@@ -4,6 +4,18 @@ import time
 
 shield_icon = icon_container['shield']
 
+TAB_img = load_image("icons/TAB") # size 50 pixel
+rotate_img = load_image("icons/rotate")
+back_img = load_image("icons/back")
+skip_img = load_image("icons/skip")
+
+button_side_len_half = 25
+
+# variables
+mob_Y_level = 300
+
+
+
 def draw_bar(screen,x,y,bar_width,bar_height, current_percent, color): # x,y is a position of x,y axis of bar
     pygame.draw.rect(screen,color,[x-bar_width//2, y-bar_height//2,int(bar_width*(current_percent/100)),bar_height])
 

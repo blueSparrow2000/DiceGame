@@ -17,9 +17,14 @@ from image_processor import *
 import pygame
 from util import *
 
+target_icon = load_image("icons/targeted")
+EID = 0
+
 class Entity():
     def __init__(self,my_name, hp, hpmax, mypos):
-        global buff_names
+        global buff_names, EID
+        self.EID = EID
+        EID += 1
         self.image = load_image(my_name)
 
         self.health = hp
@@ -31,10 +36,10 @@ class Entity():
         self.buff_icon_x = self.health_bar_pos[0] - 40
         self.buff_icon_y = self.health_bar_pos[1] + 30
         self.icon_delta = 30
-
+        self.targeted = False
 
         self.defence = 0
-        self.base_defence = 10
+        self.base_defence = 0
         self.total_defence = self.defence + self.base_defence
 
         # buff & debuffs
@@ -67,6 +72,7 @@ class Entity():
         self.defence = 0
         self.update_defence()
 
+
     def end_my_turn(self): # do something at the end of the turn
         # if poisoned, get damaged
         if (self.poisoned):
@@ -98,14 +104,17 @@ class Entity():
                     cnt = 0
                 screen.blit(buff_icon,
                             buff_icon.get_rect(center=(self.buff_icon_x + self.icon_delta * cnt, self.buff_icon_y + next_row * self.icon_delta)))
-                write_text(screen, self.buff_icon_x + self.icon_delta * cnt + 10, self.buff_icon_y + 10 + next_row * self.icon_delta,
-                           "%d" % (buff_duration), 15,
-                           'gray')
+                write_text(screen, self.buff_icon_x + self.icon_delta * cnt + 6, self.buff_icon_y + 6 + next_row * self.icon_delta,
+                           "%d" % (buff_duration), 12,
+                           'dimgray')
                 cnt += 1
+
 
     def draw(self,screen):
         screen.blit(self.image, self.image.get_rect(center=self.mypos))
         self.show_hp_attributes(screen)
+        if self.targeted:
+            screen.blit(target_icon, target_icon.get_rect(center=self.mypos))
 
 
     def take_damage(self, damage):

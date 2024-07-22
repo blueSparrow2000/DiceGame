@@ -3,13 +3,18 @@ from entity import *
 
 class Player(Entity):
     def __init__(self):
-        super().__init__('player', 100, 100, (100,320))
+        global mob_Y_level
+        super().__init__('player', 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
         self.artifacts = []
         self.current_tile = None
-        self.current_skill_idx = 0
+        self.current_skill_idx = -1
         self.tile_dict = {'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6}
 
+    def end_my_turn(self): # do something at the end of the turn
+        super().end_my_turn()
+        self.current_skill_idx = -1 # reset this
+        self.current_tile = None
 
     def new_fight(self):
         for k,v in self.buffs.items():
@@ -17,7 +22,7 @@ class Player(Entity):
         self.defence = 0
         self.update_defence()
         self.current_tile = None
-        self.current_skill_idx = 0
+        self.current_skill_idx = -1
 
 
     def push_tile_infos(self,tile_info):
@@ -34,11 +39,12 @@ class Player(Entity):
     def P(self,num):
         return 2**(num-1)
 
-    def attack(self, enemy):
-        enemy.take_damage(self.get_current_damage())
-        enemy.buffs['broken will'] = 1
-        enemy.buffs['strength'] = 1
-        enemy.buffs['toxin'] = 1
+    def attack(self, enemy_list):
+        for enemy in enemy_list:
+            enemy.take_damage(self.get_current_damage())
+            # enemy.buffs['broken will'] = 1
+            # enemy.buffs['strength'] = 1
+            # enemy.buffs['poison'] = 1
 
     def get_current_damage(self):
         # count number of attack tiles
@@ -63,10 +69,11 @@ class Player(Entity):
         return self.heal_multiplier*self.P(R)
 
     def skill_ready(self, idx): # use the idx'th skill
+        # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
 
         # if valid, change the skill index to idx
         self.current_skill_idx = idx
-        return False,True
+        return False,1
 
     def use_skill(self, enemies): # use the idx'th skill
         return True,True

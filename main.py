@@ -24,6 +24,8 @@ BACK: go back to the beggining (using planar figure)
 RETURN: skip my turn
 
 '''
+import time
+
 import pygame
 from image_processor import *
 import math
@@ -33,6 +35,7 @@ from board import *
 from music import *
 from map_logic import *
 from util import *
+import random
 
 pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
@@ -45,9 +48,10 @@ width, height = pygame.display.get_surface().get_size()  # window width, height
 screen.fill((0,0,0))  # background color
 game_fps = 30 #60
 
-def exit_game():
+def exit():
     pygame.quit()
     return False, False
+
 def exit_fight():
     return
 
@@ -76,62 +80,97 @@ def show_nonzero_dict(dd):
     return result
 
 # main screen ---------------------------------------------------
-TAB_img = load_image("icons/TAB") # size 50 pixel
-rotate_img = load_image("icons/rotate")
-back_img = load_image("icons/back")
-skip_img = load_image("icons/skip")
-
-button_side_len_half = 25
-
 tab_center = (40,height-40)
 rotate_center = (width-40,height-40)
 back_center = (width-40,height-40)
 skip_center = (width//2,height-40)
+
 
 mousepos = (0,0)
 
 player = Player()
 board = Board(player.tile_dict)
 
+def safe_delete(entity_list):
+    ### DELETE DEAD ENEMY ###
+    delete_idx = []
+    for i in range(len(entity_list)):
+        if entity_list[i].is_dead():
+            delete_idx.append(i)
+    delete_idx.reverse()
+    for i in delete_idx:
+        del entity_list[i]
+    ### DELETE DEAD ENEMY ###
+
+
 def fight():
-    global mousepos,player, board,TAB_img,rotate_img
+    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level
     current_turn = 0
     player_turn = True
     player_turn_step = 0
+    number_of_targets_to_specify = 0
+    enemy_targets = set()
 
     board.reset()
     player.new_fight()
     # randomly generate enemy following some logic
+    trial = random.randint(1,3)
+    enemy_request = ['Mob' for i in range(trial)] # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    
     enemies = []
-    enemy = Mob()
-    # enemy.update_buffs()
-    enemies.append(enemy)
+    enemy_num = len(enemy_request) # at most three
+    
+    mob_side_len = 64
+    mob_gap = 28
+    mob_X = 332 - (enemy_num-1)*(mob_side_len+mob_gap)/2
+
+    for i in range(enemy_num):
+        enemy = Mob(my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5,pos = (mob_X,mob_Y_level))
+        # enemy.update_buffs()
+        enemies.append(enemy)
+        mob_X += mob_side_len + mob_gap
 
     game_run = True
 
 
     while game_run:
-        if enemy.is_dead():
+        if len(enemies)==0:
             exit_fight()
             game_run = False
             print('player wins!')
-            break
+            return False, True
         elif player.health<=0:
             exit_fight()
             game_run = False
             print('player lost!')
-            return True
+            return True, True
 
         if not player_turn:  # enemy turn
+            ### DELETE DEAD ENEMY ###
+            safe_delete(enemies)
+            ### DELETE DEAD ENEMY ###
+
             current_turn += 1
             # do enemy logic - if something has changed, call board.update() -> do it inside the enemy class
             for entity in enemies:
                 entity.behave(player)
+                player.get_buff_effect() # update buff effect every turn
+                # draw again
+                screen.fill('white')
+                write_text(screen, width // 2, 200, "Enemy's turn", 30, 'gold')
+                player.draw(screen)
+                for entity in enemies:
+                    entity.draw(screen)
+                pygame.display.flip()
+
             player_turn = True
             player.refresh_my_turn()
             if (current_turn % 6 == 0):  # every 6th turn, reset the board
                 board.reset()
 
+            ### DELETE DEAD ENEMY ###
+            safe_delete(enemies)
+            ### DELETE DEAD ENEMY ###
 
 
 
@@ -147,7 +186,7 @@ def fight():
             if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
                 exit_fight()
                 game_run = False
-                break
+                return True, False
 
             if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
                 mousepos = pygame.mouse.get_pos()
@@ -167,6 +206,8 @@ def fight():
                             player.end_my_turn()
                             player_turn = False
                             player_turn_step = 0
+                            number_of_targets_to_specify = 0
+                            enemy_targets = set()
                         else:
                             valid_location = board.collect_tiles((xp, yp))
                             if not valid_location:
@@ -183,20 +224,35 @@ def fight():
                         if check_inside_button(mousepos, back_center, button_side_len_half):
                             # go to initial stage and do it again
                             player_turn_step = 0
+
+                            for i in range(len(enemies)):
+                                enemies[i].targeted = False
+                            number_of_targets_to_specify = 0
+                            enemy_targets = set()
+
                         else:
-                            # if chosen valid enemy
-                            is_valid_enemy = False
+                            for i in range(len(enemies)):
+                                if check_inside_button(mousepos, enemies[i].mypos, mob_side_len):
+                                    enemy_targets.add(enemies[i])
+                                    enemies[i].targeted = True
 
+                            listed_enemy_targets = list(enemy_targets)
                             # detect enemy
-                            if is_valid_enemy:
-                                # use the skill!
-                                player.use_skill(enemies)
-
+                            if number_of_targets_to_specify==len(listed_enemy_targets) or (len(enemies)<number_of_targets_to_specify and len(enemies)==len(listed_enemy_targets)): # collected all
+                                if player.current_skill_idx<0: # basic attack
+                                    player.attack(listed_enemy_targets)
+                                else:
+                                    # use the skill!
+                                    player.use_skill(listed_enemy_targets)
+                                for i in range(len(enemies)):
+                                    enemies[i].targeted = False
                                 # end players turn
                                 player.end_my_turn()
                                 player_turn = False
                                 player_turn_step = 0
                                 board.confirm_using_tile()
+                                number_of_targets_to_specify = 0
+                                enemy_targets = set()
 
                         # do player logic
                         # change through primary/secondary planar figures
@@ -206,19 +262,25 @@ def fight():
 
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                    exit_fight()
-                    game_run = False
-                    break
+                # if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 pause
+                #     exit_fight()
+                #     game_run = False
+                #     break
                 if player_turn:  # listen for the inputs
                     # if event.key == pygame.K_RETURN:
                     #     # skip player's turn
                     #     player.end_my_turn()
                     #     player_turn = False
                     #     player_turn_step = 0
+                    #     number_of_targets_to_specify = 0
+                    #enemy_targets = set()
                     if event.key == pygame.K_BACKSPACE:
                         # go to initial stage and do it again
                         player_turn_step = 0
+                        for i in range(len(enemies)):
+                            enemies[i].targeted = False
+                        number_of_targets_to_specify = 0
+                        enemy_targets = set()
 
                     if player_turn_step == 0:
                         if event.key == pygame.K_r:
@@ -226,23 +288,25 @@ def fight():
                         if event.key == pygame.K_TAB:
                             board.change_planar_figure()
                     if player_turn_step == 1:
-                        is_valid_move,need_to_specify_target = False,False
+                        is_valid_move = False
                         if event.key == pygame.K_1:
-                            is_valid_move,need_to_specify_target = player.skill_ready(1)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(1)
                         elif event.key == pygame.K_2:
-                            is_valid_move,need_to_specify_target = player.skill_ready(2)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(2)
                         elif event.key == pygame.K_3:
-                            is_valid_move,need_to_specify_target = player.skill_ready(3)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(3)
                         elif event.key == pygame.K_4:
-                            is_valid_move,need_to_specify_target = player.skill_ready(4)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(4)
                         elif event.key == pygame.K_5:
-                            is_valid_move,need_to_specify_target = player.skill_ready(5)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(5)
                         elif event.key == pygame.K_6:
-                            is_valid_move,need_to_specify_target = player.skill_ready(6)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(6)
 
                         if is_valid_move:
-                            if need_to_specify_target:
+                            if number_of_targets_to_specify>0:
                                 player_turn_step = 2
+                                player.current_skill_idx = -1
+
                             else:
                                 # use the skill!
                                 player.use_skill(enemies)
@@ -252,16 +316,15 @@ def fight():
                                 player_turn = False
                                 player_turn_step = 0
                                 board.confirm_using_tile()
+                                number_of_targets_to_specify = 0
+                                enemy_targets = set()
 
 
 
-                        if event.key == pygame.K_7 and player.can_attack:
-                            player.attack(enemies[0]) # attackes the closest enemy
-                            # end players turn
-                            player.end_my_turn()
-                            player_turn = False
-                            player_turn_step = 0
-                            board.confirm_using_tile()
+                        if event.key == pygame.K_7 and player.can_attack: # basic attack
+                            player_turn_step = 2
+                            number_of_targets_to_specify = 1
+
                         if event.key == pygame.K_8:
                             player.defend()
                             # end players turn
@@ -269,6 +332,8 @@ def fight():
                             player_turn = False
                             player_turn_step = 0
                             board.confirm_using_tile()
+                            number_of_targets_to_specify = 0
+                            enemy_targets = set()
                         if event.key == pygame.K_9:
                             player.regen()
                             # end players turn
@@ -276,6 +341,8 @@ def fight():
                             player_turn = False
                             player_turn_step = 0
                             board.confirm_using_tile()
+                            number_of_targets_to_specify = 0
+                            enemy_targets = set()
 
 
         if player_turn_step == 1:
@@ -381,30 +448,23 @@ while meta_run:
                     break
                 elif event.key == pygame.K_RETURN:
                     run = False
-                    player_lost = fight()
+                    player_lost,valid_termination = fight()
+                    if not valid_termination:
+                        meta_run = False
+                        break
+
                     if player_lost:
                         time.sleep(0.5)
-                        while 1:
-                            for event in pygame.event.get():
-                                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                                    run, meta_run = exit()
-                                    break
-                                if event.type == pygame.KEYDOWN:
-                                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                                        run, meta_run = exit()
-                                        break
-                                    elif event.key == pygame.K_RETURN:
-                                        run, meta_run = exit()
-                                        break
 
-                            screen.fill('white')
-                            write_text(screen, width//2, height//2 - 60, 'Wasted',30,'red')
-                            write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
-                            pygame.display.flip()
-                            clock.tick(game_fps)
+                        screen.fill('white')
+                        write_text(screen, width//2, height//2 - 60, 'Wasted',30,'red')
+                        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+                        pygame.display.flip()
+
+                        time.sleep(2)
                         meta_run = False
 
-                    break
+                        break
 
 
         if not run:

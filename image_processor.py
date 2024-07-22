@@ -45,7 +45,7 @@ buff_name_description_dic = {
 'broken will':"cannot attack",
 'confusion':"(player): cannot use secondary planar figure\n(enemies): misses an attack",
 'heal ban':"cannot heal",
-'poison':"takes 5 damage at the start of every turn",
+'poison':"takes 5 damage at the end of every turn",
 'toxin':"incoming attacks penetrates defence",
 }
 # buff_names = ['decay', 'strength', 'weakness','broken will','confusion','heal ban','poison','toxin']

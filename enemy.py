@@ -2,8 +2,8 @@ from entity import *
 
 
 class Enemy(Entity):
-    def __init__(self,my_name, hp, hpmax, attack_damage):
-        super().__init__(my_name, hp, hpmax, (380,320)) # mypos is calculated as follows: how many enemy in one fight
+    def __init__(self,my_name, hp, hpmax, attack_damage, pos):
+        super().__init__(my_name, hp, hpmax, pos) # mypos is calculated as follows: how many enemy in one fight
         global icons, icon_container
         ####################### enemy only stuffs ############################
         self.pattern_image = dict()
@@ -28,8 +28,8 @@ class Enemy(Entity):
 
 
 class Mob(Enemy):
-    def __init__(self, my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5):
-        super().__init__(my_name,hp,hpmax,attack_damage)
+    def __init__(self, my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5, pos = (332,300)):
+        super().__init__(my_name,hp,hpmax,attack_damage,pos)
         self.current_pattern_idx = 0
         self.pattern = ['attack','no op'] #
         self.num_of_patterns = len(self.pattern)
@@ -37,22 +37,22 @@ class Mob(Enemy):
     def behave(self, player):
         self.refresh_my_turn()
 
-        time.sleep(2)
 
         current_pattern = self.pattern[self.current_pattern_idx]
         if current_pattern=='attack':
             if self.can_attack:
                 player.take_damage(self.get_current_damage())
-                player.buffs['broken will'] = 1
-                player.buffs['strength'] = 1
-                player.buffs['toxin'] = 1
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['toxin'] = 1
         elif current_pattern=='no op':
             pass # no op
 
         self.proceed_next_pattern()
 
         self.end_my_turn()
-        time.sleep(2)
+        time.sleep(0.5)
 
     def proceed_next_pattern(self):
         # proceed to the next pattern
