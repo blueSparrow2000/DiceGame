@@ -1,58 +1,24 @@
-from image_processor import *
-import pygame
-from image_processor import *
-from util import *
+from entity import *
 
-class Player():
+
+class Player(Entity):
     def __init__(self):
-        self.tile_dict = {'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6}
-        self.max_health = 100
-        self.health = self.max_health
-        self.image = load_image('player')
-        self.mypos = (100,400)
+        super().__init__('player', 100, 100, (100,320))
+        ####################### player only stuffs ############################
+        self.artifacts = []
         self.current_tile = None
         self.current_skill_idx = 0
-        self.artifacts = []
-        self.defence = 0
-        self.base_defence = 0
-        self.total_defence = self.defence + self.base_defence
-
-        # debuffs
-        self.debuffs = {'weakness':0, 'armor_gain_less':0}# debuff name: remaining turn duration if exist
-
+        self.tile_dict = {'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6}
 
 
     def new_fight(self):
-        for k,v in self.debuffs.items():
-            self.debuffs[k] = 0 # reduce one turn
-            # apply the effect
+        for k,v in self.buffs.items():
+            self.buffs[k] = 0 # reset
         self.defence = 0
-        self.total_defence = self.defence + self.base_defence
+        self.update_defence()
         self.current_tile = None
         self.current_skill_idx = 0
 
-    def take_damage(self, damage):
-        partial_damage = damage - self.total_defence
-        if partial_damage <0: # fully blocked
-            self.total_defence -= damage
-            return
-        self.total_defence = 0
-        self.health -= partial_damage
-
-    def refresh_my_turn(self):
-        for k,v in self.debuffs.items():
-            self.debuffs[k] = max(0, v-1) # reduce one turn
-            # apply the effect
-
-        # reset the defence
-        self.defence = 0
-        self.total_defence = self.defence + self.base_defence
-
-
-    def draw(self,screen):
-        screen.blit(self.image, self.image.get_rect(center=self.mypos))
-        draw_bar(screen, self.mypos[0], self.mypos[1] - 60, 64, 10, 100, 'gray')
-        draw_bar(screen, self.mypos[0], self.mypos[1] - 60, 64, 10, 100*self.health/self.max_health, 'RED')
 
     def push_tile_infos(self,tile_info):
         self.current_tile = tile_info
@@ -69,22 +35,34 @@ class Player():
         return 2**(num-1)
 
     def attack(self, enemy):
+        enemy.take_damage(self.get_current_damage())
+        enemy.buffs['broken will'] = 1
+        enemy.buffs['strength'] = 1
+        enemy.buffs['toxin'] = 1
+
+    def get_current_damage(self):
         # count number of attack tiles
         A = self.count_tile('Attack')
-        enemy.get_damage(self.P(A))
+        return self.P(A)*self.get_attack_multiplier()
 
     def defend(self):
+        self.defence += self.get_defence_gain()
+        self.update_defence()
+
+    def get_defence_gain(self):
         # count number of defence tiles
         D = self.count_tile('Defence')
-        self.defence += self.P(D)
+        return self.P(D)*self.defence_gain_multiplier
 
     def regen(self):
+        self.health = min(self.max_health,self.health+self.get_heal_amount())
+
+    def get_heal_amount(self):
         # count number of regen tiles
         R = self.count_tile('Regen')
-        self.health = min(self.max_health,self.health+self.P(R))
+        return self.heal_multiplier*self.P(R)
 
-
-    def skill(self, idx): # use the idx'th skill
+    def skill_ready(self, idx): # use the idx'th skill
 
         # if valid, change the skill index to idx
         self.current_skill_idx = idx
