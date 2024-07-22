@@ -37,7 +37,7 @@ def load_image(filename):
         return None
 
 ### icons / buff icons
-icons = ['no op','shield','sword','buff','unkown']
+icons = ['no op','shield','sword','buff','unkown','absorption']
 buff_name_description_dic = {
 'decay':"defence is halved every turn",
 'strength':"deals double damage",
@@ -47,6 +47,7 @@ buff_name_description_dic = {
 'heal ban':"cannot heal",
 'poison':"takes 5 damage at the end of every turn",
 'toxin':"incoming attacks penetrates defence",
+'vulnerability':"takes twice a damage"
 }
 # buff_names = ['decay', 'strength', 'weakness','broken will','confusion','heal ban','poison','toxin']
 buff_names = list(buff_name_description_dic.keys())
@@ -62,4 +63,4 @@ for ic in buff_names:
 
 
 ### load enemy images
-mob_img = load_image("mob")
+# mob_img = load_image("enemies/mob")

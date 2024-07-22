@@ -1,6 +1,8 @@
 import random
 import pygame
 from image_processor import *
+from music import *
+
 import copy
 
 planar_figures = []
@@ -27,7 +29,7 @@ empty = load_image('tiles/Empty')
 unusable = load_image('tiles/Unusable')
 class Board():
     def __init__(self,tiles_dict):
-        global A,D,R,S,used,empty,unusable,planar_figures
+        global A,D,R,S,used,empty,unusable,planar_figures,sound_effects
         self.board = [[None for i in range(8)] for j in range(8)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = [[None for i in range(8)] for j in range(8)]
         self.board_original_dict = tiles_dict # 영구적인 영향을 주는 거면 이거도 바꿈

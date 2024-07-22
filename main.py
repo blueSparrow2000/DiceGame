@@ -6,7 +6,6 @@ Test version of the dice game
 To test the basic mechanism
 
 
-
 MANUAL
 player_turn_step = 0
 R: rotate the planar figure
@@ -16,6 +15,10 @@ player_turn_step = 1 (choose the skill to use)
 1: use the first skill
 2: use the second skill
 3: use the third skill
+...
+7: basic attack
+8: (defence mode) gain defence
+9: heal
 
 Click: 1) use the current planar figure on the board / player_turn_step = 0
 2) If you can choose the target, do it / player_turn_step = 2
@@ -36,6 +39,13 @@ from music import *
 from map_logic import *
 from util import *
 import random
+from skill_book import *
+
+#music_Q('Lobby',True)
+#music_Q('Encounter',True)
+
+
+
 
 pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
@@ -79,17 +89,6 @@ def show_nonzero_dict(dd):
             result[key]=value
     return result
 
-# main screen ---------------------------------------------------
-tab_center = (40,height-40)
-rotate_center = (width-40,height-40)
-back_center = (width-40,height-40)
-skip_center = (width//2,height-40)
-
-
-mousepos = (0,0)
-
-player = Player()
-board = Board(player.tile_dict)
 
 def safe_delete(entity_list):
     ### DELETE DEAD ENEMY ###
@@ -102,9 +101,24 @@ def safe_delete(entity_list):
         del entity_list[i]
     ### DELETE DEAD ENEMY ###
 
+# main screen ---------------------------------------------------
+tab_center = (40,height-40)
+rotate_center = (width-40,height-40)
+back_center = (width-40,height-40)
+skip_center = (width//2,height-40)
+
+mousepos = (0,0)
+
+##### choose character here...
+character_name = 'Mirinae'
+character_skills = character_skill_dictionary[character_name]
+player = Player(character_name,character_skills)
+board = Board(player.tile_dict)
+
 
 def fight():
-    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level
+    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects
+    music_Q('Fight', True)
     current_turn = 0
     player_turn = True
     player_turn_step = 0
@@ -125,7 +139,7 @@ def fight():
     mob_X = 332 - (enemy_num-1)*(mob_side_len+mob_gap)/2
 
     for i in range(enemy_num):
-        enemy = Mob(my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5,pos = (mob_X,mob_Y_level))
+        enemy = Mob(my_name = 'enemies/mob', hp=30, hpmax = 30, attack_damage = 5,pos = (mob_X,mob_Y_level))
         # enemy.update_buffs()
         enemies.append(enemy)
         mob_X += mob_side_len + mob_gap
@@ -134,16 +148,18 @@ def fight():
 
 
     while game_run:
-        if len(enemies)==0:
-            exit_fight()
-            game_run = False
-            print('player wins!')
-            return False, True
-        elif player.health<=0:
+        if player.health<=0: # check player death first
+            sound_effects['playerdeath'].play()
             exit_fight()
             game_run = False
             print('player lost!')
             return True, True
+        elif len(enemies)==0:
+            exit_fight()
+            game_run = False
+            print('player wins!')
+            return False, True
+
 
         if not player_turn:  # enemy turn
             ### DELETE DEAD ENEMY ###
@@ -192,6 +208,7 @@ def fight():
                 mousepos = pygame.mouse.get_pos()
 
             if event.type == pygame.MOUSEBUTTONUP:
+                sound_effects['confirm'].play()
                 (xp, yp) = pygame.mouse.get_pos()
                 mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
                 # do fight logic on player's turn
@@ -215,6 +232,7 @@ def fight():
                             else:
                                 player.push_tile_infos(valid_location)
                                 player_turn_step = 1 # progress to next stage
+
                     elif player_turn_step == 1:
                         if check_inside_button(mousepos, back_center, button_side_len_half):
                             # go to initial stage and do it again
@@ -267,6 +285,7 @@ def fight():
                 #     game_run = False
                 #     break
                 if player_turn:  # listen for the inputs
+                    sound_effects['confirm'].play()
                     # if event.key == pygame.K_RETURN:
                     #     # skip player's turn
                     #     player.end_my_turn()
@@ -290,27 +309,27 @@ def fight():
                     if player_turn_step == 1:
                         is_valid_move = False
                         if event.key == pygame.K_1:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(1)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(0)
                         elif event.key == pygame.K_2:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(2)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(1)
                         elif event.key == pygame.K_3:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(3)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(2)
                         elif event.key == pygame.K_4:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(4)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(3)
                         elif event.key == pygame.K_5:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(5)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(4)
                         elif event.key == pygame.K_6:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(6)
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(5)
 
                         if is_valid_move:
                             if number_of_targets_to_specify>0:
                                 player_turn_step = 2
-                                player.current_skill_idx = -1
 
                             else:
                                 # use the skill!
                                 player.use_skill(enemies)
 
+                                player.current_skill_idx = -1
                                 # end players turn
                                 player.end_my_turn()
                                 player_turn = False
@@ -429,7 +448,7 @@ meta_run = True
 
 while meta_run:
     # The Music in main
-    # music_Q(lobbyMusic,True)
+    music_Q('Adventure', True)
     run = True
 
     while run:
@@ -454,8 +473,7 @@ while meta_run:
                         break
 
                     if player_lost:
-                        time.sleep(0.5)
-
+                        pygame.mixer.music.stop()
                         screen.fill('white')
                         write_text(screen, width//2, height//2 - 60, 'Wasted',30,'red')
                         write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
@@ -465,6 +483,31 @@ while meta_run:
                         meta_run = False
 
                         break
+                    else:
+                        run_win_screen = True
+                        music_Q("cozy")
+                        while run_win_screen:
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                                    meta_run = False
+                                    run_win_screen = False
+                                    break
+
+                                if event.type == pygame.KEYDOWN:
+                                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                                        run_win_screen = False
+                                        break
+                                    elif event.key == pygame.K_RETURN:
+                                        run_win_screen = False
+                                        break
+                            screen.fill('white')
+                            write_text(screen, width//2, height//2 - 240, 'You won!',30,'gold')
+                            # show some items dropped etc.
+
+                            pygame.display.flip()
+                            clock.tick(game_fps)
+
+
 
 
         if not run:

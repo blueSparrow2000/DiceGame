@@ -2,14 +2,14 @@ from entity import *
 
 
 class Player(Entity):
-    def __init__(self):
-        global mob_Y_level
-        super().__init__('player', 100, 100, (100,mob_Y_level))
+    def __init__(self, character_name,character_skills):
+        global mob_Y_level, sound_effects# all the other skills should also be contained
+        super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
-        self.artifacts = []
         self.current_tile = None
         self.current_skill_idx = -1
         self.tile_dict = {'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6}
+        self.skill_book = character_skills
 
     def end_my_turn(self): # do something at the end of the turn
         super().end_my_turn()
@@ -39,9 +39,11 @@ class Player(Entity):
     def P(self,num):
         return 2**(num-1)
 
-    def attack(self, enemy_list):
-        for enemy in enemy_list:
-            enemy.take_damage(self.get_current_damage())
+    def attack(self, target_list):
+        sound_effects['sword'].play()
+        for enemy in target_list:
+            counter_attack_damage = enemy.take_damage(self.get_current_damage())
+            self.health -= counter_attack_damage
             # enemy.buffs['broken will'] = 1
             # enemy.buffs['strength'] = 1
             # enemy.buffs['poison'] = 1
@@ -69,11 +71,27 @@ class Player(Entity):
         return self.heal_multiplier*self.P(R)
 
     def skill_ready(self, idx): # use the idx'th skill
-        # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
+        # global requirement: Need at least one skill tile to use skill
+        S =self.count_tile('Skill')
+        if (S<=0):
+            return False, 1
 
-        # if valid, change the skill index to idx
-        self.current_skill_idx = idx
+
+        # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
+        skill_valid, target_nums,is_attack = getattr(self.skill_book, self.skill_book.skills[idx]+'_get_requirement')(self)
+        if skill_valid and ((not is_attack) or (is_attack and self.can_attack)):
+            # if valid, change the skill index to idx
+            self.current_skill_idx = idx
+            return skill_valid,target_nums
         return False,1
 
-    def use_skill(self, enemies): # use the idx'th skill
-        return True,True
+    def use_skill(self, target_list): # use the idx'th skill
+        # before skill
+
+        getattr(self.skill_book,self.skill_book.skills[self.current_skill_idx])(self,target_list)
+
+        # after skill
+
+
+
+

@@ -1,6 +1,7 @@
 import pygame
 from image_processor import *
 import time
+from music import *
 
 shield_icon = icon_container['shield']
 

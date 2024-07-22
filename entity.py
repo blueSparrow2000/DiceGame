@@ -6,7 +6,7 @@ Entity is common thing between player and enemy
 
 > Since buff counts are taken off every end of the turn, self-buffing needs extra duration
 Buff/Debuff to enemy: self.buffs['broken will'] = turn duration
-> 남에게 부여하는 버프 중에선 다시 내 차례가 돌아올때까지 남아있아야 하는 버프가 있고(toxin처럼 다시 내턴으로 돌아왔을때 효과가 나타나는 스킬들), 바로 다음 상대턴에 적용되는 버프가 있다.
+> 남에게 부여하는 버프 중에선 다시 내 차례가 돌아올때까지 남아있아야 하는 버프가 있고(toxin/vulnerability 처럼 다시 내턴으로 돌아왔을때 효과가 나타나는 스킬들), 바로 다음 상대턴에 적용되는 버프가 있다.
 
 Buff/Debuff to one self: self.buffs['broken will'] = turn duration + 1
 
@@ -33,6 +33,8 @@ class Entity():
         self.health_bar_pos = (self.mypos[0], self.mypos[1] + 40)
         self.icon_x = self.health_bar_pos[0] - 40
         self.icon_y = self.health_bar_pos[1]
+        self.absorption_icon_x = self.health_bar_pos[0] - 70
+        self.absorption_icon_y = self.health_bar_pos[1]
         self.buff_icon_x = self.health_bar_pos[0] - 40
         self.buff_icon_y = self.health_bar_pos[1] + 30
         self.icon_delta = 30
@@ -42,15 +44,26 @@ class Entity():
         self.base_defence = 0
         self.total_defence = self.defence + self.base_defence
 
-        # buff & debuffs
+        self.thorns = 0 # some enemy may have default thorns
+        self.absorption = 0
+        self.counter_attack = False
+
+        ######## buff & debuffs
         self.buffs = dict()
         for buff in buff_names:
             self.buffs[buff] = 0 #  debuff name: remaining turn duration if exist
 
         self.reset_buffs()
 
-        # test buffs ['decay', 'strength', 'weakness','broken will','confusion','heal ban','poison','toxin']
-        # self.buffs['broken will'] = 0
+        ######## relics
+        self.relics = []
+
+    def reset_state(self): # 상대 변수들. 상대가 공격시 사용되는 변수들. 초기화는 내턴 시작시 수행.
+        self.absorption = 0
+        self.counter_attack = False
+
+    def get_relic_effects(self):
+        pass
 
     def reset_buffs(self):
         self.can_attack = True
@@ -60,16 +73,19 @@ class Entity():
         self.heal_multiplier = 1
         self.poisoned = False
         self.toxined = False
+        self.vulnerability_multiplier = 1
 
     def get_attack_multiplier(self):
         return self.strength_multiplier*self.strength_deplifier
 
     def refresh_my_turn(self):
+        self.reset_state() # refresh state variables that activates on other side's turn
+
         self.get_buff_effect() # get buff effects
 
+        self.get_relic_effects() # get relic effects - 적들도 쓸 수는 있지만 플레이어 위주...
 
-        # reset the defence
-        self.defence = 0
+        self.defence = 0  # reset the temporal defence
         self.update_defence()
 
 
@@ -81,14 +97,14 @@ class Entity():
         self.update_buffs()  # update buff counts
 
     def show_hp_attributes(self,screen):
-        global buff_icon_container
+        global buff_icon_container, icon_container
         draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100, 'silver')
         draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100 * self.health / self.max_health, 'coral')
 
         write_text(screen, self.health_bar_pos[0], self.health_bar_pos[1], "%d/%d" % (self.health, self.max_health), 15, 'maroon')
         if (self.total_defence > 0):
 
-            screen.blit(shield_icon, shield_icon.get_rect(center=(self.icon_x, self.icon_y)))
+            screen.blit(icon_container['shield'], icon_container['shield'].get_rect(center=(self.icon_x, self.icon_y)))
             write_text(screen, self.icon_x, self.icon_y, "%d" % (self.total_defence), 15,
                        'deepskyblue')
 
@@ -97,7 +113,7 @@ class Entity():
         next_row = 0
         for buff_name, buff_duration in self.buffs.items():
             # draw only when buff is on
-            if buff_duration > 0 or (buff_name=='toxin' and self.toxined == True): # buff is on when corresponding state is also on # or (
+            if buff_duration > 0 or (buff_name=='toxin' and self.toxined == True) or (buff_name=='vulnerability' and self.vulnerability_multiplier>1): # buff is on when corresponding state is also on # or (
                 buff_icon = buff_icon_container[buff_name]
                 if cnt > 2:
                     next_row += 1
@@ -109,6 +125,10 @@ class Entity():
                            'dimgray')
                 cnt += 1
 
+        if (self.absorption > 0):
+            screen.blit(icon_container['absorption'], icon_container['absorption'].get_rect(center=(self.absorption_icon_x, self.absorption_icon_y)))
+            write_text(screen, self.absorption_icon_x, self.absorption_icon_y, "%d" % (self.absorption), 15,
+                       'khaki')
 
     def draw(self,screen):
         screen.blit(self.image, self.image.get_rect(center=self.mypos))
@@ -117,19 +137,29 @@ class Entity():
             screen.blit(target_icon, target_icon.get_rect(center=self.mypos))
 
 
-    def take_damage(self, damage):
+    def take_damage(self, damage_temp):
+        damage = self.vulnerability_multiplier * damage_temp
+        counter_attack_damage = damage
+
+        # consider absorption first
+        damage = max(0, damage - self.absorption)
+
         if (self.toxined): # ignores defence
             self.health -= damage
-            return
+        else:
+            partial_damage = damage - self.total_defence
+            if partial_damage <0: # fully blocked
+                self.total_defence -= damage
+                # print('blocked!')
+            else:
+                self.total_defence = 0
+                self.health -= partial_damage
+                # print('got hit!')
 
-        partial_damage = damage - self.total_defence
-        if partial_damage <0: # fully blocked
-            self.total_defence -= damage
-            # print('blocked!')
-            return
-        self.total_defence = 0
-        self.health -= partial_damage
-        # print('got hit!')
+        if (self.counter_attack):
+            return counter_attack_damage
+        else:
+            return 0
 
     def is_dead(self):
         return self.health <= 0
@@ -158,6 +188,8 @@ class Entity():
                     self.poisoned = True
                 elif buff_name == 'toxin':
                     self.toxined = True
+                elif buff_name == 'vulnerability':
+                    self.vulnerability_multiplier = 2
 
     def update_buffs(self):
         for buff_name, buff_duration in self.buffs.items():

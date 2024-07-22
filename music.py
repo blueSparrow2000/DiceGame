@@ -17,21 +17,16 @@ SOUND_EFFECT = current_dir+'/sound_effects/'
 
 
 # # sound effects
-# mouseClick = pygame.mixer.Sound(SOUND_EFFECT+"mouse_click.mp3")
-# hitSound = pygame.mixer.Sound(SOUND_EFFECT+"hit2.wav")
-# gameStartSound = pygame.mixer.Sound(SOUND_EFFECT+"game_start.mp3")
-#
-# def hit_sound():
-#     if sound_effect[0]:
-#         hitSound.play()
-#
-# def game_start_sound():
-#     if sound_effect[0]:
-#         gameStartSound.play()
-#
-# def mouse_click_sound():
-#     if sound_effect[0]:
-#         mouseClick.play()
+sound_effect_list = ['confirm','hit','get','sword','playerdeath']
+# confirm_sound = pygame.mixer.Sound(SOUND_EFFECT+"confirm.mp3")
+# hit_sound = pygame.mixer.Sound(SOUND_EFFECT+"hit.mp3")
+# get_sound = pygame.mixer.Sound(SOUND_EFFECT+"get.mp3")
+# sword_sound = pygame.mixer.Sound(SOUND_EFFECT+"sword.mp3")
+# playerdeath_sound = pygame.mixer.Sound(SOUND_EFFECT+"playerdeath.mp3")
+
+sound_effects = dict()
+for sound in sound_effect_list:
+    sound_effects[sound] = pygame.mixer.Sound(SOUND_EFFECT+sound+'.mp3')
 
 
 # music은 stage와 main에서만 튼다
@@ -63,3 +58,7 @@ def check_music_ended(song_start_time):
         return False
     # return True if music is still going. returns False if music is paused or ended.
     return not pygame.mixer.music.get_busy()
+
+
+
+

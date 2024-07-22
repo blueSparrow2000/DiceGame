@@ -4,7 +4,7 @@ from entity import *
 class Enemy(Entity):
     def __init__(self,my_name, hp, hpmax, attack_damage, pos):
         super().__init__(my_name, hp, hpmax, pos) # mypos is calculated as follows: how many enemy in one fight
-        global icons, icon_container
+        global icons, icon_container, sound_effects
         ####################### enemy only stuffs ############################
         self.pattern_image = dict()
         for i in range(len(icons)):
@@ -28,7 +28,7 @@ class Enemy(Entity):
 
 
 class Mob(Enemy):
-    def __init__(self, my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5, pos = (332,300)):
+    def __init__(self, my_name = 'enemies/mob', hp=30, hpmax = 30, attack_damage = 5, pos = (332,300)):
         super().__init__(my_name,hp,hpmax,attack_damage,pos)
         self.current_pattern_idx = 0
         self.pattern = ['attack','no op'] #
@@ -41,7 +41,10 @@ class Mob(Enemy):
         current_pattern = self.pattern[self.current_pattern_idx]
         if current_pattern=='attack':
             if self.can_attack:
-                player.take_damage(self.get_current_damage())
+                time.sleep(0.3)
+                sound_effects['hit'].play()
+                counter_attack_damage = player.take_damage(self.get_current_damage())
+                self.health -= counter_attack_damage
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
@@ -52,7 +55,7 @@ class Mob(Enemy):
         self.proceed_next_pattern()
 
         self.end_my_turn()
-        time.sleep(0.5)
+        time.sleep(0.2)
 
     def proceed_next_pattern(self):
         # proceed to the next pattern
