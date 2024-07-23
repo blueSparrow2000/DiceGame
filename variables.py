@@ -26,3 +26,7 @@ droplet_radius = 33
 effect_color = (150, 200, 240)
 adventure_effect_color = 'darkgoldenrod'
 option_effect_color = 'gold'
+
+
+# screen colors
+fight_bg_color = 'lightgray'

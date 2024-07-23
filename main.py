@@ -153,7 +153,7 @@ def fight():
                 entity.behave(player)
                 player.get_buff_effect() # update buff effect every turn
                 # draw again
-                screen.fill('white')
+                screen.fill(fight_bg_color)
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
                 player.draw(screen)
                 player.draw_player_info_top(screen) # Draw player main info
@@ -171,7 +171,7 @@ def fight():
             board.reset()
 
 
-        screen.fill('white')
+        screen.fill(fight_bg_color)
 
         events = pygame.event.get()
         # Event handling
@@ -559,7 +559,7 @@ def adventure_loop():
                                 if player_lost:
                                     time.sleep(0.5)
                                     pygame.mixer.music.stop()
-                                    screen.fill('white')
+                                    screen.fill(fight_bg_color)
                                     write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
                                     write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
                                     pygame.display.flip()
