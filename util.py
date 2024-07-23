@@ -2,8 +2,7 @@ import pygame
 from image_processor import *
 import time
 from music import *
-
-shield_icon = icon_container['shield']
+from variables import *
 
 TAB_img = load_image("icons/TAB") # size 50 pixel
 rotate_img = load_image("icons/rotate")
@@ -12,8 +11,6 @@ skip_img = load_image("icons/skip")
 
 button_side_len_half = 25
 
-# variables
-mob_Y_level = 300
 
 
 
@@ -30,6 +27,25 @@ def write_text(surf, x, y, text, size,color='black',bg_color = None): #(50, 200,
     textRect = text.get_rect()
     textRect.center = (x, y)
     surf.blit(text, textRect)
+
+'''
+알아서 길이별로 잘라서 잘 보여주는 함수
+'''
+def write_text_description(surf, x, y, text, size,color='black',bg_color = None):
+    center_x_level = x # fixed
+    y_level = y
+
+    total_length = len(text)
+    text_blocks = []
+    text_per_line = 40
+    current_start = 0
+    while current_start + text_per_line < total_length:
+        text_blocks.append(text[current_start:current_start+text_per_line])
+        current_start += text_per_line
+    text_blocks.append(text[current_start:total_length])
+
+    for i in range(len(text_blocks)):
+        write_text(surf, center_x_level, y_level+i*size, text_blocks[i], size, color, bg_color)
 
 
 def check_inside_button(mouse_pos,button_center, button_side_len_half):

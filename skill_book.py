@@ -6,15 +6,41 @@ N 명의 적에게 적용되는 공격은 이미 target_list에 적용이 된 �
 
 '''
 
+from util import *
+
+class Skill_Book():
+    def __init__(self, book_name, skills):
+        self.my_name = book_name
+        self.skills = skills
+        self.skill_images = []
+        self.image_button_tolerance = 25
+        self.button_spacing = 10
+        self.button_x = 50
+        self.button_y = 560
+        self.button_locations = [(self.button_x, self.button_y + (2 * self.image_button_tolerance + self.button_spacing)* i) for i in range(len(self.skills))]
+        for skill_name in self.skills:
+            self.skill_images.append(load_image("character_skills/%s/%s" % (self.my_name,skill_name)))
+
+    def draw(self,screen):
+        for i in range(len(self.skill_images)):
+            screen.blit(self.skill_images[i], self.skill_images[i].get_rect(center=self.button_locations[i]))
 
 
-from music import *
+    def check_button(self,mousepos):
+        for i in range(len(self.skill_images)):
+            if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
+                # print(self.skills[i]+" selected")
+                return i # return the index of the clicked skill to use
+
+        # no skills selected
+        return -1
 
 
 ################################# skill book
-class Mirinae_skills():
+class Mirinae_skills(Skill_Book):
+
     def __init__(self):
-        self.skills = ['martial_art','sword_storm','head_start','self_defence','guard_attack','Excaliber']
+        super().__init__('Mirinae_skills',['martial_art','sword_storm','head_start','self_defence','guard_attack','Excaliber'])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
@@ -126,10 +152,13 @@ class Mirinae_skills():
             enemy.buffs['broken will'] = 3
 
 
-class Gambler_skills():
+class Gambler_skills(Skill_Book):
     def __init__(self):
-        self.skills = []
-
+        super().__init__('Gambler_skills',[])
+        # A = player.count_tile('Attack')
+        # S = player.count_tile('Skill')
+        # D = player.count_tile('Defence')
+        # R = player.count_tile('Regen')
 
 ######################### BUILD SKILL BOOK ##########################
 mirinae_skill_book = Mirinae_skills()

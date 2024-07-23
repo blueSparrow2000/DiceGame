@@ -84,12 +84,7 @@ def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by floa
     r = max(width,int(start_radius*(1+4*math.pow(factor,1/5))))
     return r
 
-def show_nonzero_dict(dd):
-    result = dict()
-    for key, value in dd.items():
-        if value > 0:
-            result[key]=value
-    return result
+
 
 
 def safe_delete(entity_list):
@@ -119,7 +114,7 @@ board = Board(player.tile_dict)
 
 ####################################################################################################### fight loop #######################################################################################################
 def fight():
-    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects
+    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -237,10 +232,49 @@ def fight():
                                 player.push_tile_infos(valid_location)
                                 player_turn_step = 1 # progress to next stage
 
-                    elif player_turn_step == 1:
-                        if check_inside_button(mousepos, back_center, button_side_len_half):
+                    elif player_turn_step == 1: # choose skill or attack
+                        if check_inside_button(mousepos, back_center, button_side_len_half): # back
                             # go to initial stage and do it again
                             player_turn_step = 0
+                            continue  # skip below
+
+                        # basic buttons
+                        process_completed, player_turn_step,number_of_targets_to_specify = player.check_activate_button(mousepos) # -1: not selected / 0,1,2: attack, defence, regen
+
+                        if process_completed: # defence or regen does not need to modify global variables
+                            # end players turn
+                            player.end_my_turn()
+                            player_turn = False
+                            player_turn_step = 0
+                            board.confirm_using_tile()
+                            number_of_targets_to_specify = 0
+                            enemy_targets = set()
+                            continue # skip below
+
+
+                        ### skill buttons here!
+                        is_valid_move = False
+                        skill_num = player.skill_book.check_button(mousepos)
+                        if skill_num >= 0:
+                            is_valid_move,number_of_targets_to_specify = player.skill_ready(skill_num)
+
+                        if is_valid_move:
+                            if number_of_targets_to_specify>0:
+                                player_turn_step = 2
+
+                            else:
+                                # use the skill!
+                                player.use_skill(enemies)
+
+                                player.current_skill_idx = -1
+                                # end players turn
+                                player.end_my_turn()
+                                player_turn = False
+                                player_turn_step = 0
+                                board.confirm_using_tile()
+                                number_of_targets_to_specify = 0
+                                enemy_targets = set()
+
 
                     elif player_turn_step == 2:
                         if check_inside_button(mousepos, back_center, button_side_len_half):
@@ -251,6 +285,7 @@ def fight():
                                 enemies[i].targeted = False
                             number_of_targets_to_specify = 0
                             enemy_targets = set()
+                            # continue  # skip below
 
                         else:
                             for i in range(len(enemies)):
@@ -371,15 +406,21 @@ def fight():
         if player_turn_step == 1:
             screen.blit(back_img, back_img.get_rect(center=back_center))
 
-            write_text(screen, width // 2, 480, 'Current tiles', 15)
-            write_text(screen, width // 2, 500, '{}'.format(show_nonzero_dict(player.current_tile)), 15)
-            if (player.can_attack):
-                write_text(screen, width // 2, 540, '7: Attack - deals {} damage to closest enemy'.format(player.get_current_damage()), 15)
-            write_text(screen, width // 2, 560, '8: Defend - gains {} temporal defence'.format(player.get_defence_gain()), 15)
-            write_text(screen, width // 2, 580, '9: Regen - heals {} health'.format(player.get_heal_amount()), 15)
-            write_text(screen, width // 2, 600, '1~6: Skills'.format(player.current_tile), 15)
+            # replace to basic move buttons - explanation is shown only when hovering
+            player.draw_buttons(screen)
 
-            write_text(screen, width // 2, height - 30, "Press corresponding number key to confirm", 15)
+            write_text_description(screen, width // 2 + 30, text_description_level, '7: Attack - deals {} damage to closest enemy'.format(player.get_current_damage()), 15)
+            # if (player.can_attack):
+            #     write_text(screen, width // 2, 540, '7: Attack - deals {} damage to closest enemy'.format(player.get_current_damage()), 15)
+            # write_text(screen, width // 2, 560, '8: Defend - gains {} temporal defence'.format(player.get_defence_gain()), 15)
+            # write_text(screen, width // 2, 580, '9: Regen - heals {} health'.format(player.get_heal_amount()), 15)
+            # write_text(screen, width // 2, 600, '1~6: Skills'.format(player.current_tile), 15)
+            #
+            # write_text(screen, width // 2, height - 30, "Press corresponding number key to confirm", 15)
+
+            player.skill_book.draw(screen)
+
+            player.show_current_tiles(screen)
 
         elif player_turn_step == 2:
             screen.blit(back_img, back_img.get_rect(center=back_center))
@@ -397,14 +438,14 @@ def fight():
         for entity in enemies:
             entity.draw(screen)
 
-        # draw board
-        board.draw(screen, player_turn_step)
-
         # draw effects
 
         # if inside the border
         if player_turn:
-            write_text(screen, width // 2, 200, "Player's turn", 30, 'gold')
+            write_text(screen, width // 2, 160, "Player's turn", 30, 'gold')
+            # draw board
+            board.draw(screen, player_turn_step)
+
 
             if player_turn_step == 0:  # listen for the inputs
                 if check_inside_button(mousepos, tab_center, button_side_len_half):

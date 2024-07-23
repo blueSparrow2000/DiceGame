@@ -3,6 +3,7 @@ import pygame
 from image_processor import *
 from music import *
 import copy
+from variables import *
 
 planar_figures = []
 
@@ -15,20 +16,11 @@ Cross_shape = [[0,1,0],
                [0,1,0],
                [0,1,0]]
 
-
 planar_figures.extend([T_shape, Cross_shape])
 
-# TILES INIT
-A = load_image('tiles/Attack')
-D = load_image('tiles/Defence')
-R = load_image('tiles/Regen')
-S = load_image('tiles/Skill')
-used = load_image('tiles/Used')
-empty = load_image('tiles/Empty')
-unusable = load_image('tiles/Unusable')
 class Board():
     def __init__(self,tiles_dict):
-        global A,D,R,S,used,empty,unusable,planar_figures,sound_effects
+        global tile_names,planar_figures,sound_effects
         self.board = [[None for i in range(8)] for j in range(8)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = [[None for i in range(8)] for j in range(8)]
         self.board_original_dict = tiles_dict # 영구적인 영향을 주는 거면 이거도 바꿈
@@ -39,9 +31,12 @@ class Board():
         self.board_dict = self.board_original_dict # 이번 전투에만 영향을 주는거면 이거도 바꿈
         self.cube_figure = load_image('tiles/cube')
 
-        self.image_dict = {'Attack':A, 'Defence':D, 'Regen':R, 'Skill':S, 'Used':used, 'Empty':empty, 'Unusable':unusable} # TILES INIT
+        self.image_dict = dict()
+        for tile_name in tile_names:
+            self.image_dict[tile_name] = (load_image("tiles/%s" % tile_name))
+
         self.translation_dict = {}
-        self.side_length = A.get_height()
+        self.side_length =  self.image_dict['Attack'].get_height()
         self.board_Y_level = 480
         self.board_X = 240 - self.side_length*4
         #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
@@ -124,7 +119,8 @@ class Board():
 
     def collect_tiles(self,position_on_board): # center tile이 보드의 어느 타일을 가렸는지 준다
         self.temp_board = copy.deepcopy(self.board)
-        tiles = {'Attack':0, 'Defence':0, 'Regen':0, 'Skill':0, 'Used':0, 'Empty':0, 'Unusable':0} # TILES INIT
+        # tiles = {'Attack':0, 'Defence':0, 'Regen':0, 'Skill':0, 'Used':0, 'Empty':0, 'Unusable':0} # TILES INIT
+        tiles = {}
         center_x = position_on_board[0]
         center_y = position_on_board[1]
         for c in range(self.planar_figure_col):
@@ -141,16 +137,21 @@ class Board():
                         return False
 
                     # collect tiles
-                    tiles[self.board[col_board_idx][row_board_idx]] += 1
+                    this_tile = self.board[col_board_idx][row_board_idx]
+                    if this_tile in tiles:
+                        tiles[this_tile] += 1
+                    else: # not in there
+                        tiles[this_tile] = 1 # initialize
+
                     self.temp_board[col_board_idx][row_board_idx] = 'Used'# change to used
 
 
         # check whether some unusable tile is inside the planar figure
         # if unusable tile is counted, return False
-        if tiles['Unusable']>0 or tiles['Used']>0:
+        if ('Unusable' in tiles) or ('Used' in tiles): # containing these
             print("Invalid position: containing unusable or used tile")
             return False
-        #print(tiles)
+        # print(tiles)
         return tiles# return tile counts
 
     def confirm_using_tile(self):
