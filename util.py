@@ -32,20 +32,31 @@ def write_text(surf, x, y, text, size,color='black',bg_color = None): #(50, 200,
 알아서 길이별로 잘라서 잘 보여주는 함수
 '''
 def write_text_description(surf, x, y, text, size,color='black',bg_color = None):
+    if not text:
+        return
+    text_list = text.split('|')
+    title = ""
+    content = text_list[0]
+    if (len(text_list) > 1):
+        title = "{ %s }"%text_list[0]
+        content = text_list[1]
     center_x_level = x # fixed
     y_level = y
 
-    total_length = len(text)
-    text_blocks = []
-    text_per_line = 40
+    total_length = len(content)
+    content_blocks = []
+    content_per_line = 40
     current_start = 0
-    while current_start + text_per_line < total_length:
-        text_blocks.append(text[current_start:current_start+text_per_line])
-        current_start += text_per_line
-    text_blocks.append(text[current_start:total_length])
+    while current_start + content_per_line < total_length:
+        content_blocks.append(content[current_start:current_start+content_per_line])
+        current_start += content_per_line
+    content_blocks.append(content[current_start:total_length])
 
-    for i in range(len(text_blocks)):
-        write_text(surf, center_x_level, y_level+i*size, text_blocks[i], size, color, bg_color)
+    write_text(surf, center_x_level, y_level - size - 20, title, size+10, color, bg_color)
+    for i in range(len(content_blocks)):
+        write_text(surf, center_x_level, y_level+i*size, content_blocks[i], size, color, bg_color)
+
+    write_text(surf, center_x_level, requirement_level, "~ Requirements ~", 20, color, bg_color)
 
 
 def check_inside_button(mouse_pos,button_center, button_side_len_half):

@@ -6,7 +6,7 @@ class Player(Entity):
         global mob_Y_level, sound_effects, tile_names # all the other skills should also be contained
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
-        self.current_tile = None
+        self.current_tile = dict()
         self.current_skill_idx = -1
         self.tile_dict = {'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6} ########## this should be given as input for multi characters
         self.skill_book = character_skills
@@ -31,8 +31,24 @@ class Player(Entity):
         self.minitile_spacing = 50
         self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
 
-    def my_turn_lookahead(self, screen,mousepos): # show details of each skill / basic attacks
-        pass
+    def my_turn_lookahead(self, mousepos): # show details of each skill / basic attacks
+        for i in range(len(self.buttons)):
+            current_button = self.buttons[i]
+            if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
+                if (current_button == 'Attack'):
+                    if self.can_attack:
+                        return 'Attack|Attack one target with {} damage'.format(self.get_current_damage()) # string content!
+                elif (current_button=='Defence'):
+                    return 'Defence|Gain {} temporal defence'.format(self.get_defence_gain())
+                elif (current_button == 'Regen'):
+                    return 'Regeneration|Heal {} health'.format(self.get_heal_amount())
+
+        # else, check whether skill
+        for i in range(len(self.skill_book.skill_images)):
+            if check_inside_button(mousepos, self.skill_book.button_locations[i], self.skill_book.image_button_tolerance):
+                return getattr(self.skill_book, "get_detail_%s"%self.skill_book.skills[i])(self)
+
+        return None
 
     def show_current_tiles(self,screen):
         mini_tile_list = []
@@ -48,7 +64,12 @@ class Player(Entity):
 
     def draw_buttons(self,screen):
         for i in range(len(self.buttons)):
-            screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
+            if (self.buttons[i]=='Attack'):
+                if self.can_attack:
+                    screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
+                # else draw nothing!
+            else:
+                screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
 
     def check_activate_button(self,mousepos):
         for i in range(len(self.buttons)):
@@ -74,14 +95,14 @@ class Player(Entity):
     def end_my_turn(self): # do something at the end of the turn
         super().end_my_turn()
         self.current_skill_idx = -1 # reset this
-        self.current_tile = None
+        self.current_tile = dict()
 
     def new_fight(self):
         for k,v in self.buffs.items():
             self.buffs[k] = 0 # reset
         self.defence = 0
         self.update_defence()
-        self.current_tile = None
+        self.current_tile = dict()
         self.current_skill_idx = -1
 
 

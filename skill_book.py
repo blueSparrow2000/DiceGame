@@ -57,6 +57,8 @@ class Mirinae_skills(Skill_Book):
         if (A>3):
             return False, 1, True  # skill_valid, target_nums, is_attack
         return True, 1, True # skill_valid, target_nums,is_attack
+
+
     def martial_art(self,player, target_list):
         sound_effects['hit'].play()
         A = player.count_tile('Attack')
@@ -65,6 +67,12 @@ class Mirinae_skills(Skill_Book):
         for enemy in target_list:
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
+
+    def get_detail_martial_art(self,player):
+        A = player.count_tile('Attack')
+        S = player.count_tile('Skill')
+        damage = (5* S * player.P(A)) * player.get_attack_multiplier()
+        return "Martial art|When (# of attack tile) <= 3. Attack one target with %d damage"%damage
 
     def sword_storm_get_requirement(self,player):
         ''' 2
@@ -80,6 +88,12 @@ class Mirinae_skills(Skill_Book):
         for enemy in target_list:
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
+    def get_detail_sword_storm(self,player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        damage = player.P(A) * player.get_attack_multiplier()
+        return "Sword storm|Attack %d targets with %d damage"%(S+1,damage)
+
     def head_start_get_requirement(self,player):
         ''' 3
         S명의 적에게 취약을 부여하고 D*5만큼 상대의 방어도를 제거한다
@@ -94,6 +108,11 @@ class Mirinae_skills(Skill_Book):
         for enemy in target_list:
             enemy.buffs['vulnerability'] = 3
             enemy.total_defence -= 5*D
+
+    def get_detail_head_start(self,player):
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        return "Head start|Apply vulnerability to %d targets (3 turns) and remove %d defence"%(S+1,D*5)
 
     def self_defence_get_requirement(self,player):
         ''' 4
@@ -112,6 +131,13 @@ class Mirinae_skills(Skill_Book):
         player.absorption = 5 * S * (R+D)
         player.counter_attack = True
 
+    def get_detail_self_defence(self,player):
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        R = player.count_tile('Regen')
+        absorption_amt = 5 * S * (R+D)
+        return "Self defence|For all the incoming attacks next turn, absorb %d damage and reflect each damage back"%(absorption_amt)
+
     def guard_attack_get_requirement(self,player):
         ''' 5
         한 적에게 P(A)*S + P(D) 만큼 데이지를 준다
@@ -129,27 +155,42 @@ class Mirinae_skills(Skill_Book):
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
 
+    def get_detail_guard_attack(self, player):
+        A = player.count_tile('Attack')
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+
+        damage = ( S * player.P(A) + player.P(D) ) * player.get_attack_multiplier()
+        return "Guard attack|Attack one target with %d damage"%damage
+
     def Excaliber_get_requirement(self,player):
         ''' 6
         condition:
-        when attack tile >= 4
+        when attack tile >= 1
 
-        Gives P(A)*5 damage to an enemy
+        Gives (A+S)*10 damage to an enemy
         Gives debuff: broken will for three turns
         '''
         A = player.count_tile('Attack')
-        if (A<4):
+        if (A<1):
             return False, 1, True  # skill_valid, target_nums, is_attack
         return True, 1, True # skill_valid, target_nums,is_attack
 
     def Excaliber(self,player, target_list):
         sound_effects['playerdeath'].play()
         A = player.count_tile('Attack')
-        damage = ( 5 * player.P(A) )* player.get_attack_multiplier()
+        S = player.count_tile('Skill')
+        damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
         for enemy in target_list:
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
             enemy.buffs['broken will'] = 3
+
+    def get_detail_Excaliber(self, player):
+        A = player.count_tile('Attack')
+        S = player.count_tile('Skill')
+        damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
+        return "Excaliber|When (# of attack tile) >= 3.           Attack one target with %d damage and    apply [broken will] for 3 turns"%damage
 
 
 class Gambler_skills(Skill_Book):

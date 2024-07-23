@@ -1,15 +1,12 @@
-class A():
-    def __init__(self,i):
-        self.a = i
+text = "fgags"#"WINDOW|hif sfssfsf"
 
-el = [A(i) for i in range(3)]
+text_list = text.split('|')
+title = ""
+content = text_list[0]
+if (len(text_list)>1):
+    title = text_list[0]
+    content = text_list[1]
 
-gg = set([el[0],el[0],el[1]])
-
-for ent in list(gg):
-    print(ent.a)
-
-# for i in range(2):
-#     el.remove(el[i])
-#
-# print(len(el))
+print(text_list)
+print(title)
+print(content)

@@ -144,6 +144,7 @@ def fight():
 
     game_run = True
 
+    current_display_text = ""
 
     while game_run:
         if player.health<=0: # check player death first
@@ -205,6 +206,10 @@ def fight():
 
             if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
                 mousepos = pygame.mouse.get_pos()
+                if player_turn_step == 1:  # choose skill or attack
+                    new_text = player.my_turn_lookahead(mousepos)
+                    if new_text is not None: # optimization (change only when needed)
+                        current_display_text = new_text
 
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
@@ -224,6 +229,7 @@ def fight():
                             player_turn_step = 0
                             number_of_targets_to_specify = 0
                             enemy_targets = set()
+                            current_display_text = ""  # reset text
                         else:
                             valid_location = board.collect_tiles((xp, yp))
                             if not valid_location:
@@ -236,6 +242,7 @@ def fight():
                         if check_inside_button(mousepos, back_center, button_side_len_half): # back
                             # go to initial stage and do it again
                             player_turn_step = 0
+                            current_display_text = ""  # reset text
                             continue  # skip below
 
                         # basic buttons
@@ -280,6 +287,7 @@ def fight():
                         if check_inside_button(mousepos, back_center, button_side_len_half):
                             # go to initial stage and do it again
                             player_turn_step = 0
+                            current_display_text = ""  # reset text
 
                             for i in range(len(enemies)):
                                 enemies[i].targeted = False
@@ -335,6 +343,7 @@ def fight():
                     if event.key == pygame.K_BACKSPACE:
                         # go to initial stage and do it again
                         player_turn_step = 0
+                        current_display_text = ""  # reset text
                         for i in range(len(enemies)):
                             enemies[i].targeted = False
                         number_of_targets_to_specify = 0
@@ -409,14 +418,7 @@ def fight():
             # replace to basic move buttons - explanation is shown only when hovering
             player.draw_buttons(screen)
 
-            write_text_description(screen, width // 2 + 30, text_description_level, '7: Attack - deals {} damage to closest enemy'.format(player.get_current_damage()), 15)
-            # if (player.can_attack):
-            #     write_text(screen, width // 2, 540, '7: Attack - deals {} damage to closest enemy'.format(player.get_current_damage()), 15)
-            # write_text(screen, width // 2, 560, '8: Defend - gains {} temporal defence'.format(player.get_defence_gain()), 15)
-            # write_text(screen, width // 2, 580, '9: Regen - heals {} health'.format(player.get_heal_amount()), 15)
-            # write_text(screen, width // 2, 600, '1~6: Skills'.format(player.current_tile), 15)
-            #
-            # write_text(screen, width // 2, height - 30, "Press corresponding number key to confirm", 15)
+            write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
 
             player.skill_book.draw(screen)
 
