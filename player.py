@@ -2,13 +2,13 @@ from entity import *
 
 
 class Player(Entity):
-    def __init__(self, character_name,character_skills): # tile_dict
+    def __init__(self, character_name,character_skills, character_tiles): # tile_dict
         global mob_Y_level, sound_effects, tile_names ,requirement_level# all the other skills should also be contained
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
         self.current_tile = dict()
         self.current_skill_idx = -1
-        self.tile_dict = {'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6} ########## this should be given as input for multi characters
+        self.tile_dict = character_tiles ########## this should be given as input for multi characters
         self.skill_book = character_skills
 
         ######################################## buttons

@@ -8,7 +8,7 @@ requirement_level = 760
 turn_text_level = 160
 
 # TILES INIT - need to add new type if nessesary
-tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable']
+tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
 
 
 # move background

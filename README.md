@@ -12,6 +12,7 @@ A simple dice game
 
 
 # To do
+- Implement Joker => player gets to right-click it and choose one from the shown list above => then joker changes into it
 - add relics (few ~ 3)
 - add various enemies (few ~ 3)
 - Mirinae: skill balancing 

@@ -89,7 +89,10 @@ mousepos = (0,0)
 ##### choose character here...
 character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
-player = Player(character_name,character_skills)
+character_tiles = character_tile_dictionary[character_name]
+
+
+player = Player(character_name,character_skills,character_tiles)
 board = Board(player.tile_dict)
 map = Map()
 ####################################################################################################### fight loop #######################################################################################################
