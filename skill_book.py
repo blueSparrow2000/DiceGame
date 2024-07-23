@@ -79,6 +79,7 @@ class Mirinae_skills():
         '''
         return True, 1, True
     def self_defence(self,player, target_list):
+        sound_effects['get'].play()
         S = player.count_tile('Skill')
         D = player.count_tile('Defence')
         R = player.count_tile('Regen')

@@ -18,11 +18,11 @@ SOUND_EFFECT = current_dir+'/sound_effects/'
 
 # # sound effects
 sound_effect_list = ['confirm','hit','get','sword','playerdeath']
-# confirm_sound = pygame.mixer.Sound(SOUND_EFFECT+"confirm.mp3")
-# hit_sound = pygame.mixer.Sound(SOUND_EFFECT+"hit.mp3")
-# get_sound = pygame.mixer.Sound(SOUND_EFFECT+"get.mp3")
-# sword_sound = pygame.mixer.Sound(SOUND_EFFECT+"sword.mp3")
-# playerdeath_sound = pygame.mixer.Sound(SOUND_EFFECT+"playerdeath.mp3")
+confirm_sound = pygame.mixer.Sound(SOUND_EFFECT+"confirm.mp3")
+hit_sound = pygame.mixer.Sound(SOUND_EFFECT+"hit.mp3")
+get_sound = pygame.mixer.Sound(SOUND_EFFECT+"get.mp3")
+sword_sound = pygame.mixer.Sound(SOUND_EFFECT+"sword.mp3")
+playerdeath_sound = pygame.mixer.Sound(SOUND_EFFECT+"playerdeath.mp3")
 
 sound_effects = dict()
 for sound in sound_effect_list:
