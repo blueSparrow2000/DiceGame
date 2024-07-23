@@ -64,3 +64,23 @@ for ic in buff_names:
 
 ### load enemy images
 # mob_img = load_image("enemies/mob")
+
+
+## backgrounds
+bg_width, bg_height = 480, 1920
+bg1 = pygame.transform.smoothscale(load_image("background/1"), (bg_width, bg_height))
+bg2 = pygame.transform.smoothscale(load_image("background/no_mans_land"), (bg_width, bg_height))
+bg3 = pygame.transform.smoothscale(load_image("background/shallow_area"), (bg_width, bg_height))
+
+layer = pygame.transform.smoothscale(load_image("background/down_layer"), (480, 960))
+bg_list = [bg1, bg2, bg3]
+
+
+
+
+
+
+
+
+
+

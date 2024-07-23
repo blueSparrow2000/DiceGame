@@ -40,10 +40,7 @@ from map_logic import *
 from util import *
 import random
 from skill_book import *
-
-#music_Q('Lobby',True)
-#music_Q('Encounter',True)
-
+from map_logic import *
 
 
 
@@ -111,7 +108,7 @@ character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
 player = Player(character_name,character_skills)
 board = Board(player.tile_dict)
-
+map = Map()
 ####################################################################################################### fight loop #######################################################################################################
 def fight():
     global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
@@ -495,85 +492,156 @@ def fight():
 
 
 ####################################################################################################### adventure loop #######################################################################################################
+
+
 def adventure_loop():
+    global background_y, background_layer_y, board, map
     meta_run_adventure = True
+    mousepos = (0,0)
 
     while meta_run_adventure:
         # The Music in main
         music_Q('Adventure', True)
         run_adventure = True
 
+        map.random_initialize()
+        board.init_turn()
+        map_choosing_step = 0  # 0: placing planar figure / 1: clicking reachable map tile => fight etc
+
         while run_adventure:
+            # keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들
+            # if keys[pygame.K_UP]:
+            #     background_y += 1
+            #     background_layer_y += 2
+            # if keys[pygame.K_DOWN]:
+            #     background_y -= 1
+            #     background_layer_y -= 2
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
                     run_adventure, meta_run_adventure = exit()
                     break
 
                 if event.type == pygame.MOUSEMOTION:
-                    continue
+                    mousepos = pygame.mouse.get_pos()
 
                 if event.type == pygame.MOUSEBUTTONUP:
                     sound_effects['confirm'].play()
                     (xp, yp) = pygame.mouse.get_pos()
                     mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
 
+                    if check_inside_button(mousepos, tab_center, button_side_len_half):
+                        board.change_planar_figure(False)
+                    elif check_inside_button(mousepos, rotate_center, button_side_len_half):
+                        board.rotate_once()
+
+                    if map_choosing_step == 0: # check map
+                        is_valid = map.check_tiles((xp, yp),board)
+                        if is_valid: # goto next step (only happens here)
+                            map_choosing_step = 1
+                    elif map_choosing_step == 1:
+
+                        is_valid, which_event = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
+                        if is_valid:
+                            if which_event == 'campfire':
+                                pass
+                            elif which_event == 'ruin':
+                                pass
+                            elif which_event == 'shop':
+                                pass
+                            elif which_event == 'altar':
+                                pass
+                            elif which_event == 'fight':
+                                run_adventure = False
+                                # initialize board attributes
+                                board.init_turn()
+                                player_lost, valid_termination = fight()
+                                # initialize board attributes
+                                board.init_turn()
+
+                                if not valid_termination:
+                                    meta_run_adventure = False
+                                    break
+
+                                if player_lost:
+                                    time.sleep(0.5)
+                                    pygame.mixer.music.stop()
+                                    screen.fill('white')
+                                    write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
+                                    write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+                                    pygame.display.flip()
+
+                                    time.sleep(2)
+                                    meta_run_adventure = False
+
+                                    break
+                                else:
+                                    run_win_screen = True
+                                    music_Q("cozy")
+                                    time.sleep(0.5)
+                                    while run_win_screen:
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                                                meta_run_adventure = False
+                                                run_win_screen = False
+                                                break
+
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                                                    run_win_screen = False
+                                                    break
+                                                elif event.key == pygame.K_RETURN:
+                                                    run_win_screen = False
+                                                    break
+                                        screen.fill('seagreen')
+                                        write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
+                                        write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
+                                                   'gray')
+                                        # show some items dropped etc.
+
+                                        pygame.display.flip()
+                                        clock.tick(game_fps)
+                                    player.update_depth(5)
+
+                        else: # not valid move => pass
+                            pass
+
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                        run_adventure, meta_run_adventure = exit()
-                        break
-                    elif event.key == pygame.K_RETURN:
-                        run_adventure = False
-                        player_lost, valid_termination = fight()
-                        if not valid_termination:
-                            meta_run_adventure = False
+                        sound_effects['confirm'].play()
+                        if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                            run_adventure, meta_run_adventure = exit()
                             break
+                        elif event.key == pygame.K_r:
+                            board.rotate_once()
+                        elif event.key == pygame.K_TAB:
+                            board.change_planar_figure(False)
 
-                        if player_lost:
-                            time.sleep(0.5)
-                            pygame.mixer.music.stop()
-                            screen.fill('white')
-                            write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
-                            write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
-                            pygame.display.flip()
-
-                            time.sleep(2)
-                            meta_run_adventure = False
-
-                            break
-                        else:
-                            run_win_screen = True
-                            music_Q("cozy")
-                            time.sleep(0.5)
-                            while run_win_screen:
-                                for event in pygame.event.get():
-                                    if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                                        meta_run_adventure = False
-                                        run_win_screen = False
-                                        break
-
-                                    if event.type == pygame.KEYDOWN:
-                                        if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                                            run_win_screen = False
-                                            break
-                                        elif event.key == pygame.K_RETURN:
-                                            run_win_screen = False
-                                            break
-                                screen.fill('seagreen')
-                                write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
-                                write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20, 'gray')
-                                # show some items dropped etc.
-
-                                pygame.display.flip()
-                                clock.tick(game_fps)
-                            player.update_depth(5)
+                        elif event.key == pygame.K_RETURN:
+                            pass
 
             if not run_adventure:
                 break
 
             screen.fill('seagreen')
+            # screen.blit(bg_list[0], (0, background_y))
+            # y_rel = background_layer_y % height
+            # y_part2 = y_rel - height if y_rel > 0 else y_rel + height
+            # screen.blit(layer, (0, y_rel))
+            # screen.blit(layer, (0, y_part2))
+
+            map.draw(screen)
+
+            if map_choosing_step==1:
+                map.highlight_reachable_locations(screen)
+
 
             # Draw player main info
             player.draw_player_info_top(screen)
+
+            if map_choosing_step==0 and mousepos[1] >= 480:  # on the board
+                board.draw_planar_figure(screen, mousepos)
+                screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
+                screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
 
             if mouse_particle_list:  # if not empty
                 # print(len(mouse_particle_list))
@@ -617,6 +685,7 @@ while run_character_selection:
             mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
 
         if event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
                 pygame.quit()
                 break

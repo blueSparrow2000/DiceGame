@@ -8,4 +8,6 @@ turn_text_level = 160
 tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable']
 
 
-
+# move background
+background_y = -470
+background_layer_y = 100
