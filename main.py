@@ -179,15 +179,17 @@ def fight():
                     entity.draw(screen)
                 pygame.display.flip()
 
-            player_turn = True
-            player.refresh_my_turn()
-            if (current_turn % 6 == 0):  # every 6th turn, reset the board
-                board.reset()
-
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies)
             ### DELETE DEAD ENEMY ###
 
+            player_turn = True
+            player.refresh_my_turn()
+
+            board.reset()
+
+            # initialize planar figures
+            board.init_turn()
 
 
         screen.fill('white')
@@ -215,7 +217,7 @@ def fight():
                 if player_turn:  # listen for the inputs
                     if player_turn_step == 0:
                         if check_inside_button(mousepos, tab_center, button_side_len_half):
-                            board.change_planar_figure()
+                            board.change_planar_figure(player.confused)
                         elif check_inside_button(mousepos, rotate_center, button_side_len_half):
                             board.rotate_once()
                         elif check_inside_button(mousepos, skip_center, button_side_len_half):
@@ -305,7 +307,7 @@ def fight():
                         if event.key == pygame.K_r:
                             board.rotate_once()
                         if event.key == pygame.K_TAB:
-                            board.change_planar_figure()
+                            board.change_planar_figure(player.confused)
                     if player_turn_step == 1:
                         is_valid_move = False
                         if event.key == pygame.K_1:
@@ -473,6 +475,7 @@ while meta_run:
                         break
 
                     if player_lost:
+                        time.sleep(0.5)
                         pygame.mixer.music.stop()
                         screen.fill('white')
                         write_text(screen, width//2, height//2 - 60, 'Wasted',30,'red')
@@ -486,6 +489,7 @@ while meta_run:
                     else:
                         run_win_screen = True
                         music_Q("cozy")
+                        time.sleep(0.5)
                         while run_win_screen:
                             for event in pygame.event.get():
                                 if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
@@ -502,6 +506,7 @@ while meta_run:
                                         break
                             screen.fill('white')
                             write_text(screen, width//2, height//2 - 240, 'You won!',30,'gold')
+                            write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20, 'black')
                             # show some items dropped etc.
 
                             pygame.display.flip()

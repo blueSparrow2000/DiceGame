@@ -47,6 +47,7 @@ class Entity():
         self.thorns = 0 # some enemy may have default thorns
         self.absorption = 0
         self.counter_attack = False
+        self.confused = False
 
         ######## buff & debuffs
         self.buffs = dict()
@@ -74,6 +75,7 @@ class Entity():
         self.poisoned = False
         self.toxined = False
         self.vulnerability_multiplier = 1
+        self.confused = False
 
     def get_attack_multiplier(self):
         return self.strength_multiplier*self.strength_deplifier
@@ -181,7 +183,7 @@ class Entity():
                 elif buff_name == 'broken will':
                     self.can_attack = False
                 elif buff_name == 'confusion':
-                    pass
+                    self.confused = True
                 elif buff_name == 'heal ban':
                     self.heal_multiplier = 0
                 elif buff_name == 'poison':

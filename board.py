@@ -2,7 +2,6 @@ import random
 import pygame
 from image_processor import *
 from music import *
-
 import copy
 
 planar_figures = []
@@ -48,13 +47,25 @@ class Board():
         #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
 
         self.figure_index = 0 # 0 for primary, 1 for secondary
+        self.init_planar_figures = [copy.deepcopy(planar_figures[0]),copy.deepcopy(planar_figures[1])]
         self.my_planar_figures = [planar_figures[0],planar_figures[1]]
         self.current_planar_figure = self.my_planar_figures[self.figure_index]
         self.planar_figure_col = len(self.current_planar_figure)
         self.planar_figure_row = len(self.current_planar_figure[0])
         self.planar_figure_center = [1,1] # col, row
 
-    def change_planar_figure(self):
+        self.board_reset_turn = 6
+        self.current_turn = 0
+
+    def init_turn(self):
+        self.figure_index = 0
+        self.my_planar_figures = [copy.deepcopy(planar_figures[0]), copy.deepcopy(planar_figures[1])]
+        self.current_planar_figure = self.my_planar_figures[self.figure_index]
+        self.refresh_planar_figure()
+
+    def change_planar_figure(self, confused):
+        if confused:
+            return
         self.figure_index = (self.figure_index+1)%2
         self.current_planar_figure = self.my_planar_figures[self.figure_index]
         self.refresh_planar_figure()
@@ -69,14 +80,20 @@ class Board():
         self.board_dict = self.board_original_dict
 
     def reset(self): # reset the board (each 6 turn)
-        board_temp = []
-        for k,v in self.board_dict.items():
-            tile = k
-            for i in range(v):
-                board_temp.append(tile)
-        random.shuffle(board_temp)
-        # boardify
-        self.boardify(board_temp)
+        if (self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
+            board_temp = []
+            for k,v in self.board_dict.items():
+                tile = k
+                for i in range(v):
+                    board_temp.append(tile)
+            random.shuffle(board_temp)
+            # boardify
+            self.boardify(board_temp)
+
+            # reset turn
+            self.current_turn = 0
+
+        self.current_turn+=1
 
     def boardify(self,board_temp): # change images where board is changed to used
         for i in range(8):

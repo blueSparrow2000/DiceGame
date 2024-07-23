@@ -47,3 +47,6 @@ anser: KK
 
 
 Summer Wind
+
+
+極東の羊、テレキャスターと踊る:しゃろう
