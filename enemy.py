@@ -49,7 +49,7 @@ class Mob(Enemy):
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
                 # player.buffs['toxin'] = 1
-                player.buffs['confusion'] = 1
+                # player.buffs['confusion'] = 1
         elif current_pattern=='no op':
             pass # no op
 

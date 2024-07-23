@@ -57,7 +57,7 @@ class Board():
         self.board_reset_turn = 6
         self.current_turn = 0
 
-    def init_turn(self):
+    def init_turn(self): # initialize planar figure at every turn starts
         self.figure_index = 0
         self.my_planar_figures = [copy.deepcopy(planar_figures[0]), copy.deepcopy(planar_figures[1])]
         self.current_planar_figure = self.my_planar_figures[self.figure_index]
@@ -79,8 +79,8 @@ class Board():
     def new_game(self):
         self.board_dict = self.board_original_dict
 
-    def reset(self): # reset the board (each 6 turn)
-        if (self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
+    def reset(self,enforced = False): # reset the board (each 6 turn)
+        if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
             board_temp = []
             for k,v in self.board_dict.items():
                 tile = k
@@ -94,6 +94,9 @@ class Board():
             self.current_turn = 0
 
         self.current_turn+=1
+
+        # initialize planar figures
+        self.init_turn()
 
     def boardify(self,board_temp): # change images where board is changed to used
         for i in range(8):

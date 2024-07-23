@@ -42,6 +42,7 @@ class Player(Entity):
     def attack(self, target_list):
         sound_effects['sword'].play()
         for enemy in target_list:
+            # enemy.take_damage(100)
             counter_attack_damage = enemy.take_damage(self.get_current_damage())
             self.health -= counter_attack_damage
             # enemy.buffs['broken will'] = 1

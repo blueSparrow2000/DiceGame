@@ -73,6 +73,8 @@ particle_width_mouse = 3
 mouse_particle_radius = 5
 droplet_radius = 33
 effect_color = (150, 200, 240)
+adventure_effect_color = 'darkgoldenrod'
+option_effect_color = 'gold'
 
 def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
     if not mouse:
@@ -115,7 +117,7 @@ character_skills = character_skill_dictionary[character_name]
 player = Player(character_name,character_skills)
 board = Board(player.tile_dict)
 
-
+####################################################################################################### fight loop #######################################################################################################
 def fight():
     global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects
     music_Q('Fight', True)
@@ -125,7 +127,8 @@ def fight():
     number_of_targets_to_specify = 0
     enemy_targets = set()
 
-    board.reset()
+    board.reset(True)
+
     player.new_fight()
     # randomly generate enemy following some logic
     trial = random.randint(1,3)
@@ -162,6 +165,8 @@ def fight():
 
 
         if not player_turn:  # enemy turn
+            ########################################### Just after the player turn ###########################
+
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies)
             ### DELETE DEAD ENEMY ###
@@ -183,13 +188,10 @@ def fight():
             safe_delete(enemies)
             ### DELETE DEAD ENEMY ###
 
+            ########################################### Just before the player turn starts! ###########################
             player_turn = True
             player.refresh_my_turn()
-
             board.reset()
-
-            # initialize planar figures
-            board.init_turn()
 
 
         screen.fill('white')
@@ -442,101 +444,160 @@ def fight():
 
 
 
+####################################################################################################### adventure loop #######################################################################################################
+def adventure_loop():
+    meta_run_adventure = True
 
+    while meta_run_adventure:
+        # The Music in main
+        music_Q('Adventure', True)
+        run_adventure = True
 
-# main loop - traverse through the map
-run = True
-meta_run = True
+        while run_adventure:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                    run_adventure, meta_run_adventure = exit()
+                    break
 
-while meta_run:
-    # The Music in main
-    music_Q('Adventure', True)
-    run = True
+                if event.type == pygame.MOUSEMOTION:
+                    continue
 
-    while run:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                run, meta_run = exit()
+                if event.type == pygame.MOUSEBUTTONUP:
+                    sound_effects['confirm'].play()
+                    (xp, yp) = pygame.mouse.get_pos()
+                    mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                        run_adventure, meta_run_adventure = exit()
+                        break
+                    elif event.key == pygame.K_RETURN:
+                        run_adventure = False
+                        player_lost, valid_termination = fight()
+                        if not valid_termination:
+                            meta_run_adventure = False
+                            break
+
+                        if player_lost:
+                            time.sleep(0.5)
+                            pygame.mixer.music.stop()
+                            screen.fill('white')
+                            write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
+                            write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+                            pygame.display.flip()
+
+                            time.sleep(2)
+                            meta_run_adventure = False
+
+                            break
+                        else:
+                            run_win_screen = True
+                            music_Q("cozy")
+                            time.sleep(0.5)
+                            while run_win_screen:
+                                for event in pygame.event.get():
+                                    if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                                        meta_run_adventure = False
+                                        run_win_screen = False
+                                        break
+
+                                    if event.type == pygame.KEYDOWN:
+                                        if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                                            run_win_screen = False
+                                            break
+                                        elif event.key == pygame.K_RETURN:
+                                            run_win_screen = False
+                                            break
+                                screen.fill('white')
+                                write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
+                                write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20, 'black')
+                                # show some items dropped etc.
+
+                                pygame.display.flip()
+                                clock.tick(game_fps)
+
+            if not run_adventure:
                 break
 
-            if event.type == pygame.MOUSEMOTION:
-                mousepos = pygame.mouse.get_pos()
+            screen.fill('seagreen')
 
+            if mouse_particle_list:  # if not empty
+                # print(len(mouse_particle_list))
+                current_run_time = pygame.time.get_ticks()
+                for mouse_particle in mouse_particle_list:
+                    # draw_particle(screen, mouse_particle)
+                    mouse_click_time = mouse_particle[0]
+                    position = mouse_particle[1]
+                    delta = (current_run_time - (mouse_click_time)) / 1000
+                    if delta >= water_draw_time_mouse:
+                        mouse_particle_list.remove(mouse_particle)
+                    factor = delta / water_draw_time_mouse
+                    radi = calc_drop_radius(factor, mouse_particle_radius)
+                    pygame.draw.circle(screen, adventure_effect_color, position, radi, particle_width_mouse)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                    run, meta_run = exit()
-                    break
-                elif event.key == pygame.K_RETURN:
-                    run = False
-                    player_lost,valid_termination = fight()
-                    if not valid_termination:
-                        meta_run = False
-                        break
-
-                    if player_lost:
-                        time.sleep(0.5)
-                        pygame.mixer.music.stop()
-                        screen.fill('white')
-                        write_text(screen, width//2, height//2 - 60, 'Wasted',30,'red')
-                        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
-                        pygame.display.flip()
-
-                        time.sleep(2)
-                        meta_run = False
-
-                        break
-                    else:
-                        run_win_screen = True
-                        music_Q("cozy")
-                        time.sleep(0.5)
-                        while run_win_screen:
-                            for event in pygame.event.get():
-                                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                                    meta_run = False
-                                    run_win_screen = False
-                                    break
-
-                                if event.type == pygame.KEYDOWN:
-                                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                                        run_win_screen = False
-                                        break
-                                    elif event.key == pygame.K_RETURN:
-                                        run_win_screen = False
-                                        break
-                            screen.fill('white')
-                            write_text(screen, width//2, height//2 - 240, 'You won!',30,'gold')
-                            write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20, 'black')
-                            # show some items dropped etc.
-
-                            pygame.display.flip()
-                            clock.tick(game_fps)
+            pygame.display.flip()
+            clock.tick(game_fps)
 
 
 
 
-        if not run:
+
+
+####################################################################################################### character selection loop #######################################################################################################
+run_character_selection = True
+
+# The Music in main
+music_Q('Lobby', True)
+
+while run_character_selection:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+            pygame.quit()
             break
 
-        screen.fill('dimgray')
+        if event.type == pygame.MOUSEMOTION:
+            continue
+        if event.type == pygame.MOUSEBUTTONUP:
+            sound_effects['confirm'].play()
+            (xp, yp) = pygame.mouse.get_pos()
+            mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                pygame.quit()
+                break
+            elif event.key == pygame.K_RETURN:
+                run_character_selection = False
+                adventure_loop()
+                # player_lost,valid_termination = adventure_loop()
+                # if not valid_termination:
+                #     break
+                break
 
 
-        if mouse_particle_list:  # if not empty
-            #print(len(mouse_particle_list))
-            current_run_time = pygame.time.get_ticks()
-            for mouse_particle in mouse_particle_list:
-                #draw_particle(screen, mouse_particle)
-                mouse_click_time = mouse_particle[0]
-                position = mouse_particle[1]
-                delta = (current_run_time - (mouse_click_time))/1000
-                if  delta >= water_draw_time_mouse:
-                    mouse_particle_list.remove(mouse_particle)
-                factor = delta / water_draw_time_mouse
-                radi = calc_drop_radius(factor, mouse_particle_radius)
-                pygame.draw.circle(screen,effect_color, position, radi, particle_width_mouse)
+    if not run_character_selection:
+        break
 
-        pygame.display.flip()
-        clock.tick(game_fps)
+    screen.fill('dimgray')
+    write_text(screen, width // 2, height // 2 - 240, 'Choose a character and press enter to start!', 20, 'gold')
+
+
+    if mouse_particle_list:  # if not empty
+        #print(len(mouse_particle_list))
+        current_run_time = pygame.time.get_ticks()
+        for mouse_particle in mouse_particle_list:
+            #draw_particle(screen, mouse_particle)
+            mouse_click_time = mouse_particle[0]
+            position = mouse_particle[1]
+            delta = (current_run_time - (mouse_click_time))/1000
+            if  delta >= water_draw_time_mouse:
+                mouse_particle_list.remove(mouse_particle)
+            factor = delta / water_draw_time_mouse
+            radi = calc_drop_radius(factor, mouse_particle_radius)
+            pygame.draw.circle(screen,option_effect_color, position, radi, particle_width_mouse)
+
+    pygame.display.flip()
+    clock.tick(game_fps)
 
 
 
