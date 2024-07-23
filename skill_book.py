@@ -72,7 +72,7 @@ class Mirinae_skills(Skill_Book):
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
         damage = (5* S * player.P(A)) * player.get_attack_multiplier()
-        return "Martial art|Attack one target with %d damage"%damage
+        return "Martial art|Attack one target with 5*A*S = %d damage"%damage
 
     def sword_storm_get_requirement(self,player):
         ''' 2
@@ -92,7 +92,7 @@ class Mirinae_skills(Skill_Book):
         S = player.count_tile('Skill')
         A = player.count_tile('Attack')
         damage = player.P(A) * player.get_attack_multiplier()
-        return "Sword storm|Attack %d targets with %d damage"%(S+1,damage)
+        return "Sword storm|Attack S+1 = %d targets with P(A) = %d    damage"%(S+1,damage)
 
     def head_start_get_requirement(self,player):
         ''' 3
@@ -112,7 +112,7 @@ class Mirinae_skills(Skill_Book):
     def get_detail_head_start(self,player):
         S = player.count_tile('Skill')
         D = player.count_tile('Defence')
-        return "Head start|Apply vulnerability to %d targets (3 turns) and remove %d defence"%(S+1,D*5)
+        return "Head start|Apply vulnerability to S+1 = %d targets  (3 turns) and remove 5*D = %d defence"%(S+1,D*5)
 
     def self_defence_get_requirement(self,player):
         ''' 4
@@ -136,7 +136,7 @@ class Mirinae_skills(Skill_Book):
         D = player.count_tile('Defence')
         R = player.count_tile('Regen')
         absorption_amt = 5 * S * (R+D)
-        return "Self defence|For all the incoming attacks next turn, absorb %d damage and reflect each damage back"%(absorption_amt)
+        return "Self defence|For all the incoming attacks next turn, absorb 5*S*(R+D) = %d damage and reflect each damage back"%(absorption_amt)
 
     def guard_attack_get_requirement(self,player):
         ''' 5
@@ -161,7 +161,7 @@ class Mirinae_skills(Skill_Book):
         D = player.count_tile('Defence')
 
         damage = ( S * player.P(A) + player.P(D) ) * player.get_attack_multiplier()
-        return "Guard attack|Attack one target with %d damage"%damage
+        return "Guard attack|Attack one target with S*P(A)+P(D) = %d  damage"%damage
 
     def Excaliber_get_requirement(self,player):
         ''' 6
@@ -190,7 +190,7 @@ class Mirinae_skills(Skill_Book):
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
         damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
-        return "Excaliber|Attack one target with %d damage and    apply [broken will] for 3 turns"%damage
+        return "Excaliber|Attack one target with 10*(A+S) = %d    damage and apply 'broken will' for 3    turns"%damage
 
 
 class Gambler_skills(Skill_Book):
