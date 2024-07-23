@@ -493,7 +493,6 @@ def fight():
 
 ####################################################################################################### adventure loop #######################################################################################################
 
-
 def adventure_loop():
     global background_y, background_layer_y, board, map
     meta_run_adventure = True
@@ -505,6 +504,7 @@ def adventure_loop():
         run_adventure = True
 
         map.random_initialize()
+
         board.init_turn()
         map_choosing_step = 0  # 0: placing planar figure / 1: clicking reachable map tile => fight etc
 
@@ -540,6 +540,13 @@ def adventure_loop():
                         if is_valid: # goto next step (only happens here)
                             map_choosing_step = 1
                     elif map_choosing_step == 1:
+                        if check_inside_button(mousepos, skip_center, button_side_len_half):  # back
+                            # go to initial stage and do it again
+                            map_choosing_step = 0
+                            map.reset()
+                            board.init_turn()
+                            continue  # skip below
+
 
                         is_valid, which_event = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
                         if is_valid:
@@ -633,7 +640,7 @@ def adventure_loop():
 
             if map_choosing_step==1:
                 map.highlight_reachable_locations(screen)
-
+                screen.blit(back_img, back_img.get_rect(center=skip_center))
 
             # Draw player main info
             player.draw_player_info_top(screen)

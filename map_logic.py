@@ -16,6 +16,8 @@ class Map():
         self.map = [[['void',False] for x in range(7)] for y in range(7)] # tile name, reachability
         self.must_contain_at_least_one = [[False for x in range(7)] for y in range(7)]
 
+        self.map_save = copy.deepcopy(self.map) # for reset
+
         self.image_dict = dict() # load map tile images!
         for tile_name in map_tile_names:
             self.image_dict[tile_name] = (load_image("map_tiles/%s" % tile_name))
@@ -51,7 +53,10 @@ class Map():
         # self.map[5][3] must contain this coordinate 5,3
         self.map[6][3] = ['base',False]  # must not contain this!
 
+        self.map_save = copy.deepcopy(self.map)
 
+    def reset(self):
+        self.map = copy.deepcopy(self.map_save)
 
     def draw(self,screen):
         for i in range(7):
@@ -128,8 +133,8 @@ class Map():
                     self.map[c][r] = ['bridge',False]
 
 
-        for tttt in range(7):
-            print(self.map[tttt])
+        # for tttt in range(7):
+        #     print(self.map[tttt])
         return True
 
 

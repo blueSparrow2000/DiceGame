@@ -56,10 +56,10 @@ class Player(Entity):
         write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, 'darkgoldenrod')
 
         # depth
-        write_text(screen, 440,self.giant_HP_width + self.giant_HP_width, " - %d m"%self.current_depth,30, 'black')
+        write_text(screen, 440,self.giant_HP_width *2, " - %d m"%self.current_depth,30, 'black')
 
         # gold
-        write_text(screen, 40,self.giant_HP_width + self.giant_HP_width - 10, "Gold %d g"%self.current_depth,20, 'gold')
+        write_text(screen, 40,self.giant_HP_width*2 - 10, "Gold %d g"%self.current_depth,20, 'gold')
 
 
         # relics
