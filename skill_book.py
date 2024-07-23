@@ -49,14 +49,14 @@ class Mirinae_skills(Skill_Book):
     def martial_art_get_requirement(self,player):
         ''' 1
         condition:
-        when attack tile <= 3
+        when attack tile < 4
 
         attack one enemy with damage S * (A) * 5
         '''
         A = player.count_tile('Attack')
         if (A>3):
-            return False, 1, True  # skill_valid, target_nums, is_attack
-        return True, 1, True # skill_valid, target_nums,is_attack
+            return False, 1, True, {'Skill':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
+        return True, 1, True, {'Skill':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
 
 
     def martial_art(self,player, target_list):
@@ -72,7 +72,7 @@ class Mirinae_skills(Skill_Book):
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
         damage = (5* S * player.P(A)) * player.get_attack_multiplier()
-        return "Martial art|When (# of attack tile) <= 3. Attack one target with %d damage"%damage
+        return "Martial art|Attack one target with %d damage"%damage
 
     def sword_storm_get_requirement(self,player):
         ''' 2
@@ -80,7 +80,7 @@ class Mirinae_skills(Skill_Book):
         '''
 
         S = player.count_tile('Skill')
-        return True, S+1, True  # skill_valid, target_nums,is_attack
+        return True, S+1, True, {'Skill':(1,0),}  # skill_valid, target_nums,is_attack
     def sword_storm(self,player, target_list):
         sound_effects['sword'].play()
         A = player.count_tile('Attack')
@@ -100,7 +100,7 @@ class Mirinae_skills(Skill_Book):
 
         '''
         S = player.count_tile('Skill')
-        return True, S, True
+        return True, S, True, {'Skill':(2,0),}
 
     def head_start(self,player, target_list):
         sound_effects['hit'].play()
@@ -122,7 +122,7 @@ class Mirinae_skills(Skill_Book):
 
         #회복 및 방어가 공격으로 전환된다: S*P(R+D)만큼 피해를 준다
         '''
-        return True, 1, True
+        return True, 1, True, {'Skill':(2,0),}
     def self_defence(self,player, target_list):
         sound_effects['get'].play()
         S = player.count_tile('Skill')
@@ -142,7 +142,7 @@ class Mirinae_skills(Skill_Book):
         ''' 5
         한 적에게 P(A)*S + P(D) 만큼 데이지를 준다
         '''
-        return True, 1, True
+        return True, 1, True, {'Skill':(3,0),}
 
     def guard_attack(self,player, target_list):
         sound_effects['sword'].play()
@@ -173,8 +173,8 @@ class Mirinae_skills(Skill_Book):
         '''
         A = player.count_tile('Attack')
         if (A<1):
-            return False, 1, True  # skill_valid, target_nums, is_attack
-        return True, 1, True # skill_valid, target_nums,is_attack
+            return False, 1, True, {'Skill':(3,0),'Attack':(1,0)} # skill_valid, target_nums, is_attack
+        return True, 1, True, {'Skill':(3,0),'Attack':(1,0)} # skill_valid, target_nums,is_attack
 
     def Excaliber(self,player, target_list):
         sound_effects['playerdeath'].play()
@@ -190,7 +190,7 @@ class Mirinae_skills(Skill_Book):
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
         damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
-        return "Excaliber|When (# of attack tile) >= 3.           Attack one target with %d damage and    apply [broken will] for 3 turns"%damage
+        return "Excaliber|Attack one target with %d damage and    apply [broken will] for 3 turns"%damage
 
 
 class Gambler_skills(Skill_Book):

@@ -232,6 +232,7 @@ def fight():
                             current_display_text = ""  # reset text
                         else:
                             valid_location = board.collect_tiles((xp, yp))
+                            player.initialize_step_1()
                             if not valid_location:
                                 pass
                             else:
@@ -419,6 +420,7 @@ def fight():
             player.draw_buttons(screen)
 
             write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
+            player.show_required_tiles(screen)
 
             player.skill_book.draw(screen)
 

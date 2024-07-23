@@ -3,7 +3,7 @@ from entity import *
 
 class Player(Entity):
     def __init__(self, character_name,character_skills): # tile_dict
-        global mob_Y_level, sound_effects, tile_names # all the other skills should also be contained
+        global mob_Y_level, sound_effects, tile_names ,requirement_level# all the other skills should also be contained
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
         self.current_tile = dict()
@@ -31,24 +31,54 @@ class Player(Entity):
         self.minitile_spacing = 50
         self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
 
+        self.required_tiles = dict()
+        self.required_tile_x = 200
+        self.required_tile_y = requirement_level + 30
+        self.requirement_spacing = 25
+
+    def initialize_step_1(self):
+        self.required_tiles = dict()
+
     def my_turn_lookahead(self, mousepos): # show details of each skill / basic attacks
         for i in range(len(self.buttons)):
             current_button = self.buttons[i]
             if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
                 if (current_button == 'Attack'):
                     if self.can_attack:
+                        self.required_tiles = dict()
                         return 'Attack|Attack one target with {} damage'.format(self.get_current_damage()) # string content!
                 elif (current_button=='Defence'):
+                    self.required_tiles = dict()
                     return 'Defence|Gain {} temporal defence'.format(self.get_defence_gain())
                 elif (current_button == 'Regen'):
+                    self.required_tiles = dict()
                     return 'Regeneration|Heal {} health'.format(self.get_heal_amount())
 
         # else, check whether skill
         for i in range(len(self.skill_book.skill_images)):
             if check_inside_button(mousepos, self.skill_book.button_locations[i], self.skill_book.image_button_tolerance):
+                _,_,_, self.required_tiles = getattr(self.skill_book, self.skill_book.skills[
+                    i] + '_get_requirement')(self)
+
                 return getattr(self.skill_book, "get_detail_%s"%self.skill_book.skills[i])(self)
 
         return None
+
+    def show_required_tiles(self,screen):
+        cnt = 0
+        for req_tile_name,req_range in self.required_tiles.items():
+            content = " %d ~ %d " % req_range
+
+            if not req_range[0]:
+                content = "   ~ %d "%req_range[1]
+            elif not req_range[1]:
+                content = " %d ~   " % req_range[0]
+
+            screen.blit(self.mini_tile_icons[req_tile_name], self.mini_tile_icons[req_tile_name].get_rect(center= (self.required_tile_x, self.required_tile_y + cnt * self.requirement_spacing) ))
+            write_text(screen, self.required_tile_x + 40, self.required_tile_y + cnt * self.requirement_spacing,content , 20)
+
+            cnt+=1
+
 
     def show_current_tiles(self,screen):
         mini_tile_list = []
@@ -96,6 +126,7 @@ class Player(Entity):
         super().end_my_turn()
         self.current_skill_idx = -1 # reset this
         self.current_tile = dict()
+
 
     def new_fight(self):
         for k,v in self.buffs.items():
@@ -154,13 +185,12 @@ class Player(Entity):
 
     def skill_ready(self, idx): # use the idx'th skill
         # global requirement: Need at least one skill tile to use skill
-        S =self.count_tile('Skill')
-        if (S<=0):
+        S = self.count_tile('Skill')
+        if ( S <= idx//2 ): # check skill requirement
             return False, 1
 
-
         # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
-        skill_valid, target_nums,is_attack = getattr(self.skill_book, self.skill_book.skills[idx]+'_get_requirement')(self)
+        skill_valid, target_nums,is_attack,_ = getattr(self.skill_book, self.skill_book.skills[idx]+'_get_requirement')(self)
         if skill_valid and ((not is_attack) or (is_attack and self.can_attack)):
             # if valid, change the skill index to idx
             self.current_skill_idx = idx
