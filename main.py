@@ -107,17 +107,24 @@ def fight():
     player.new_fight()
     # randomly generate enemy following some logic
     trial = random.randint(1,3)
-    enemy_request = ['Mob' for i in range(trial)] # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
-    
+    enemy_request = ['mob' for i in range(trial)] # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    #enemy_request = ['halo']
+
     enemies = []
-    enemy_num = len(enemy_request) # at most three
     
     mob_side_len = 64
     mob_gap = 28
-    mob_X = 332 - (enemy_num-1)*(mob_side_len+mob_gap)/2
+    mob_X = 332 - (len(enemy_request)-1)*(mob_side_len+mob_gap)/2
 
-    for i in range(enemy_num):
-        enemy = Mob(my_name = 'enemies/mob', hp=30, hpmax = 30, attack_damage = 5,pos = (mob_X,mob_Y_level))
+    # Mob(my_name='enemies/mob', hp=30, hpmax=30, attack_damage=5, pos=(mob_X, mob_Y_level))
+    # enemy.update_buffs()
+    for i in range(len(enemy_request)):
+        enemy = None
+        if enemy_request[i]=='mob':
+            enemy = Mob(pos=(mob_X, mob_Y_level),rank=1)
+        elif enemy_request[i]=='halo':
+            enemy = Halo(pos=(mob_X, mob_Y_level))
+
         # enemy.update_buffs()
         enemies.append(enemy)
         mob_X += mob_side_len + mob_gap

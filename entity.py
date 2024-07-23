@@ -60,6 +60,12 @@ class Entity():
         ######## relics
         self.relics = []
 
+    def regen(self):
+        self.health = min(self.max_health,self.health+self.get_heal_amount())
+
+    def get_heal_amount(self):
+        return
+
     def reset_state(self): # 상대 변수들. 상대가 공격시 사용되는 변수들. 초기화는 내턴 시작시 수행.
         self.absorption = 0
         self.counter_attack = False

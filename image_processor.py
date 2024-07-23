@@ -37,7 +37,7 @@ def load_image(filename):
         return None
 
 ### icons / buff icons
-icons = ['no op','shield','sword','buff','unkown','absorption']
+icons = ['no op','shield','attack','buff','unkown','regen','absorption'] #  enemy가 사용하니까 추가할때 이름을 주의하라 (enemy의 기술 명으로 해야함)
 buff_name_description_dic = {
 'decay':"defence is halved every turn",
 'strength':"deals double damage",
@@ -67,13 +67,13 @@ for ic in buff_names:
 
 
 ## backgrounds
-bg_width, bg_height = 480, 1920
-bg1 = pygame.transform.smoothscale(load_image("background/1"), (bg_width, bg_height))
-bg2 = pygame.transform.smoothscale(load_image("background/no_mans_land"), (bg_width, bg_height))
-bg3 = pygame.transform.smoothscale(load_image("background/shallow_area"), (bg_width, bg_height))
-
-layer = pygame.transform.smoothscale(load_image("background/down_layer"), (480, 960))
-bg_list = [bg1, bg2, bg3]
+# bg_width, bg_height = 480, 1920
+# bg1 = pygame.transform.smoothscale(load_image("background/1"), (bg_width, bg_height))
+# bg2 = pygame.transform.smoothscale(load_image("background/no_mans_land"), (bg_width, bg_height))
+# bg3 = pygame.transform.smoothscale(load_image("background/shallow_area"), (bg_width, bg_height))
+#
+# layer = pygame.transform.smoothscale(load_image("background/down_layer"), (480, 960))
+# bg_list = [bg1, bg2, bg3]
 
 
 

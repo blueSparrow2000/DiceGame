@@ -16,7 +16,7 @@ class Player(Entity):
         self.button_images = []
         self.image_button_tolerance = 25
         for button_name in self.buttons:
-            self.button_images.append(load_image("%s" % button_name))
+            self.button_images.append(load_image("tiles/%s" % button_name))
         self.button_spacing = 120
         self.button_x = 240
         self.button_y = 460
@@ -205,9 +205,6 @@ class Player(Entity):
         # count number of defence tiles
         D = self.count_tile('Defence')
         return self.P(D)*self.defence_gain_multiplier
-
-    def regen(self):
-        self.health = min(self.max_health,self.health+self.get_heal_amount())
 
     def get_heal_amount(self):
         # count number of regen tiles
