@@ -8,7 +8,7 @@ from util import *
 import copy
 import random
 
-map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight']
+map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight','boss_fight']
 event_tile_names = ['campfire','fight','ruin','shop','altar']
 class Map():
     def __init__(self):
@@ -27,15 +27,24 @@ class Map():
 
         self.map_Y_level = 480
         self.map_X = 240 - self.side_length*3 - self.side_length//2
-    def random_initialize(self):
+
+        self.break_limit = False
+
+    def random_initialize(self, player):
         self.map = [[['void',False] for x in range(7)] for y in range(7)]
         self.must_contain_at_least_one = [[[False] for x in range(7)] for y in range(7)] # 해당 픽셀이 must contain이어야 하나, True라면 해당 픽셀이 must contain이게 한 이유가 되는 픽셀 좌표를 넣음
 
-        # spawn island randomly - fight/campfire/shop/boss/ruin/altar
-        self.map[1][3] = ['fight',False]
-        self.map[2][5] = ['ruin',False]
-        self.map[3][3] = ['shop',False]
-        self.map[4][2] = ['altar', False]
+
+        if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= -100: # only boss fight tile is given
+            self.map[1][3] = ['fight',False]
+            self.break_limit = True
+        else:
+            # spawn island randomly - fight/campfire/shop/boss/ruin/altar
+            self.map[1][3] = ['fight',False]
+            self.map[2][5] = ['ruin',False]
+            self.map[3][3] = ['shop',False]
+            self.map[4][2] = ['altar', False]
+            self.map[4][5] = ['campfire', False]
 
         # insert at-least-contain-one's in neighbors islands
         for c in range(7):
@@ -61,7 +70,13 @@ class Map():
     def draw(self,screen):
         for i in range(7):
             for j in range(7):
+                if self.map[i][j][0]=='fight':
+                    if self.break_limit:  # boss fight
+                        screen.blit(self.image_dict['boss_fight'], (self.map_X + j*self.side_length, self.map_Y_level + self.side_length*i))
+                        continue
                 screen.blit(self.image_dict[self.map[i][j][0]], (self.map_X + j*self.side_length, self.map_Y_level + self.side_length*i))
+
+
     def check_tiles(self,position_on_map, board_obj): # center tile이 보드의 어느 타일을 가렸는지 준다
         self.bridge_map = [[False for x in range(7)] for y in range(7)]
         self.reachability_map = [[False for x in range(7)] for y in range(7)]
@@ -153,6 +168,6 @@ class Map():
                 if self.map[c][r][1]: # reachable
                     if check_inside_button(mousepos, (self.map_X + r*self.side_length + self.side_length//2, self.map_Y_level + self.side_length*c + self.side_length//2), self.image_button_tolerance): # 이게 버튼 센터가 아닐 수 있음 (self.map_X + r*self.side_length, self.map_Y_level + self.side_length*c)
                         map_tile_name = self.map[c][r][0]
-                        print(self.map[c][r])
-                        return True, map_tile_name # is_valid, which_event
-        return False, False
+                        # print("current map tile choice: "+self.map[c][r])
+                        return True, map_tile_name , 6-c # is_valid, which_event, depth = 6-c
+        return False, False , 0

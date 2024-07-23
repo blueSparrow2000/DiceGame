@@ -44,7 +44,9 @@ class Player(Entity):
 
 
     def update_depth(self, amount):
-        self.current_depth += amount
+        self.current_depth -= amount
+        if self.current_depth <= - 100:
+            self.current_depth = 'LIMIT'
 
     def draw_player_info_top(self,screen):
 
@@ -56,10 +58,10 @@ class Player(Entity):
         write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, 'darkgoldenrod')
 
         # depth
-        write_text(screen, 440,self.giant_HP_width *2, " - %d m"%self.current_depth,30, 'black')
+        write_text(screen, 400,self.giant_HP_width *2, " %s m"%self.current_depth,30, 'black')
 
         # gold
-        write_text(screen, 40,self.giant_HP_width*2 - 10, "Gold %d g"%self.current_depth,20, 'gold')
+        write_text(screen, 40,self.giant_HP_width*2 - 10, "Gold %d g"%self.golds,20, 'gold')
 
 
         # relics

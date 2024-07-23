@@ -41,7 +41,10 @@ from util import *
 import random
 from skill_book import *
 from map_logic import *
-
+from area_ruin import *
+from area_campfire import *
+from area_altar import *
+from area_shop import *
 
 
 pygame.init()  # 파이게임 초기화
@@ -53,7 +56,7 @@ pygame.display.set_caption('Dice Game')  # window title
 width, height = pygame.display.get_surface().get_size()  # window width, height
 
 screen.fill((0,0,0))  # background color
-game_fps = 30 #60
+
 
 def exit():
     pygame.quit()
@@ -61,26 +64,6 @@ def exit():
 
 def exit_fight():
     return
-
-mouse_particle_list = []  # mouse click effects
-water_draw_time = 0.8
-water_draw_time_mouse = 0.6
-particle_width = 6
-particle_width_mouse = 3
-mouse_particle_radius = 5
-droplet_radius = 33
-effect_color = (150, 200, 240)
-adventure_effect_color = 'darkgoldenrod'
-option_effect_color = 'gold'
-
-def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
-    if not mouse:
-        width = int(math.pow(3*(1-factor),3)+3.5)
-    else:
-        width = int(math.pow(2.5*(1-factor),3)+1.7)
-    r = max(width,int(start_radius*(1+4*math.pow(factor,1/5))))
-    return r
-
 
 
 
@@ -503,7 +486,7 @@ def adventure_loop():
         music_Q('Adventure', True)
         run_adventure = True
 
-        map.random_initialize()
+        map.random_initialize(player)
 
         board.init_turn()
         map_choosing_step = 0  # 0: placing planar figure / 1: clicking reachable map tile => fight etc
@@ -548,23 +531,26 @@ def adventure_loop():
                             continue  # skip below
 
 
-                        is_valid, which_event = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
+                        is_valid, which_event, move_depth = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
                         if is_valid:
+                            player.update_depth(move_depth)
+                            run_adventure = False
+
                             if which_event == 'campfire':
-                                pass
+                                go_to_campfire(screen,clock, player)
                             elif which_event == 'ruin':
-                                pass
+                                go_to_ruin(screen,clock, player)
                             elif which_event == 'shop':
-                                pass
+                                go_to_shop(screen,clock, player)
                             elif which_event == 'altar':
-                                pass
+                                go_to_altar(screen,clock, player)
                             elif which_event == 'fight':
-                                run_adventure = False
+
                                 # initialize board attributes
                                 board.init_turn()
                                 player_lost, valid_termination = fight()
-                                # initialize board attributes
                                 board.init_turn()
+                                # initialize board attributes
 
                                 if not valid_termination:
                                     meta_run_adventure = False
@@ -608,7 +594,7 @@ def adventure_loop():
 
                                         pygame.display.flip()
                                         clock.tick(game_fps)
-                                    player.update_depth(5)
+
 
                         else: # not valid move => pass
                             pass

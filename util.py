@@ -3,6 +3,7 @@ from image_processor import *
 import time
 from music import *
 from variables import *
+import math
 
 TAB_img = load_image("icons/TAB") # size 50 pixel
 rotate_img = load_image("icons/rotate")
@@ -64,3 +65,12 @@ def check_inside_button(mouse_pos,button_center, button_side_len_half):
         return True
     else:
         return False
+
+def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
+    if not mouse:
+        width = int(math.pow(3*(1-factor),3)+3.5)
+    else:
+        width = int(math.pow(2.5*(1-factor),3)+1.7)
+    r = max(width,int(start_radius*(1+4*math.pow(factor,1/5))))
+    return r
+
