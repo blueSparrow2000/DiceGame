@@ -174,8 +174,9 @@ def fight():
                 player.get_buff_effect() # update buff effect every turn
                 # draw again
                 screen.fill('white')
-                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'gold')
+                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
                 player.draw(screen)
+                player.draw_player_info_top(screen) # Draw player main info
                 for entity in enemies:
                     entity.draw(screen)
                 pygame.display.flip()
@@ -445,6 +446,9 @@ def fight():
 
         # draw effects
 
+        # Draw player main info
+        player.draw_player_info_top(screen)
+
         # if inside the border
         if player_turn:
             write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
@@ -469,7 +473,7 @@ def fight():
                 if mousepos[1] >= 480:  # on the board
                     board.draw_planar_figure(screen, mousepos)
         else:
-            write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'gold')
+            write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
 
         if mouse_particle_list:  # if not empty
             # print(len(mouse_particle_list))
@@ -566,6 +570,9 @@ def adventure_loop():
                 break
 
             screen.fill('seagreen')
+
+            # Draw player main info
+            player.draw_player_info_top(screen)
 
             if mouse_particle_list:  # if not empty
                 # print(len(mouse_particle_list))

@@ -39,14 +39,17 @@ class Player(Entity):
         ### game variables
         self.current_depth = 0
         self.golds = 0
-        self.giant_HP_pos = [240, 50]
+        self.giant_HP_width = 30
+        self.giant_HP_pos = [240,self.giant_HP_width//2]
+
+
     def draw_player_info_top(self,screen):
 
-        draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100, 'silver')
-        draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100 * self.health / self.max_health, 'coral')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], 480, self.giant_HP_width, 100, 'silver')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], 480, self.giant_HP_width, 100 * self.health / self.max_health, 'coral')
 
-        write_text(screen, self.health_bar_pos[0], self.health_bar_pos[1], "%d/%d" % (self.health, self.max_health), 15, 'maroon')
-        write_text(screen, 50,20, self.my_name,30, 'gold')
+        write_text(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
+        write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, 'darkgoldenrod')
 
         # depth
 
