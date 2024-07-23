@@ -7,16 +7,63 @@ from variables import *
 
 planar_figures = []
 
+# total 11 but i am lazy
 T_shape = [[1,1,1],
            [0,1,0],
            [0,1,0],
            [0,1,0]]
+
 Cross_shape = [[0,1,0],
                [1,1,1],
                [0,1,0],
                [0,1,0]]
 
-planar_figures.extend([T_shape, Cross_shape])
+Worm_shape =  [[1,1,0],
+               [0,1,0],
+               [0,1,0],
+               [0,1,1]]
+
+Worm_2_shape =[[1,1,0],
+               [0,1,1],
+               [0,1,0],
+               [0,1,0]]
+
+Worm_3_shape =[[1,1,0],
+               [0,1,0],
+               [0,1,1],
+               [0,1,0]]
+
+Cacti_shape = [[0,1,0],
+               [1,1,0],
+               [0,1,1],
+               [0,1,0]]
+
+Diag_shape =  [[1,0,0],
+               [1,1,0],
+               [0,1,1],
+               [0,0,1]]
+
+Diag_2_shape =[[1,0,0],
+               [1,1,0],
+               [0,1,0],
+               [0,1,1]]
+
+Chair_shape = [[0,1,0],
+               [0,1,0],
+               [1,1,1],
+               [1,0,0]]
+
+Chair_2_shape=[[0,0,1],
+               [0,1,1],
+               [1,1,0],
+               [0,1,0]]
+
+# Thunder_shape=[[1,0,0], # out of range
+#                [1,0,0],
+#                [1,1,0],
+#                [0,1,0],
+#                [0,1,0]]
+planar_figures.extend([T_shape, Cross_shape, Worm_shape, Worm_2_shape, Worm_3_shape, Cacti_shape, Diag_shape, Diag_2_shape, Chair_shape, Chair_2_shape])
 
 class Board():
     def __init__(self,tiles_dict):

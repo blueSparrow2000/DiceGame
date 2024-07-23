@@ -36,6 +36,27 @@ class Player(Entity):
         self.required_tile_y = requirement_level + 30
         self.requirement_spacing = 25
 
+        ### game variables
+        self.current_depth = 0
+        self.golds = 0
+        self.giant_HP_pos = [240, 50]
+    def draw_player_info_top(self,screen):
+
+        draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100, 'silver')
+        draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100 * self.health / self.max_health, 'coral')
+
+        write_text(screen, self.health_bar_pos[0], self.health_bar_pos[1], "%d/%d" % (self.health, self.max_health), 15, 'maroon')
+        write_text(screen, 50,20, self.my_name,30, 'gold')
+
+        # depth
+
+
+        # gold
+
+
+        # relics
+
+
     def initialize_step_1(self):
         self.required_tiles = dict()
 

@@ -25,6 +25,7 @@ class Entity():
         global buff_names, EID
         self.EID = EID
         EID += 1
+        self.my_name = my_name
         self.image = load_image(my_name)
 
         self.health = hp

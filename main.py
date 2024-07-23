@@ -114,7 +114,7 @@ board = Board(player.tile_dict)
 
 ####################################################################################################### fight loop #######################################################################################################
 def fight():
-    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level
+    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -174,7 +174,7 @@ def fight():
                 player.get_buff_effect() # update buff effect every turn
                 # draw again
                 screen.fill('white')
-                write_text(screen, width // 2, 200, "Enemy's turn", 30, 'gold')
+                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'gold')
                 player.draw(screen)
                 for entity in enemies:
                     entity.draw(screen)
@@ -356,62 +356,63 @@ def fight():
                         if event.key == pygame.K_TAB:
                             board.change_planar_figure(player.confused)
                     if player_turn_step == 1:
-                        is_valid_move = False
-                        if event.key == pygame.K_1:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(0)
-                        elif event.key == pygame.K_2:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(1)
-                        elif event.key == pygame.K_3:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(2)
-                        elif event.key == pygame.K_4:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(3)
-                        elif event.key == pygame.K_5:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(4)
-                        elif event.key == pygame.K_6:
-                            is_valid_move,number_of_targets_to_specify = player.skill_ready(5)
-
-                        if is_valid_move:
-                            if number_of_targets_to_specify>0:
-                                player_turn_step = 2
-
-                            else:
-                                # use the skill!
-                                player.use_skill(enemies)
-
-                                player.current_skill_idx = -1
-                                # end players turn
-                                player.end_my_turn()
-                                player_turn = False
-                                player_turn_step = 0
-                                board.confirm_using_tile()
-                                number_of_targets_to_specify = 0
-                                enemy_targets = set()
-
-
-
-                        if event.key == pygame.K_7 and player.can_attack: # basic attack
-                            player_turn_step = 2
-                            number_of_targets_to_specify = 1
-
-                        if event.key == pygame.K_8:
-                            player.defend()
-                            # end players turn
-                            player.end_my_turn()
-                            player_turn = False
-                            player_turn_step = 0
-                            board.confirm_using_tile()
-                            number_of_targets_to_specify = 0
-                            enemy_targets = set()
-                        if event.key == pygame.K_9:
-                            player.regen()
-                            # end players turn
-                            player.end_my_turn()
-                            player_turn = False
-                            player_turn_step = 0
-                            board.confirm_using_tile()
-                            number_of_targets_to_specify = 0
-                            enemy_targets = set()
-
+                        pass
+                        # is_valid_move = False
+                        # if event.key == pygame.K_1:
+                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(0)
+                        # elif event.key == pygame.K_2:
+                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(1)
+                        # elif event.key == pygame.K_3:
+                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(2)
+                        # elif event.key == pygame.K_4:
+                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(3)
+                        # elif event.key == pygame.K_5:
+                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(4)
+                        # elif event.key == pygame.K_6:
+                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(5)
+                        #
+                        # if is_valid_move:
+                        #     if number_of_targets_to_specify>0:
+                        #         player_turn_step = 2
+                        #
+                        #     else:
+                        #         # use the skill!
+                        #         player.use_skill(enemies)
+                        #
+                        #         player.current_skill_idx = -1
+                        #         # end players turn
+                        #         player.end_my_turn()
+                        #         player_turn = False
+                        #         player_turn_step = 0
+                        #         board.confirm_using_tile()
+                        #         number_of_targets_to_specify = 0
+                        #         enemy_targets = set()
+                        #
+                        #
+                        #
+                        # if event.key == pygame.K_7 and player.can_attack: # basic attack
+                        #     player_turn_step = 2
+                        #     number_of_targets_to_specify = 1
+                        #
+                        # if event.key == pygame.K_8:
+                        #     player.defend()
+                        #     # end players turn
+                        #     player.end_my_turn()
+                        #     player_turn = False
+                        #     player_turn_step = 0
+                        #     board.confirm_using_tile()
+                        #     number_of_targets_to_specify = 0
+                        #     enemy_targets = set()
+                        # if event.key == pygame.K_9:
+                        #     player.regen()
+                        #     # end players turn
+                        #     player.end_my_turn()
+                        #     player_turn = False
+                        #     player_turn_step = 0
+                        #     board.confirm_using_tile()
+                        #     number_of_targets_to_specify = 0
+                        #     enemy_targets = set()
+                        #
 
         if player_turn_step == 1:
             screen.blit(back_img, back_img.get_rect(center=back_center))
@@ -446,7 +447,7 @@ def fight():
 
         # if inside the border
         if player_turn:
-            write_text(screen, width // 2, 160, "Player's turn", 30, 'gold')
+            write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
             # draw board
             board.draw(screen, player_turn_step)
 
@@ -468,7 +469,7 @@ def fight():
                 if mousepos[1] >= 480:  # on the board
                     board.draw_planar_figure(screen, mousepos)
         else:
-            write_text(screen, width // 2, 200, "Enemy's turn", 30, 'gold')
+            write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'gold')
 
         if mouse_particle_list:  # if not empty
             # print(len(mouse_particle_list))
