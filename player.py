@@ -43,18 +43,23 @@ class Player(Entity):
         self.giant_HP_pos = [240,self.giant_HP_width//2]
 
 
+    def update_depth(self, amount):
+        self.current_depth += amount
+
     def draw_player_info_top(self,screen):
 
         draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], 480, self.giant_HP_width, 100, 'silver')
         draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], 480, self.giant_HP_width, 100 * self.health / self.max_health, 'coral')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , 480, 5, 100, 'gray')
 
-        write_text(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
+        write_text(screen, 440, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
         write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, 'darkgoldenrod')
 
         # depth
-
+        write_text(screen, 440,self.giant_HP_width + self.giant_HP_width, " - %d m"%self.current_depth,30, 'black')
 
         # gold
+        write_text(screen, 40,self.giant_HP_width + self.giant_HP_width - 10, "Gold %d g"%self.current_depth,20, 'gold')
 
 
         # relics

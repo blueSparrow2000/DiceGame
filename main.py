@@ -558,13 +558,14 @@ def adventure_loop():
                                         elif event.key == pygame.K_RETURN:
                                             run_win_screen = False
                                             break
-                                screen.fill('white')
+                                screen.fill('seagreen')
                                 write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
-                                write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20, 'black')
+                                write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20, 'gray')
                                 # show some items dropped etc.
 
                                 pygame.display.flip()
                                 clock.tick(game_fps)
+                            player.update_depth(5)
 
             if not run_adventure:
                 break

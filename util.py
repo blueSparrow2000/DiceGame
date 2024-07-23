@@ -14,8 +14,8 @@ button_side_len_half = 25
 
 
 
-def draw_bar(screen,x,y,bar_width,bar_height, current_percent, color): # x,y is a position of x,y axis of bar
-    pygame.draw.rect(screen,color,[x-bar_width//2, y-bar_height//2,int(bar_width*(current_percent/100)),bar_height])
+def draw_bar(screen,x,y,bar_length,bar_height, current_percent, color): # x,y is a position of x,y axis of bar
+    pygame.draw.rect(screen,color,[x-bar_length//2, y-bar_height//2,int(bar_length*(current_percent/100)),bar_height])
 
 def write_text(surf, x, y, text, size,color='black',bg_color = None): #(50, 200, 50)
     font = pygame.font.Font('freesansbold.ttf', size)
