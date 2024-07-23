@@ -108,7 +108,8 @@ def fight():
     # randomly generate enemy following some logic
     trial = random.randint(1,3)
     enemy_request = ['mob' for i in range(trial)] # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
-    #enemy_request = ['halo']
+    if player.current_depth=='LIMIT' or player.current_depth <= -100:
+        enemy_request = ['halo'] # boss fight
 
     enemies = []
     
@@ -541,6 +542,7 @@ def adventure_loop():
                         is_valid, which_event, move_depth = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
                         if is_valid:
                             player.update_depth(move_depth)
+                            player.update_depth(100)
                             run_adventure = False
 
                             if which_event == 'campfire':

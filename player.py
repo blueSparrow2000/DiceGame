@@ -44,6 +44,8 @@ class Player(Entity):
 
 
     def update_depth(self, amount):
+        if self.current_depth=='LIMIT':
+            return
         self.current_depth -= amount
         if self.current_depth <= - 100:
             self.current_depth = 'LIMIT'
