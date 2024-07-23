@@ -2,7 +2,7 @@ from util import *
 
 def go_to_shop(screen,clock, player):
     game_run = True
-
+    music_Q('Encounter', True)
     while game_run:
         screen.fill('white')
 

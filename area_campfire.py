@@ -2,7 +2,7 @@ from util import *
 
 def go_to_campfire(screen,clock, player):
     game_run = True
-
+    music_Q('cozy', True)
     while game_run:
         screen.fill('white')
 
