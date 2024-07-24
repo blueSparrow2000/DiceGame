@@ -66,7 +66,7 @@ Chair_2_shape=[[0,0,1],
 planar_figures.extend([T_shape, Cross_shape, Worm_shape, Worm_2_shape, Worm_3_shape, Cacti_shape, Diag_shape, Diag_2_shape, Chair_shape, Chair_2_shape])
 
 class Board():
-    def __init__(self,tiles_dict):
+    def __init__(self,tiles_dict,planar_figure_idx):
         global tile_names,planar_figures,sound_effects
         self.board = [[None for i in range(8)] for j in range(8)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = [[None for i in range(8)] for j in range(8)]
@@ -89,8 +89,9 @@ class Board():
         #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
 
         self.figure_index = 0 # 0 for primary, 1 for secondary
-        self.init_planar_figures = [copy.deepcopy(planar_figures[0]),copy.deepcopy(planar_figures[1])]
-        self.my_planar_figures = [planar_figures[0],planar_figures[1]]
+        self.planar_figure_idx = planar_figure_idx # absolute variants of planar figures
+        self.init_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[0]]),copy.deepcopy(planar_figures[self.planar_figure_idx[1]])]
+        self.my_planar_figures = [planar_figures[self.planar_figure_idx[0]],planar_figures[self.planar_figure_idx[1]]]
         self.current_planar_figure = self.my_planar_figures[self.figure_index]
         self.planar_figure_col = len(self.current_planar_figure)
         self.planar_figure_row = len(self.current_planar_figure[0])
@@ -101,7 +102,7 @@ class Board():
 
     def init_turn(self): # initialize planar figure at every turn starts
         self.figure_index = 0
-        self.my_planar_figures = [copy.deepcopy(planar_figures[0]), copy.deepcopy(planar_figures[1])]
+        self.my_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[0]]), copy.deepcopy(planar_figures[self.planar_figure_idx[1]])]
         self.current_planar_figure = self.my_planar_figures[self.figure_index]
         self.refresh_planar_figure()
 

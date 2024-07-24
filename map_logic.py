@@ -41,7 +41,7 @@ class Map():
 
         self.break_limit = False
 
-        self.debug_mode = False
+        self.debug_mode =True
 
     def random_initialize(self, player):
         self.moving_X = 0
@@ -67,7 +67,7 @@ class Map():
             self.break_limit = True
         else:
             # spawn island randomly - fight/campfire/shop/boss/ruin/altar
-            self.map[1][3] = ['fight',False]
+            self.map[4][4] = ['fight',False]
             self.map[2][5] = ['ruin',False]
             self.map[3][3] = ['shop',False]
             self.map[4][2] = ['altar', False]
@@ -139,13 +139,6 @@ class Map():
         while delta > 1: # 한칸 앞둔 경우엔 델타에 따라 넣으면 끝
             fail_counter+= 1
 
-            if (not self.is_bridge(self.imaginary_location[0],self.imaginary_location[1])) and self.is_not_void(self.imaginary_location[0],self.imaginary_location[1]): # 현재 내가 밟고 있는 위치가 브릿지가 아니고 보이드도 아닐때
-                # 현재 위치를 타깃으로 재설정한다!
-                # 그리고 실행할거를 바꿔야함
-                self.target = [self.imaginary_location[0],self.imaginary_location[1]]
-                return self.map[self.imaginary_location[0]][self.imaginary_location[1]][0], 6-self.imaginary_location[0] # 더이상 패스파인팅 할 필요 없음
-
-
             y_checked = False
 
             if (self.target[0]- self.imaginary_location[0]) < 0 and self.is_not_void(self.imaginary_location[0] - 1,self.imaginary_location[1]): # y remaining & there is a bridge
@@ -174,6 +167,14 @@ class Map():
                         print("left")
             # update delta
             delta = abs(self.target[0] - self.imaginary_location[0]) + abs(self.target[1] - self.imaginary_location[1])
+
+            if (not self.is_bridge(self.imaginary_location[0],self.imaginary_location[1])) and self.is_not_void(self.imaginary_location[0],self.imaginary_location[1]): # 현재 내가 밟고 있는 위치가 브릿지가 아니고 보이드도 아닐때
+                # 현재 위치를 타깃으로 재설정한다!
+                # 그리고 실행할거를 바꿔야함
+                self.target = [self.imaginary_location[0],self.imaginary_location[1]]
+                return self.map[self.imaginary_location[0]][self.imaginary_location[1]][0], 6-self.imaginary_location[0] # 더이상 패스파인팅 할 필요 없음
+
+
             ########## check fail ###########
             if fail_counter >= fail_limit:
                 fail_counter = 0 # reset counter

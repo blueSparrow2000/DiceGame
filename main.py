@@ -98,9 +98,10 @@ character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
 character_tiles = character_tile_dictionary[character_name]
 
+planar_figure_idx = [0,1] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
 
 player = Player(character_name,character_skills,character_tiles)
-board = Board(player.tile_dict)
+board = Board(player.tile_dict, planar_figure_idx)
 map = Map()
 ####################################################################################################### fight loop #######################################################################################################
 def fight():
