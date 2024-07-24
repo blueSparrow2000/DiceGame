@@ -1,7 +1,9 @@
 '''
-
-
-
+If there is space in your tile list (empty tiles are more than one)
+- can buy each of these tiles with cost of gold
+{'Attack':5, 'Defence':5, 'Regen':5, 'Skill':10, 'Joker':20, } # 'Karma' is not buyable
+- can by artifacts (random)
+- can erase any 'one' tile with cost of gold: 50
 
 
 '''

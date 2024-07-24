@@ -13,6 +13,7 @@ turn_text_level = 160
 
 # TILES INIT - need to add new type if nessesary
 tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
+joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 
 
 # move background

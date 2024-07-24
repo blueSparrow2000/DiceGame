@@ -3,7 +3,7 @@ from entity import *
 
 class Player(Entity):
     def __init__(self, character_name,character_skills, character_tiles): # tile_dict
-        global mob_Y_level, sound_effects, tile_names ,requirement_level# all the other skills should also be contained
+        global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles     # all the other skills should also be contained
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
         self.current_tile = dict()
@@ -45,7 +45,7 @@ class Player(Entity):
 
 
         # transform button attributes
-        self.transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma'] #'Joker' is not transformed into joker
+        self.transformable_tiles = joker_transformable_tiles #'Joker' is not transformed into joker
         self.transform_x = 200
         self.transform_y = 870
         self.transform_spacing = 50

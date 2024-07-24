@@ -1,3 +1,10 @@
+'''
+60% change of getting random relics
+40% change of fighting elite enemy
+
+
+'''
+
 from util import *
 
 def go_to_ruin(screen,clock, player):

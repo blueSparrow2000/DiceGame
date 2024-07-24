@@ -1,3 +1,11 @@
+'''
+choose betweem one
+> heal 20 health
+> change usable skill (choose 3 among 6) => 이건 스킬을 전부 다 사용하지 못하는 모드일떄 (하드코어)
+
+
+'''
+
 from util import *
 
 def go_to_campfire(screen,clock, player):

@@ -1,3 +1,10 @@
+'''
+Take random curse(cursed tile etc)
+and choose between three random relics
+
+
+'''
+
 from util import *
 
 def go_to_altar(screen,clock, player):
