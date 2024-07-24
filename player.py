@@ -39,9 +39,16 @@ class Player(Entity):
         ### game variables
         self.current_depth = 0
         self.golds = 0
+        self.items=[]
         self.giant_HP_width = 30
         self.giant_HP_pos = [240,self.giant_HP_width//2]
 
+    def get_gold(self, amount):
+        self.golds += amount
+
+    def get_drop(self, drop_list):
+        self.items.extend(drop_list)
+        print(self.items)
 
     def update_depth(self, amount):
         if self.reached_max_depth(): # do not update
@@ -67,10 +74,10 @@ class Player(Entity):
         if self.reached_max_depth():
             write_text(screen, 420, self.giant_HP_width * 2, " %s " % self.current_depth, 30, 'black')
         else:
-            write_text(screen, 420,self.giant_HP_width *2, " %s m"%self.current_depth,30, 'black')
+            write_text(screen, 420,self.giant_HP_width *2, " %3d m"%self.current_depth,30, 'black')
 
         # gold
-        write_text(screen, 40,self.giant_HP_width*2 - 10, "Gold %d g"%self.golds,20, 'gold')
+        write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'gold')
 
 
         # relics

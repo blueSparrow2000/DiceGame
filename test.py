@@ -15,12 +15,16 @@
 # for i in range(7):
 #     print(must_contain_at_least_one[i])
 
-def list_compare(list_a, list_b):
-    k = len(list_a)
-    for i in range(k):
-        if not (list_a[i] == list_b[i]):
-            return False
-    return True
-a = [0,0,0,1]
-b = [0,0,0,0]
-print(list_compare(a,b))
+# def list_compare(list_a, list_b):
+#     k = len(list_a)
+#     for i in range(k):
+#         if not (list_a[i] == list_b[i]):
+#             return False
+#     return True
+# a = [0,0,0,1]
+# b = [0,0,0,0]
+# print(list_compare(a,b))
+
+a = []
+a.extend([])
+print(a)

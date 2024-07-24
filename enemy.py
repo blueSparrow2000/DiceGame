@@ -48,6 +48,11 @@ class Enemy(Entity):
     def get_current_damage(self):
         return self.attack_damage*self.get_attack_multiplier()
 
+    def get_drop(self):
+        return []
+
+    def get_gold(self):
+        return 1 # default one gold
 
 class Mob(Enemy):
     def __init__(self, my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'], rank = 1 ):

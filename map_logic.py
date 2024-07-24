@@ -41,7 +41,7 @@ class Map():
 
         self.break_limit = False
 
-        self.debug_mode =True
+        self.debug_mode = False
 
     def random_initialize(self, player):
         self.moving_X = 0

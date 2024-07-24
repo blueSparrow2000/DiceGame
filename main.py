@@ -98,7 +98,7 @@ character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
 character_tiles = character_tile_dictionary[character_name]
 
-planar_figure_idx = [0,1] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
+planar_figure_idx = [8,9] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
 
 player = Player(character_name,character_skills,character_tiles)
 board = Board(player.tile_dict, planar_figure_idx)
@@ -130,13 +130,23 @@ def fight():
 
     # Mob(my_name='enemies/mob', hp=30, hpmax=30, attack_damage=5, pos=(mob_X, mob_Y_level))
     # enemy.update_buffs()
+
+    # determine golds / enemy drops
+    enemy_drops = []
+    earned_gold = 0
+
     for i in range(len(enemy_request)):
         enemy = None
         if enemy_request[i]=='mob':
             enemy = Mob(pos=(mob_X, mob_Y_level),rank=1)
+
         elif enemy_request[i]=='halo':
             enemy = Halo(pos=(mob_X, mob_Y_level))
 
+        drop = enemy.get_drop()
+        if drop:
+            enemy_drops.append(drop)
+        earned_gold += enemy.get_gold()
         # enemy.update_buffs()
         enemies.append(enemy)
         mob_X += mob_side_len + mob_gap
@@ -152,6 +162,10 @@ def fight():
             print('player lost!')
             return True, True
         elif len(enemies)==0:
+            # give player these!
+            player.get_gold(earned_gold)
+            player.get_drop(enemy_drops)
+
             exit_fight()
             game_run = False
             print('player wins!')
