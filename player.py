@@ -43,12 +43,112 @@ class Player(Entity):
         self.giant_HP_width = 30
         self.giant_HP_pos = [240,self.giant_HP_width//2]
 
+
+        # transform button attributes
+        self.transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma'] #'Joker' is not transformed into joker
+        self.transform_x = 200
+        self.transform_y = 870
+        self.transform_spacing = 50
+        self.transform_tolerance = 15
+        self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y ) for i in range(len(self.transformable_tiles))]
+
+
+
+    def have_joker_tile(self):  # ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
+        for tile_name, amount in self.current_tile.items():
+            if tile_name == 'Joker' and amount > 0:
+                return True
+        return False
+
+    def transform_tile(self, transformed_tile_name):
+        # remove one joker
+        self.current_tile['Joker'] -= 1  # have joker 일때만 실행됨
+
+        # for tile_name, amount in self.current_tile.items():
+        #     if tile_name == 'Joker' and amount > 0:
+        #         amount -= 1
+
+        if transformed_tile_name in self.current_tile:  # if key exists
+            self.current_tile[transformed_tile_name] += 1
+        else:
+            self.current_tile[transformed_tile_name] = 1  # add new entry
+
+    def tile_transform_button(self,mousepos):
+        if not self.have_joker_tile():
+            return
+
+        for i in range(len(self.transformable_tiles)):
+            if check_inside_button(mousepos, self.transform_icon_locations[i], self.transform_tolerance):
+                current_tile = self.transformable_tiles[i]
+                self.transform_tile(current_tile)
+                break # get out if done
+
+
+    def draw_tile_transform_button(self,screen):
+        if not self.have_joker_tile():
+            return
+
+        write_text(screen, 240, self.transform_y - 30, "choose a tile", 15, color='darkgoldenrod')
+
+        cnt = 0
+        for mini_tile in self.transformable_tiles: # draw transform tiles in order
+            screen.blit(self.mini_tile_icons[mini_tile], self.mini_tile_icons[mini_tile].get_rect(center=self.transform_icon_locations[cnt]))
+            cnt+=1
+
+
+
+
+    def show_current_tiles(self, screen):
+        # background
+        draw_bar(screen, 240, self.minitile_y, 312, 50, 100, (120, 120, 120))
+        draw_bar(screen, 240, self.minitile_y, 300, 38, 100, (150, 150, 150))
+
+        mini_tile_list = []
+        for tile_name, amount in self.current_tile.items():
+            if tile_name not in self.minitile_not_shown:
+                for i in range(amount):
+                    mini_tile_list.append(tile_name)
+
+        minitile_numbers = len(mini_tile_list)
+        self.minitile_x = 240 - (minitile_numbers - 1) * (self.minitile_spacing) / 2
+        for i in range(minitile_numbers):
+            screen.blit(self.mini_tile_icons[mini_tile_list[i]], self.mini_tile_icons[mini_tile_list[i]].get_rect(
+                center=(self.minitile_x + i * self.minitile_spacing, self.minitile_y)))
+
+    def draw_buttons(self, screen):
+        for i in range(len(self.buttons)):
+            if (self.buttons[i] == 'Attack'):
+                if self.can_attack:
+                    screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
+                # else draw nothing!
+            else:
+                screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
+
+    def check_activate_button(self, mousepos):
+        for i in range(len(self.buttons)):
+            current_button = self.buttons[i]
+            if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
+                if (current_button == 'Attack'):
+                    # attack button
+                    if self.can_attack:
+                        return False, 2, 1  # need to go to next step, step 2, choose one target
+                elif (current_button == 'Defence'):
+                    # defence button
+                    self.defend()
+                    return True, 1, 0  # end turn
+                elif (current_button == 'Regen'):
+                    # regen button
+                    self.regen()
+                    return True, 1, 0  # end turn
+
+        return False, 1, 0  # process_completed (end player turn right away flag), player_turn_step (currently 1), number_of_targets_to_specify (any is fine. default 1)
+
     def get_gold(self, amount):
         self.golds += amount
 
     def get_drop(self, drop_list):
         self.items.extend(drop_list)
-        print(self.items)
+
 
     def update_depth(self, amount):
         if self.reached_max_depth(): # do not update
@@ -125,52 +225,6 @@ class Player(Entity):
             write_text(screen, self.required_tile_x + 40, self.required_tile_y + cnt * self.requirement_spacing,content , 20)
 
             cnt+=1
-
-
-    def show_current_tiles(self,screen):
-        # background
-        draw_bar(screen, 240, self.minitile_y, 312, 50, 100, (120,120,120))
-        draw_bar(screen, 240, self.minitile_y, 300, 38, 100, (150,150,150))
-
-        mini_tile_list = []
-        for tile_name, amount in self.current_tile.items():
-            if tile_name not in self.minitile_not_shown:
-                for i in range(amount):
-                    mini_tile_list.append(tile_name)
-
-        minitile_numbers = len(mini_tile_list)
-        self.minitile_x = 240 - (minitile_numbers - 1) * (self.minitile_spacing) / 2
-        for i in range(minitile_numbers):
-            screen.blit(self.mini_tile_icons[mini_tile_list[i]], self.mini_tile_icons[mini_tile_list[i]].get_rect(center= (self.minitile_x + i * self.minitile_spacing, self.minitile_y) ))
-
-    def draw_buttons(self,screen):
-        for i in range(len(self.buttons)):
-            if (self.buttons[i]=='Attack'):
-                if self.can_attack:
-                    screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
-                # else draw nothing!
-            else:
-                screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
-
-    def check_activate_button(self,mousepos):
-        for i in range(len(self.buttons)):
-            current_button = self.buttons[i]
-            if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
-                if (current_button == 'Attack'):
-                    # attack button
-                    if self.can_attack:
-                        return False, 2, 1 # need to go to next step, step 2, choose one target
-                elif (current_button=='Defence'):
-                    # defence button
-                    self.defend()
-                    return True, 1,0 # end turn
-                elif (current_button == 'Regen'):
-                    # regen button
-                    self.regen()
-                    return True, 1, 0 # end turn
-
-
-        return False,1 ,0 #process_completed (end player turn right away flag), player_turn_step (currently 1), number_of_targets_to_specify (any is fine. default 1)
 
 
     def end_my_turn(self): # do something at the end of the turn

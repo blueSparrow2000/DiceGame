@@ -98,7 +98,8 @@ character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
 character_tiles = character_tile_dictionary[character_name]
 
-planar_figure_idx = [8,9] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
+planar_figure_idx = [6,7] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
+# warning: some tiles cannot reach boss room! Becareful to choose!
 
 player = Player(character_name,character_skills,character_tiles)
 board = Board(player.tile_dict, planar_figure_idx)
@@ -258,6 +259,9 @@ def fight():
                             player_turn_step = 0
                             current_display_text = ""  # reset text
                             continue  # skip below
+
+                        # check whether to transform joker tiles if exists
+                        player.tile_transform_button(mousepos)
 
                         # basic buttons
                         process_completed, player_turn_step,number_of_targets_to_specify = player.check_activate_button(mousepos) # -1: not selected / 0,1,2: attack, defence, regen
@@ -440,6 +444,9 @@ def fight():
 
             player.show_current_tiles(screen)
 
+            # if joker is in the current tiles, you should select one!
+            player.draw_tile_transform_button(screen)
+
         elif player_turn_step == 2:
             screen.blit(back_img, back_img.get_rect(center=back_center))
 
@@ -619,7 +626,6 @@ def adventure_loop():
 
             if activate_tile:
                 player.update_depth(move_depth)
-                player.update_depth(100)
                 adventure_bg_color = update_depth_color(player)
                 run_adventure = False
 
