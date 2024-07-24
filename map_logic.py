@@ -28,13 +28,40 @@ class Map():
         self.map_Y_level = 480
         self.map_X = 240 - self.side_length*3 - self.side_length//2
 
+        # animation variables
+        self.moving_X = 0
+        self.moving_Y = 0
+        self.block_paths = [] # 거리 단위임에 유의
+        self.target = [0,0] # c,r
+        self.move_index = 0
+        self.imaginary_location = [5,3] # 5,3에서 시작
+        self.path_finder_fail = False
+
+        self.move_speed = 2 # must divide self.side_length
+
         self.break_limit = False
 
+        self.debug_mode = False
+
     def random_initialize(self, player):
+        self.moving_X = 0
+        self.moving_Y = 0
+        self.block_paths = [] # 거리 단위임에 유의
+        self.target = [0,0]
+        self.move_index = 0
+        self.imaginary_location = [5,3] # 5,3에서 시작
+        self.path_finder_fail = False
+
+
         self.map = [[['void',False] for x in range(7)] for y in range(7)]
         self.must_contain_at_least_one = [[[False] for x in range(7)] for y in range(7)] # 해당 픽셀이 must contain이어야 하나, True라면 해당 픽셀이 must contain이게 한 이유가 되는 픽셀 좌표를 넣음
 
-
+        ################# init ###################
+        '''
+        주의: 마지막 column에서는 스폰시키지 마 (base랑 같은 위치의 타일의 경우 스폰 X)
+        즉 self.map[6][x]는 건드리지 마!! c=6
+        
+        '''
         if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= -100: # only boss fight tile is given
             self.map[1][3] = ['fight',False]
             self.break_limit = True
@@ -68,6 +95,7 @@ class Map():
         self.map = copy.deepcopy(self.map_save)
 
     def draw(self,screen):
+        global top_down_player
         for i in range(7):
             for j in range(7):
                 if self.map[i][j][0]=='fight':
@@ -75,6 +103,193 @@ class Map():
                         screen.blit(self.image_dict['boss_fight'], (self.map_X + j*self.side_length, self.map_Y_level + self.side_length*i))
                         continue
                 screen.blit(self.image_dict[self.map[i][j][0]], (self.map_X + j*self.side_length, self.map_Y_level + self.side_length*i))
+
+
+        screen.blit(top_down_player,(self.map_X + 3 * self.side_length, self.map_Y_level + self.side_length * 6))
+
+    def is_not_void(self,c,r):
+        return not self.map[c][r][0]=='void'
+
+    def is_bridge(self,c,r):
+        return self.map[c][r][0]=='bridge'
+
+
+    def update_target(self, location):
+        self.target = location
+        
+    def find_path(self):
+        '''
+        도중에 bridge가 아닌 다른 타일을 거치게 된다면 => 그 타일이 목적지로 재설정 된다!!
+
+
+        '''
+        fail_counter = 0 # 아직 ㄷ자 형으로된 경로의 경우 이런 알고리즘으로는 가는게 불가능함. 카운터가 너무 크면 그냥 바로 이동시켜
+        fail_limit = 20
+        hard_fail = False
+
+
+        if self.debug_mode:
+            self.print_map()
+        # go up one block (start position)
+
+        self.block_paths.append([0,0,0,50]) # 일단 한칸 앞으로는 항상 가야함 [+x, -x, +y, -y]의 amount로 저장해두기 right lefft down up
+
+        # 택시 기하 거리
+        delta = abs(self.target[0]- self.imaginary_location[0]) + abs(self.target[1]- self.imaginary_location[1])
+        while delta > 1: # 한칸 앞둔 경우엔 델타에 따라 넣으면 끝
+            fail_counter+= 1
+
+            if (not self.is_bridge(self.imaginary_location[0],self.imaginary_location[1])) and self.is_not_void(self.imaginary_location[0],self.imaginary_location[1]): # 현재 내가 밟고 있는 위치가 브릿지가 아니고 보이드도 아닐때
+                # 현재 위치를 타깃으로 재설정한다!
+                # 그리고 실행할거를 바꿔야함
+                self.target = [self.imaginary_location[0],self.imaginary_location[1]]
+                return self.map[self.imaginary_location[0]][self.imaginary_location[1]][0], 6-self.imaginary_location[0] # 더이상 패스파인팅 할 필요 없음
+
+
+            y_checked = False
+
+            if (self.target[0]- self.imaginary_location[0]) < 0 and self.is_not_void(self.imaginary_location[0] - 1,self.imaginary_location[1]): # y remaining & there is a bridge
+                self.imaginary_location[0] -= 1
+                self.block_paths.append([0, 0, 0, 50]) # go up
+                y_checked = True
+                if self.debug_mode:
+                    print("up")
+            if (self.target[0]- self.imaginary_location[0]) > 0 and self.is_not_void(self.imaginary_location[0] + 1,self.imaginary_location[1]): # y remaining
+                self.imaginary_location[0] += 1
+                self.block_paths.append([0, 0, 50, 0]) # go down
+                y_checked = True
+                if self.debug_mode:
+                    print("down")
+
+            if not y_checked: # change x accordingly
+                if (self.target[1] - self.imaginary_location[1]) > 0 :
+                    self.imaginary_location[1] += 1
+                    self.block_paths.append([50, 0, 0, 0])  # go right
+                    if self.debug_mode:
+                        print("right")
+                if (self.target[1] - self.imaginary_location[1]) < 0 :
+                    self.imaginary_location[1] -= 1
+                    self.block_paths.append([0, 50, 0, 0])  # go left
+                    if self.debug_mode:
+                        print("left")
+            # update delta
+            delta = abs(self.target[0] - self.imaginary_location[0]) + abs(self.target[1] - self.imaginary_location[1])
+            ########## check fail ###########
+            if fail_counter >= fail_limit:
+                fail_counter = 0 # reset counter
+                if hard_fail:
+                    self.path_finder_fail = True
+                    break
+                # not void 인 타일 아무거나로 이동해라 right up left순서로 찾기
+                if self.is_not_void(self.imaginary_location[0],self.imaginary_location[1] + 1) :
+                    self.imaginary_location[1] += 1
+                    self.block_paths.append([50, 0, 0, 0])  # go right
+                    if self.debug_mode:
+                        print("right")
+                elif self.is_not_void(self.imaginary_location[0] - 1,self.imaginary_location[1]):
+                    self.imaginary_location[0] -= 1
+                    self.block_paths.append([0, 0, 0, 50])  # go up
+                    if self.debug_mode:
+                        print("up")
+                elif self.is_not_void(self.imaginary_location[0],self.imaginary_location[1] - 1):
+                    self.imaginary_location[1] -= 1
+                    self.block_paths.append([0, 50, 0, 0])  # go left
+                    if self.debug_mode:
+                        print("left")
+
+                hard_fail = True
+
+
+            ########## find path ###########
+
+
+
+        # last one step
+        if (self.target[1] - self.imaginary_location[1]) > 0:
+            self.block_paths.append([50, 0, 0, 0])  # go
+        elif (self.target[1] - self.imaginary_location[1]) < 0:
+            self.block_paths.append([0, 50, 0, 0])  # go
+        elif (self.target[0] - self.imaginary_location[0]) > 0:
+            self.block_paths.append([0, 0, 50, 0])  # go
+        elif (self.target[0] - self.imaginary_location[0]) < 0:
+            self.block_paths.append([0, 0, 0, 50])  # go
+
+        if self.debug_mode:
+            print(self.block_paths)
+
+        return False, 0
+
+    def list_compare(self,list_a,list_b):
+        k = len(list_a)
+        for i in range(k):
+            if not (list_a[i]==list_b[i]):
+                return False
+        return True
+    def update_move(self): # block_paths에 나온대로 움직이면 됨
+        '''
+        if block path is empty => return True (end)
+
+        else: block path is not empty
+        get block_path[0]
+        move accordingly, and increment/decrement block path
+        if it becomes [0,0] => remove 0th one
+        return False
+
+
+        '''
+        # 일단 한칸 앞으로는 항상 가야함 [+x, -x, +y, -y]의 amount로 저장해두기 right lefft down up
+
+        if self.path_finder_fail:# path finder가 fail했을 경우 그냥 다이렉트로 간다
+            return True
+
+
+        if self.block_paths == []:
+            return True
+
+        move = self.block_paths[0]
+        if move[0]>0: #
+            self.moving_X += self.move_speed
+            self.block_paths[0][0] -= self.move_speed
+        elif move[1]>0:
+            self.moving_X -= self.move_speed
+            self.block_paths[0][1] -= self.move_speed
+        elif move[2]>0:
+            self.moving_Y += self.move_speed
+            self.block_paths[0][2] -= self.move_speed
+        elif move[3]>0:
+            self.moving_Y -= self.move_speed
+            self.block_paths[0][3] -= self.move_speed
+
+        if self.list_compare( self.block_paths[0], [0,0,0,0]):
+            # delete the block path
+            self.block_paths.pop(0)
+        return False
+
+        #
+        # # update direction following the bridges and finish when reaching goal tile
+        # # self.moving_X += 1
+        # self.moving_Y -= 1
+        #
+        # if self.moving_Y < -100: # end of animation when block moves is gone
+        #     return True
+        # return False
+
+
+    def animate_draw(self,screen):
+        global top_down_player
+        flag = self.update_move()
+
+        for i in range(7):
+            for j in range(7):
+                if self.map[i][j][0]=='fight':
+                    if self.break_limit:  # boss fight
+                        screen.blit(self.image_dict['boss_fight'], (self.map_X + j*self.side_length - self.moving_X, self.map_Y_level + self.side_length*i - self.moving_Y))
+                        continue
+                screen.blit(self.image_dict[self.map[i][j][0]], (self.map_X + j*self.side_length - self.moving_X, self.map_Y_level + self.side_length*i - self.moving_Y))
+
+
+        screen.blit(top_down_player,(self.map_X + 3 * self.side_length, self.map_Y_level + self.side_length * 6))
+        return flag
 
 
     def check_tiles(self,position_on_map, board_obj): # center tile이 보드의 어느 타일을 가렸는지 준다
@@ -148,11 +363,12 @@ class Map():
                     self.map[c][r] = ['bridge',False]
 
 
-        # for tttt in range(7):
-        #     print(self.map[tttt])
+
         return True
 
-
+    def print_map(self):
+        for tttt in range(7):
+            print(self.map[tttt])
 
     def highlight_reachable_locations(self,screen):
         for c in range(7):
@@ -169,5 +385,6 @@ class Map():
                     if check_inside_button(mousepos, (self.map_X + r*self.side_length + self.side_length//2, self.map_Y_level + self.side_length*c + self.side_length//2), self.image_button_tolerance): # 이게 버튼 센터가 아닐 수 있음 (self.map_X + r*self.side_length, self.map_Y_level + self.side_length*c)
                         map_tile_name = self.map[c][r][0]
                         # print("current map tile choice: "+self.map[c][r])
+                        self.update_target([c,r])
                         return True, map_tile_name , 6-c # is_valid, which_event, depth = 6-c
         return False, False , 0

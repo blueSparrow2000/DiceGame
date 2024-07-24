@@ -498,6 +498,9 @@ def adventure_loop():
     meta_run_adventure = True
     mousepos = (0,0)
 
+    animation_block = False
+    activate_tile = False
+
     while meta_run_adventure:
         # The Music in main
         music_Q('Adventure', True)
@@ -507,6 +510,12 @@ def adventure_loop():
 
         board.init_turn()
         map_choosing_step = 0  # 0: placing planar figure / 1: clicking reachable map tile => fight etc
+
+        # reset
+        animation_block = False
+        activate_tile = False
+        is_valid, which_event, move_depth = False, False, 0
+
 
         while run_adventure:
             # keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들
@@ -520,6 +529,9 @@ def adventure_loop():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
                     run_adventure, meta_run_adventure = exit()
+                    break
+
+                if animation_block: #no event listening
                     break
 
                 if event.type == pygame.MOUSEMOTION:
@@ -550,69 +562,12 @@ def adventure_loop():
 
                         is_valid, which_event, move_depth = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
                         if is_valid:
-                            player.update_depth(move_depth)
-                            adventure_bg_color = update_depth_color(player)
-                            run_adventure = False
+                            new_event, new_depth =  map.find_path()
+                            if new_event:
+                                which_event,move_depth = new_event, new_depth # 패스 파인터 실행 / 타깃 변경시 이벤트도 같이 변경되도록 만든다!!
 
-                            if which_event == 'campfire':
-                                go_to_campfire(screen,clock, player)
-                            elif which_event == 'ruin':
-                                go_to_ruin(screen,clock, player)
-                            elif which_event == 'shop':
-                                go_to_shop(screen,clock, player)
-                            elif which_event == 'altar':
-                                go_to_altar(screen,clock, player)
-                            elif which_event == 'fight':
-
-                                # initialize board attributes
-                                board.init_turn()
-                                player_lost, valid_termination = fight()
-                                board.init_turn()
-                                # initialize board attributes
-
-                                if not valid_termination:
-                                    meta_run_adventure = False
-                                    break
-
-                                if player_lost:
-                                    time.sleep(0.5)
-                                    sound_effects['playerdeath'].play()
-                                    pygame.mixer.music.stop()
-                                    screen.fill(fight_bg_color)
-                                    write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
-                                    write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
-                                    pygame.display.flip()
-
-                                    time.sleep(2)
-                                    meta_run_adventure = False
-
-                                    break
-                                else:
-                                    run_win_screen = True
-                                    music_Q("cozy")
-                                    time.sleep(0.5)
-                                    while run_win_screen:
-                                        for event in pygame.event.get():
-                                            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                                                meta_run_adventure = False
-                                                run_win_screen = False
-                                                break
-
-                                            if event.type == pygame.KEYDOWN:
-                                                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                                                    run_win_screen = False
-                                                    break
-                                                elif event.key == pygame.K_RETURN:
-                                                    run_win_screen = False
-                                                    break
-                                        screen.fill(adventure_bg_color)
-                                        write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
-                                        write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
-                                                   'gray')
-                                        # show some items dropped etc.
-
-                                        pygame.display.flip()
-                                        clock.tick(game_fps)
+                            # then request animation, then at the end of the animation, execute flag turns on, and animate flag turns off
+                            animation_block = True
 
 
                         else: # not valid move => pass
@@ -641,19 +596,98 @@ def adventure_loop():
             # screen.blit(layer, (0, y_rel))
             # screen.blit(layer, (0, y_part2))
 
-            map.draw(screen)
 
-            if map_choosing_step==1:
-                map.highlight_reachable_locations(screen)
-                screen.blit(back_img, back_img.get_rect(center=skip_center))
+            if animation_block:
+                activate_tile = map.animate_draw(screen)
+            else:
+                map.draw(screen)
+
+            if activate_tile:
+                player.update_depth(move_depth)
+                adventure_bg_color = update_depth_color(player)
+                run_adventure = False
+
+                if which_event == 'campfire':
+                    go_to_campfire(screen, clock, player)
+                elif which_event == 'ruin':
+                    go_to_ruin(screen, clock, player)
+                elif which_event == 'shop':
+                    go_to_shop(screen, clock, player)
+                elif which_event == 'altar':
+                    go_to_altar(screen, clock, player)
+                elif which_event == 'fight':
+                    ########################################################## go to fight #################################################
+                    # initialize board attributes
+                    board.init_turn()
+                    player_lost, valid_termination = fight()
+                    board.init_turn()
+                    # initialize board attributes
+
+                    if not valid_termination:
+                        meta_run_adventure = False
+                        break
+
+                    if player_lost:
+                        time.sleep(0.5)
+                        sound_effects['playerdeath'].play()
+                        pygame.mixer.music.stop()
+                        screen.fill(fight_bg_color)
+                        write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
+                        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+                        pygame.display.flip()
+
+                        time.sleep(2)
+                        meta_run_adventure = False
+
+                        break
+                    else:
+                        run_win_screen = True
+                        music_Q("cozy")
+                        time.sleep(0.5)
+                        while run_win_screen:
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                                    meta_run_adventure = False
+                                    run_win_screen = False
+                                    break
+
+                                if event.type == pygame.KEYDOWN:
+                                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                                        run_win_screen = False
+                                        break
+                                    elif event.key == pygame.K_RETURN:
+                                        run_win_screen = False
+                                        break
+                            screen.fill(adventure_bg_color)
+                            write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
+                            write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
+                                       'gray')
+                            # show some items dropped etc.
+
+                            pygame.display.flip()
+                            clock.tick(game_fps)
+                    ########################################################## go to fight #################################################
+
+
+
+
+
 
             # Draw player main info
             player.draw_player_info_top(screen)
+            screen.blit(shadow_layer, (0, 0))
+
+            if map_choosing_step==1 and not animation_block:
+                map.highlight_reachable_locations(screen)
+                screen.blit(back_img_white, back_img_white.get_rect(center=skip_center))
+
 
             if map_choosing_step==0 and mousepos[1] >= 480:  # on the board
                 board.draw_planar_figure(screen, mousepos)
-                screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
-                screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
+                screen.blit(TAB_img_white, TAB_img_white.get_rect(center=tab_center))
+                screen.blit(rotate_img_white, rotate_img_white.get_rect(center=rotate_center))
+
+
 
             if mouse_particle_list:  # if not empty
                 # print(len(mouse_particle_list))

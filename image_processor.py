@@ -76,11 +76,9 @@ for ic in buff_names:
 # bg_list = [bg1, bg2, bg3]
 
 
+top_down_player = load_image("player_topdown")
 
-
-
-
-
+shadow_layer = pygame.transform.smoothscale(load_image("background/shadow"), (480, 960))
 
 
 

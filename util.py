@@ -10,6 +10,12 @@ rotate_img = load_image("icons/rotate")
 back_img = load_image("icons/back")
 skip_img = load_image("icons/skip")
 
+TAB_img_white = load_image("icons/TAB_white") # size 50 pixel
+rotate_img_white = load_image("icons/rotate_white")
+back_img_white = load_image("icons/back_white")
+skip_img_white = load_image("icons/skip_white")
+
+
 button_side_len_half = 25
 
 
