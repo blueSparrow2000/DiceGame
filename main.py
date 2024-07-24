@@ -551,7 +551,6 @@ def adventure_loop():
                         is_valid, which_event, move_depth = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
                         if is_valid:
                             player.update_depth(move_depth)
-                            player.update_depth(43)
                             adventure_bg_color = update_depth_color(player)
                             run_adventure = False
 

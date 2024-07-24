@@ -121,6 +121,10 @@ class Player(Entity):
 
 
     def show_current_tiles(self,screen):
+        # background
+        draw_bar(screen, 240, self.minitile_y, 312, 50, 100, (120,120,120))
+        draw_bar(screen, 240, self.minitile_y, 300, 38, 100, (150,150,150))
+
         mini_tile_list = []
         for tile_name, amount in self.current_tile.items():
             if tile_name not in self.minitile_not_shown:
