@@ -201,10 +201,20 @@ class Gambler_skills(Skill_Book):
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
 
+
+class Ohm_skills(Skill_Book):
+    def __init__(self):
+        super().__init__('Gambler_skills',[])
+        # A = player.count_tile('Attack')
+        # S = player.count_tile('Skill')
+        # D = player.count_tile('Defence')
+        # R = player.count_tile('Regen')
+
 ######################### BUILD SKILL BOOK ##########################
 mirinae_skill_book = Mirinae_skills()
 gambler_skill_book = Gambler_skills()
+ohm_skill_book = Ohm_skills()
 
-character_skill_dictionary = {'Mirinae':mirinae_skill_book,'Gambler':gambler_skill_book}
-character_tile_dictionary = {'Mirinae':{'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6, 'Joker':0,'Karma':0},'Gambler':{'Attack':4, 'Defence':6, 'Regen':4, 'Skill':10, 'Joker':1,'Karma':0} }
+character_skill_dictionary = {'Mirinae':mirinae_skill_book,'Gambler':gambler_skill_book, 'Ohm': ohm_skill_book}
+character_tile_dictionary = {'Mirinae':{'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6, 'Joker':0, 'Karma':0},'Gambler':{'Attack':4, 'Defence':6, 'Regen':4, 'Skill':10, 'Joker':1,'Karma':0},'Ohm':{'Attack':5, 'Defence':4, 'Regen':5, 'Skill':10, 'Joker':0,'Karma':1} }
 
