@@ -65,6 +65,12 @@ def exit():
 def exit_fight():
     return
 
+def update_depth_color(player):
+    depth = player.current_depth
+    #print((110 + depth, 200+depth, 110 + depth))
+    if player.reached_max_depth():
+        depth = -100
+    return (100 + depth, 130 + depth, 100 + depth)
 
 
 def safe_delete(entity_list):
@@ -74,6 +80,7 @@ def safe_delete(entity_list):
         if entity_list[i].is_dead():
             delete_idx.append(i)
     delete_idx.reverse()
+
     for i in delete_idx:
         del entity_list[i]
     ### DELETE DEAD ENEMY ###
@@ -111,7 +118,7 @@ def fight():
     # randomly generate enemy following some logic
     trial = random.randint(1,3)
     enemy_request = ['mob' for i in range(trial)] # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
-    if player.current_depth=='LIMIT' or player.current_depth <= -100:
+    if player.reached_max_depth():
         enemy_request = ['halo'] # boss fight
 
     enemies = []
@@ -139,7 +146,6 @@ def fight():
 
     while game_run:
         if player.health<=0: # check player death first
-            sound_effects['playerdeath'].play()
             exit_fight()
             game_run = False
             print('player lost!')
@@ -488,7 +494,7 @@ def fight():
 ####################################################################################################### adventure loop #######################################################################################################
 
 def adventure_loop():
-    global background_y, background_layer_y, board, map
+    global background_y, background_layer_y, board, map, adventure_bg_color
     meta_run_adventure = True
     mousepos = (0,0)
 
@@ -545,6 +551,8 @@ def adventure_loop():
                         is_valid, which_event, move_depth = map.check_reachable_locations((xp, yp)) #['campfire','fight','ruin','shop','altar']
                         if is_valid:
                             player.update_depth(move_depth)
+                            player.update_depth(43)
+                            adventure_bg_color = update_depth_color(player)
                             run_adventure = False
 
                             if which_event == 'campfire':
@@ -569,6 +577,7 @@ def adventure_loop():
 
                                 if player_lost:
                                     time.sleep(0.5)
+                                    sound_effects['playerdeath'].play()
                                     pygame.mixer.music.stop()
                                     screen.fill(fight_bg_color)
                                     write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
@@ -597,7 +606,7 @@ def adventure_loop():
                                                 elif event.key == pygame.K_RETURN:
                                                     run_win_screen = False
                                                     break
-                                        screen.fill('seagreen')
+                                        screen.fill(adventure_bg_color)
                                         write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
                                         write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
                                                    'gray')
@@ -626,7 +635,7 @@ def adventure_loop():
             if not run_adventure:
                 break
 
-            screen.fill('seagreen')
+            screen.fill(adventure_bg_color)
             # screen.blit(bg_list[0], (0, background_y))
             # y_rel = background_layer_y % height
             # y_part2 = y_rel - height if y_rel > 0 else y_rel + height

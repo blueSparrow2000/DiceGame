@@ -3,6 +3,10 @@ game_fps = 30 #60
 
 # variables
 mob_Y_level = 280
+MAX_DEPTH = -100
+
+
+# text levels
 text_description_level = 640
 requirement_level = 760
 turn_text_level = 160
@@ -30,3 +34,4 @@ option_effect_color = 'gold'
 
 # screen colors
 fight_bg_color = 'lightgray'
+adventure_bg_color = (100,130,100)

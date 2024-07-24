@@ -184,13 +184,13 @@ class Mirinae_skills(Skill_Book):
         for enemy in target_list:
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
-            enemy.buffs['broken will'] = 3
+            enemy.buffs['broken will'] = 1
 
     def get_detail_Excaliber(self, player):
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
         damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
-        return "Excaliber|Attack one target with 10*(A+S) = %d    damage and apply 'broken will' for 3    turns"%damage
+        return "Excaliber|Attack one target with 10*(A+S) = %d    damage and apply 'broken will' for 1    turns"%damage
 
 
 class Gambler_skills(Skill_Book):
