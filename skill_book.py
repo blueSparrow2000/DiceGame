@@ -193,28 +193,27 @@ class Mirinae_skills(Skill_Book):
         return "Excaliber|Attack one target with 10*(A+S) = %d    damage and apply 'broken will' for 1    turns"%damage
 
 
-class Gambler_skills(Skill_Book):
+class Cinavro_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Gambler_skills',[])
+        super().__init__('Cinavro_skills',[])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
 
 
-class Ohm_skills(Skill_Book):
+class Narin_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Gambler_skills',[])
+        super().__init__('Narin_skills',[])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
 
 ######################### BUILD SKILL BOOK ##########################
-mirinae_skill_book = Mirinae_skills()
-gambler_skill_book = Gambler_skills()
-ohm_skill_book = Ohm_skills()
 
-character_skill_dictionary = {'Mirinae':mirinae_skill_book,'Gambler':gambler_skill_book, 'Ohm': ohm_skill_book}
-character_tile_dictionary = {'Mirinae':{'Attack':6, 'Defence':6, 'Regen':6, 'Skill':6, 'Joker':0, 'Karma':0},'Gambler':{'Attack':4, 'Defence':6, 'Regen':4, 'Skill':10, 'Joker':1,'Karma':0},'Ohm':{'Attack':5, 'Defence':4, 'Regen':5, 'Skill':10, 'Joker':0,'Karma':1} }
+character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills()}
+character_tile_dictionary = {'Mirinae':{'Attack':10, 'Defence':4, 'Regen':4, 'Skill':6, 'Joker':0, 'Karma':0},
+                             'Cinavro':{'Attack':4, 'Defence':6, 'Regen':4, 'Skill':10, 'Joker':1,'Karma':0},
+                             'Narin':{'Attack':5, 'Defence':4, 'Regen':5, 'Skill':10, 'Joker':0,'Karma':1} }
 

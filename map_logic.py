@@ -71,7 +71,7 @@ class Map():
             self.map[2][5] = ['ruin',False]
             self.map[3][3] = ['shop',False]
             self.map[4][2] = ['altar', False]
-            self.map[4][5] = ['campfire', False]
+            self.map[1][3] = ['campfire', False]
 
         # insert at-least-contain-one's in neighbors islands
         for c in range(7):

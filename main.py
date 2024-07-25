@@ -98,15 +98,15 @@ character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
 character_tiles = character_tile_dictionary[character_name]
 
-planar_figure_idx = [6,7] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
+planar_figure_idx = [4,5] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
 # warning: some tiles cannot reach boss room! Becareful to choose!
 
-player = Player(character_name,character_skills,character_tiles)
-board = Board(player.tile_dict, planar_figure_idx)
+
+player = Player(character_name,character_skills,Board(character_tiles, planar_figure_idx))
 map = Map()
 ####################################################################################################### fight loop #######################################################################################################
 def fight():
-    global mousepos,player, board,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
+    global mousepos,player,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -114,7 +114,7 @@ def fight():
     number_of_targets_to_specify = 0
     enemy_targets = set()
 
-    board.reset(True)
+    player.board.reset(True)
 
     player.new_fight()
     # randomly generate enemy following some logic
@@ -181,7 +181,7 @@ def fight():
             ### DELETE DEAD ENEMY ###
 
             current_turn += 1
-            # do enemy logic - if something has changed, call board.update() -> do it inside the enemy class
+
             for entity in enemies:
                 entity.behave(player)
                 player.get_buff_effect() # update buff effect every turn
@@ -201,7 +201,7 @@ def fight():
             ########################################### Just before the player turn starts! ###########################
             player_turn = True
             player.refresh_my_turn()
-            board.reset()
+            player.board.reset()
 
 
         screen.fill(fight_bg_color)
@@ -233,9 +233,9 @@ def fight():
                 if player_turn:  # listen for the inputs
                     if player_turn_step == 0:
                         if check_inside_button(mousepos, tab_center, button_side_len_half):
-                            board.change_planar_figure(player.confused)
+                            player.board.change_planar_figure(player.confused)
                         elif check_inside_button(mousepos, rotate_center, button_side_len_half):
-                            board.rotate_once()
+                            player.board.rotate_once()
                         elif check_inside_button(mousepos, skip_center, button_side_len_half):
                             # skip player's turn
                             player.end_my_turn()
@@ -245,7 +245,7 @@ def fight():
                             enemy_targets = set()
                             current_display_text = ""  # reset text
                         else:
-                            valid_location = board.collect_tiles((xp, yp))
+                            valid_location = player.board.collect_tiles((xp, yp))
                             player.initialize_step_1()
                             if not valid_location:
                                 pass
@@ -271,7 +271,7 @@ def fight():
                             player.end_my_turn()
                             player_turn = False
                             player_turn_step = 0
-                            board.confirm_using_tile()
+                            player.board.confirm_using_tile()
                             number_of_targets_to_specify = 0
                             enemy_targets = set()
                             continue # skip below
@@ -296,7 +296,7 @@ def fight():
                                 player.end_my_turn()
                                 player_turn = False
                                 player_turn_step = 0
-                                board.confirm_using_tile()
+                                player.board.confirm_using_tile()
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
 
@@ -333,7 +333,7 @@ def fight():
                                 player.end_my_turn()
                                 player_turn = False
                                 player_turn_step = 0
-                                board.confirm_using_tile()
+                                player.board.confirm_using_tile()
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
 
@@ -369,9 +369,9 @@ def fight():
 
                     if player_turn_step == 0:
                         if event.key == pygame.K_r:
-                            board.rotate_once()
+                            player.board.rotate_once()
                         if event.key == pygame.K_TAB:
-                            board.change_planar_figure(player.confused)
+                            player.board.change_planar_figure(player.confused)
                     if player_turn_step == 1:
                         pass
                         # is_valid_move = False
@@ -401,7 +401,7 @@ def fight():
                         #         player.end_my_turn()
                         #         player_turn = False
                         #         player_turn_step = 0
-                        #         board.confirm_using_tile()
+                        #         player.board.confirm_using_tile()
                         #         number_of_targets_to_specify = 0
                         #         enemy_targets = set()
                         #
@@ -417,7 +417,7 @@ def fight():
                         #     player.end_my_turn()
                         #     player_turn = False
                         #     player_turn_step = 0
-                        #     board.confirm_using_tile()
+                        #     player.board.confirm_using_tile()
                         #     number_of_targets_to_specify = 0
                         #     enemy_targets = set()
                         # if event.key == pygame.K_9:
@@ -426,7 +426,7 @@ def fight():
                         #     player.end_my_turn()
                         #     player_turn = False
                         #     player_turn_step = 0
-                        #     board.confirm_using_tile()
+                        #     player.board.confirm_using_tile()
                         #     number_of_targets_to_specify = 0
                         #     enemy_targets = set()
                         #
@@ -472,7 +472,7 @@ def fight():
         if player_turn:
             write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
             # draw board
-            board.draw(screen, player_turn_step)
+            player.board.draw(screen, player_turn_step)
 
 
             if player_turn_step == 0:  # listen for the inputs
@@ -490,7 +490,7 @@ def fight():
 
 
                 if mousepos[1] >= 480:  # on the board
-                    board.draw_planar_figure(screen, mousepos)
+                    player.board.draw_planar_figure(screen, mousepos)
         else:
             write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
 
@@ -516,7 +516,7 @@ def fight():
 ####################################################################################################### adventure loop #######################################################################################################
 
 def adventure_loop():
-    global background_y, background_layer_y, board, map, adventure_bg_color
+    global background_y, background_layer_y, map, adventure_bg_color
     meta_run_adventure = True
     mousepos = (0,0)
 
@@ -530,7 +530,7 @@ def adventure_loop():
 
         map.random_initialize(player)
 
-        board.init_turn()
+        player.board.init_turn()
         map_choosing_step = 0  # 0: placing planar figure / 1: clicking reachable map tile => fight etc
 
         # reset
@@ -565,12 +565,12 @@ def adventure_loop():
                     mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
 
                     if check_inside_button(mousepos, tab_center, button_side_len_half):
-                        board.change_planar_figure(False)
+                        player.board.change_planar_figure(False)
                     elif check_inside_button(mousepos, rotate_center, button_side_len_half):
-                        board.rotate_once()
+                        player.board.rotate_once()
 
                     if map_choosing_step == 0: # check map
-                        is_valid = map.check_tiles((xp, yp),board)
+                        is_valid = map.check_tiles((xp, yp),player.board)
                         if is_valid: # goto next step (only happens here)
                             map_choosing_step = 1
                     elif map_choosing_step == 1:
@@ -578,7 +578,7 @@ def adventure_loop():
                             # go to initial stage and do it again
                             map_choosing_step = 0
                             map.reset()
-                            board.init_turn()
+                            player.board.init_turn()
                             continue  # skip below
 
 
@@ -601,9 +601,9 @@ def adventure_loop():
                             run_adventure, meta_run_adventure = exit()
                             break
                         elif event.key == pygame.K_r:
-                            board.rotate_once()
+                            player.board.rotate_once()
                         elif event.key == pygame.K_TAB:
-                            board.change_planar_figure(False)
+                            player.board.change_planar_figure(False)
 
                         elif event.key == pygame.K_RETURN:
                             pass
@@ -640,9 +640,9 @@ def adventure_loop():
                 elif which_event == 'fight':
                     ########################################################## go to fight #################################################
                     # initialize board attributes
-                    board.init_turn()
+                    player.board.init_turn()
                     player_lost, valid_termination = fight()
-                    board.init_turn()
+                    player.board.init_turn()
                     # initialize board attributes
 
                     if not valid_termination:
@@ -705,7 +705,7 @@ def adventure_loop():
 
 
             if map_choosing_step==0 and mousepos[1] >= 480:  # on the board
-                board.draw_planar_figure(screen, mousepos)
+                player.board.draw_planar_figure(screen, mousepos)
                 screen.blit(TAB_img_white, TAB_img_white.get_rect(center=tab_center))
                 screen.blit(rotate_img_white, rotate_img_white.get_rect(center=rotate_center))
 

@@ -2,14 +2,14 @@ from entity import *
 
 
 class Player(Entity):
-    def __init__(self, character_name,character_skills, character_tiles): # tile_dict
+    def __init__(self, character_name,character_skills, board): # tile_dict
         global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles     # all the other skills should also be contained
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
         self.current_tile = dict()
         self.current_skill_idx = -1
-        self.tile_dict = character_tiles ########## this should be given as input for multi characters
         self.skill_book = character_skills
+        self.board = board
 
         ######################################## buttons
         self.buttons = ['Attack', 'Defence','Regen']
@@ -254,7 +254,7 @@ class Player(Entity):
         return 0
 
     def P(self,num):
-        return 2**(num-1)
+        return 2**(num)
 
     def attack(self, target_list):
         sound_effects['sword'].play()
