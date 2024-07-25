@@ -40,7 +40,7 @@ class Skill_Book():
 class Mirinae_skills(Skill_Book):
 
     def __init__(self):
-        super().__init__('Mirinae_skills',['martial_art','sword_storm','head_start','self_defence','guard_attack','Excaliber'])
+        super().__init__('Mirinae_skills',['martial_art','head_start','sword_storm','self_defence','guard_attack','Excaliber'])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
@@ -51,7 +51,7 @@ class Mirinae_skills(Skill_Book):
         condition:
         when attack tile < 4
 
-        attack one enemy with damage S * (A) * 5
+        attack one enemy with damage A * 5
         '''
         A = player.count_tile('Attack')
         if (A>3):
@@ -62,38 +62,16 @@ class Mirinae_skills(Skill_Book):
     def martial_art(self,player, target_list):
         sound_effects['hit'].play()
         A = player.count_tile('Attack')
-        S = player.count_tile('Skill')
-        damage = (5* S * player.P(A)) * player.get_attack_multiplier()
+        damage = (5*A) * player.get_attack_multiplier()
         for enemy in target_list:
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
 
     def get_detail_martial_art(self,player):
         A = player.count_tile('Attack')
-        S = player.count_tile('Skill')
-        damage = (5* S * player.P(A)) * player.get_attack_multiplier()
-        return "Martial art|Attack one target with 5*A*S = %d damage"%damage
+        damage = (5*A) * player.get_attack_multiplier()
+        return "Martial art|Attack one target with 5*A = %d damage"%damage
 
-    def sword_storm_get_requirement(self,player):
-        ''' 2
-
-
-        '''
-
-        S = player.count_tile('Skill')
-        return True, S+1, True, {'Skill':(1,0),}  # skill_valid, target_nums,is_attack
-    def sword_storm(self,player, target_list):
-        sound_effects['sword'].play()
-        A = player.count_tile('Attack')
-        damage = player.P(A) * player.get_attack_multiplier()
-        for enemy in target_list:
-            counter_attack_damage = enemy.take_damage(damage)
-            player.health -= counter_attack_damage
-    def get_detail_sword_storm(self,player):
-        S = player.count_tile('Skill')
-        A = player.count_tile('Attack')
-        damage = player.P(A) * player.get_attack_multiplier()
-        return "Sword storm|Attack S+1 = %d targets with P(A) = %d    damage"%(S+1,damage)
 
     def head_start_get_requirement(self,player):
         ''' 3
@@ -101,7 +79,7 @@ class Mirinae_skills(Skill_Book):
 
         '''
         S = player.count_tile('Skill')
-        return True, S, True, {'Skill':(2,0),}
+        return True, S+1, True, {'Skill':(1,0),}
 
     def head_start(self,player, target_list):
         sound_effects['hit'].play()
@@ -113,7 +91,26 @@ class Mirinae_skills(Skill_Book):
     def get_detail_head_start(self,player):
         S = player.count_tile('Skill')
         D = player.count_tile('Defence')
-        return "Head start|Apply vulnerability to S+1 = %d targets  (3 turns) and remove 5*D = %d defence"%(S+1,D*5)
+        return "Head start|Apply vulnerability to S+1 = %d targets  (3 turns) and removes 5*D = %d defence"%(S+1,D*5)
+
+    def sword_storm_get_requirement(self,player):
+        ''' 2
+
+
+        '''
+        return True, 3, True, {'Skill':(2,0),}  # skill_valid, target_nums,is_attack
+    def sword_storm(self,player, target_list):
+        sound_effects['sword'].play()
+        A = player.count_tile('Attack')
+        damage = (A*5)  * player.get_attack_multiplier()
+        for enemy in target_list:
+            counter_attack_damage = enemy.take_damage(damage)
+            player.health -= counter_attack_damage
+    def get_detail_sword_storm(self,player):
+        A = player.count_tile('Attack')
+        damage = (A*5) * player.get_attack_multiplier()
+        return "Sword storm|Attack all targets with A*5 = %d damage"%(damage)
+
 
     def self_defence_get_requirement(self,player):
         ''' 4
@@ -123,7 +120,7 @@ class Mirinae_skills(Skill_Book):
 
         #회복 및 방어가 공격으로 전환된다: S*P(R+D)만큼 피해를 준다
         '''
-        return True, 1, True, {'Skill':(2,0),}
+        return True, 0, True, {'Skill':(2,0),}
     def self_defence(self,player, target_list):
         sound_effects['get'].play()
         S = player.count_tile('Skill')
@@ -206,7 +203,7 @@ class Narin_skills(Skill_Book):
 ######################### BUILD SKILL BOOK ##########################
 
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills()}
-character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':1, 'Karma':0},
+character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1} }
 

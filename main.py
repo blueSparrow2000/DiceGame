@@ -275,7 +275,6 @@ def fight():
                             enemy_targets = set()
                             continue # skip below
 
-
                         ### skill buttons here!
                         is_valid_move = False
                         skill_num = player.skill_book.check_button(mousepos)
@@ -318,29 +317,8 @@ def fight():
                                     enemy_targets.add(enemies[i])
                                     enemies[i].targeted = True
 
-                            listed_enemy_targets = list(enemy_targets)
-                            # detect enemy
-                            if number_of_targets_to_specify==len(listed_enemy_targets) or (len(enemies)<number_of_targets_to_specify and len(enemies)==len(listed_enemy_targets)): # collected all
-                                if player.current_skill_idx<0: # basic attack
-                                    player.attack(listed_enemy_targets)
-                                else:
-                                    # use the skill!
-                                    player.use_skill(listed_enemy_targets)
-                                for i in range(len(enemies)):
-                                    enemies[i].targeted = False
-                                # end players turn
-                                player.end_my_turn()
-                                player_turn = False
-                                player_turn_step = 0
-                                player.board.confirm_using_tile()
-                                number_of_targets_to_specify = 0
-                                enemy_targets = set()
 
-                        # do player logic
-                        # change through primary/secondary planar figures
-                        # rotate the planar figure
-                        # click the board
-                        # select the skill
+
 
 
             if event.type == pygame.KEYDOWN:
@@ -430,28 +408,6 @@ def fight():
                         #     number_of_targets_to_specify = 0
                         #     enemy_targets = set()
                         #
-
-        if player_turn_step == 1:
-            screen.blit(back_img, back_img.get_rect(center=back_center))
-
-            # replace to basic move buttons - explanation is shown only when hovering
-            player.draw_buttons(screen)
-
-            write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
-            player.show_required_tiles(screen)
-
-            player.skill_book.draw(screen)
-
-            player.show_current_tiles(screen)
-
-            # if joker is in the current tiles, you should select one!
-            player.draw_tile_transform_button(screen)
-
-        elif player_turn_step == 2:
-            screen.blit(back_img, back_img.get_rect(center=back_center))
-
-            write_text(screen, width // 2, height - 30, "Click the enemy to target", 15)
-
         if not game_run:
             break
 
@@ -468,12 +424,10 @@ def fight():
         # Draw player main info
         player.draw_player_info_top(screen)
 
-        # if inside the border
         if player_turn:
+            ### DRAWING ###
             write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
-            # draw board
             player.board.draw(screen, player_turn_step, mousepos)
-
 
             if player_turn_step == 0:  # listen for the inputs
                 if check_inside_button(mousepos, tab_center, button_side_len_half):
@@ -481,13 +435,55 @@ def fight():
                 elif check_inside_button(mousepos, rotate_center, button_side_len_half):
                     write_text(screen, mousepos[0]-100, mousepos[1], "rotate planar figure", 15)
 
+                ### DRAWING ###
                 screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
                 screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
                 screen.blit(skip_img, skip_img.get_rect(center=skip_center))
-
-
                 if mousepos[1] >= 480:  # on the board
                     player.board.draw_planar_figure(screen, mousepos)
+
+            elif player_turn_step == 1:
+                ### DRAWING ###
+                screen.blit(back_img, back_img.get_rect(center=back_center))
+                player.draw_buttons(screen)  # replace to basic move buttons - explanation is shown only when hovering
+                write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
+                player.show_required_tiles(screen)
+                player.skill_book.draw(screen)
+                player.show_current_tiles(screen)
+                # if joker is in the current tiles, you should select one!
+                player.draw_tile_transform_button(screen)
+
+            elif player_turn_step == 2:
+                # immediate attack
+                if number_of_targets_to_specify >= len(enemies):  # if number_of_targets_to_specify >= len(enemies) # 즉 지정할 적의 수가 존재하는 적의 수보다 많을 경우, 지정할 필요 없이 바로 전체데미지 주면 되니까
+                    for enemy in enemies:  # enemy_targets = set(enemies) for a faster way, but it does not change enemy.targeted = True
+                        enemy_targets.add(enemy)
+                        enemy.targeted = True
+
+                # detect enemy
+                listed_enemy_targets = list(enemy_targets)
+                if number_of_targets_to_specify == len(listed_enemy_targets) or (
+                        len(enemies) < number_of_targets_to_specify and len(enemies) == len(
+                    listed_enemy_targets)):  # collected all
+                    if player.current_skill_idx < 0:  # basic attack
+                        player.attack(listed_enemy_targets)
+                    else:
+                        # use the skill!
+                        player.use_skill(listed_enemy_targets)
+                    for i in range(len(enemies)):
+                        enemies[i].targeted = False
+                    # end players turn
+                    player.end_my_turn()
+                    player_turn = False
+                    player_turn_step = 0
+                    player.board.confirm_using_tile()
+                    number_of_targets_to_specify = 0
+                    enemy_targets = set()
+
+                ### DRAWING ###
+                screen.blit(back_img, back_img.get_rect(center=back_center))
+                write_text(screen, width // 2, height - 30, "Click the enemy to target", 15)
+
         else:
             write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
 

@@ -25,6 +25,5 @@
 # b = [0,0,0,0]
 # print(list_compare(a,b))
 
-a = []
-a.extend([])
-print(a)
+a = ['1','2','2']
+print(set(a))
