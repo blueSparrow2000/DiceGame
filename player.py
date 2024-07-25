@@ -53,13 +53,6 @@ class Player(Entity):
         self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y ) for i in range(len(self.transformable_tiles))]
 
 
-
-    def have_joker_tile(self):  # ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
-        for tile_name, amount in self.current_tile.items():
-            if tile_name == 'Joker' and amount > 0:
-                return True
-        return False
-
     def transform_tile(self, transformed_tile_name):
         # remove one joker
         self.current_tile['Joker'] -= 1  # have joker 일때만 실행됨
@@ -73,8 +66,15 @@ class Player(Entity):
         else:
             self.current_tile[transformed_tile_name] = 1  # add new entry
 
+    # def have_joker_tile(self):  # ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
+    #     for tile_name, amount in self.current_tile.items():
+    #         if tile_name == 'Joker' and amount > 0:
+    #             return True
+    #     return False
+
+
     def tile_transform_button(self,mousepos):
-        if not self.have_joker_tile():
+        if not self.check_exists_in_current_tile('Joker'):
             return
 
         for i in range(len(self.transformable_tiles)):
@@ -85,7 +85,7 @@ class Player(Entity):
 
 
     def draw_tile_transform_button(self,screen):
-        if not self.have_joker_tile():
+        if not self.check_exists_in_current_tile('Joker'):
             return
 
         write_text(screen, 240, self.transform_y - 30, "choose a tile", 15, color='darkgoldenrod')
@@ -115,8 +115,14 @@ class Player(Entity):
             screen.blit(self.mini_tile_icons[mini_tile_list[i]], self.mini_tile_icons[mini_tile_list[i]].get_rect(
                 center=(self.minitile_x + i * self.minitile_spacing, self.minitile_y)))
 
-    def draw_buttons(self, screen):
+    def check_exists_in_current_tile(self, tile_name):
+        return tile_name in self.current_tile and self.current_tile[tile_name] > 0 # if such tile exists and is having more than one
+
+    def draw_buttons(self, screen): # can click only if current tile exists
         for i in range(len(self.buttons)):
+            if not self.check_exists_in_current_tile(self.buttons[i]):
+                continue # pass to check next button
+
             if (self.buttons[i] == 'Attack'):
                 if self.can_attack:
                     screen.blit(self.button_images[i], self.button_images[i].get_rect(center=self.button_locations[i]))
@@ -127,6 +133,8 @@ class Player(Entity):
     def check_activate_button(self, mousepos):
         for i in range(len(self.buttons)):
             current_button = self.buttons[i]
+            if not self.check_exists_in_current_tile(current_button):
+                continue # pass to check next button
             if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
                 if (current_button == 'Attack'):
                     # attack button
@@ -189,6 +197,8 @@ class Player(Entity):
     def my_turn_lookahead(self, mousepos): # show details of each skill / basic attacks
         for i in range(len(self.buttons)):
             current_button = self.buttons[i]
+            if not self.check_exists_in_current_tile(current_button):
+                continue # pass to check next button
             if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
                 if (current_button == 'Attack'):
                     if self.can_attack:

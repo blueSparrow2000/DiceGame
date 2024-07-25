@@ -184,17 +184,28 @@ class Board():
         for i in range(8):
             for j in range(8):
                 self.board[i][j] = board_temp[i*8+j]
-    def draw(self,screen, step):
+    def draw(self,screen, step, mousepos):
         global write_text
         if step==0:
             for i in range(8):
                 for j in range(8):
                     screen.blit(self.image_dict[self.board[i][j]], (self.board_X + j*self.side_length, self.board_Y_level + self.side_length*i))
-            # draw reset counter
 
-            write_text(screen, 440 , self.board_Y_level - 25, "%d"%(self.board_reset_turn - self.current_turn + 1), 20)
+            turns_remaining_until_board_reset = self.board_reset_turn - self.current_turn + 1
+            # draw reset counter
+            if turns_remaining_until_board_reset==1:
+                write_text(screen, 440 , self.board_Y_level - 25, "%d"%(turns_remaining_until_board_reset), 20, color = 'red')
+            else:
+                write_text(screen, 440, self.board_Y_level - 25, "%d" % (turns_remaining_until_board_reset), 20)
+
             screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(440, self.board_Y_level - 25)))
-            #write_text(screen, 240, self.board_Y_level - 40, "turns left until board reset", 10)
+
+            if check_inside_button(mousepos, (440, self.board_Y_level - 25), button_side_len_half):
+                write_text(screen, 240, 460, "turns left until board reset", 15)
+            else:
+                write_text(screen, 240, 460, "Click: confirm", 15)
+
+
         elif step==1:
             pass
         elif step==2:

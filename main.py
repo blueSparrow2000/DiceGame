@@ -98,7 +98,7 @@ character_name = 'Mirinae'
 character_skills = character_skill_dictionary[character_name]
 character_tiles = character_tile_dictionary[character_name]
 
-planar_figure_idx = [4,5] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
+planar_figure_idx = [0,6] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
 # warning: some tiles cannot reach boss room! Becareful to choose!
 
 
@@ -472,7 +472,7 @@ def fight():
         if player_turn:
             write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
             # draw board
-            player.board.draw(screen, player_turn_step)
+            player.board.draw(screen, player_turn_step, mousepos)
 
 
             if player_turn_step == 0:  # listen for the inputs
@@ -480,9 +480,6 @@ def fight():
                     write_text(screen, mousepos[0]+100, mousepos[1], "toggle planar figure", 15)
                 elif check_inside_button(mousepos, rotate_center, button_side_len_half):
                     write_text(screen, mousepos[0]-100, mousepos[1], "rotate planar figure", 15)
-
-
-                write_text(screen, width // 2, height//2 - 20, "Click: confirm", 15)
 
                 screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
                 screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
