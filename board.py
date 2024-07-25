@@ -1,3 +1,20 @@
+'''
+Board를 변경하는 범위엔 3가지가 있다
+1. 영구히 보드의 타일 분포를 변경시키는 것 (전투 종료 후에도 영구 지속)
+self.permanent_board_dict 영구적인 영향
+=> permanent
+
+2. 해당 전투에서 지속적으로 타일 분포를 변경시키는것 (전투 종료시 리셋)
+self.temporary_board_dict 이번 전투 중에만 유지되는 타일분포
+=> temporary
+
+3. 보드가 리셋되기 전까지 현재의 보드 판의 타일분포를 변경시키는것 (전투 중에 보드 리셋시 리셋되는)
+self.board를 변경하면 됨
+=>
+
+'''
+
+
 import random
 import pygame
 from image_processor import *
@@ -70,12 +87,12 @@ class Board():
         global tile_names,planar_figures,sound_effects
         self.board = [[None for i in range(8)] for j in range(8)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = [[None for i in range(8)] for j in range(8)]
-        self.board_original_dict = tiles_dict # 영구적인 영향을 주는 거면 이거도 바꿈
+        self.permanent_board_dict = tiles_dict # 영구적인 영향을 주는 거면 이거도 바꿈
         tile_count = 0
-        for k,v in self.board_original_dict.items():
+        for k,v in self.permanent_board_dict.items():
             tile_count+=v
-        self.board_original_dict['Empty'] = 64 - tile_count
-        self.board_dict = self.board_original_dict # 이번 전투에만 영향을 주는거면 이거도 바꿈
+        self.permanent_board_dict['Empty'] = 64 - tile_count
+        self.temporary_board_dict = self.permanent_board_dict # 이번 전투에만 영향을 주는거면 이거도 바꿈
         self.cube_figure = load_image('tiles/cube')
 
         self.image_dict = dict()
@@ -100,6 +117,9 @@ class Board():
         self.board_reset_turn = 6
         self.current_turn = 0
 
+    def consume_all_tiles_board(self):
+        pass
+
     def init_turn(self): # initialize planar figure at every turn starts
         self.figure_index = 0
         self.my_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[0]]), copy.deepcopy(planar_figures[self.planar_figure_idx[1]])]
@@ -120,12 +140,13 @@ class Board():
         #self.planar_figure_center = [1,1]
 
     def new_game(self):
-        self.board_dict = self.board_original_dict
+        self.temporary_board_dict = self.permanent_board_dict
+        self.reset(True)
 
     def reset(self,enforced = False): # reset the board (each 6 turn)
         if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
             board_temp = []
-            for k,v in self.board_dict.items():
+            for k,v in self.temporary_board_dict.items():
                 tile = k
                 for i in range(v):
                     board_temp.append(tile)

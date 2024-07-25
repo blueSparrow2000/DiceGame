@@ -241,6 +241,9 @@ class Player(Entity):
         self.current_tile = dict()
         self.current_skill_idx = -1
 
+        # reset the board
+        self.board.new_game()
+
 
     def push_tile_infos(self,tile_info):
         self.current_tile = tile_info

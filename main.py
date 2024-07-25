@@ -114,8 +114,6 @@ def fight():
     number_of_targets_to_specify = 0
     enemy_targets = set()
 
-    player.board.reset(True)
-
     player.new_fight()
     # randomly generate enemy following some logic
     trial = random.randint(1,3)
@@ -374,6 +372,7 @@ def fight():
                             player.board.change_planar_figure(player.confused)
                     if player_turn_step == 1:
                         pass
+                        ### 키보드 단축키 활성화 할래? 안할래. 안할래... 더 복잡다
                         # is_valid_move = False
                         # if event.key == pygame.K_1:
                         #     is_valid_move,number_of_targets_to_specify = player.skill_ready(0)
