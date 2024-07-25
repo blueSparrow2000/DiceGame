@@ -16,11 +16,8 @@ self.board를 변경하면 됨
 
 
 import random
-import pygame
-from image_processor import *
-from music import *
 import copy
-from variables import *
+from util import *
 
 planar_figures = []
 
@@ -116,6 +113,7 @@ class Board():
 
         self.board_reset_turn = 6
         self.current_turn = 0
+        self.board_reset_icon = load_image("icons/reset")
 
     def consume_all_tiles_on_board(self, tile_name): # consume all tiles and return how many are (actually) consumed
         how_many_consumed = 0
@@ -187,10 +185,16 @@ class Board():
             for j in range(8):
                 self.board[i][j] = board_temp[i*8+j]
     def draw(self,screen, step):
+        global write_text
         if step==0:
             for i in range(8):
                 for j in range(8):
                     screen.blit(self.image_dict[self.board[i][j]], (self.board_X + j*self.side_length, self.board_Y_level + self.side_length*i))
+            # draw reset counter
+
+            write_text(screen, 440 , self.board_Y_level - 25, "%d"%(self.board_reset_turn - self.current_turn + 1), 20)
+            screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(440, self.board_Y_level - 25)))
+            #write_text(screen, 240, self.board_Y_level - 40, "turns left until board reset", 10)
         elif step==1:
             pass
         elif step==2:

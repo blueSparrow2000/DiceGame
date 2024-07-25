@@ -200,6 +200,7 @@ def fight():
             player_turn = True
             player.refresh_my_turn()
             player.board.reset()
+            current_display_text = ""
 
 
         screen.fill(fight_bg_color)
