@@ -140,26 +140,14 @@ class Mirinae_skills(Skill_Book):
         ''' 5
 
         '''
-        return True, 1, True, {'Skill':(3,0),}
+        return True, 0, True, {'Skill':(3,0),'Defence':(1,0)}
 
     def guard_attack(self,player, target_list):
-        sound_effects['sword'].play()
-        A = player.count_tile('Attack')
-        S = player.count_tile('Skill')
-        D = player.count_tile('Defence')
-
-        damage = ( S * player.P(A) + player.P(D) ) * player.get_attack_multiplier()
-        for enemy in target_list:
-            counter_attack_damage = enemy.take_damage(damage)
-            player.health -= counter_attack_damage
+        sound_effects['get'].play()
+        player.board.convert_all_tiles_on_board('Defence', 'Attack')
 
     def get_detail_guard_attack(self, player):
-        A = player.count_tile('Attack')
-        S = player.count_tile('Skill')
-        D = player.count_tile('Defence')
-
-        damage = ( S * player.P(A) + player.P(D) ) * player.get_attack_multiplier()
-        return "Guard attack|Attack one target with S*P(A)+P(D) = %d  damage"%damage
+        return "Guard attack|All defence tiles become attack tiles on current board"
 
     def Excaliber_get_requirement(self,player):
         ''' 6

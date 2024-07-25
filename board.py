@@ -118,6 +118,16 @@ class Board():
         self.current_turn = 0
         self.board_reset_icon = load_image("icons/reset")
 
+
+    def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target into convert tile
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(8):
+            for j in range(8):
+                current_tile = self.board[i][j]
+                if current_tile == target_tile:
+                    self.temp_board[i][j] = convert_tile # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
+
+
     def consume_all_tiles_on_board(self, tile_name): # consume all tiles and return how many are (actually) consumed
         how_many_consumed = 0
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles

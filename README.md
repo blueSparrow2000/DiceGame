@@ -39,6 +39,61 @@ WARNING: There might still be a bug in character selection. (초기화되지 않
 
 - add various enemies
 
+
+# Character Concepts
+Attack, defence, regeneration values are exponentially proportional to the number of tiles used, so it is important to use proper tiles.
+
+### Mirinae the slayer
+"Attack is the best defence"
+
+
+A deck that focuses on attack rather than defense and recovery. 
+She has an ultimate ability that allows her to collect a lot of attack tiles and inflict great damage, making it advantageous against strong enemies. Vulnerability can provide synergy.
+A martial art skill can withstand situations with few attack tiles. 
+In addition, it has wide-area and counterattacks, so it can stably deal with multiple enemies. 
+You can take advantage of the opportunity to turn the tables by using the skill to convert all defense tiles into attack tiles.
+
+### Cinavro the gambler
+"It's not manipulation, it's my skills"
+
+
+A deck that exploits 'Joker' tiles that can be used as any tiles you want. 
+This makes the game easy, so his skills are weakened compared to other characters.
+
+
+### Narin the conservator of Karma
+"???"
+
+
+Karma, a substance that replicates itself, is a tile that returns as harm to you when the board is reset.
+Hence you must either wait for Karma to duplicate and use them all or must eliminate from the beginning.
+Use various skills to explore the synergy! The most fun deck.
+
+
+### Baron the knight
+TBU (To Be Updated)
+
+
+
+### Riri the cleric
+TBU (To Be Updated)
+
+
+
+### Ato the noble
+TBU (To Be Updated)
+
+
+
+### Arisu the explorer
+TBU (To Be Updated)
+
+
+
+
+
+
+
 # Music Credits
 sanctuary: EN_OKAWA
 
