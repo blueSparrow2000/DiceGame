@@ -84,12 +84,14 @@ class Board():
         global tile_names,planar_figures,sound_effects
         self.board = [[None for i in range(8)] for j in range(8)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = [[None for i in range(8)] for j in range(8)]
-        self.permanent_board_dict = tiles_dict # 영구적인 영향을 주는 거면 이거도 바꿈
+        self.permanent_board_dict = copy.deepcopy(tiles_dict) # 영구적인 영향을 주는 거면 이거도 바꿈
         tile_count = 0
         for k,v in self.permanent_board_dict.items():
             tile_count+=v
         self.permanent_board_dict['Empty'] = 64 - tile_count
         self.temporary_board_dict = self.permanent_board_dict # 이번 전투에만 영향을 주는거면 이거도 바꿈
+        # print(self.permanent_board_dict)
+        # print(self.temporary_board_dict)
         self.cube_figure = load_image('tiles/cube')
 
         self.image_dict = dict()
@@ -103,7 +105,8 @@ class Board():
         #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
 
         self.figure_index = 0 # 0 for primary, 1 for secondary
-        self.planar_figure_idx = planar_figure_idx # absolute variants of planar figures
+        self.planar_figures = copy.deepcopy(planar_figures)
+        self.planar_figure_idx = copy.deepcopy(planar_figure_idx) # absolute variants of planar figures
         self.init_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[0]]),copy.deepcopy(planar_figures[self.planar_figure_idx[1]])]
         self.my_planar_figures = [planar_figures[self.planar_figure_idx[0]],planar_figures[self.planar_figure_idx[1]]]
         self.current_planar_figure = self.my_planar_figures[self.figure_index]

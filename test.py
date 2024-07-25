@@ -25,5 +25,8 @@
 # b = [0,0,0,0]
 # print(list_compare(a,b))
 
-a = ['1','2','2']
-print(set(a))
+
+def hihi():
+    print(x)
+x = 10
+hihi()

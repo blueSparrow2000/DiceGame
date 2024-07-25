@@ -56,6 +56,12 @@ pygame.display.set_caption('Dice Game')  # window title
 width, height = pygame.display.get_surface().get_size()  # window width, height
 
 screen.fill((0,0,0))  # background color
+tab_center = (40,height-40)
+rotate_center = (width-40,height-40)
+back_center = (width-40,height-40)
+skip_center = (width//2,height-40)
+
+mousepos = (0,0)
 
 
 def exit():
@@ -85,28 +91,10 @@ def safe_delete(entity_list):
         del entity_list[i]
     ### DELETE DEAD ENEMY ###
 
-# main screen ---------------------------------------------------
-tab_center = (40,height-40)
-rotate_center = (width-40,height-40)
-back_center = (width-40,height-40)
-skip_center = (width//2,height-40)
 
-mousepos = (0,0)
-
-##### choose character here...
-character_name = 'Mirinae'
-character_skills = character_skill_dictionary[character_name]
-character_tiles = character_tile_dictionary[character_name]
-
-planar_figure_idx = [0,6] # choose two between 0~9 # currently 10 planar figures available (11th one is different)
-# warning: some tiles cannot reach boss room! Becareful to choose!
-
-
-player = Player(character_name,character_skills,Board(character_tiles, planar_figure_idx))
-map = Map()
 ####################################################################################################### fight loop #######################################################################################################
-def fight():
-    global mousepos,player,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
+def fight(player):
+    global mousepos,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -508,13 +496,10 @@ def fight():
 
 ####################################################################################################### adventure loop #######################################################################################################
 
-def adventure_loop():
-    global background_y, background_layer_y, map, adventure_bg_color
+def adventure_loop(player,map):
+    global background_y, background_layer_y, adventure_bg_color
     meta_run_adventure = True
     mousepos = (0,0)
-
-    animation_block = False
-    activate_tile = False
 
     while meta_run_adventure:
         # The Music in main
@@ -634,7 +619,7 @@ def adventure_loop():
                     ########################################################## go to fight #################################################
                     # initialize board attributes
                     player.board.init_turn()
-                    player_lost, valid_termination = fight()
+                    player_lost, valid_termination = fight(player)
                     player.board.init_turn()
                     # initialize board attributes
 
@@ -646,15 +631,28 @@ def adventure_loop():
                         time.sleep(0.5)
                         sound_effects['playerdeath'].play()
                         pygame.mixer.music.stop()
-                        screen.fill(fight_bg_color)
-                        write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
-                        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
-                        pygame.display.flip()
+                        run_lost_screen = True
+                        while run_lost_screen:
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                                    meta_run_adventure = False
+                                    run_lost_screen = False
+                                    return False
 
-                        time.sleep(2)
-                        meta_run_adventure = False
+                                if event.type == pygame.KEYDOWN:
+                                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                                        run_lost_screen = False
+                                        break
+                                    elif event.key == pygame.K_RETURN:
+                                        run_lost_screen = False
+                                        break
+                            screen.fill(fight_bg_color)
+                            write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
+                            write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+                            pygame.display.flip()
+                            clock.tick(game_fps)
 
-                        break
+                        return True # try again for other characters
                     else:
                         run_win_screen = True
                         music_Q("cozy")
@@ -727,61 +725,83 @@ def adventure_loop():
 
 
 ####################################################################################################### character selection loop #######################################################################################################
-run_character_selection = True
+# main screen ---------------------------------------------------
 
-# The Music in main
-music_Q('Lobby', True)
+meta_run = True
+while meta_run:
+    # The Music in main
+    music_Q('Lobby', True)
+    run_character_selection = True
 
-while run_character_selection:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-            pygame.quit()
-            break
 
-        if event.type == pygame.MOUSEMOTION:
-            continue
-        if event.type == pygame.MOUSEBUTTONUP:
-            sound_effects['confirm'].play()
-            (xp, yp) = pygame.mouse.get_pos()
-            mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+    # reset key variables for next meta run
+    ##### choose character here...
+    character_name = 'Mirinae'
+    character_skills = character_skill_dictionary[character_name]
+    character_tiles = character_tile_dictionary[character_name]
 
-        if event.type == pygame.KEYDOWN:
+    planar_figure_idx = [0, 6]  # choose two between 0~9 # currently 10 planar figures available (11th one is different)
+    # warning: some tiles cannot reach boss room! Becareful to choose!
 
-            if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+    player = Player(character_name, character_skills, Board(character_tiles, planar_figure_idx))
+    map = Map()
+    print("Starting a new game!")
+
+
+    while run_character_selection:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                meta_run = False
                 pygame.quit()
                 break
-            elif event.key == pygame.K_RETURN:
-                run_character_selection = False
-                adventure_loop()
-                # player_lost,valid_termination = adventure_loop()
-                # if not valid_termination:
-                #     break
-                break
+
+            if event.type == pygame.MOUSEMOTION:
+                continue
+            if event.type == pygame.MOUSEBUTTONUP:
+                sound_effects['confirm'].play()
+                (xp, yp) = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                    meta_run = False
+                    pygame.quit()
+                    break
+                elif event.key == pygame.K_RETURN:
+                    run_character_selection = False
+                    try_again = adventure_loop(player,map)
+                    # player_lost,valid_termination = adventure_loop(player,map)
+                    # if not valid_termination:
+                    #     break
+                    if not try_again:
+                        meta_run = False
+                    break
 
 
-    if not run_character_selection:
-        break
+        if not run_character_selection:
+            break
 
-    screen.fill('dimgray')
-    write_text(screen, width // 2, height // 2 - 240, 'Choose a character and press enter to start!', 20, 'gold')
+        screen.fill('dimgray')
+        write_text(screen, width // 2, height // 2 - 240, 'Choose a character and press enter to start!', 20, 'gold')
 
 
-    if mouse_particle_list:  # if not empty
-        #print(len(mouse_particle_list))
-        current_run_time = pygame.time.get_ticks()
-        for mouse_particle in mouse_particle_list:
-            #draw_particle(screen, mouse_particle)
-            mouse_click_time = mouse_particle[0]
-            position = mouse_particle[1]
-            delta = (current_run_time - (mouse_click_time))/1000
-            if  delta >= water_draw_time_mouse:
-                mouse_particle_list.remove(mouse_particle)
-            factor = delta / water_draw_time_mouse
-            radi = calc_drop_radius(factor, mouse_particle_radius)
-            pygame.draw.circle(screen,option_effect_color, position, radi, particle_width_mouse)
+        if mouse_particle_list:  # if not empty
+            #print(len(mouse_particle_list))
+            current_run_time = pygame.time.get_ticks()
+            for mouse_particle in mouse_particle_list:
+                #draw_particle(screen, mouse_particle)
+                mouse_click_time = mouse_particle[0]
+                position = mouse_particle[1]
+                delta = (current_run_time - (mouse_click_time))/1000
+                if  delta >= water_draw_time_mouse:
+                    mouse_particle_list.remove(mouse_particle)
+                factor = delta / water_draw_time_mouse
+                radi = calc_drop_radius(factor, mouse_particle_radius)
+                pygame.draw.circle(screen,option_effect_color, position, radi, particle_width_mouse)
 
-    pygame.display.flip()
-    clock.tick(game_fps)
+        pygame.display.flip()
+        clock.tick(game_fps)
 
 
 
