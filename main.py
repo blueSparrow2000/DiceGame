@@ -733,9 +733,10 @@ while meta_run:
     music_Q('Lobby', True)
     run_character_selection = True
 
+    ###################### call the character selecting function here! ######################
 
-    # reset key variables for next meta run
-    ##### choose character here...
+
+    # get the data (character name and planar figure index) and assign here!
     character_name = 'Mirinae'
     character_skills = character_skill_dictionary[character_name]
     character_tiles = character_tile_dictionary[character_name]
