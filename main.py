@@ -751,6 +751,7 @@ while meta_run:
     while run_character_selection:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                run_character_selection = False
                 meta_run = False
                 pygame.quit()
                 break
@@ -765,6 +766,7 @@ while meta_run:
             if event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                    run_character_selection = False
                     meta_run = False
                     pygame.quit()
                     break

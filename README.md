@@ -14,6 +14,9 @@ A simple dice game
 2024.07.24 Completed map logic / Implement Joker => player gets to right-click it and choose one from the shown list above => then joker changes into it
 
 
+2024.07.25 Added immediate attacking feature / Revised Mirinae's excaliber skill / Now the game is rogue-like! 
+
+
 # To do
 - add relics (few ~ 3)
 - add various enemies (few ~ 3)
