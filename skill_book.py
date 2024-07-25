@@ -76,7 +76,8 @@ class Mirinae_skills(Skill_Book):
 
     def sword_storm_get_requirement(self,player):
         ''' 2
-        attacks S+1 enemies with P(A)
+
+
         '''
 
         S = player.count_tile('Skill')
@@ -96,7 +97,7 @@ class Mirinae_skills(Skill_Book):
 
     def head_start_get_requirement(self,player):
         ''' 3
-        S명의 적에게 취약을 부여하고 D*5만큼 상대의 방어도를 제거한다
+
 
         '''
         S = player.count_tile('Skill')
@@ -140,7 +141,7 @@ class Mirinae_skills(Skill_Book):
 
     def guard_attack_get_requirement(self,player):
         ''' 5
-        한 적에게 P(A)*S + P(D) 만큼 데이지를 준다
+
         '''
         return True, 1, True, {'Skill':(3,0),}
 
@@ -165,32 +166,24 @@ class Mirinae_skills(Skill_Book):
 
     def Excaliber_get_requirement(self,player):
         ''' 6
-        condition:
-        when attack tile >= 1
 
-        Gives (A+S)*10 damage to an enemy
-        Gives debuff: broken will for three turns
         '''
-        A = player.count_tile('Attack')
-        if (A<1):
-            return False, 1, True, {'Skill':(3,0),'Attack':(1,0)} # skill_valid, target_nums, is_attack
-        return True, 1, True, {'Skill':(3,0),'Attack':(1,0)} # skill_valid, target_nums,is_attack
+        return True, 1, True, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
 
     def Excaliber(self,player, target_list):
         sound_effects['playerdeath'].play()
-        A = player.count_tile('Attack')
-        S = player.count_tile('Skill')
-        damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
+
+        total_A = player.board.consume_all_tiles_on_board('Attack')
+        damage = ( 10 * total_A ) * player.get_attack_multiplier()
         for enemy in target_list:
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
             enemy.buffs['broken will'] = 1
 
     def get_detail_Excaliber(self, player):
-        A = player.count_tile('Attack')
-        S = player.count_tile('Skill')
-        damage = ( 10 * (A+S) ) * player.get_attack_multiplier()
-        return "Excaliber|Attack one target with 10*(A+S) = %d    damage and apply 'broken will' for 1    turns"%damage
+        total_A = player.board.count_all_tiles_on_board('Attack')
+        damage = ( 10 * total_A ) * player.get_attack_multiplier()
+        return "Excaliber|Use up all attack tiles in the board and gives 10 times the amount of damage =  %d to one enemy and apply 'broken will' for 1 turn"%damage
 
 
 class Cinavro_skills(Skill_Book):

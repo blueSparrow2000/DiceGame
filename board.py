@@ -117,8 +117,28 @@ class Board():
         self.board_reset_turn = 6
         self.current_turn = 0
 
-    def consume_all_tiles_board(self):
-        pass
+    def consume_all_tiles_on_board(self, tile_name): # consume all tiles and return how many are (actually) consumed
+        how_many_consumed = 0
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(8):
+            for j in range(8):
+                current_tile = self.board[i][j]
+                if current_tile == tile_name:
+                    self.temp_board[i][j] = 'Used' # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
+                    how_many_consumed+=1
+
+        return how_many_consumed
+
+    def count_all_tiles_on_board(self, tile_name): # for lookahead
+        how_many = 0
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(8):
+            for j in range(8):
+                if self.board[i][j] == tile_name:
+                    how_many+=1
+
+        return how_many
+
 
     def init_turn(self): # initialize planar figure at every turn starts
         self.figure_index = 0

@@ -192,13 +192,13 @@ class Player(Entity):
             if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
                 if (current_button == 'Attack'):
                     if self.can_attack:
-                        self.required_tiles = dict()
+                        self.initialize_step_1()
                         return 'Attack|Attack one target with {} damage'.format(self.get_current_damage()) # string content!
                 elif (current_button=='Defence'):
-                    self.required_tiles = dict()
+                    self.initialize_step_1()
                     return 'Defence|Gain {} temporal defence'.format(self.get_defence_gain())
                 elif (current_button == 'Regen'):
-                    self.required_tiles = dict()
+                    self.initialize_step_1()
                     return 'Regeneration|Heal {} health'.format(self.get_heal_amount())
 
         # else, check whether skill
