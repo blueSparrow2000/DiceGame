@@ -17,15 +17,14 @@ A simple dice game
 2024.07.25 Added immediate attacking feature / Reworked Mirinae's skill / Now the game is rogue-like! 
 
 
-2024.07.26 Shrinkable board / width, height are now possible to change
+2024.07.26 Shrinkable board / width, height are now possible to change / Now possible to add a tile permanently into the board
 
 
 
 # To do
-
-- change skill mechanism: you may dislearn skills and learn new skill into current slots!
+- (Big update) change skill mechanism: you may dis-learn skills and learn new skill into current slots!
 - Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)
-- make a fixed tile slot (player can choose one tile to be fixed in a location - when shrinking, it is not fixed anymore)
+- (Medium update) make a fixed tile slot (player can choose one tile to be fixed in a location - when shrinking, it is not fixed anymore)
 - add health bar object that saves target value and have a shrinking animation at every update (call update instead of directly changing self.hp and drawing health bar)
 - add relics (few ~ 3)
 - add various enemies (few ~ 3)

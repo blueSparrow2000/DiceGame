@@ -157,7 +157,6 @@ class Board():
 
     '''
     Use this function to add a tile permanently
-    
     '''
     def permanently_replace_a_blank_tile_to(self, target_tile):
         if not self.check_tile_exists_in_permanent('Empty'):
@@ -168,7 +167,7 @@ class Board():
 
     '''
     Use this function to delete a tile permanently
-    The tile becomes empty tile
+    The deleted tile becomes empty tile
     '''
     def permanently_delete_a_tile(self, target_tile):
         safe_delete_dict(self.permanent_board_dict, target_tile)
