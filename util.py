@@ -20,6 +20,15 @@ button_side_len_half = 25
 
 
 
+def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
+    if not mouse:
+        width = int(math.pow(3*(1-factor),3)+3.5)
+    else:
+        width = int(math.pow(2.5*(1-factor),3)+1.7)
+    r = max(width,int(start_radius*(1+4*math.pow(factor,1/5))))
+    return r
+
+
 
 def draw_bar(screen,x,y,bar_length,bar_height, current_percent, color): # x,y is a position of x,y axis of bar
     pygame.draw.rect(screen,color,[x-bar_length//2, y-bar_height//2,int(bar_length*(current_percent/100)),bar_height])
@@ -72,11 +81,34 @@ def check_inside_button(mouse_pos,button_center, button_side_len_half):
     else:
         return False
 
-def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
-    if not mouse:
-        width = int(math.pow(3*(1-factor),3)+3.5)
+
+'''
+safely add a tile in a dictionary
+'''
+def safe_tile_add_one(dictionary, target_tile):
+    if target_tile in dictionary:
+        dictionary[target_tile] += 1 # increase one
     else:
-        width = int(math.pow(2.5*(1-factor),3)+1.7)
-    r = max(width,int(start_radius*(1+4*math.pow(factor,1/5))))
-    return r
+        dictionary[target_tile] = 1 # add new tile
+
+def safe_delete_dict(dictionary, target_tile):
+    if target_tile in dictionary: # only when exists
+        if (dictionary[target_tile]<=0):
+            print("WARNING: possible error in the code (not deleted properly somewhere)\nREASON: Delete entity with amount 0 or less than 0")
+        dictionary[target_tile] -= 1
+        if dictionary[target_tile] <= 0: # delete entry if no longer exist
+            del dictionary[target_tile]
+
+
+dd = {'hi':1, 'he':0, 'gg':-1}
+safe_tile_add_one(dd,'ho')
+print(dd)
+safe_tile_add_one(dd,'hi')
+print(dd)
+safe_delete_dict(dd,'ho')
+print(dd)
+safe_delete_dict(dd,'gg')
+print(dd)
+safe_delete_dict(dd,'he')
+print(dd)
 

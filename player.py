@@ -55,16 +55,13 @@ class Player(Entity):
 
     def transform_tile(self, transformed_tile_name):
         # remove one joker
-        self.current_tile['Joker'] -= 1  # have joker 일때만 실행됨
+        safe_delete_dict(self.current_tile, 'Joker')
 
-        # for tile_name, amount in self.current_tile.items():
-        #     if tile_name == 'Joker' and amount > 0:
-        #         amount -= 1
-
-        if transformed_tile_name in self.current_tile:  # if key exists
-            self.current_tile[transformed_tile_name] += 1
-        else:
-            self.current_tile[transformed_tile_name] = 1  # add new entry
+        safe_tile_add_one(self.current_tile, transformed_tile_name)
+        # if transformed_tile_name in self.current_tile:  # if key exists
+        #     self.current_tile[transformed_tile_name] += 1
+        # else:
+        #     self.current_tile[transformed_tile_name] = 1  # add new entry
 
     # def have_joker_tile(self):  # ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
     #     for tile_name, amount in self.current_tile.items():

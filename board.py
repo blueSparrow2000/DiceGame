@@ -137,16 +137,22 @@ class Board():
                 tile_count+=v
         self.permanent_board_dict['Empty'] = self.board_side_length**2 - tile_count # reset empty tiles
 
+    '''
+    Are there more than given amount of tiles?
+    '''
     def check_number_of_given_tiles_is_geq_amount_in_permanent(self, given_tile, amount=1):
         return given_tile in self.permanent_board_dict and self.permanent_board_dict[given_tile] >= amount # if such tile exists and is having more than one
-
-
+    '''
+    Is there exactly given amount of tiles?
+    '''
     def check_number_of_given_tiles_in_permanent(self, given_tile, amount=1):
         return given_tile in self.permanent_board_dict and self.permanent_board_dict[given_tile] == amount # if such tile exists and is having more than one
 
+    '''
+    Is there at least one tile?
+    '''
     def check_tile_exists_in_permanent(self, given_tile):
         return given_tile in self.permanent_board_dict and self.permanent_board_dict[given_tile] > 0 # if such tile exists and is having more than one
-
 
 
     '''
@@ -154,20 +160,23 @@ class Board():
     
     '''
     def permanently_replace_a_blank_tile_to(self, target_tile):
-        pass
+        if not self.check_tile_exists_in_permanent('Empty'):
+            print("My tiles are full!!! Can not add more!")
+            return
+        safe_tile_add_one(self.permanent_board_dict, target_tile)
+        self.reset_permanent_board_dict() # recalculate the empty tiles
 
     '''
     Use this function to delete a tile permanently
     The tile becomes empty tile
     '''
     def permanently_delete_a_tile(self, target_tile):
-        pass
-
+        safe_delete_dict(self.permanent_board_dict, target_tile)
+        self.reset_permanent_board_dict() # recalculate the empty tiles
 
     ''' Altar
     when shrinking board to 7 by 7
     check whether there are at least 14 blank tiles
-    
     '''
     def permanently_shrink_the_board_by_one(self):
         if not self.check_number_of_given_tiles_is_geq_amount_in_permanent('Empty', (self.board_side_length)*2 - 1):
@@ -177,11 +186,9 @@ class Board():
         self.board_side_length -= 1
         self.shrink_recalculate_board_offsets()
         self.reset_permanent_board_dict()
-        # print(self.permanent_board_dict)
 
     def shrink_recalculate_board_offsets(self):
         self.board_X = width//2 - (self.side_length//2) * self.board_side_length
-
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles

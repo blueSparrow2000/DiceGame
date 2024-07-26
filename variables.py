@@ -1,6 +1,6 @@
 # system variables
 game_fps = 30 #60
-width,height = 960, 960#480, 960
+width,height = 480, 960#480, 960
 
 
 # game variables
