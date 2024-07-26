@@ -7,10 +7,12 @@ self.permanent_board_dict 영구적인 영향
 2. 해당 전투에서 지속적으로 타일 분포를 변경시키는것 (전투 종료시 리셋)
 self.temporary_board_dict 이번 전투 중에만 유지되는 타일분포
 => temporary
+reset every time game starts (new_game 함수)
 
 3. 보드가 리셋되기 전까지 현재의 보드 판의 타일분포를 변경시키는것 (전투 중에 보드 리셋시 리셋되는)
 self.board를 변경하면 됨
-=>
+=> board
+reset every time turn ends (reset 함수)
 
 '''
 
@@ -82,14 +84,15 @@ planar_figures.extend([T_shape, Cross_shape, Worm_shape, Worm_2_shape, Worm_3_sh
 class Board():
     def __init__(self,tiles_dict,planar_figure_idx):
         global tile_names,planar_figures,sound_effects
-        self.board = [[None for i in range(8)] for j in range(8)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
-        self.temp_board = [[None for i in range(8)] for j in range(8)]
+        self.board_side_length = 8
+        self.board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
+        self.temp_board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)]
         self.permanent_board_dict = copy.deepcopy(tiles_dict) # 영구적인 영향을 주는 거면 이거도 바꿈
         tile_count = 0
         for k,v in self.permanent_board_dict.items():
             tile_count+=v
-        self.permanent_board_dict['Empty'] = 64 - tile_count
-        self.temporary_board_dict = self.permanent_board_dict # 이번 전투에만 영향을 주는거면 이거도 바꿈
+        self.permanent_board_dict['Empty'] = self.board_side_length**2 - tile_count
+        self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict) # 이번 전투에만 영향을 주는거면 이거도 바꿈
         # print(self.permanent_board_dict)
         # print(self.temporary_board_dict)
         self.cube_figure = load_image('tiles/cube')
@@ -118,11 +121,66 @@ class Board():
         self.current_turn = 0
         self.board_reset_icon = load_image("icons/reset")
 
+    '''
+    Re calculate # of empty tiles
+    '''
+    def reset_permanent_board_dict(self):
+        tile_count = 0
+        for k,v in self.permanent_board_dict.items():
+            if k != 'Empty': # count non-empty tiles only
+                tile_count+=v
+        self.permanent_board_dict['Empty'] = self.board_side_length**2 - tile_count # reset empty tiles
+
+    def check_number_of_given_tiles_is_geq_amount_in_permanent(self, given_tile, amount=1):
+        return given_tile in self.permanent_board_dict and self.permanent_board_dict[given_tile] >= amount # if such tile exists and is having more than one
+
+
+    def check_number_of_given_tiles_in_permanent(self, given_tile, amount=1):
+        return given_tile in self.permanent_board_dict and self.permanent_board_dict[given_tile] == amount # if such tile exists and is having more than one
+
+    def check_tile_exists_in_permanent(self, given_tile):
+        return given_tile in self.permanent_board_dict and self.permanent_board_dict[given_tile] > 0 # if such tile exists and is having more than one
+
+
+
+    '''
+    Use this function to add a tile permanently
+    
+    '''
+    def permanently_replace_a_blank_tile_to(self, target_tile):
+        pass
+
+    '''
+    Use this function to delete a tile permanently
+    The tile becomes empty tile
+    '''
+    def permanently_delete_a_tile(self, target_tile):
+        pass
+
+
+    ''' Altar
+    when shrinking board to 7 by 7
+    check whether there are at least 14 blank tiles
+    
+    '''
+    def permanently_shrink_the_board_by_one(self):
+        if not self.check_number_of_given_tiles_is_geq_amount_in_permanent('Empty', (self.board_side_length)*2 - 1):
+            print("Not enough space to shrink the tiles")
+            return False
+
+        self.board_side_length -= 1
+        self.shrink_recalculate_board_offsets()
+        self.reset_permanent_board_dict()
+        # print(self.permanent_board_dict)
+
+    def shrink_recalculate_board_offsets(self):
+        self.board_X = 240 - (self.side_length//2) * self.board_side_length
+
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
-        for i in range(8):
-            for j in range(8):
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
                 current_tile = self.board[i][j]
                 if current_tile == target_tile:
                     self.temp_board[i][j] = convert_tile # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
@@ -131,8 +189,8 @@ class Board():
     def consume_all_tiles_on_board(self, tile_name): # consume all tiles and return how many are (actually) consumed
         how_many_consumed = 0
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
-        for i in range(8):
-            for j in range(8):
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
                 current_tile = self.board[i][j]
                 if current_tile == tile_name:
                     self.temp_board[i][j] = 'Used' # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
@@ -143,8 +201,8 @@ class Board():
     def count_all_tiles_on_board(self, tile_name): # for lookahead
         how_many = 0
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
-        for i in range(8):
-            for j in range(8):
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
                 if self.board[i][j] == tile_name:
                     how_many+=1
 
@@ -170,8 +228,11 @@ class Board():
         # change the center pos accordingly
         #self.planar_figure_center = [1,1]
 
+    '''
+    reset board & temporary tile dict when the game starts
+    '''
     def new_game(self):
-        self.temporary_board_dict = self.permanent_board_dict
+        self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
         self.reset(True)
 
     def reset(self,enforced = False): # reset the board (each 6 turn)
@@ -194,14 +255,14 @@ class Board():
         self.init_turn()
 
     def boardify(self,board_temp): # change images where board is changed to used
-        for i in range(8):
-            for j in range(8):
-                self.board[i][j] = board_temp[i*8+j]
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                self.board[i][j] = board_temp[i*self.board_side_length+j]
     def draw(self,screen, step, mousepos):
         global write_text
         if step==0:
-            for i in range(8):
-                for j in range(8):
+            for i in range(self.board_side_length):
+                for j in range(self.board_side_length):
                     screen.blit(self.image_dict[self.board[i][j]], (self.board_X + j*self.side_length, self.board_Y_level + self.side_length*i))
 
             turns_remaining_until_board_reset = self.board_reset_turn - self.current_turn + 1
@@ -249,7 +310,7 @@ class Board():
                     row_board_idx = (center_x+row_offset - self.board_X) // self.side_length
                     col_board_idx = (center_y+col_offset - self.board_Y_level) // self.side_length
                     # check boarder
-                    if (row_board_idx < 0 or col_board_idx < 0 or row_board_idx > 7 or col_board_idx > 7):
+                    if (row_board_idx < 0 or col_board_idx < 0 or row_board_idx > (self.board_side_length-1) or col_board_idx > (self.board_side_length-1)):
                         print("invalid position: outside the border")
                         return False
 

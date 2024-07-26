@@ -95,6 +95,7 @@ def safe_delete(entity_list):
 ####################################################################################################### fight loop #######################################################################################################
 def fight(player):
     global mousepos,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
+    player.board.permanently_shrink_the_board_by_one()
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -743,7 +744,6 @@ while meta_run:
     player = Player(character_name, character_skills, Board(character_tiles, planar_figure_idx))
     map = Map()
     print("Starting a new game!")
-
 
     while run_character_selection:
         for event in pygame.event.get():

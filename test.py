@@ -24,9 +24,7 @@
 # a = [0,0,0,1]
 # b = [0,0,0,0]
 # print(list_compare(a,b))
-
-
-def hihi():
-    print(x)
-x = 10
-hihi()
+x=2
+if x !=1:
+    print('hi')
+print('gg')
