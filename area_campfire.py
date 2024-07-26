@@ -48,7 +48,7 @@ def go_to_campfire(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, 240, 240, 'Campfire', 30, 'gold')
+        write_text(screen, width//2, 240, 'Campfire', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)

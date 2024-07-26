@@ -50,7 +50,7 @@ def go_to_shop(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, 240, 240, 'Shop', 30, 'gold')
+        write_text(screen, width//2, 240, 'Shop', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)

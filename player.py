@@ -18,7 +18,7 @@ class Player(Entity):
         for button_name in self.buttons:
             self.button_images.append(load_image("tiles/%s" % button_name))
         self.button_spacing = 120
-        self.button_x = 240
+        self.button_x = width//2
         self.button_y = 460
         self.button_locations=[( self.button_x + (i-1)*self.button_spacing, self.button_y) for i in range(len(self.buttons))]
 
@@ -26,13 +26,13 @@ class Player(Entity):
         self.mini_tile_icons = dict()
         for mini_tile in self.mini_tiles:
             self.mini_tile_icons[mini_tile] = (load_image("icons/mini_tile/%s" % mini_tile))
-        self.minitile_x = 240
-        self.minitile_y = 920
+        self.minitile_x = width//2
+        self.minitile_y = height-40
         self.minitile_spacing = 50
         self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
 
         self.required_tiles = dict()
-        self.required_tile_x = 200
+        self.required_tile_x = width//2 - 40
         self.required_tile_y = requirement_level + 30
         self.requirement_spacing = 25
 
@@ -41,12 +41,12 @@ class Player(Entity):
         self.golds = 0
         self.items=[]
         self.giant_HP_width = 30
-        self.giant_HP_pos = [240,self.giant_HP_width//2]
+        self.giant_HP_pos = [width//2,self.giant_HP_width//2]
 
 
         # transform button attributes
         self.transformable_tiles = joker_transformable_tiles #'Joker' is not transformed into joker
-        self.transform_x = 200
+        self.transform_x = width//2 - 40
         self.transform_y = 870
         self.transform_spacing = 50
         self.transform_tolerance = 15
@@ -88,7 +88,7 @@ class Player(Entity):
         if not self.check_exists_in_current_tile('Joker'):
             return
 
-        write_text(screen, 240, self.transform_y - 30, "choose a tile", 15, color='darkgoldenrod')
+        write_text(screen, width//2, self.transform_y - 30, "choose a tile", 15, color='darkgoldenrod')
 
         cnt = 0
         for mini_tile in self.transformable_tiles: # draw transform tiles in order
@@ -100,8 +100,8 @@ class Player(Entity):
 
     def show_current_tiles(self, screen):
         # background
-        draw_bar(screen, 240, self.minitile_y, 312, 50, 100, (120, 120, 120))
-        draw_bar(screen, 240, self.minitile_y, 300, 38, 100, (150, 150, 150))
+        draw_bar(screen, width//2, self.minitile_y, 312, 50, 100, (120, 120, 120))
+        draw_bar(screen, width//2, self.minitile_y, 300, 38, 100, (150, 150, 150))
 
         mini_tile_list = []
         for tile_name, amount in self.current_tile.items():
@@ -110,7 +110,7 @@ class Player(Entity):
                     mini_tile_list.append(tile_name)
 
         minitile_numbers = len(mini_tile_list)
-        self.minitile_x = 240 - (minitile_numbers - 1) * (self.minitile_spacing) / 2
+        self.minitile_x = width//2 - (minitile_numbers - 1) * (self.minitile_spacing) / 2
         for i in range(minitile_numbers):
             screen.blit(self.mini_tile_icons[mini_tile_list[i]], self.mini_tile_icons[mini_tile_list[i]].get_rect(
                 center=(self.minitile_x + i * self.minitile_spacing, self.minitile_y)))
@@ -171,18 +171,18 @@ class Player(Entity):
 
     def draw_player_info_top(self,screen):
 
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], 480, self.giant_HP_width, 100, 'silver')
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], 480, self.giant_HP_width, 100 * self.health / self.max_health, 'coral')
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , 480, 5, 100, 'gray')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100 * self.health / self.max_health, 'coral')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , width, 5, 100, 'gray')
 
-        write_text(screen, 440, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
+        write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
         write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, 'darkgoldenrod')
 
         # depth
         if self.reached_max_depth():
-            write_text(screen, 420, self.giant_HP_width * 2, " %s " % self.current_depth, 30, 'black')
+            write_text(screen, width - 60, self.giant_HP_width * 2, " %s " % self.current_depth, 30, 'black')
         else:
-            write_text(screen, 420,self.giant_HP_width *2, " %3d m"%self.current_depth,30, 'black')
+            write_text(screen, width - 60,self.giant_HP_width *2, " %3d m"%self.current_depth,30, 'black')
 
         # gold
         write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'gold')

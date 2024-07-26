@@ -44,6 +44,7 @@ def go_to_area(screen,clock, player):
 
 
         # draw effects
+        write_text(screen, width//2, 240, 'Area name', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)

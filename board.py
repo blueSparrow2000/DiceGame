@@ -83,7 +83,7 @@ planar_figures.extend([T_shape, Cross_shape, Worm_shape, Worm_2_shape, Worm_3_sh
 
 class Board():
     def __init__(self,tiles_dict,planar_figure_idx):
-        global tile_names,planar_figures,sound_effects
+        global tile_names,planar_figures,sound_effects,board_Y_level
         self.board_side_length = 8
         self.board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)]
@@ -103,8 +103,8 @@ class Board():
 
         self.translation_dict = {}
         self.side_length =  self.image_dict['Attack'].get_height()
-        self.board_Y_level = 480
-        self.board_X = 240 - self.side_length*4
+        self.board_Y_level = board_Y_level
+        self.board_X = width//2 - self.side_length*4
         #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
 
         self.figure_index = 0 # 0 for primary, 1 for secondary
@@ -174,7 +174,7 @@ class Board():
         # print(self.permanent_board_dict)
 
     def shrink_recalculate_board_offsets(self):
-        self.board_X = 240 - (self.side_length//2) * self.board_side_length
+        self.board_X = width//2 - (self.side_length//2) * self.board_side_length
 
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target into convert tile
@@ -268,16 +268,16 @@ class Board():
             turns_remaining_until_board_reset = self.board_reset_turn - self.current_turn + 1
             # draw reset counter
             if turns_remaining_until_board_reset==1:
-                write_text(screen, 440 , self.board_Y_level - 25, "%d"%(turns_remaining_until_board_reset), 20, color = 'red')
+                write_text(screen, width-40 , self.board_Y_level - 25, "%d"%(turns_remaining_until_board_reset), 20, color = 'red')
             else:
-                write_text(screen, 440, self.board_Y_level - 25, "%d" % (turns_remaining_until_board_reset), 20)
+                write_text(screen, width-40, self.board_Y_level - 25, "%d" % (turns_remaining_until_board_reset), 20)
 
-            screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(440, self.board_Y_level - 25)))
+            screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(width-40, self.board_Y_level - 25)))
 
-            if check_inside_button(mousepos, (440, self.board_Y_level - 25), button_side_len_half):
-                write_text(screen, 240, 460, "turns left until board reset", 15)
+            if check_inside_button(mousepos, (width-40, self.board_Y_level - 25), button_side_len_half):
+                write_text(screen, width//2, 460, "turns left until board reset", 15)
             else:
-                write_text(screen, 240, 460, "Click: confirm", 15)
+                write_text(screen, width//2, 460, "Click: confirm", 15)
 
 
         elif step==1:

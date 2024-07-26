@@ -50,7 +50,6 @@ from area_shop import *
 pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
 # computer screen size: 1920 x 1080
-width,height = 480, 960
 screen = pygame.display.set_mode((width,height))  # window 생성
 pygame.display.set_caption('Dice Game')  # window title
 width, height = pygame.display.get_surface().get_size()  # window width, height
@@ -95,7 +94,6 @@ def safe_delete(entity_list):
 ####################################################################################################### fight loop #######################################################################################################
 def fight(player):
     global mousepos,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
-    player.board.permanently_shrink_the_board_by_one()
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -112,9 +110,8 @@ def fight(player):
 
     enemies = []
     
-    mob_side_len = 64
-    mob_gap = 28
-    mob_X = 332 - (len(enemy_request)-1)*(mob_side_len+mob_gap)/2
+
+    mob_X = width - 148 - (len(enemy_request)-1)*(mob_side_len+mob_gap)/2
 
     # Mob(my_name='enemies/mob', hp=30, hpmax=30, attack_damage=5, pos=(mob_X, mob_Y_level))
     # enemy.update_buffs()
@@ -302,7 +299,7 @@ def fight(player):
 
                         else:
                             for i in range(len(enemies)):
-                                if check_inside_button(mousepos, enemies[i].mypos, mob_side_len):
+                                if check_inside_button(mousepos, enemies[i].mypos, mob_side_len//2):
                                     enemy_targets.add(enemies[i])
                                     enemies[i].targeted = True
 
@@ -428,7 +425,7 @@ def fight(player):
                 screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
                 screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
                 screen.blit(skip_img, skip_img.get_rect(center=skip_center))
-                if mousepos[1] >= 480:  # on the board
+                if mousepos[1] >= board_Y_level:  # on the board
                     player.board.draw_planar_figure(screen, mousepos)
 
             elif player_turn_step == 1:
@@ -696,7 +693,7 @@ def adventure_loop(player,map):
                 screen.blit(back_img_white, back_img_white.get_rect(center=skip_center))
 
 
-            if map_choosing_step==0 and mousepos[1] >= 480:  # on the board
+            if map_choosing_step==0 and mousepos[1] >= board_Y_level:  # on the board
                 player.board.draw_planar_figure(screen, mousepos)
                 screen.blit(TAB_img_white, TAB_img_white.get_rect(center=tab_center))
                 screen.blit(rotate_img_white, rotate_img_white.get_rect(center=rotate_center))

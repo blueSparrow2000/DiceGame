@@ -5,6 +5,7 @@ Collection of functions which draws stuff on screen
 
 import pygame
 import os, sys
+from variables import *
 
 '''
 When player clickes appropriate keys, 
@@ -78,7 +79,7 @@ for ic in buff_names:
 
 top_down_player = load_image("player_topdown")
 
-shadow_layer = pygame.transform.smoothscale(load_image("background/shadow"), (480, 960))
+shadow_layer = pygame.transform.smoothscale(load_image("background/shadow"), (width, height))
 
 
 

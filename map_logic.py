@@ -12,7 +12,7 @@ map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge
 event_tile_names = ['campfire','fight','ruin','shop','altar']
 class Map():
     def __init__(self):
-        global map_tile_names,event_tile_names
+        global map_tile_names,event_tile_names,map_Y_level
         self.map = [[['void',False] for x in range(7)] for y in range(7)] # tile name, reachability
         self.must_contain_at_least_one = [[False for x in range(7)] for y in range(7)]
 
@@ -23,10 +23,10 @@ class Map():
             self.image_dict[tile_name] = (load_image("map_tiles/%s" % tile_name))
 
         self.side_length = 50 # map tile's length
-        self.image_button_tolerance = 25
+        self.image_button_tolerance = self.side_length//2
 
-        self.map_Y_level = 480
-        self.map_X = 240 - self.side_length*3 - self.side_length//2
+        self.map_Y_level = map_Y_level
+        self.map_X = width//2 - self.side_length*3 - self.side_length//2
 
         # animation variables
         self.moving_X = 0

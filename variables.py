@@ -1,10 +1,16 @@
-# game variables
+# system variables
 game_fps = 30 #60
+width,height = 960, 960#480, 960
 
-# variables
+
+# game variables
+board_Y_level = 480
+map_Y_level = 480
 mob_Y_level = 280
 MAX_DEPTH = -100
 
+mob_side_len = 64
+mob_gap = 28
 
 # text levels
 text_description_level = 640
