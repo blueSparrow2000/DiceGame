@@ -100,15 +100,3 @@ def safe_delete_dict(dictionary, target_tile):
             del dictionary[target_tile]
 
 
-dd = {'hi':1, 'he':0, 'gg':-1}
-safe_tile_add_one(dd,'ho')
-print(dd)
-safe_tile_add_one(dd,'hi')
-print(dd)
-safe_delete_dict(dd,'ho')
-print(dd)
-safe_delete_dict(dd,'gg')
-print(dd)
-safe_delete_dict(dd,'he')
-print(dd)
-
