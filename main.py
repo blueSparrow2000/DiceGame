@@ -92,8 +92,9 @@ def safe_delete(entity_list):
 
 
 ####################################################################################################### fight loop #######################################################################################################
+
 def fight(player):
-    global mousepos,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
+    global mousepos,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level, cnttt
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True

@@ -122,6 +122,12 @@ class Board():
         self.board_reset_icon = load_image("icons/reset")
 
     '''
+    You can change board reset frequency by calling the below function. Initially it is 6 turns.
+    '''
+    def change_board_reset_frequency_to(self, reset_turns):
+        self.board_reset_turn = reset_turns
+
+    '''
     Re calculate # of empty tiles
     '''
     def reset_permanent_board_dict(self):
@@ -232,8 +238,10 @@ class Board():
     reset board & temporary tile dict when the game starts
     '''
     def new_game(self):
+        self.current_turn = 0
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
         self.reset(True)
+
 
     def reset(self,enforced = False): # reset the board (each 6 turn)
         if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
