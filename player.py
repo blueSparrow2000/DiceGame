@@ -297,12 +297,10 @@ class Player(Entity):
 
     def skill_ready(self, idx): # use the idx'th skill
         # global requirement: Need at least one skill tile to use skill
-        S = self.count_tile('Skill')
-        if ( S <= idx//2 ): # check skill requirement
-            return False, 1
 
         # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
-        skill_valid, target_nums,is_attack,_ = getattr(self.skill_book, self.skill_book.skills[idx]+'_get_requirement')(self)
+        skill_valid, target_nums,is_attack,requirement_dict = getattr(self.skill_book, self.skill_book.skills[idx]+'_get_requirement')(self)
+
         if skill_valid and ((not is_attack) or (is_attack and self.can_attack)):
             # if valid, change the skill index to idx
             self.current_skill_idx = idx

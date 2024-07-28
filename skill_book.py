@@ -53,8 +53,10 @@ class Mirinae_skills(Skill_Book):
 
         attack one enemy with damage A * 5
         '''
+
+        S = player.count_tile('Skill')
         A = player.count_tile('Attack')
-        if (A>3):
+        if (S<1 or A>3):
             return False, 1, True, {'Skill':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
         return True, 1, True, {'Skill':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
 
@@ -79,6 +81,8 @@ class Mirinae_skills(Skill_Book):
 
         '''
         S = player.count_tile('Skill')
+        if (S<1):
+            return False, S+1, True, {'Skill':(1,0),}
         return True, S+1, True, {'Skill':(1,0),}
 
     def head_start(self,player, target_list):
@@ -98,6 +102,9 @@ class Mirinae_skills(Skill_Book):
 
 
         '''
+        S = player.count_tile('Skill')
+        if (S<2):
+            return False, 3, True, {'Skill':(2,0),}
         return True, 3, True, {'Skill':(2,0),}  # skill_valid, target_nums,is_attack
     def sword_storm(self,player, target_list):
         sound_effects['sword'].play()
@@ -120,6 +127,9 @@ class Mirinae_skills(Skill_Book):
 
         #회복 및 방어가 공격으로 전환된다: S*P(R+D)만큼 피해를 준다
         '''
+        S = player.count_tile('Skill')
+        if (S<2):
+            return False, 0, True, {'Skill':(2,0),}
         return True, 0, True, {'Skill':(2,0),}
     def self_defence(self,player, target_list):
         sound_effects['get'].play()
@@ -140,6 +150,9 @@ class Mirinae_skills(Skill_Book):
         ''' 5
 
         '''
+        S = player.count_tile('Skill')
+        if (S<3):
+            return False, 0, True, {'Skill':(3,0),'Defence':(1,0)}
         return True, 0, True, {'Skill':(3,0),'Defence':(1,0)}
 
     def guard_attack(self,player, target_list):
@@ -153,6 +166,9 @@ class Mirinae_skills(Skill_Book):
         ''' 6
 
         '''
+        S = player.count_tile('Skill')
+        if (S<3):
+            return False, 1, True, {'Skill':(3,0)}
         return True, 1, True, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
 
     def Excaliber(self,player, target_list):
