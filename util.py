@@ -91,7 +91,7 @@ def safe_tile_add_one(dictionary, target_tile):
     else:
         dictionary[target_tile] = 1 # add new tile
 
-def safe_delete_dict(dictionary, target_tile):
+def safe_delete_dict_one(dictionary, target_tile):
     if target_tile in dictionary: # only when exists
         if (dictionary[target_tile]<=0):
             print("WARNING: possible error in the code (not deleted properly somewhere)\nREASON: Delete entity with amount 0 or less than 0")

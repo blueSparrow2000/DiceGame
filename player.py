@@ -55,7 +55,7 @@ class Player(Entity):
 
     def transform_tile(self, transformed_tile_name):
         # remove one joker
-        safe_delete_dict(self.current_tile, 'Joker')
+        safe_delete_dict_one(self.current_tile, 'Joker')
 
         safe_tile_add_one(self.current_tile, transformed_tile_name)
         # if transformed_tile_name in self.current_tile:  # if key exists

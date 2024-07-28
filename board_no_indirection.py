@@ -170,7 +170,7 @@ class Board():
     The deleted tile becomes empty tile
     '''
     def permanently_delete_a_tile(self, target_tile):
-        safe_delete_dict(self.permanent_board_dict, target_tile)
+        safe_delete_dict_one(self.permanent_board_dict, target_tile)
         self.reset_permanent_board_dict() # recalculate the empty tiles
 
     ''' Altar

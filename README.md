@@ -17,10 +17,10 @@ A simple dice game
 2024.07.25 Added immediate attacking feature / Reworked Mirinae's skill / Now the game is rogue-like! 
 
 
-2024.07.26 Altar) Shrinkable board / width, height are now possible to change / possible to add/delete a tile permanently into the board
+2024.07.26 (Altar) Shrinkable board / width, height are now possible to change / possible to add/delete a tile permanently into the board
 
 
-2024.07.28 Board is now implemented using indirection / 
+2024.07.28 Board is now implemented using indirection (can freely change board shape/configuration) / (Altar) Added fixing tile functionality to the board: player can choose one tile to be fixed in a location (still preserves location when shrinking - except on right most ones... they will be pulled in )
 
 
 # To do
@@ -30,14 +30,7 @@ A simple dice game
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)
 - elite enemies drop random tiles that you can permanently obtain 
-- 
-- calculate position of the board tile before and use that list to draw / check 
-- Altar) Add a mechanism to fix a tile in the board
-- 
 
-
-- (Medium update) make a fixed tile slot (player can choose one tile to be fixed in a location - when shrinking, it is not fixed anymore)
-- add health bar object that saves target value and have a shrinking animation at every update (call update instead of directly changing self.hp and drawing health bar)
 - add relics (few ~ 3)
 - add various enemies (few ~ 3)
 
@@ -47,6 +40,8 @@ WARNING: There might still be a bug in character selection. (초기화되지 않
 
 
 ### beyond beta version (further implementation will use Flutter instead of python)
+- (better graphics) add health bar object that saves target value and have a shrinking animation at every update (call update instead of directly changing self.hp and drawing health bar)
+
 - add relics
 
 - add enemy spawning logics

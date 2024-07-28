@@ -40,7 +40,14 @@ import copy
 #             temp[i] = [blocks[i][0],'Used']
 #
 # print(temp)
+dd = {1:'hi', 2:'tt', 0:'tt'}
+vv = list(dd.values())
+print(vv.count('ss'))
+kk = list(dd.keys())
+kk.sort()
+print(kk)
 
-a = [1,2]
-b = [2,2]
-print(a+b)
+
+# v = [1,2,3]
+# v.insert(5,4)
+# print(v)

@@ -101,6 +101,7 @@ class Board():
         for k,v in self.permanent_board_dict.items():
             tile_count+=v
         self.permanent_board_dict['Empty'] = self.board_side_length**2 - tile_count
+        # temporary board dict also preserves tiles like permanent one
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict) # 이번 전투에만 영향을 주는거면 이거도 바꿈
         self.cube_figure = load_image('tiles/cube')
 
@@ -113,7 +114,6 @@ class Board():
         self.board_Y_level = board_Y_level + self.side_length//2
         self.board_Y_selectable = board_Y_level - self.side_length
         self.board_X = width//2 - self.side_length*4 + self.side_length//2
-        #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
 
         self.figure_index = 0 # 0 for primary, 1 for secondary
         self.planar_figures = copy.deepcopy(planar_figures)
@@ -129,8 +129,109 @@ class Board():
         self.current_turn = 0
         self.board_reset_icon = load_image("icons/reset")
 
+        ##################### FIXED TILE ######################
+        self.permanently_fixed_tiles = dict()
+        ##################### FIXED TILE ######################
 
     ################################################## permenant changes ##################################################
+
+    ##################### FIXED TILE ######################
+
+    '''
+    How to use(outside the board function):
+    
+    player.board.permenantly_add_fixed_tile_location(player.board.get_index_from_pos(mousepos), tile_name_to_fix)
+    '''
+
+    def get_index_from_pos(self, mousepos): # (65,505) very first elem?
+        center_x = mousepos[0]
+        center_y = mousepos[1]
+
+        # 전개도의 부분 중 해당 위치가 보드의 어느 좌표인지 변환: 보드가 중앙을 기준으로 가운데 맞춤 되어 있을 때의 경우이다!!
+        row_board_idx = (center_x - (self.board_X - self.side_length//2)) // self.side_length
+        col_board_idx = (center_y - (self.board_Y_level - self.side_length//2)) // self.side_length
+
+        if (row_board_idx < 0 or col_board_idx < 0 or row_board_idx > (self.board_side_length - 1) or col_board_idx > (
+                self.board_side_length - 1)):
+            print("invalid position: outside the border")
+            return -1 # improper location index
+
+        return col_board_idx*self.board_side_length + row_board_idx
+
+
+    ''' 
+    Can fix a tile!
+    How to use:
+    Make an interface to fix a tile (self.board_side_length by self.board_side_length grid, click on the mouse and get the location)
+     - check it is a valid location:
+        > permanent tiles should have at least one empty slot to accept a fixed tile
+        > it should not crash with other fixed tile location
+        > location index should be properly given (not False)
+    WHEN USING RETURN VALUE OF THIS FUNCTION if this function returned false, it should get a player mouse position again for proper fixed tile location
+    it returns true when adding fixed tile succeed
+     
+     
+     WARNING: when adding a fixed tile into the fixed tile list, that tile should also be added to a permanent tile (and call self.permanently_replace_a_blank_tile_to(tile_name))
+     
+     
+     
+    When reseting the board, exclude the number of fixed tiles from the self.temporary_board_dict when generating random set
+    Then add a fixed tile into the desired index calculated when it is made
+    보드 리셋 할때만 고정된거, 아닌거 두개를 구분해 주면 되는거니까! 
+    
+    형태
+    fixed_tile = {location : tile_name, ...  } 
+    tile_name: string ('Attack' etc..)
+    location: integer (called location_index) => calculated value corresponding to clicked tile's location in 1D array ( = col*self.board_side_length + row )
+    '''
+    def permenantly_add_fixed_tile_location(self, location_index, tile_name):
+        if not self.check_tile_exists_in_permanent('Empty'):
+            print("My tiles are full!!! Can not add more!")
+            return False
+
+        if location_index==-1: # when given improper location index
+            print("invalid location index")
+            return False
+
+        # check whether the tile collides location with existing tiles
+        for fixed_tile_idx in self.permanently_fixed_tiles.keys():
+            if location_index == fixed_tile_idx:
+                print("tile already exists in that location!")
+                return  False
+
+
+
+        # add one!
+        self.permanently_fixed_tiles[location_index] = tile_name
+
+        # also add one to the permanent tiles!
+        self.permanently_replace_a_blank_tile_to(tile_name)
+        print("success!")
+        return True # success
+
+    '''
+    return a dictionary:
+    permanent_tiles - number of fixed tiles for each tiles
+    
+    Because we need to randomized location of non-fixed tiles! (excluding fixed tiles!)
+    
+    NOTE: fixed tile's values (strings) are subset of permanent tiles' keys, so theres always exist a tile in temporary_board_dict that fixed_tiles has 
+    '''
+    def get_non_fixed_permanent_tiles(self):
+        temp_board_dict_excluding_fixed_tiles = copy.deepcopy(self.temporary_board_dict)
+
+        fixed_tile_names = list(self.permanently_fixed_tiles.values()) # get list of tile names
+        for tile_name, tile_amount in self.temporary_board_dict.items():
+            for i in range(fixed_tile_names.count(tile_name)):
+                safe_delete_dict_one(temp_board_dict_excluding_fixed_tiles, tile_name) # get rid of amount of fixed tiles in the temp_excluded_fixed array
+
+        return temp_board_dict_excluding_fixed_tiles
+
+
+
+    ##################### FIXED TILE ######################
+
+
 
     '''
     You can change board reset frequency by calling the below function. Initially it is 6 turns.
@@ -181,7 +282,7 @@ class Board():
     The deleted tile becomes empty tile
     '''
     def permanently_delete_a_tile(self, target_tile):
-        safe_delete_dict(self.permanent_board_dict, target_tile)
+        safe_delete_dict_one(self.permanent_board_dict, target_tile)
         self.reset_permanent_board_dict() # recalculate the empty tiles
 
     ''' Altar
@@ -278,11 +379,21 @@ class Board():
             ############### RESET BOARD ###############
             self.clear_board()  # empty the board only when reset
             board_temp = []
-            for k, v in self.temporary_board_dict.items(): # fetch board content to an array
+
+            ######### fixed tile handling ##########
+            non_fixed_tile_to_use = self.get_non_fixed_permanent_tiles()
+            for k, v in non_fixed_tile_to_use.items(): # fetch board content to an array
                 tile = k
                 for i in range(v):
                     board_temp.append(tile)
             random.shuffle(board_temp)  # randomize
+
+            # add fixed tiles in appropriate index (which will be calculated in boardify or shapify)
+            fixed_locations = list(self.permanently_fixed_tiles.keys())
+            fixed_locations.sort() # sort 해야 insert할시 작은 순서 인덱스부터 차곡차곡 들어가서 맞는 결과 나옴
+            for fixed_tile_idx in fixed_locations:
+                board_temp.insert(fixed_tile_idx,self.permanently_fixed_tiles[fixed_tile_idx])
+            ######### fixed tile handling ##########
 
             if irregular_reset_shape:
                 self.irregular_shapify(board_temp, irregular_reset_shape)
@@ -298,6 +409,7 @@ class Board():
 
 
     ############################################################################################################ BOARD INDIRECTION 수정은 여기부터! ############################################################################################################
+
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
         for i in range(len(self.board)):
@@ -415,6 +527,8 @@ class Board():
                     safe_tile_add_one(tiles,board_tile_name)  # add a tile to the current tile collection
                     self.temp_board[i] = [board_tile_location, 'Used']
                     #break # only one tile can be inside a pc
+
+        # print(tiles)
 
         if out_of_board_protection and (not self.check_tile_sum_to_6(tiles)): # detect whether planar figure is outside a board when clicking the board: BOSS FIGHT 에서는 out_of_board_protection = False로 줄거임
             return False
