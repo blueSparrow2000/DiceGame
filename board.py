@@ -20,6 +20,7 @@ reset every time turn ends (reset 함수)
 import random
 import copy
 from util import *
+import math
 
 planar_figures = []
 
@@ -80,7 +81,15 @@ Chair_2_shape=[[0,0,1],
 #                [0,1,0],
 #                [0,1,0]]
 planar_figures.extend([T_shape, Cross_shape, Worm_shape, Worm_2_shape, Worm_3_shape, Cacti_shape, Diag_shape, Diag_2_shape, Chair_shape, Chair_2_shape])
+'''
+BOSS FIGHT PARAMETERS
 
+When reseting the board, it gets 'fragmented'
+reset(self, enforced=False, irregular_reset_shape = 'fragmented')
+
+Out of board protection becomes false! => more free space to use
+collect_tiles(self,mousepos, out_of_board_protection = False)
+'''
 class Board():
     def __init__(self,tiles_dict,planar_figure_idx):
         global tile_names,planar_figures,sound_effects,board_Y_level
@@ -254,7 +263,7 @@ class Board():
     def confirm_using_tile(self):
         self.board = self.temp_board
 
-    def reset(self, enforced=False, irregular_reset_shape = 'stripe'):  # reset the board (each 6 turn)
+    def reset(self, enforced=False, irregular_reset_shape = None):  # reset the board (each 6 turn)
         '''
         This function only resets content of current board
 
@@ -289,8 +298,6 @@ class Board():
 
 
     ############################################################################################################ BOARD INDIRECTION 수정은 여기부터! ############################################################################################################
-    ############################################################################################################# self.board 부분을 찾고 수정하시오 ###########################################################################################################
-    ########################################################################################################################################################################################################################
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
         for i in range(len(self.board)):
@@ -325,6 +332,24 @@ class Board():
                     board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i * 1.1], board_temp[i*self.board_side_length + j] ]
                     self.board.append(board_tile)
 
+        elif irregular_reset_shape=='fragmented':
+            spiral_coeff = 1
+            distance_coeff = 5
+            amount = len(board_temp)
+            FRAGMENTED_offsets = []
+            for i in range(amount): #-self.board_side_length//2 + (self.board_side_length+1)%2, self.board_side_length//2
+                    theta = spiral_coeff * i
+                    deviance = [ round(distance_coeff * theta*math.cos(theta) ), round(distance_coeff *  theta* math.sin(theta) )]
+                    purturvation = [0,0]#[ random.randint(-10,10), random.randint(-10,10)]
+                    FRAGMENTED_offsets.append([deviance[0] + purturvation[0],deviance[1] + purturvation[1] ])
+            for i in range(len(FRAGMENTED_offsets)):
+                fragment = FRAGMENTED_offsets[i]
+                board_tile = [[width//2 + fragment[0], (height//4)*3 + fragment[1]], board_temp[i] ]
+                self.board.append(board_tile)
+        elif irregular_reset_shape=='diamond':
+            pass
+        elif irregular_reset_shape == 'circular':
+            pass
 
     def boardify(self,board_temp): # change images where board is changed to used
         '''
@@ -367,7 +392,14 @@ class Board():
         elif step==2:
             pass
 
-    def collect_tiles(self,mousepos): # center tile이 보드의 어느 타일을 가렸는지 준다
+    def check_tile_sum_to_6(self,tiles):
+        amount_of_tiles = 0
+        for tile_name, amount in tiles.items():
+            amount_of_tiles += amount
+        # print(amount_of_tiles)
+        return amount_of_tiles == 6
+
+    def collect_tiles(self,mousepos, out_of_board_protection = True): # center tile이 보드의 어느 타일을 가렸는지 준다
         if mousepos[1] < self.board_Y_selectable:  # not on the board
             return False
 
@@ -384,7 +416,9 @@ class Board():
                     self.temp_board[i] = [board_tile_location, 'Used']
                     #break # only one tile can be inside a pc
 
-        # print(tiles)
+        if out_of_board_protection and (not self.check_tile_sum_to_6(tiles)): # detect whether planar figure is outside a board when clicking the board: BOSS FIGHT 에서는 out_of_board_protection = False로 줄거임
+            return False
+
         # check whether some unusable tile is inside the planar figure
         if ('Unusable' in tiles) or ('Used' in tiles):        # if unusable tile is included, return False
             print("Invalid position: containing unusable or used tile")
