@@ -293,7 +293,7 @@ class Map():
         return flag
 
 
-    def check_tiles(self,position_on_map, board_obj): # center tile이 보드의 어느 타일을 가렸는지 준다
+    def check_tiles(self,position_on_map, board_obj): # board object의 planar figure만 사용한다!
         self.bridge_map = [[False for x in range(7)] for y in range(7)]
         self.reachability_map = [[False for x in range(7)] for y in range(7)]
 
@@ -323,10 +323,8 @@ class Map():
 
                     # collect tiles
                     this_tile = self.map[col_board_idx][row_board_idx][0] # only names
-                    if this_tile in tiles:
-                        tiles[this_tile] += 1
-                    else: # not in there
-                        tiles[this_tile] = 1 # initialize
+
+                    safe_tile_add_one(tiles, this_tile)
 
                     if self.must_contain_at_least_one[col_board_idx][row_board_idx][0]:# must contain을 건드렸다면
                         at_least_one_flag = True

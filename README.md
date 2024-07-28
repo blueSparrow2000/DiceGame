@@ -20,6 +20,8 @@ A simple dice game
 2024.07.26 Altar) Shrinkable board / width, height are now possible to change / possible to add/delete a tile permanently into the board
 
 
+2024.07.28 Board is now implemented using indirection / 
+
 
 # To do
 - (Big update) change skill mechanism: you may dis-learn skills and learn new skill into current slots!

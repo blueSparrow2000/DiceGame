@@ -207,7 +207,7 @@ class Narin_skills(Skill_Book):
 ######################### BUILD SKILL BOOK ##########################
 
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills()}
-character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
+character_tile_dictionary = {'Mirinae':{'Attack':0, 'Regen':0, 'Defence':4, 'Skill':24, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1} }
 

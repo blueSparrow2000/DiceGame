@@ -426,8 +426,8 @@ def fight(player):
                 screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
                 screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
                 screen.blit(skip_img, skip_img.get_rect(center=skip_center))
-                if mousepos[1] >= board_Y_level:  # on the board
-                    player.board.draw_planar_figure(screen, mousepos)
+
+                player.board.draw_planar_figure(screen, mousepos)
 
             elif player_turn_step == 1:
                 ### DRAWING ###

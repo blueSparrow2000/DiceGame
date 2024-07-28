@@ -1,3 +1,5 @@
+from util import *
+import copy
 # map = [['void' for x in range(7)] for y in range(7)]
 # must_contain_at_least_one = [[False for x in range(7)] for y in range(7)]
 # map[0][3] = 'fight'
@@ -24,7 +26,17 @@
 # a = [0,0,0,1]
 # b = [0,0,0,0]
 # print(list_compare(a,b))
-x=2
-if x !=1:
-    print('hi')
-print('gg')
+
+
+blocks = [[[0,0],'Empty'] , [[0,1],'Defence'], [[1,0],'Attack'], [[1,1],'Skill']]
+temp = copy.deepcopy(blocks)
+pcs = [[0.9,0.9], [1,1], [1.1,1.1]]
+side_len_half = 0.5
+
+for pc in pcs:
+    for i in range(len(blocks)):
+        if check_inside_button(pc, blocks[i][0], side_len_half):
+            # add tile
+            temp[i] = [blocks[i][0],'Used']
+
+print(temp)

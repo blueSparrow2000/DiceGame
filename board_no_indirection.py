@@ -85,14 +85,16 @@ class Board():
     def __init__(self,tiles_dict,planar_figure_idx):
         global tile_names,planar_figures,sound_effects,board_Y_level
         self.board_side_length = 8
-        self.board = [] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
-        self.temp_board = []
+        self.board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
+        self.temp_board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)]
         self.permanent_board_dict = copy.deepcopy(tiles_dict) # 영구적인 영향을 주는 거면 이거도 바꿈
         tile_count = 0
         for k,v in self.permanent_board_dict.items():
             tile_count+=v
         self.permanent_board_dict['Empty'] = self.board_side_length**2 - tile_count
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict) # 이번 전투에만 영향을 주는거면 이거도 바꿈
+        # print(self.permanent_board_dict)
+        # print(self.temporary_board_dict)
         self.cube_figure = load_image('tiles/cube')
 
         self.image_dict = dict()
@@ -101,9 +103,8 @@ class Board():
 
         self.translation_dict = {}
         self.side_length =  self.image_dict['Attack'].get_height()
-        self.board_Y_level = board_Y_level + self.side_length//2
-        self.board_Y_selectable = board_Y_level - self.side_length
-        self.board_X = width//2 - self.side_length*4 + self.side_length//2
+        self.board_Y_level = board_Y_level
+        self.board_X = width//2 - self.side_length*4
         #self.rect = pygame.Rect((self.board_X,self.board_Y_level), (self.side_length*8,self.side_length*8))
 
         self.figure_index = 0 # 0 for primary, 1 for secondary
@@ -119,9 +120,6 @@ class Board():
         self.board_reset_turn = 6
         self.current_turn = 0
         self.board_reset_icon = load_image("icons/reset")
-
-
-    ################################################## permenant changes ##################################################
 
     '''
     You can change board reset frequency by calling the below function. Initially it is 6 turns.
@@ -188,20 +186,40 @@ class Board():
         self.shrink_recalculate_board_offsets()
         self.reset_permanent_board_dict()
 
-
     def shrink_recalculate_board_offsets(self):
-        self.board_X = width//2 - (self.side_length//2) * self.board_side_length + self.side_length//2 # centerize
+        self.board_X = width//2 - (self.side_length//2) * self.board_side_length
 
-    ################################################## permenant changes ##################################################
+    def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target into convert tile
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                current_tile = self.board[i][j]
+                if current_tile == target_tile:
+                    self.temp_board[i][j] = convert_tile # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
 
 
-    ################################################## planar figures ##########################################################
+    def consume_all_tiles_on_board(self, tile_name): # consume all tiles and return how many are (actually) consumed
+        how_many_consumed = 0
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                current_tile = self.board[i][j]
+                if current_tile == tile_name:
+                    self.temp_board[i][j] = 'Used' # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
+                    how_many_consumed+=1
 
-    def refresh_planar_figure(self):
-        self.planar_figure_col = len(self.current_planar_figure)
-        self.planar_figure_row = len(self.current_planar_figure[0])
-        # change the center pos accordingly
-        #self.planar_figure_center = [1,1]
+        return how_many_consumed
+
+    def count_all_tiles_on_board(self, tile_name): # for lookahead
+        how_many = 0
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                if self.board[i][j] == tile_name:
+                    how_many+=1
+
+        return how_many
+
 
     def init_turn(self): # initialize planar figure at every turn starts
         self.figure_index = 0
@@ -216,10 +234,72 @@ class Board():
         self.current_planar_figure = self.my_planar_figures[self.figure_index]
         self.refresh_planar_figure()
 
-    def draw_planar_figure(self,screen,mousepos):
-        if mousepos[1] < self.board_Y_selectable:  # not on the board
-            return False
+    def refresh_planar_figure(self):
+        self.planar_figure_col = len(self.current_planar_figure)
+        self.planar_figure_row = len(self.current_planar_figure[0])
+        # change the center pos accordingly
+        #self.planar_figure_center = [1,1]
 
+    '''
+    reset board & temporary tile dict when the game starts
+    '''
+    def new_game(self):
+        self.current_turn = 0
+        self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
+        self.reset(True)
+
+
+    def reset(self,enforced = False): # reset the board (each 6 turn)
+        if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
+            board_temp = []
+            for k,v in self.temporary_board_dict.items():
+                tile = k
+                for i in range(v):
+                    board_temp.append(tile)
+            random.shuffle(board_temp)
+            # boardify
+            self.boardify(board_temp)
+
+            # reset turn
+            self.current_turn = 0
+
+        self.current_turn+=1
+
+        # initialize planar figures
+        self.init_turn()
+
+    def boardify(self,board_temp): # change images where board is changed to used
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                self.board[i][j] = board_temp[i*self.board_side_length+j]
+    def draw(self,screen, step, mousepos):
+        global write_text
+        if step==0:
+            # draw board pixels
+            for i in range(self.board_side_length):
+                for j in range(self.board_side_length):
+                    screen.blit(self.image_dict[self.board[i][j]], (self.board_X + j*self.side_length, self.board_Y_level + self.side_length*i))
+
+            turns_remaining_until_board_reset = self.board_reset_turn - self.current_turn + 1
+            # draw reset counter
+            if turns_remaining_until_board_reset==1:
+                write_text(screen, width-40 , self.board_Y_level - 25, "%d"%(turns_remaining_until_board_reset), 20, color = 'red')
+            else:
+                write_text(screen, width-40, self.board_Y_level - 25, "%d" % (turns_remaining_until_board_reset), 20)
+
+            screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(width-40, self.board_Y_level - 25)))
+
+            if check_inside_button(mousepos, (width-40, self.board_Y_level - 25), button_side_len_half):
+                write_text(screen, width//2, 460, "turns left until board reset", 15)
+            else:
+                write_text(screen, width//2, 460, "Click: confirm", 15)
+
+
+        elif step==1:
+            pass
+        elif step==2:
+            pass
+    def draw_planar_figure(self,screen,mousepos):
         for c in range(self.planar_figure_col):
             for r in range(self.planar_figure_row):
                 if (self.current_planar_figure[c][r])==1: # draw only when exists
@@ -240,157 +320,46 @@ class Board():
         self.current_planar_figure = list(zip(*self.current_planar_figure[::-1]))
         self.refresh_planar_figure()
 
-    ################################################## planar figures ##########################################################
+    def collect_tiles(self,position_on_board): # center tile이 보드의 어느 타일을 가렸는지 준다
+        self.temp_board = copy.deepcopy(self.board)
+        # tiles = {'Attack':0, 'Defence':0, 'Regen':0, 'Skill':0, 'Used':0, 'Empty':0, 'Unusable':0} # TILES INIT
+        tiles = {}
+        center_x = position_on_board[0]
+        center_y = position_on_board[1]
+        for c in range(self.planar_figure_col):
+            for r in range(self.planar_figure_row):
+                if (self.current_planar_figure[c][r])==1: # draw only when exists
+                    row_offset = (r - self.planar_figure_center[1])*self.side_length
+                    col_offset = (c - self.planar_figure_center[0])*self.side_length
+
+                    # 전개도의 부분 중 해당 위치가 보드의 어느 좌표인지 변환: 보드가 중앙을 기준으로 가운데 맞춤 되어 있을 때의 경우이다!!
+                    row_board_idx = (center_x+row_offset - self.board_X) // self.side_length
+                    col_board_idx = (center_y+col_offset - self.board_Y_level) // self.side_length
+                    # check boarder
+                    if (row_board_idx < 0 or col_board_idx < 0 or row_board_idx > (self.board_side_length-1) or col_board_idx > (self.board_side_length-1)):
+                        print("invalid position: outside the border")
+                        return False
+
+                    # collect tiles
+                    this_tile = self.board[col_board_idx][row_board_idx]
+                    if this_tile in tiles:
+                        tiles[this_tile] += 1
+                    else: # not in there
+                        tiles[this_tile] = 1 # initialize
+
+                    self.temp_board[col_board_idx][row_board_idx] = 'Used'# change to used
 
 
-    '''
-    reset board & temporary tile dict when the game starts
-    '''
-    def new_game(self):
-        self.current_turn = 0
-        self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
-        self.reset(True)
+        # check whether some unusable tile is inside the planar figure
+        # if unusable tile is counted, return False
+        if ('Unusable' in tiles) or ('Used' in tiles): # containing these
+            print("Invalid position: containing unusable or used tile")
+            return False
+        # print(tiles)
+        return tiles# return tile counts
 
     def confirm_using_tile(self):
         self.board = self.temp_board
-
-    def reset(self, enforced=False, irregular_reset_shape = 'stripe'):  # reset the board (each 6 turn)
-        '''
-        This function only resets content of current board
-
-        Location is determined in the boardify function!
-
-        board_temp = list of tile names (no location information when creating)
-        '''
-
-        self.init_turn() # initialize planar figures
-
-        if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
-            ############### RESET BOARD ###############
-            self.clear_board()  # empty the board only when reset
-            board_temp = []
-            for k, v in self.temporary_board_dict.items(): # fetch board content to an array
-                tile = k
-                for i in range(v):
-                    board_temp.append(tile)
-            random.shuffle(board_temp)  # randomize
-
-            if irregular_reset_shape:
-                self.irregular_shapify(board_temp, irregular_reset_shape)
-            else:
-                self.boardify(board_temp) # set up a board
-            ############### RESET BOARD ###############
-            self.current_turn = 0 # reset turn
-
-        self.current_turn += 1
-
-    def clear_board(self):
-        self.board = [] # initialize board
-
-
-    ############################################################################################################ BOARD INDIRECTION 수정은 여기부터! ############################################################################################################
-    ############################################################################################################# self.board 부분을 찾고 수정하시오 ###########################################################################################################
-    ########################################################################################################################################################################################################################
-    def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
-        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
-        for i in range(len(self.board)):
-            board_tile_name = self.board[i][1]
-            if board_tile_name == target_tile:
-                self.temp_board[i][1] = convert_tile  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
-
-
-    def consume_all_tiles_on_board(self, target_tile): # consume all tiles and return how many are (actually) consumed
-        how_many_consumed = 0
-        for i in range(len(self.board)):
-            current_tile_name = self.board[i][1]
-            if current_tile_name == target_tile:
-                self.temp_board[i][1] = 'Used'  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
-                how_many_consumed += 1
-        return how_many_consumed
-
-    def count_all_tiles_on_board(self, target_tile): # for lookahead
-        how_many = 0
-        for i in range(len(self.board)):
-            current_tile_name = self.board[i][1]
-            if current_tile_name == target_tile:
-                how_many += 1
-        return how_many
-
-
-    def irregular_shapify(self, board_temp, irregular_reset_shape = 'stripe'):
-        # calculate irregular locations!
-        if irregular_reset_shape=='stripe':
-            for i in range(self.board_side_length):
-                for j in range(self.board_side_length):
-                    board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i * 1.1], board_temp[i*self.board_side_length + j] ]
-                    self.board.append(board_tile)
-
-
-    def boardify(self,board_temp): # change images where board is changed to used
-        '''
-        boardifying with grid shape centered middle vertical line
-
-        IMPORTANT: assigns location and tile information here!!!!!
-        '''
-        for i in range(self.board_side_length):
-            for j in range(self.board_side_length):
-                board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i], board_temp[i*self.board_side_length + j] ]
-                self.board.append(board_tile)
-
-    def draw(self,screen, step, mousepos):
-        global write_text
-        if step==0:
-            ### draw board
-            for i in range(len(self.board)):
-                board_tile_location = self.board[i][0]
-                board_tile_name = self.board[i][1]
-                tile_img = self.image_dict[board_tile_name]
-                screen.blit(tile_img,tile_img.get_rect(center=board_tile_location))
-            ### draw board
-
-            turns_remaining_until_board_reset = self.board_reset_turn - self.current_turn + 1
-            # draw reset counter
-            if turns_remaining_until_board_reset==1:
-                write_text(screen, width-40 , self.board_Y_level - self.side_length, "%d"%(turns_remaining_until_board_reset), 20, color = 'red')
-            else:
-                write_text(screen, width-40, self.board_Y_level - self.side_length, "%d" % (turns_remaining_until_board_reset), 20)
-
-            screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(width-40, self.board_Y_level - self.side_length)))
-
-            if check_inside_button(mousepos, (width-40, self.board_Y_level - self.side_length), button_side_len_half):
-                write_text(screen, width//2, 460, "turns left until board reset", 15)
-            else:
-                write_text(screen, width//2, 460, "Click: confirm", 15)
-
-        elif step==1:
-            pass
-        elif step==2:
-            pass
-
-    def collect_tiles(self,mousepos): # center tile이 보드의 어느 타일을 가렸는지 준다
-        if mousepos[1] < self.board_Y_selectable:  # not on the board
-            return False
-
-        planar_figure_center_locations = self.get_center_locations_planar_figure(mousepos)
-        self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
-
-        tiles = dict() # current tile collection
-        for pc in planar_figure_center_locations:
-            for i in range(len(self.board)):
-                board_tile_location = self.board[i][0]
-                board_tile_name = self.board[i][1]
-                if check_inside_button(pc, board_tile_location, self.side_length//2): # whether ith tile is inside in one sector of planar figure
-                    safe_tile_add_one(tiles,board_tile_name)  # add a tile to the current tile collection
-                    self.temp_board[i] = [board_tile_location, 'Used']
-                    #break # only one tile can be inside a pc
-
-        # print(tiles)
-        # check whether some unusable tile is inside the planar figure
-        if ('Unusable' in tiles) or ('Used' in tiles):        # if unusable tile is included, return False
-            print("Invalid position: containing unusable or used tile")
-            return False
-
-        return tiles# return tile counts
 
 
 
