@@ -4,8 +4,9 @@ tile_to_fix: String of a tile name that will be fixed (only one at a time!)
 '''
 from util import *
 
-def fix_a_tile_screen(screen,clock, player, tile_to_fix):
+def fix_a_tile(screen,clock, player, tile_to_fix):
     game_run = True
+    mousepos = (0,0)
 
     while game_run:
         screen.fill('white')
@@ -26,9 +27,21 @@ def fix_a_tile_screen(screen,clock, player, tile_to_fix):
 
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
-                (xp, yp) = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
-                # do fight logic on player's turn
+                mousepos = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
+
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    # confirm changes
+                    player.board.confirm_fixing_tile(tile_to_fix)
+                    # exit
+                    game_run = False
+                    break
+
+                elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
+                    # go to initial stage and do it again
+                    player.board.reset_fixing_tile()
+
+                player.board.update_temp_fixed(mousepos, tile_to_fix)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -42,12 +55,21 @@ def fix_a_tile_screen(screen,clock, player, tile_to_fix):
         if not game_run:
             break
 
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+        screen.blit(back_img, back_img.get_rect(center = bottom_right_button))
 
-        # draw effects
-        write_text(screen, width//2, 240, 'Area name', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)
+
+        player.board.draw_fixed_board(screen)
+
+        # draw a tile to fix
+        tile_to_fix
 
 
         if mouse_particle_list:  # if not empty

@@ -131,6 +131,9 @@ class Board():
 
         ##################### FIXED TILE ######################
         self.permanently_fixed_tiles = dict()
+        self.temp_permanently_fixed_tiles = dict()
+        self.fixed_board = [['Empty' for i in range(self.board_side_length)] for j in range(self.board_side_length)]
+        self.permanent_fix_exist_flag = False
         ##################### FIXED TILE ######################
 
     ################################################## permenant changes ##################################################
@@ -142,6 +145,24 @@ class Board():
     
     player.board.permenantly_add_fixed_tile_location(player.board.get_index_from_pos(mousepos), tile_name_to_fix)
     '''
+    def fixed_boardify(self,board_temp): # change images where board is changed to used
+        fixed_board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)]
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                fixed_board[i][j] = board_temp[i*self.board_side_length+j]
+        return fixed_board
+    def update_fixed_board(self): # called only when clicking / or reseting (back button)
+        temp_board = ['Empty' for j in range(self.board_side_length**2)]
+        for fixed_tile_idx,tile_name in self.temp_permanently_fixed_tiles.items():
+            temp_board[fixed_tile_idx] = tile_name
+        # update fixed board
+        self.fixed_board = self.fixed_boardify(temp_board)
+
+    def draw_fixed_board(self,screen):
+        for i in range(self.board_side_length):
+            for j in range(self.board_side_length):
+                img = self.image_dict[self.fixed_board[i][j]]
+                screen.blit(img,img.get_rect(center=(self.board_X + j*self.side_length, self.board_Y_level + self.side_length*i)))
 
     def get_index_from_pos(self, mousepos): # (65,505) very first elem?
         center_x = mousepos[0]
@@ -199,15 +220,28 @@ class Board():
                 print("tile already exists in that location!")
                 return  False
 
-
-
+        self.reset_fixing_tile()
         # add one!
-        self.permanently_fixed_tiles[location_index] = tile_name
-
-        # also add one to the permanent tiles!
-        self.permanently_replace_a_blank_tile_to(tile_name)
-        print("success!")
+        self.temp_permanently_fixed_tiles[location_index] = tile_name
+        self.permanent_fix_exist_flag = True
+        self.update_fixed_board()
         return True # success
+
+
+    def update_temp_fixed(self,mousepos, tile_name_to_fix):
+        self.permenantly_add_fixed_tile_location(self.get_index_from_pos(mousepos), tile_name_to_fix)
+
+    def confirm_fixing_tile(self,tile_name_to_fix):
+        if self.permanent_fix_exist_flag:
+            self.permanently_fixed_tiles = copy.deepcopy(self.temp_permanently_fixed_tiles)
+            # also add one to the permanent tiles!
+            self.permanently_replace_a_blank_tile_to(tile_name_to_fix)
+            print("Fixed a tile permanently!")
+
+    def reset_fixing_tile(self):
+        self.temp_permanently_fixed_tiles = copy.deepcopy(self.permanently_fixed_tiles)
+        self.permanent_fix_exist_flag = False
+        self.update_fixed_board()
 
     '''
     return a dictionary:

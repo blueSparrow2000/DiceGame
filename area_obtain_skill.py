@@ -3,6 +3,8 @@ How to use:
 call
 obtain_skill(screen, clock, player, spell_name)  # spell_name: string
 
+CAN USE ONE AT A TIME ONLY! (other wise, loop)
+
 '''
 from util import *
 

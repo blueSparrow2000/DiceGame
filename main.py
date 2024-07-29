@@ -46,6 +46,7 @@ from area_campfire import *
 from area_altar import *
 from area_shop import *
 from area_obtain_skill import *
+from area_fix_a_tile import *
 
 pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
@@ -718,8 +719,8 @@ while meta_run:
                     break
                 elif event.key == pygame.K_RETURN:
                     run_character_selection = False
-                    obtain_skill(screen, clock, player, 'poison_spell')  # spell_name: string
-
+                    # obtain_skill(screen, clock, player, 'poison_spell')  # spell_name: string
+                    fix_a_tile(screen, clock, player,'Attack')
                     try_again = adventure_loop(player,map)
                     # player_lost,valid_termination = adventure_loop(player,map)
                     # if not valid_termination:
