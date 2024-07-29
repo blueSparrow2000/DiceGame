@@ -721,8 +721,9 @@ while meta_run:
                 elif event.key == pygame.K_RETURN:
                     run_character_selection = False
 
-                    # for i in range(3):
-                    #     obtain_skill(screen, clock, player, 'poison_spell')  # spell_name: string
+                    # for i in range(1):
+                    #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string
+                    #     obtain_skill(screen, clock, player, 'poison_spell')
                     # for i in range(3):
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')

@@ -4,20 +4,31 @@ and choose between three random relics
 
 
 What Alter can give
-(+)
+(+) BLESS
 Decrease board reset frequency by 1
-Give 1 random tile that is fixable (among Attack, Defence, Regen, Skill)
+Curse or Treat > Board get shuffled every turn end (even fixed tiles are shuffled)
+Shrink the board side size by one
+
+Give 1 random fixable tile  (among Attack, Defence, Regen, Skill)
+Remove the limitation of placing planar figure outside the board (now net can have less than 6 current tiles including empty ones => 'out_of_board_protection = False' on collect_tile function)
+change all tile_type_1 to tile_type_2 (e.g. all attack tiles become defence tiles) where each tiles are one of Attack, Defence, Regen, Skill
 
 
+(-) CURSE
+Delete one skill slot forever
+Halve maximum health
+Make irregular-shaped board (diag or circle etc.)
 
 
-(-)
-
-
+options
+1. get a CURSE(randomly bad) and choose BLESS among random 3
+2. 9:1 probability of getting CURSE: BLESS (both are random)
 
 '''
 
 from util import *
+import random
+
 
 def go_to_altar(screen,clock, player):
     game_run = True

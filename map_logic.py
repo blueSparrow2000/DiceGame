@@ -69,8 +69,8 @@ class Map():
             # spawn island randomly - fight/campfire/shop/boss/ruin/altar
             self.map[4][4] = ['fight',False]
             self.map[2][5] = ['ruin',False]
-            self.map[2][1] = ['shop',False]
-            self.map[4][2] = ['altar', False]
+            self.map[2][1] = ['altar',False]
+            self.map[4][2] = ['shop', False]
             self.map[1][3] = ['campfire', False]
 
         # insert at-least-contain-one's in neighbors islands

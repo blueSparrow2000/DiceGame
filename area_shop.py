@@ -4,7 +4,7 @@ What shop can give
 > buy a skill (randomly chosen one skill) - but you need to replace a skill for that
 > buy random artifacts
 
-> erase a tile for some gold? (자리없을듯..)
+> erase (= change to empty tile) a tile for some gold? (자리없을듯..)
 
 
 
@@ -24,7 +24,7 @@ If there is space in your tile list (empty tiles are more than one)
 '''
 
 from util import *
-
+import random
 def go_to_shop(screen,clock, player):
     game_run = True
     music_Q('Encounter', True)
