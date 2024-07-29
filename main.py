@@ -160,6 +160,8 @@ def fight(player):
 
         if not player_turn:  # enemy turn
             ########################################### Just after the player turn ###########################
+            player.get_buff_effect()  # update buff effect every turn
+
             time.sleep(0.3)
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies)
@@ -169,7 +171,6 @@ def fight(player):
 
             for entity in enemies:
                 entity.behave(player)
-                player.get_buff_effect() # update buff effect every turn
                 # draw again
                 screen.fill(fight_bg_color)
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
@@ -342,7 +343,6 @@ def fight(player):
             break
 
 
-
         if player_turn:
             ### DRAWING ###
             write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
@@ -403,6 +403,7 @@ def fight(player):
                 ### DRAWING ###
                 screen.blit(back_img, back_img.get_rect(center=bottom_right_button))
                 write_text(screen, width // 2, height - 30, "Click the enemy to target", 15)
+
 
         else:
             write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
@@ -720,10 +721,11 @@ while meta_run:
                 elif event.key == pygame.K_RETURN:
                     run_character_selection = False
 
-                    # for i in range(5):
+                    # for i in range(3):
                     #     obtain_skill(screen, clock, player, 'poison_spell')  # spell_name: string
-                    # for i in range(5):
+                    # for i in range(3):
                     #     fix_a_tile(screen, clock, player,'Attack')
+                    #     fix_a_tile(screen, clock, player,'Defence')
 
                     try_again = adventure_loop(player,map)
                     # player_lost,valid_termination = adventure_loop(player,map)

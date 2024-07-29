@@ -36,7 +36,7 @@ class Enemy(Entity):
         current_pattern = self.pattern[self.current_pattern_idx]
 
         # check whether can attack or not
-        if current_pattern == 'attack' and (self.buffs['broken will']>0): #not self.can_attack
+        if current_pattern == 'attack' and (self.buffs['broken will']>0):
             # change to no op
             current_pattern = 'no op'
 
@@ -55,7 +55,7 @@ class Enemy(Entity):
         return 1 # default one gold
 
 class Mob(Enemy):
-    def __init__(self, my_name = 'mob', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'], rank = 1 ):
+    def __init__(self, my_name = 'mob', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank)
 
     def behave(self, player):
@@ -72,19 +72,20 @@ class Mob(Enemy):
                 # player.buffs['strength'] = 1
                 # player.buffs['toxin'] = 1
                 # player.buffs['confusion'] = 1
+
         elif current_pattern=='no op':
             pass # no op
         elif current_pattern=='shield':
             pass # no op
         elif current_pattern=='buff':
             self.buffs['strength'] = 2 # for one turn since it is self buffing
+            # self.buffs['attack immunity'] = 2
         elif current_pattern=='regen':
             pass # no op
         elif current_pattern=='unkown':
             pass # no op
 
         self.proceed_next_pattern()
-
         self.end_my_turn()
         time.sleep(0.2)
 

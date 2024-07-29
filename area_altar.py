@@ -3,6 +3,18 @@ Take random curse(cursed tile etc)
 and choose between three random relics
 
 
+What Alter can give
+(+)
+Decrease board reset frequency by 1
+Give 1 random tile that is fixable (among Attack, Defence, Regen, Skill)
+
+
+
+
+(-)
+
+
+
 '''
 
 from util import *

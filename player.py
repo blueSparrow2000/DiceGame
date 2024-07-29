@@ -5,6 +5,7 @@ class Player(Entity):
     def __init__(self, character_name,character_skills, board): # tile_dict
         global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles     # all the other skills should also be contained
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
+        self.my_type = 'player'
         ####################### player only stuffs ############################
         self.current_tile = dict()
         self.board = board
@@ -229,6 +230,13 @@ class Player(Entity):
     def reset_replacement_of_skill(self):
         self.temp_current_skills = copy.deepcopy(self.current_skills)
 
+    def remove_one_skill_from_highest_index(self):
+        if self.max_num_of_skills <= 0:
+            print("There are no skills left to remove!")
+            return
+        self.max_num_of_skills -= 1
+        self.current_skills = copy.deepcopy(self.current_skills[:self.max_num_of_skills]) # at first, player can use all the skills in the character's skill book
+        self.temp_current_skills = copy.deepcopy(self.current_skills)
     '''
     Skill change interface
     '''

@@ -230,7 +230,6 @@ class Board():
         # print("T ", self.temp_permanently_fixed_tiles)
         return True # success
 
-
     def update_temp_fixed(self,mousepos, tile_name_to_fix):
         self.permenantly_add_fixed_tile_location(self.get_index_from_pos(mousepos), tile_name_to_fix)
 
@@ -242,13 +241,10 @@ class Board():
             print("Fixed a tile permanently!")
             self.reset_fixing_tile()
 
-
     def reset_fixing_tile(self):
         self.temp_permanently_fixed_tiles = copy.deepcopy(self.permanently_fixed_tiles)
         self.permanent_fix_exist_flag = False
         self.update_fixed_board()
-
-
     ##################### FIXED TILE ######################
     '''
     return a dictionary:

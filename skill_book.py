@@ -15,7 +15,7 @@ class Skill_Book():
 
         self.skill_images = dict()
         # learnable skill names here (only used inside this class)
-        self.learnable_skill_list = ['poison_spell']
+        self.learnable_skill_list = ['poison_spell', 'holy_barrier']
         for skill_name in self.learnable_skill_list:
             self.skill_images[skill_name] = load_image("skills/learnable_skills/%s" % (skill_name))
         self.character_skills = character_skills
@@ -75,6 +75,22 @@ class Skill_Book():
         A = player.count_tile('Attack')
         damage = (3*A) * player.get_attack_multiplier()
         return "Poison spell|Attack one target with 3*A = %d damage   and inflict poison for 3 turns"%damage
+
+
+
+    def holy_barrier_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        R = player.count_tile('Regen')
+        if (S<3 or A>1 or R<1):
+            return False, 0, True, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums, is_attack
+        return True, 0, True, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums,is_attack
+
+    def holy_barrier(self,player, target_list):
+        sound_effects['playerdeath'].play()
+        player.buffs['attack immunity'] = 2
+    def get_detail_holy_barrier(self,player):
+        return "Holy barrier|Summon a shield that blocks all attacks once"
 
 
 ################################# skill book

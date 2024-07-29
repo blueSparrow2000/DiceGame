@@ -1,9 +1,24 @@
 '''
+What shop can give
+> buy tiles
+> buy a skill (randomly chosen one skill) - but you need to replace a skill for that
+> buy random artifacts
+
+> erase a tile for some gold? (자리없을듯..)
+
+
+
+
+
+
+
 If there is space in your tile list (empty tiles are more than one)
 - can buy each of these tiles with cost of gold
 {'Attack':5, 'Defence':5, 'Regen':10, 'Skill':10, 'Joker':20, } # 'Karma' is not buyable
 - can by artifacts (random)
 - can erase any 'one' tile with cost of gold: 50
+
+
 
 
 '''

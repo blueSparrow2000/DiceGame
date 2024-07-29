@@ -29,6 +29,8 @@ A simple dice game
 
 
 # To do
+- Map generation logic
+
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)

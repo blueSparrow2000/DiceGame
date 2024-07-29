@@ -26,6 +26,7 @@ class Entity():
         self.EID = EID
         EID += 1
         self.my_name = my_name
+        self.my_type='entity'
         self.image = load_image(my_name)
 
         self.health = hp
@@ -127,6 +128,10 @@ class Entity():
                 if cnt > 2:
                     next_row += 1
                     cnt = 0
+
+                if (self.my_type == 'player' and buff_name=='attack immunity'): # for attack immunity, decrement 1
+                    buff_duration-=1
+
                 screen.blit(buff_icon,
                             buff_icon.get_rect(center=(self.buff_icon_x + self.icon_delta * cnt, self.buff_icon_y + next_row * self.icon_delta)))
                 write_text(screen, self.buff_icon_x + self.icon_delta * cnt + 6, self.buff_icon_y + 6 + next_row * self.icon_delta,
@@ -147,6 +152,10 @@ class Entity():
 
 
     def take_damage(self, damage_temp):
+        if (self.buffs['attack immunity']>0): # do not take damage
+            print(self.buffs['attack immunity'])
+            return 0
+
         damage = self.vulnerability_multiplier * damage_temp
         counter_attack_damage = damage
 
@@ -199,6 +208,9 @@ class Entity():
                     self.toxined = True
                 elif buff_name == 'vulnerability':
                     self.vulnerability_multiplier = 2
+                elif buff_name == 'attack immunity':
+                    pass
+
 
     def update_buffs(self):
         for buff_name, buff_duration in self.buffs.items():

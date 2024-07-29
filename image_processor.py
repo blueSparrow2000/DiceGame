@@ -48,7 +48,8 @@ buff_name_description_dic = {
 'heal ban':"cannot heal",
 'poison':"takes 5 damage at the end of every turn",
 'toxin':"incoming attacks penetrates defence",
-'vulnerability':"takes twice a damage"
+'vulnerability':"takes twice a damage",
+'attack immunity':"immune to all attacks"
 }
 # buff_names = ['decay', 'strength', 'weakness','broken will','confusion','heal ban','poison','toxin']
 buff_names = list(buff_name_description_dic.keys())
