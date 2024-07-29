@@ -723,7 +723,7 @@ while meta_run:
 
                     # for i in range(1):
                     #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string
-                    #     obtain_skill(screen, clock, player, 'poison_spell')
+                    #     obtain_skill(screen, clock, player, 'poison_dart')
                     # for i in range(3):
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')

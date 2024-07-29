@@ -15,7 +15,7 @@ class Skill_Book():
 
         self.skill_images = dict()
         # learnable skill names here (only used inside this class)
-        self.learnable_skill_list = ['poison_spell', 'holy_barrier']
+        self.learnable_skill_list = ['poison_dart', 'holy_barrier']
         for skill_name in self.learnable_skill_list:
             self.skill_images[skill_name] = load_image("skills/learnable_skills/%s" % (skill_name))
         self.character_skills = character_skills
@@ -54,7 +54,7 @@ class Skill_Book():
     attacks one target
     inflict 
     '''
-    def poison_spell_get_requirement(self,player):
+    def poison_dart_get_requirement(self,player):
         S = player.count_tile('Skill')
         A = player.count_tile('Attack')
         R = player.count_tile('Regen')
@@ -62,7 +62,7 @@ class Skill_Book():
             return False, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
         return True, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
 
-    def poison_spell(self,player, target_list):
+    def poison_dart(self,player, target_list):
         sound_effects['hit'].play()
         A = player.count_tile('Attack')
         damage = (3*A) * player.get_attack_multiplier()
@@ -71,10 +71,10 @@ class Skill_Book():
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
 
-    def get_detail_poison_spell(self,player):
+    def get_detail_poison_dart(self,player):
         A = player.count_tile('Attack')
         damage = (3*A) * player.get_attack_multiplier()
-        return "Poison spell|Attack one target with 3*A = %d damage   and inflict poison for 3 turns"%damage
+        return "Poison dart|Attack one target with 3*A = %d damage   and inflict poison for 3 turns"%damage
 
 
 
