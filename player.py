@@ -12,6 +12,7 @@ class Player(Entity):
         self.skill_book = character_skills # get a skill book
         self.max_num_of_skills = 6 # number of skills that player can have
         self.current_skills = copy.deepcopy(self.skill_book.character_skills) # at first, player can use all the skills in the character's skill book
+        self.temp_current_skills = copy.deepcopy(self.current_skills)
         self.current_skill_idx = -1
 
         ######################################## buttons
@@ -204,7 +205,8 @@ class Player(Entity):
             return False
 
         # replace the skill!
-        self.current_skills[idx] = skill_to_learn # at first, player can use all the skills in the character's skill book
+        self.reset_replacement_of_skill()
+        self.temp_current_skills[idx] = skill_to_learn # at first, player can use all the skills in the character's skill book
 
     def draw_skill_to_learn(self,screen, skill_to_learn): # skill_to_learn: string of skill name
         # draw skill to learn
@@ -217,21 +219,29 @@ class Player(Entity):
     def draw_skill_to_swap(self,screen):
         # draw existing skills
         write_text(screen, self.button_x,self.button_y, "Choose a skill to replace", 20, 'darkgoldenrod')
-        self.draw_skills(screen)
+        self.draw_skills(screen, self.temp_current_skills)
 
     def check_valid_skill_index(self,idx): # also covers case when idx == -1
         return 0<= idx <= self.max_num_of_skills -1
 
     def confirm_skill_replacement(self):
-        pass
+        self.current_skills = copy.deepcopy(self.temp_current_skills)
+    def reset_replacement_of_skill(self):
+        self.temp_current_skills = copy.deepcopy(self.current_skills)
+
     '''
     Skill change interface
     '''
 
-    def draw_skills(self,screen):
-        for i in range(len(self.current_skills)):
-            skill_name = self.current_skills[i]
-            self.skill_book.draw_skill(screen, skill_name, i)
+    def draw_skills(self,screen, temporary_skill_list = None):
+        if temporary_skill_list:
+            for i in range(len(temporary_skill_list)):
+                skill_name = temporary_skill_list[i]
+                self.skill_book.draw_skill(screen, skill_name, i)
+        else:
+            for i in range(len(self.current_skills)):
+                skill_name = self.current_skills[i]
+                self.skill_book.draw_skill(screen, skill_name, i)
 
 
     def check_skill_button(self,mousepos):

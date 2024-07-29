@@ -1,15 +1,11 @@
 '''
-How to use:
-call
-obtain_skill(screen, clock, player, spell_name)  # spell_name: string
+tile_to_fix: String of a tile name that will be fixed (only one at a time!)
 
 '''
 from util import *
 
-def obtain_skill(screen,clock, player,skill_to_learn):
+def fix_a_tile_screen(screen,clock, player, tile_to_fix):
     game_run = True
-    mousepos = (0,0)
-    current_display_text = "Hover mouse on a tile for description"
 
     while game_run:
         screen.fill('white')
@@ -27,29 +23,12 @@ def obtain_skill(screen,clock, player,skill_to_learn):
 
             if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
                 mousepos = pygame.mouse.get_pos()
-                new_text = player.my_turn_lookahead(mousepos)
-                if new_text is not None:  # optimization (change only when needed)
-                    current_display_text = new_text
 
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
-                mousepos = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
-
-                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
-                    # confirm changes
-                    player.confirm_skill_replacement()
-
-                    # exit
-                    game_run = False
-                    break
-
-                elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
-                    # go to initial stage and do it again
-                    current_display_text = "Hover mouse on a tile for description"  # reset text
-                    player.reset_replacement_of_skill()
-
-                player.replace_current_skill(mousepos, skill_to_learn)
+                (xp, yp) = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+                # do fight logic on player's turn
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -63,22 +42,12 @@ def obtain_skill(screen,clock, player,skill_to_learn):
         if not game_run:
             break
 
-        # draw button
-        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
-        else:
-            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
-        screen.blit(back_img, back_img.get_rect(center = bottom_right_button))
 
+        # draw effects
+        write_text(screen, width//2, 240, 'Area name', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)
-
-        player.show_required_tiles(screen)
-        player.draw_skill_to_learn(screen, skill_to_learn)
-        player.draw_skill_to_swap(screen)
-
-        write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
 
 
         if mouse_particle_list:  # if not empty

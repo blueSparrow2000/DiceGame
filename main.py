@@ -718,7 +718,8 @@ while meta_run:
                     break
                 elif event.key == pygame.K_RETURN:
                     run_character_selection = False
-                    obtain_skill(screen, clock, player, 'poison_spell') ############
+                    obtain_skill(screen, clock, player, 'poison_spell')  # spell_name: string
+
                     try_again = adventure_loop(player,map)
                     # player_lost,valid_termination = adventure_loop(player,map)
                     # if not valid_termination:
