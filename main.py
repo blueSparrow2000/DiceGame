@@ -139,7 +139,7 @@ def fight(player):
 
     game_run = True
 
-    current_display_text = ""
+    current_display_text = "Hover mouse on a tile for description"
 
     while game_run:
         if player.health<=0: # check player death first
@@ -158,9 +158,42 @@ def fight(player):
             return False, True
 
 
-
-
         screen.fill(fight_bg_color)
+
+
+        if not player_turn:  # enemy turn
+            ########################################### Just after the player turn ###########################
+            time.sleep(0.3)
+            ### DELETE DEAD ENEMY ###
+            safe_delete(enemies)
+            ### DELETE DEAD ENEMY ###
+
+            current_turn += 1
+
+            for entity in enemies:
+                entity.behave(player)
+                player.get_buff_effect() # update buff effect every turn
+                # draw again
+                screen.fill(fight_bg_color)
+                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
+                player.draw(screen)
+                player.draw_player_info_top(screen) # Draw player main info
+                for entity in enemies:
+                    entity.draw(screen)
+                pygame.display.flip()
+
+            ### DELETE DEAD ENEMY ###
+            safe_delete(enemies)
+            ### DELETE DEAD ENEMY ###
+
+            ########################################### Just before the player turn starts! ###########################
+            player_turn = True
+            player.refresh_my_turn()
+            player.board.reset()
+            current_display_text = "Hover mouse on a tile for description"
+
+
+
 
         events = pygame.event.get()
         # Event handling
@@ -199,7 +232,7 @@ def fight(player):
                             player_turn_step = 0
                             number_of_targets_to_specify = 0
                             enemy_targets = set()
-                            current_display_text = ""  # reset text
+                            current_display_text = "Hover mouse on a tile for description"  # reset text
                         else:
                             valid_location = player.board.collect_tiles((xp, yp))
                             player.initialize_step_1()
@@ -213,7 +246,7 @@ def fight(player):
                         if check_inside_button(mousepos, back_center, button_side_len_half): # back
                             # go to initial stage and do it again
                             player_turn_step = 0
-                            current_display_text = ""  # reset text
+                            current_display_text = "Hover mouse on a tile for description"  # reset text
                             continue  # skip below
 
                         # check whether to transform joker tiles if exists
@@ -260,7 +293,7 @@ def fight(player):
                         if check_inside_button(mousepos, back_center, button_side_len_half):
                             # go to initial stage and do it again
                             player_turn_step = 0
-                            current_display_text = ""  # reset text
+                            current_display_text = "Hover mouse on a tile for description"  # reset text
 
                             for i in range(len(enemies)):
                                 enemies[i].targeted = False
@@ -294,7 +327,7 @@ def fight(player):
                     if event.key == pygame.K_BACKSPACE:
                         # go to initial stage and do it again
                         player_turn_step = 0
-                        current_display_text = ""  # reset text
+                        current_display_text = "Hover mouse on a tile for description"  # reset text
                         for i in range(len(enemies)):
                             enemies[i].targeted = False
                         number_of_targets_to_specify = 0
@@ -312,48 +345,6 @@ def fight(player):
             break
 
 
-        if not player_turn:  # enemy turn
-            ########################################### Just after the player turn ###########################
-            time.sleep(0.3)
-            ### DELETE DEAD ENEMY ###
-            safe_delete(enemies)
-            ### DELETE DEAD ENEMY ###
-
-            current_turn += 1
-
-            for entity in enemies:
-                entity.behave(player)
-                player.get_buff_effect() # update buff effect every turn
-                # draw again
-                screen.fill(fight_bg_color)
-                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
-                player.draw(screen)
-                player.draw_player_info_top(screen) # Draw player main info
-                for entity in enemies:
-                    entity.draw(screen)
-                pygame.display.flip()
-
-            ### DELETE DEAD ENEMY ###
-            safe_delete(enemies)
-            ### DELETE DEAD ENEMY ###
-
-            ########################################### Just before the player turn starts! ###########################
-            player_turn = True
-            player.refresh_my_turn()
-            player.board.reset()
-            current_display_text = ""
-
-        # draw player
-        player.draw(screen)
-
-        # draw enemy
-        for entity in enemies:
-            entity.draw(screen)
-
-        # draw effects
-
-        # Draw player main info
-        player.draw_player_info_top(screen)
 
         if player_turn:
             ### DRAWING ###
@@ -418,6 +409,20 @@ def fight(player):
 
         else:
             write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
+
+
+        # draw player
+        player.draw(screen)
+
+        # draw enemy
+        for entity in enemies:
+            entity.draw(screen)
+
+        # draw effects
+
+        # Draw player main info
+        player.draw_player_info_top(screen)
+
 
         if mouse_particle_list:  # if not empty
             # print(len(mouse_particle_list))

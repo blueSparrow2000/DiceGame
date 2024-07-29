@@ -248,7 +248,6 @@ class Player(Entity):
         for i in range(len(self.current_skills)):
             if self.skill_book.check_button(mousepos,i):
                 _,_,_, self.required_tiles = getattr(self.skill_book, self.current_skills[i] + '_get_requirement')(self)
-
                 return getattr(self.skill_book, "get_detail_%s"%self.current_skills[i])(self)
 
         return None
