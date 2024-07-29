@@ -110,7 +110,7 @@ class Board():
             self.image_dict[tile_name] = (load_image("tiles/%s" % tile_name))
 
         self.translation_dict = {}
-        self.side_length =  self.image_dict['Attack'].get_height()
+        self.side_length = self.image_dict['Attack'].get_height()
         self.board_Y_level = board_Y_level + self.side_length//2
         self.board_Y_selectable = board_Y_level - self.side_length
         self.board_X = width//2 - self.side_length*4 + self.side_length//2
@@ -145,6 +145,7 @@ class Board():
     
     player.board.permenantly_add_fixed_tile_location(player.board.get_index_from_pos(mousepos), tile_name_to_fix)
     '''
+
     def fixed_boardify(self,board_temp): # change images where board is changed to used
         fixed_board = [[None for i in range(self.board_side_length)] for j in range(self.board_side_length)]
         for i in range(self.board_side_length):
@@ -225,6 +226,8 @@ class Board():
         self.temp_permanently_fixed_tiles[location_index] = tile_name
         self.permanent_fix_exist_flag = True
         self.update_fixed_board()
+        # print("P ",self.permanently_fixed_tiles)
+        # print("T ", self.temp_permanently_fixed_tiles)
         return True # success
 
 
@@ -237,12 +240,16 @@ class Board():
             # also add one to the permanent tiles!
             self.permanently_replace_a_blank_tile_to(tile_name_to_fix)
             print("Fixed a tile permanently!")
+            self.reset_fixing_tile()
+
 
     def reset_fixing_tile(self):
         self.temp_permanently_fixed_tiles = copy.deepcopy(self.permanently_fixed_tiles)
         self.permanent_fix_exist_flag = False
         self.update_fixed_board()
 
+
+    ##################### FIXED TILE ######################
     '''
     return a dictionary:
     permanent_tiles - number of fixed tiles for each tiles
@@ -263,7 +270,9 @@ class Board():
 
 
 
-    ##################### FIXED TILE ######################
+    def display_tile(self,screen,tile_name, location):
+        img = self.image_dict[tile_name]
+        screen.blit(img, img.get_rect(center=location))
 
 
 
