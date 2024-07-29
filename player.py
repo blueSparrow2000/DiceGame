@@ -1,5 +1,5 @@
 from entity import *
-
+import copy
 
 class Player(Entity):
     def __init__(self, character_name,character_skills, board): # tile_dict
@@ -7,9 +7,12 @@ class Player(Entity):
         super().__init__(character_name, 100, 100, (100,mob_Y_level))
         ####################### player only stuffs ############################
         self.current_tile = dict()
-        self.current_skill_idx = -1
-        self.skill_book = character_skills
         self.board = board
+
+        self.skill_book = character_skills # get a skill book
+        self.max_num_of_skills = 6 # number of skills that player can have
+        self.current_skills = copy.deepcopy(self.skill_book.character_skills) # at first, player can use all the skills in the character's skill book
+        self.current_skill_idx = -1
 
         ######################################## buttons
         self.buttons = ['Attack', 'Defence','Regen']
@@ -50,24 +53,17 @@ class Player(Entity):
         self.transform_y = 870
         self.transform_spacing = 50
         self.transform_tolerance = 15
-        self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y ) for i in range(len(self.transformable_tiles))]
+        self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y) for i in range(len(self.transformable_tiles))]
 
 
+    '''
+    Handling Joker tiles
+    
+    '''
     def transform_tile(self, transformed_tile_name):
         # remove one joker
         safe_delete_dict_one(self.current_tile, 'Joker')
-
         safe_tile_add_one(self.current_tile, transformed_tile_name)
-        # if transformed_tile_name in self.current_tile:  # if key exists
-        #     self.current_tile[transformed_tile_name] += 1
-        # else:
-        #     self.current_tile[transformed_tile_name] = 1  # add new entry
-
-    # def have_joker_tile(self):  # ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
-    #     for tile_name, amount in self.current_tile.items():
-    #         if tile_name == 'Joker' and amount > 0:
-    #             return True
-    #     return False
 
 
     def tile_transform_button(self,mousepos):
@@ -92,9 +88,9 @@ class Player(Entity):
             screen.blit(self.mini_tile_icons[mini_tile], self.mini_tile_icons[mini_tile].get_rect(center=self.transform_icon_locations[cnt]))
             cnt+=1
 
-
-
-
+    '''
+    current(selected) tile functions
+    '''
     def show_current_tiles(self, screen):
         # background
         draw_bar(screen, width//2, self.minitile_y, 312, 50, 100, (120, 120, 120))
@@ -115,6 +111,10 @@ class Player(Entity):
     def check_exists_in_current_tile(self, tile_name):
         return tile_name in self.current_tile and self.current_tile[tile_name] > 0 # if such tile exists and is having more than one
 
+    '''
+    Handling Skills/basic moves 
+    
+    '''
     def draw_buttons(self, screen): # can click only if current tile exists
         for i in range(len(self.buttons)):
             if not self.check_exists_in_current_tile(self.buttons[i]):
@@ -191,6 +191,42 @@ class Player(Entity):
     def initialize_step_1(self):
         self.required_tiles = dict()
 
+    ############################################################## skill book 공사 ##############################################################
+
+    def draw_skills(self,screen):
+        for i in range(len(self.current_skills)):
+            skill_name = self.current_skills[i]
+            self.skill_book.draw_skill(screen, skill_name, i)
+
+
+    def check_skill_button(self,mousepos):
+        for i in range(len(self.current_skills)):
+            if self.skill_book.check_button(mousepos,i):
+                return i # return the index of the clicked skill to use
+
+        # no skills selected
+        return -1
+
+    def skill_ready(self, idx): # use the idx'th skill
+        # global requirement: Need at least one skill tile to use skill
+
+        # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
+        skill_valid, target_nums,is_attack,requirement_dict = getattr(self.skill_book, self.current_skills[idx]+'_get_requirement')(self)
+
+        if skill_valid and ((not is_attack) or (is_attack and self.can_attack)):
+            # if valid, change the skill index to idx
+            self.current_skill_idx = idx
+            return skill_valid,target_nums
+        return False,1
+
+    def use_skill(self, target_list): # use the idx'th skill
+        # before skill
+
+        getattr(self.skill_book,self.current_skills[self.current_skill_idx])(self,target_list)
+
+        # after skill
+
+
     def my_turn_lookahead(self, mousepos): # show details of each skill / basic attacks
         for i in range(len(self.buttons)):
             current_button = self.buttons[i]
@@ -209,14 +245,17 @@ class Player(Entity):
                     return 'Regeneration|Heal {} health'.format(self.get_heal_amount())
 
         # else, check whether skill
-        for i in range(len(self.skill_book.skill_images)):
-            if check_inside_button(mousepos, self.skill_book.button_locations[i], self.skill_book.image_button_tolerance):
-                _,_,_, self.required_tiles = getattr(self.skill_book, self.skill_book.skills[
-                    i] + '_get_requirement')(self)
+        for i in range(len(self.current_skills)):
+            if self.skill_book.check_button(mousepos,i):
+                _,_,_, self.required_tiles = getattr(self.skill_book, self.current_skills[i] + '_get_requirement')(self)
 
-                return getattr(self.skill_book, "get_detail_%s"%self.skill_book.skills[i])(self)
+                return getattr(self.skill_book, "get_detail_%s"%self.current_skills[i])(self)
 
         return None
+
+
+    ############################################################## skill book 공사 ##############################################################
+
 
     def show_required_tiles(self,screen):
         cnt = 0
@@ -295,24 +334,6 @@ class Player(Entity):
         R = self.count_tile('Regen')
         return self.heal_multiplier*self.P(R)
 
-    def skill_ready(self, idx): # use the idx'th skill
-        # global requirement: Need at least one skill tile to use skill
-
-        # self.can_attack 확인하기. 공격하는 스킬의 경우 can attack일때만 valid하다
-        skill_valid, target_nums,is_attack,requirement_dict = getattr(self.skill_book, self.skill_book.skills[idx]+'_get_requirement')(self)
-
-        if skill_valid and ((not is_attack) or (is_attack and self.can_attack)):
-            # if valid, change the skill index to idx
-            self.current_skill_idx = idx
-            return skill_valid,target_nums
-        return False,1
-
-    def use_skill(self, target_list): # use the idx'th skill
-        # before skill
-
-        getattr(self.skill_book,self.skill_book.skills[self.current_skill_idx])(self,target_list)
-
-        # after skill
 
 
 

@@ -23,10 +23,13 @@ A simple dice game
 2024.07.28 Board is now implemented using indirection (can freely change board shape/configuration) / (Altar) Added fixing tile functionality to the board: player can choose one tile to be fixed in a location (still preserves location when shrinking - except on right most ones... they will be pulled in )
 
 
+2024.07.29 - (Big update) change skill mechanism: you can learn/dis-learn random new skill in the shop (about 10 ~ 30 gold based on the power balance) 
+/ you can have upto 6 skills maximum, so you have to dis-learn in order to learn new skills
+
+
+
 # To do
-- (Big update) change skill mechanism: you may dis-learn skills and learn new skill into current slots!
-- you can learn/dis-learn random new skill in the shop (about 10 ~ 30 gold based on the power balance) / you can have upto 6 skills maximum, so you have to dis-learn in order to learn new skills
-- 
+
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)
 - elite enemies drop random tiles that you can permanently obtain 

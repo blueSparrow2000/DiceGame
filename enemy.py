@@ -55,7 +55,7 @@ class Enemy(Entity):
         return 1 # default one gold
 
 class Mob(Enemy):
-    def __init__(self, my_name = 'mob', hp=30, hpmax = 30, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'], rank = 1 ):
+    def __init__(self, my_name = 'mob', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'], rank = 1 ):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank)
 
     def behave(self, player):
@@ -64,7 +64,6 @@ class Mob(Enemy):
         current_pattern = self.pattern[self.current_pattern_idx]
         if current_pattern=='attack':
             if self.can_attack:
-                time.sleep(0.3)
                 sound_effects['hit'].play()
                 counter_attack_damage = player.take_damage(self.get_current_damage())
                 self.health -= counter_attack_damage

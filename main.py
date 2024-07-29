@@ -158,36 +158,6 @@ def fight(player):
             return False, True
 
 
-        if not player_turn:  # enemy turn
-            ########################################### Just after the player turn ###########################
-
-            ### DELETE DEAD ENEMY ###
-            safe_delete(enemies)
-            ### DELETE DEAD ENEMY ###
-
-            current_turn += 1
-
-            for entity in enemies:
-                entity.behave(player)
-                player.get_buff_effect() # update buff effect every turn
-                # draw again
-                screen.fill(fight_bg_color)
-                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
-                player.draw(screen)
-                player.draw_player_info_top(screen) # Draw player main info
-                for entity in enemies:
-                    entity.draw(screen)
-                pygame.display.flip()
-
-            ### DELETE DEAD ENEMY ###
-            safe_delete(enemies)
-            ### DELETE DEAD ENEMY ###
-
-            ########################################### Just before the player turn starts! ###########################
-            player_turn = True
-            player.refresh_my_turn()
-            player.board.reset()
-            current_display_text = ""
 
 
         screen.fill(fight_bg_color)
@@ -264,7 +234,7 @@ def fight(player):
 
                         ### skill buttons here!
                         is_valid_move = False
-                        skill_num = player.skill_book.check_button(mousepos)
+                        skill_num = player.check_skill_button(mousepos)
                         if skill_num >= 0:
                             is_valid_move,number_of_targets_to_specify = player.skill_ready(skill_num)
 
@@ -315,8 +285,7 @@ def fight(player):
                 #     break
                 if player_turn:  # listen for the inputs
                     sound_effects['confirm'].play()
-                    # if event.key == pygame.K_RETURN:
-                    #     # skip player's turn
+                    # if event.key == pygame.K_RETURN:    # skip player's turn
                     #     player.end_my_turn()
                     #     player_turn = False
                     #     player_turn_step = 0
@@ -338,66 +307,41 @@ def fight(player):
                             player.board.change_planar_figure(player.confused)
                     if player_turn_step == 1:
                         pass
-                        ### 키보드 단축키 활성화 할래? 안할래. 안할래... 더 복잡다
-                        # is_valid_move = False
-                        # if event.key == pygame.K_1:
-                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(0)
-                        # elif event.key == pygame.K_2:
-                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(1)
-                        # elif event.key == pygame.K_3:
-                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(2)
-                        # elif event.key == pygame.K_4:
-                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(3)
-                        # elif event.key == pygame.K_5:
-                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(4)
-                        # elif event.key == pygame.K_6:
-                        #     is_valid_move,number_of_targets_to_specify = player.skill_ready(5)
-                        #
-                        # if is_valid_move:
-                        #     if number_of_targets_to_specify>0:
-                        #         player_turn_step = 2
-                        #
-                        #     else:
-                        #         # use the skill!
-                        #         player.use_skill(enemies)
-                        #
-                        #         player.current_skill_idx = -1
-                        #         # end players turn
-                        #         player.end_my_turn()
-                        #         player_turn = False
-                        #         player_turn_step = 0
-                        #         player.board.confirm_using_tile()
-                        #         number_of_targets_to_specify = 0
-                        #         enemy_targets = set()
-                        #
-                        #
-                        #
-                        # if event.key == pygame.K_7 and player.can_attack: # basic attack
-                        #     player_turn_step = 2
-                        #     number_of_targets_to_specify = 1
-                        #
-                        # if event.key == pygame.K_8:
-                        #     player.defend()
-                        #     # end players turn
-                        #     player.end_my_turn()
-                        #     player_turn = False
-                        #     player_turn_step = 0
-                        #     player.board.confirm_using_tile()
-                        #     number_of_targets_to_specify = 0
-                        #     enemy_targets = set()
-                        # if event.key == pygame.K_9:
-                        #     player.regen()
-                        #     # end players turn
-                        #     player.end_my_turn()
-                        #     player_turn = False
-                        #     player_turn_step = 0
-                        #     player.board.confirm_using_tile()
-                        #     number_of_targets_to_specify = 0
-                        #     enemy_targets = set()
-                        #
+
         if not game_run:
             break
 
+
+        if not player_turn:  # enemy turn
+            ########################################### Just after the player turn ###########################
+            time.sleep(0.3)
+            ### DELETE DEAD ENEMY ###
+            safe_delete(enemies)
+            ### DELETE DEAD ENEMY ###
+
+            current_turn += 1
+
+            for entity in enemies:
+                entity.behave(player)
+                player.get_buff_effect() # update buff effect every turn
+                # draw again
+                screen.fill(fight_bg_color)
+                write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
+                player.draw(screen)
+                player.draw_player_info_top(screen) # Draw player main info
+                for entity in enemies:
+                    entity.draw(screen)
+                pygame.display.flip()
+
+            ### DELETE DEAD ENEMY ###
+            safe_delete(enemies)
+            ### DELETE DEAD ENEMY ###
+
+            ########################################### Just before the player turn starts! ###########################
+            player_turn = True
+            player.refresh_my_turn()
+            player.board.reset()
+            current_display_text = ""
 
         # draw player
         player.draw(screen)
@@ -435,7 +379,7 @@ def fight(player):
                 player.draw_buttons(screen)  # replace to basic move buttons - explanation is shown only when hovering
                 write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
                 player.show_required_tiles(screen)
-                player.skill_book.draw(screen)
+                player.draw_skills(screen)
                 player.show_current_tiles(screen)
                 # if joker is in the current tiles, you should select one!
                 player.draw_tile_transform_button(screen)
@@ -459,6 +403,7 @@ def fight(player):
                         player.use_skill(listed_enemy_targets)
                     for i in range(len(enemies)):
                         enemies[i].targeted = False
+                        enemies[i].draw(screen) # redraw
                     # end players turn
                     player.end_my_turn()
                     player_turn = False

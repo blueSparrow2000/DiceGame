@@ -8,32 +8,72 @@ N 명의 적에게 적용되는 공격은 이미 target_list에 적용이 된 �
 
 from util import *
 
+
 class Skill_Book():
-    def __init__(self, book_name, skills):
+    def __init__(self, book_name, character_skills):
         self.my_name = book_name
-        self.skills = skills
-        self.skill_images = []
+
+        self.skill_images = dict()
+        # learnable skill names here (only used inside this class)
+        self.learnable_skill_list = ['poison_spell']
+        for skill_name in self.learnable_skill_list:
+            self.skill_images[skill_name] = load_image("skills/learnable_skills/%s" % (skill_name))
+        self.character_skills = character_skills
+        for skill_name in self.character_skills:
+            self.skill_images[skill_name] = load_image("skills/%s/%s" % (self.my_name,skill_name))
+
+
         self.image_button_tolerance = 25
         self.button_spacing = 10
         self.button_x = 50
         self.button_y = 560
-        self.button_locations = [(self.button_x, self.button_y + (2 * self.image_button_tolerance + self.button_spacing)* i) for i in range(len(self.skills))]
-        for skill_name in self.skills:
-            self.skill_images.append(load_image("character_skills/%s/%s" % (self.my_name,skill_name)))
-
-    def draw(self,screen):
-        for i in range(len(self.skill_images)):
-            screen.blit(self.skill_images[i], self.skill_images[i].get_rect(center=self.button_locations[i]))
+        self.button_locations = [(self.button_x, self.button_y + (2 * self.image_button_tolerance + self.button_spacing)* i) for i in range(len(self.character_skills))]
 
 
-    def check_button(self,mousepos):
-        for i in range(len(self.skill_images)):
-            if check_inside_button(mousepos, self.button_locations[i], self.image_button_tolerance):
-                # print(self.skills[i]+" selected")
-                return i # return the index of the clicked skill to use
 
-        # no skills selected
-        return -1
+    def draw_skill(self,screen, skill_name, skill_location_index):
+
+        screen.blit(self.skill_images[skill_name], self.skill_images[skill_name].get_rect(center=self.button_locations[skill_location_index]))
+
+
+    def check_button(self,mousepos,skill_location_index):
+        if check_inside_button(mousepos, self.button_locations[skill_location_index], self.image_button_tolerance):
+            # print(self.character_skills[i]+" selected")
+            return True
+        return False
+
+    ''' 
+    All the skills that the player can learn goes here
+    poison etc.
+    
+    '''
+
+    '''
+    poison spell (poison dart relic will increase its power)
+    attacks one target
+    inflict 
+    '''
+    def poison_spell_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        R = player.count_tile('Regen')
+        if (S<1 or A>3 or R<1):
+            return False, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
+        return True, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
+
+    def poison_spell(self,player, target_list):
+        sound_effects['hit'].play()
+        A = player.count_tile('Attack')
+        damage = (3*A) * player.get_attack_multiplier()
+        for enemy in target_list:
+            enemy.buffs['poison'] = 3
+            counter_attack_damage = enemy.take_damage(damage)
+            player.health -= counter_attack_damage
+
+    def get_detail_poison_spell(self,player):
+        A = player.count_tile('Attack')
+        damage = (3*A) * player.get_attack_multiplier()
+        return "Poison spell|Attack one target with 3*A = %d damage   and inflict poison for 3 turns"%damage
 
 
 ################################# skill book
@@ -207,7 +247,7 @@ class Narin_skills(Skill_Book):
 ######################### BUILD SKILL BOOK ##########################
 
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills()}
-character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
+character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':20, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1} }
 
