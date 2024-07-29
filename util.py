@@ -5,20 +5,6 @@ from music import *
 from variables import *
 import math
 
-TAB_img = load_image("icons/TAB") # size 50 pixel
-rotate_img = load_image("icons/rotate")
-back_img = load_image("icons/back")
-skip_img = load_image("icons/skip")
-
-TAB_img_white = load_image("icons/TAB_white") # size 50 pixel
-rotate_img_white = load_image("icons/rotate_white")
-back_img_white = load_image("icons/back_white")
-skip_img_white = load_image("icons/skip_white")
-
-
-button_side_len_half = 25
-
-
 
 def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
     if not mouse:
@@ -47,7 +33,7 @@ def write_text(surf, x, y, text, size,color='black',bg_color = None): #(50, 200,
 '''
 알아서 길이별로 잘라서 잘 보여주는 함수
 '''
-def write_text_description(surf, x, y, text, size,color='black',bg_color = None):
+def write_text_description(surf, x, y, text, size,color='black',bg_color = None, requirement_shown = True):
     if not text:
         return
     text_list = text.split('|')
@@ -72,7 +58,8 @@ def write_text_description(surf, x, y, text, size,color='black',bg_color = None)
     for i in range(len(content_blocks)):
         write_text(surf, center_x_level, y_level+i*size, content_blocks[i], size, color, bg_color)
 
-    write_text(surf, center_x_level, requirement_level, "~ Requirements ~", 20, color, bg_color)
+    if requirement_shown:
+        write_text(surf, center_x_level, requirement_level, "~ Requirements ~", 20, color, bg_color)
 
 
 def check_inside_button(mouse_pos,button_center, button_side_len_half):

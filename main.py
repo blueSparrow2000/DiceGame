@@ -45,7 +45,7 @@ from area_ruin import *
 from area_campfire import *
 from area_altar import *
 from area_shop import *
-
+from area_obtain_skill import *
 
 pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
@@ -55,10 +55,6 @@ pygame.display.set_caption('Dice Game')  # window title
 width, height = pygame.display.get_surface().get_size()  # window width, height
 
 screen.fill((0,0,0))  # background color
-tab_center = (40,height-40)
-rotate_center = (width-40,height-40)
-back_center = (width-40,height-40)
-skip_center = (width//2,height-40)
 
 mousepos = (0,0)
 
@@ -94,7 +90,7 @@ def safe_delete(entity_list):
 ####################################################################################################### fight loop #######################################################################################################
 
 def fight(player):
-    global mousepos,TAB_img,rotate_img, back_img,skip_img ,tab_center,rotate_center,back_center,skip_center ,mob_Y_level, sound_effects ,text_description_level,turn_text_level
+    global mousepos,TAB_img,rotate_img, back_img,skip_img ,bottom_left_button,bottom_right_button,bottom_center_button,mob_Y_level, sound_effects ,text_description_level,turn_text_level
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
@@ -221,11 +217,11 @@ def fight(player):
                 # do fight logic on player's turn
                 if player_turn:  # listen for the inputs
                     if player_turn_step == 0:
-                        if check_inside_button(mousepos, tab_center, button_side_len_half):
+                        if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
                             player.board.change_planar_figure(player.confused)
-                        elif check_inside_button(mousepos, rotate_center, button_side_len_half):
+                        elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
                             player.board.rotate_once()
-                        elif check_inside_button(mousepos, skip_center, button_side_len_half):
+                        elif check_inside_button(mousepos, bottom_center_button, button_side_len_half):
                             # skip player's turn
                             player.end_my_turn()
                             player_turn = False
@@ -243,7 +239,7 @@ def fight(player):
                                 player_turn_step = 1 # progress to next stage
 
                     elif player_turn_step == 1: # choose skill or attack
-                        if check_inside_button(mousepos, back_center, button_side_len_half): # back
+                        if check_inside_button(mousepos, bottom_right_button, button_side_len_half): # back
                             # go to initial stage and do it again
                             player_turn_step = 0
                             current_display_text = "Hover mouse on a tile for description"  # reset text
@@ -290,7 +286,7 @@ def fight(player):
 
 
                     elif player_turn_step == 2:
-                        if check_inside_button(mousepos, back_center, button_side_len_half):
+                        if check_inside_button(mousepos, bottom_right_button, button_side_len_half): # back
                             # go to initial stage and do it again
                             player_turn_step = 0
                             current_display_text = "Hover mouse on a tile for description"  # reset text
@@ -352,21 +348,21 @@ def fight(player):
             player.board.draw(screen, player_turn_step, mousepos)
 
             if player_turn_step == 0:  # listen for the inputs
-                if check_inside_button(mousepos, tab_center, button_side_len_half):
+                if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
                     write_text(screen, mousepos[0]+100, mousepos[1], "toggle planar figure", 15)
-                elif check_inside_button(mousepos, rotate_center, button_side_len_half):
+                elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
                     write_text(screen, mousepos[0]-100, mousepos[1], "rotate planar figure", 15)
 
                 ### DRAWING ###
-                screen.blit(TAB_img, TAB_img.get_rect(center=tab_center))
-                screen.blit(rotate_img, rotate_img.get_rect(center=rotate_center))
-                screen.blit(skip_img, skip_img.get_rect(center=skip_center))
+                screen.blit(TAB_img, TAB_img.get_rect(center=bottom_left_button))
+                screen.blit(rotate_img, rotate_img.get_rect(center=bottom_right_button))
+                screen.blit(skip_img, skip_img.get_rect(center=bottom_center_button))
 
                 player.board.draw_planar_figure(screen, mousepos)
 
             elif player_turn_step == 1:
                 ### DRAWING ###
-                screen.blit(back_img, back_img.get_rect(center=back_center))
+                screen.blit(back_img, back_img.get_rect(center=bottom_right_button))
                 player.draw_buttons(screen)  # replace to basic move buttons - explanation is shown only when hovering
                 write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
                 player.show_required_tiles(screen)
@@ -404,7 +400,7 @@ def fight(player):
                     enemy_targets = set()
 
                 ### DRAWING ###
-                screen.blit(back_img, back_img.get_rect(center=back_center))
+                screen.blit(back_img, back_img.get_rect(center=bottom_right_button))
                 write_text(screen, width // 2, height - 30, "Click the enemy to target", 15)
 
         else:
@@ -491,9 +487,9 @@ def adventure_loop(player,map):
                     (xp, yp) = pygame.mouse.get_pos()
                     mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
 
-                    if check_inside_button(mousepos, tab_center, button_side_len_half):
+                    if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
                         player.board.change_planar_figure(False)
-                    elif check_inside_button(mousepos, rotate_center, button_side_len_half):
+                    elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
                         player.board.rotate_once()
 
                     if map_choosing_step == 0: # check map
@@ -501,7 +497,7 @@ def adventure_loop(player,map):
                         if is_valid: # goto next step (only happens here)
                             map_choosing_step = 1
                     elif map_choosing_step == 1:
-                        if check_inside_button(mousepos, skip_center, button_side_len_half):  # back
+                        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):  # back
                             # go to initial stage and do it again
                             map_choosing_step = 0
                             map.reset()
@@ -641,13 +637,13 @@ def adventure_loop(player,map):
 
             if map_choosing_step==1 and not animation_block:
                 map.highlight_reachable_locations(screen)
-                screen.blit(back_img_white, back_img_white.get_rect(center=skip_center))
+                screen.blit(back_img_white, back_img_white.get_rect(center=bottom_center_button))
 
 
             if map_choosing_step==0 and mousepos[1] >= board_Y_level:  # on the board
                 player.board.draw_planar_figure(screen, mousepos)
-                screen.blit(TAB_img_white, TAB_img_white.get_rect(center=tab_center))
-                screen.blit(rotate_img_white, rotate_img_white.get_rect(center=rotate_center))
+                screen.blit(TAB_img_white, TAB_img_white.get_rect(center=bottom_left_button))
+                screen.blit(rotate_img_white, rotate_img_white.get_rect(center=bottom_right_button))
 
 
 
@@ -722,6 +718,7 @@ while meta_run:
                     break
                 elif event.key == pygame.K_RETURN:
                     run_character_selection = False
+                    obtain_skill(screen, clock, player, 'poison_spell') ############
                     try_again = adventure_loop(player,map)
                     # player_lost,valid_termination = adventure_loop(player,map)
                     # if not valid_termination:

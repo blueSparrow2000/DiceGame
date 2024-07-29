@@ -42,3 +42,12 @@ option_effect_color = 'gold'
 # screen colors
 fight_bg_color = 'lightgray'
 adventure_bg_color = (100,130,100)
+
+
+### basic buttons
+bottom_left_button = (40, height - 40)
+bottom_right_button = (width - 40, height - 40)
+bottom_center_button = (width//2,height-40)
+
+
+button_side_len_half = 25

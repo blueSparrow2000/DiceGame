@@ -184,7 +184,6 @@ class Player(Entity):
         # gold
         write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'gold')
 
-
         # relics
 
 
@@ -192,6 +191,42 @@ class Player(Entity):
         self.required_tiles = dict()
 
     ############################################################## skill book 공사 ##############################################################
+    '''
+    Skill change interface
+    Or click skip / press enter to not replace the skill 
+    
+    On mousebutton up, call replace_current_skill
+    On the drawing, call draw_skill_to_swap & draw_skill_to_learn
+    '''
+    def replace_current_skill(self,mousepos,skill_to_learn): # called when clicked
+        idx = self.check_skill_button(mousepos)
+        if not self.check_valid_skill_index(idx):
+            return False
+
+        # replace the skill!
+        self.current_skills[idx] = skill_to_learn # at first, player can use all the skills in the character's skill book
+
+    def draw_skill_to_learn(self,screen, skill_to_learn): # skill_to_learn: string of skill name
+        # draw skill to learn
+        display_location = [width // 2, turn_text_level + 70]
+        self.skill_book.draw_skill_on_custom_location(screen, skill_to_learn, display_location)
+        # else, check whether skill
+        skill_detail = getattr(self.skill_book, "get_detail_%s"%skill_to_learn)(self)
+        write_text_description(screen, width // 2, turn_text_level + 200, skill_detail, 15,requirement_shown = False)
+
+    def draw_skill_to_swap(self,screen):
+        # draw existing skills
+        write_text(screen, self.button_x,self.button_y, "Choose a skill to replace", 20, 'darkgoldenrod')
+        self.draw_skills(screen)
+
+    def check_valid_skill_index(self,idx): # also covers case when idx == -1
+        return 0<= idx <= self.max_num_of_skills -1
+
+    def confirm_skill_replacement(self):
+        pass
+    '''
+    Skill change interface
+    '''
 
     def draw_skills(self,screen):
         for i in range(len(self.current_skills)):

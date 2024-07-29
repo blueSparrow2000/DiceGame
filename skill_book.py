@@ -30,9 +30,10 @@ class Skill_Book():
         self.button_locations = [(self.button_x, self.button_y + (2 * self.image_button_tolerance + self.button_spacing)* i) for i in range(len(self.character_skills))]
 
 
+    def draw_skill_on_custom_location(self,screen, skill_name, skill_location):
+        screen.blit(self.skill_images[skill_name], self.skill_images[skill_name].get_rect(center=skill_location))
 
     def draw_skill(self,screen, skill_name, skill_location_index):
-
         screen.blit(self.skill_images[skill_name], self.skill_images[skill_name].get_rect(center=self.button_locations[skill_location_index]))
 
 
