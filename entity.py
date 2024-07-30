@@ -11,11 +11,8 @@ Buff/Debuff to enemy: self.buffs['broken will'] = turn duration
 Buff/Debuff to one self: self.buffs['broken will'] = turn duration + 1
 
 '''
-
-
-from image_processor import *
-import pygame
 from util import *
+
 
 target_icon = load_image("icons/targeted")
 EID = 0
@@ -105,6 +102,7 @@ class Entity():
             self.health -= 5
 
         self.update_buffs()  # update buff counts
+        time.sleep(0.3)
 
     def show_hp_attributes(self,screen):
         global buff_icon_container, icon_container

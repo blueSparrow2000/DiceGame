@@ -87,7 +87,8 @@ class Mob(Enemy):
 
         self.proceed_next_pattern()
         self.end_my_turn()
-        time.sleep(0.2)
+
+
 
 class Halo(Enemy):
     def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = 32, pos = (332,mob_Y_level), attack_pattern = ['unkown', 'buff', 'attack','regen'], rank = 1 ):
