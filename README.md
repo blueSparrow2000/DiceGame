@@ -27,9 +27,11 @@ A simple dice game
 / you can have upto 6 skills maximum, so you have to dis-learn in order to learn new skills
 
 
+2024.07.30 Altar tile now works / changed board tile's shape => [location, name, Boolean] where boolean indicates whether it is a fixed tile or not
+
+
 
 # To do
-- Make altar work
 - Make shop work
 - Make campfire work
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!

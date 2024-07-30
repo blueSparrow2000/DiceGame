@@ -39,12 +39,16 @@ def player_death_screen(screen,clock,player):
 
 def adventure_loop(screen, clock, player,map):
     global background_y, background_layer_y, adventure_bg_color
+    adventure_bg_color = update_depth_color(player)
     meta_run_adventure = True
     mousepos = (0,0)
 
     while meta_run_adventure:
         # The Music in main
-        music_Q('Adventure', True)
+        if player.reached_max_depth():
+            pygame.mixer.music.stop() # no music
+        else:
+            music_Q('Adventure', True)
         run_adventure = True
 
         map.random_initialize(player)

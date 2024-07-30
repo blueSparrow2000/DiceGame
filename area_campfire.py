@@ -11,6 +11,9 @@ from util import *
 def go_to_campfire(screen,clock, player):
     game_run = True
     music_Q('cozy', True)
+    campfire_heal_amount = 20
+    player.enforeced_regen(campfire_heal_amount)
+
     while game_run:
         screen.fill('white')
 
@@ -49,6 +52,10 @@ def go_to_campfire(screen,clock, player):
 
         # draw effects
         write_text(screen, width//2, 240, 'Campfire', 30, 'gold')
+
+        write_text(screen, width//2, height//2, 'You took a rest near the campfire', 15, 'darkgoldenrod')
+        write_text(screen, width//2, height//2 + 50, '+20 HP', 15, 'red')
+
 
         # Draw player main info
         player.draw_player_info_top(screen)
