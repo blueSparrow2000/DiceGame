@@ -9,7 +9,7 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
     mousepos = (0,0)
 
     while game_run:
-        screen.fill('white')
+        screen.fill('oldlace')
 
         events = pygame.event.get()
         # Event handling

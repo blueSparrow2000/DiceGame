@@ -158,7 +158,7 @@ class Player(Entity):
             self.golds -= amount
             return True
 
-        print("not enough gold!")
+        # print("not enough gold!")
         return False
 
     def can_buy(self, amount):
@@ -252,7 +252,6 @@ class Player(Entity):
                 changed_flag = True
         self.current_skills = copy.deepcopy(self.temp_current_skills)
 
-        print(changed_flag)
         return changed_flag
 
     def reset_replacement_of_skill(self):

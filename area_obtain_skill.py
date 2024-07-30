@@ -15,7 +15,7 @@ def obtain_skill(screen,clock, player,skill_to_learn):
     current_display_text = "Hover mouse on a tile for description"
 
     while game_run:
-        screen.fill('white')
+        screen.fill('oldlace')
 
         events = pygame.event.get()
         # Event handling
