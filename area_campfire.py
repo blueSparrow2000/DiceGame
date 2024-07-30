@@ -51,10 +51,10 @@ def go_to_campfire(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, width//2, 240, 'Campfire', 30, 'gold')
+        write_text(screen, width//2, area_name_Y_level, 'Campfire', 30, 'gold')
 
-        write_text(screen, width//2, height//2, 'You took a rest near the campfire', 15, 'darkgoldenrod')
-        write_text(screen, width//2, height//2 + 50, '+20 HP', 15, 'red')
+        write_text(screen, width//2, height//2 - 100, 'You took a rest near the campfire', 15, 'darkgoldenrod')
+        write_text(screen, width//2, height//2 - 50, '+20 HP', 15, 'red')
 
 
         # Draw player main info

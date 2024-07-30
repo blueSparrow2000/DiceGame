@@ -8,6 +8,13 @@ N 명의 적에게 적용되는 공격은 이미 target_list에 적용이 된 �
 
 from util import *
 
+class DummyPlayer():
+    def __init__(self):
+        pass
+    def count_tile(self, name):
+        return 0
+
+global_dummy_player = DummyPlayer()
 
 class Skill_Book():
     def __init__(self, book_name, character_skills):
@@ -30,6 +37,16 @@ class Skill_Book():
         self.button_locations = [(self.button_x, self.button_y + (2 * self.image_button_tolerance + self.button_spacing)* i) for i in range(len(self.character_skills))]
 
 
+        self.mini_tiles = list(tile_names)
+        self.mini_tile_icons = dict()
+        for mini_tile in self.mini_tiles:
+            self.mini_tile_icons[mini_tile] = (load_image("icons/mini_tile/%s" % mini_tile))
+        self.minitile_x = width//2
+        self.minitile_y = height-40
+        self.minitile_spacing = 50
+        self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
+
+
     def draw_skill_on_custom_location(self,screen, skill_name, skill_location):
         screen.blit(self.skill_images[skill_name], self.skill_images[skill_name].get_rect(center=skill_location))
 
@@ -42,6 +59,33 @@ class Skill_Book():
             # print(self.character_skills[i]+" selected")
             return True
         return False
+
+    def show_requirement_mini_tiles(self,screen, location, skill_name, requirement_dict_given = None):
+        if not requirement_dict_given:
+            return
+
+        required_tile_x, required_tile_y = location
+        requirement_spacing = 25
+
+        requirement_dict = requirement_dict_given
+        if requirement_dict_given=="create": # create one
+            _, _, _,requirement_dict = getattr(self,skill_name +'_get_requirement')(global_dummy_player)
+
+        cnt = 0
+        for req_tile_name, req_range in requirement_dict.items():
+            content = " %d ~ %d " % req_range
+
+            if not req_range[0]:
+                content = "   ~ %d " % req_range[1]
+            elif not req_range[1]:
+                content = " %d ~   " % req_range[0]
+
+            screen.blit(self.mini_tile_icons[req_tile_name], self.mini_tile_icons[req_tile_name].get_rect(
+                center=(required_tile_x , required_tile_y + cnt * requirement_spacing)))
+            write_text(screen, required_tile_x + 40, required_tile_y + cnt * requirement_spacing,
+                       content, 20)
+
+            cnt += 1
 
     ''' 
     All the skills that the player can learn goes here
@@ -268,3 +312,4 @@ character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Ski
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1} }
 
+learnable_skills = Mirinae_skills() # dummy...

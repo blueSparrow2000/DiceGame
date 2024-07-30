@@ -205,8 +205,7 @@ class Player(Entity):
     ############################################################## skill book 공사 ##############################################################
     '''
     Skill change interface
-    Or click skip / press enter to not replace the skill 
-    
+
     On mousebutton up, call replace_current_skill
     On the drawing, call draw_skill_to_swap & draw_skill_to_learn
     '''
@@ -221,15 +220,15 @@ class Player(Entity):
 
     def draw_skill_to_learn(self,screen, skill_to_learn): # skill_to_learn: string of skill name
         # draw skill to learn
-        display_location = [width // 2, turn_text_level + 70]
+        display_location = [width // 2 , turn_text_level + 30]
         self.skill_book.draw_skill_on_custom_location(screen, skill_to_learn, display_location)
         # else, check whether skill
         skill_detail = getattr(self.skill_book, "get_detail_%s"%skill_to_learn)(self)
-        write_text_description(screen, width // 2, turn_text_level + 200, skill_detail, 15,requirement_shown = False)
+        write_text_description(screen, width // 2, turn_text_level + 120, skill_detail, 15, bg_color = None, requirement_shown = True, requirement_pos = [width // 2, turn_text_level + 170] )
 
     def draw_skill_to_swap(self,screen):
         # draw existing skills
-        write_text(screen, self.button_x,self.button_y, "Choose a skill to replace", 20, 'darkgoldenrod')
+        write_text(screen, self.button_x,self.button_y + 50, "Choose a skill to replace", 20, 'darkgoldenrod')
         self.draw_skills(screen, self.temp_current_skills)
 
     def check_valid_skill_index(self,idx): # also covers case when idx == -1
@@ -320,19 +319,21 @@ class Player(Entity):
 
 
     def show_required_tiles(self,screen):
-        cnt = 0
-        for req_tile_name,req_range in self.required_tiles.items():
-            content = " %d ~ %d " % req_range
+        self.skill_book.show_requirement_mini_tiles(screen, (self.required_tile_x, self.required_tile_y), "", requirement_dict_given=self.required_tiles)
 
-            if not req_range[0]:
-                content = "   ~ %d "%req_range[1]
-            elif not req_range[1]:
-                content = " %d ~   " % req_range[0]
-
-            screen.blit(self.mini_tile_icons[req_tile_name], self.mini_tile_icons[req_tile_name].get_rect(center= (self.required_tile_x, self.required_tile_y + cnt * self.requirement_spacing) ))
-            write_text(screen, self.required_tile_x + 40, self.required_tile_y + cnt * self.requirement_spacing,content , 20)
-
-            cnt+=1
+        # cnt = 0
+        # for req_tile_name,req_range in self.required_tiles.items():
+        #     content = " %d ~ %d " % req_range
+        #
+        #     if not req_range[0]:
+        #         content = "   ~ %d "%req_range[1]
+        #     elif not req_range[1]:
+        #         content = " %d ~   " % req_range[0]
+        #
+        #     screen.blit(self.mini_tile_icons[req_tile_name], self.mini_tile_icons[req_tile_name].get_rect(center= (self.required_tile_x, self.required_tile_y + cnt * self.requirement_spacing) ))
+        #     write_text(screen, self.required_tile_x + 40, self.required_tile_y + cnt * self.requirement_spacing,content , 20)
+        #
+        #     cnt+=1
 
 
     def end_my_turn(self): # do something at the end of the turn

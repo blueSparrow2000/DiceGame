@@ -32,11 +32,15 @@ A simple dice game
 
 
 # To do
+- Make shop work
+
 - Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)
 
-- Make shop work
 - add relics (few ~ 3)
 - Make ruin work
+
+- New debuff(for player only) 'chained': block the use of a specific tile for one turn
+- 'thorn': if current tile contains thorn tile, player gets 5 damage (deleted when board resets)
 
 - add various enemies (few ~ 3)
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher

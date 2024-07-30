@@ -47,7 +47,7 @@ def go_to_ruin(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, width//2, 240, 'Ruin', 30, 'gold')
+        write_text(screen, width//2, area_name_Y_level, 'Ruin', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)

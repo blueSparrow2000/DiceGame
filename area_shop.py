@@ -4,11 +4,8 @@ What shop can give
 > buy a skill (randomly chosen one skill) - but you need to replace a skill for that
 > buy random artifacts
 
+TBU
 > erase (= change to empty tile) a tile for some gold? (자리없을듯..)
-
-
-
-
 
 
 
@@ -26,7 +23,30 @@ If there is space in your tile list (empty tiles are more than one)
 from util import *
 from area_obtain_skill import *
 
+shop_text_description_level = 210
+
+
+
+
+
+
 def go_to_shop(screen,clock, player):
+    shop_buy_tiles = {'Attack': 3, 'Defence': 3, 'Regen': 3, 'Skill': 3, 'Joker': 3}
+    buyable_tiles = list(shop_buy_tiles.keys())
+
+    shop_image_button_tolerance = 25
+    shop_button_spacing = 10
+    shop_button_x = 50
+    shop_button_y = shop_text_description_level + 100
+    shop_bless_button_locations = [
+        (shop_button_x, shop_button_y + (4 * shop_image_button_tolerance + shop_button_spacing) * i) for i in range(len(buyable_tiles))]
+
+
+    shop_image_dict = dict()
+    for tile_name in buyable_tiles:
+        shop_image_dict[tile_name] = load_image("tiles/%s" % tile_name)
+
+
     game_run = True
     music_Q('Encounter', True)
     while game_run:
@@ -66,10 +86,29 @@ def go_to_shop(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, width//2, 240, 'Shop', 30, 'gold')
+        write_text(screen, width//2, area_name_Y_level, 'Shop', 30, 'gold')
 
         # Draw player main info
         player.draw_player_info_top(screen)
+
+
+
+        # buy tiles
+        # shop_text_description_level
+
+
+
+
+        # buy a skill (randomly chosen one skill) - but you need to replace a skill for that
+
+
+
+
+
+
+
+        # buy random artifacts - TBU
+
 
 
         if mouse_particle_list:  # if not empty

@@ -34,7 +34,7 @@ def write_text(surf, x, y, text, size,color='black',bg_color = None): #(50, 200,
 '''
 알아서 길이별로 잘라서 잘 보여주는 함수
 '''
-def write_text_description(surf, x, y, text, size,color='black',bg_color = None, requirement_shown = True):
+def write_text_description(surf, x, y, text, size,color='black',bg_color = None, requirement_shown = True, requirement_pos = []):
     if not text:
         return
     text_list = text.split('|')
@@ -60,7 +60,15 @@ def write_text_description(surf, x, y, text, size,color='black',bg_color = None,
         write_text(surf, center_x_level, y_level+i*size, content_blocks[i], size, color, bg_color)
 
     if requirement_shown:
-        write_text(surf, center_x_level, requirement_level, "~ Requirements ~", 20, color, bg_color)
+        req_tile_x, req_tile_y = center_x_level, requirement_level
+        if not requirement_pos == []:
+            req_tile_x, req_tile_y = requirement_pos
+
+        write_text(surf, req_tile_x, req_tile_y, "~ Requirements ~", 20, color, bg_color)
+
+
+
+
 
 
 def check_inside_button(mouse_pos,button_center, button_side_len_half):

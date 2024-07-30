@@ -106,7 +106,7 @@ while meta_run:
                     run_character_selection = False
 
                     #### set character abilities (like fixing a tile etc) ####
-
+                    obtain_skill(screen, clock, player, 'poison_dart')
                     # for i in range(1):
                     #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string
                     #     obtain_skill(screen, clock, player, 'poison_dart')

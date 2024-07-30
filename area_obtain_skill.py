@@ -7,6 +7,7 @@ CAN USE ONE AT A TIME ONLY! (other wise, loop)
 
 '''
 from util import *
+from skill_book import *
 
 def obtain_skill(screen,clock, player,skill_to_learn):
     game_run = True
@@ -81,6 +82,8 @@ def obtain_skill(screen,clock, player,skill_to_learn):
         player.draw_skill_to_swap(screen)
 
         write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
+        learnable_skills.show_requirement_mini_tiles(screen, [width // 2 - 40, turn_text_level + 200], skill_to_learn, requirement_dict_given = "create")
+
 
 
         if mouse_particle_list:  # if not empty

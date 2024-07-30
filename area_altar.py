@@ -143,7 +143,7 @@ def go_to_altar(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, width//2, 160, 'Altar', 30, 'gold')
+        write_text(screen, width//2, area_name_Y_level, 'Altar', 30, 'gold')
 
         write_text(screen,width//2 , altar_text_description_level, 'You got a curse', 30, 'maroon')
         screen.blit(altar_images[curse], altar_images[curse].get_rect(center=[width//2,altar_text_description_level+75 ]))
