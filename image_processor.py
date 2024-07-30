@@ -96,5 +96,5 @@ back_img_white = load_image("icons/back_white")
 skip_img_white = load_image("icons/skip_white")
 confirm_img_white = load_image("icons/confirm_white")
 
-
+sold_out = load_image("icons/sold_out")
 

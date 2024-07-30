@@ -22,6 +22,10 @@ area_name_Y_level = 160
 tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
 joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 
+# other variables
+runnable_skill_price_dict ={'poison_dart':10, 'holy_barrier':30}
+
+
 
 # move background
 background_y = -470
@@ -41,7 +45,7 @@ option_effect_color = 'gold'
 
 
 # screen colors
-fight_bg_color = 'lightgray'
+fight_bg_color = 'lightgray' #  'oldlace'
 adventure_bg_color = (100,130,100)
 
 

@@ -23,23 +23,35 @@ If there is space in your tile list (empty tiles are more than one)
 from util import *
 from area_obtain_skill import *
 
+
+def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
+    if target_tile in dictionary: # only when exists
+        if (dictionary[target_tile][target_index]<=0):
+            print("WARNING: possible error in the code (not deleted properly somewhere)\nREASON: Delete entity with amount 0 or less than 0")
+        dictionary[target_tile][target_index] -= 1
+        if dictionary[target_tile][target_index] <= 0: # delete entry if no longer exist
+            del dictionary[target_tile]
+
+
 shop_text_description_level = 210
 
-
-
-
-
+shop_text_color = 'black'
 
 def go_to_shop(screen,clock, player):
-    shop_buy_tiles = {'Attack': 3, 'Defence': 3, 'Regen': 3, 'Skill': 3, 'Joker': 3}
+    shop_buy_tiles = {'Attack': [3, 5], 'Defence': [3, 5], 'Regen': [3, 10], 'Skill': [3, 10], 'Joker':[3, 20]}
     buyable_tiles = list(shop_buy_tiles.keys())
 
     shop_image_button_tolerance = 25
     shop_button_spacing = 10
     shop_button_x = 50
     shop_button_y = shop_text_description_level + 100
-    shop_bless_button_locations = [
-        (shop_button_x, shop_button_y + (4 * shop_image_button_tolerance + shop_button_spacing) * i) for i in range(len(buyable_tiles))]
+    shop_button_locations = [
+        (shop_button_x+ (3*shop_image_button_tolerance + shop_button_spacing + 10) * i, shop_button_y ) for i in range(len(buyable_tiles))]
+
+    shop_skill_button_loc = [width//2, shop_text_description_level + 300]
+    skill_list = list(runnable_skill_price_dict.keys())
+    skill_to_sell = random.choice(skill_list)
+    price_of_skill = runnable_skill_price_dict[skill_to_sell]
 
 
     shop_image_dict = dict()
@@ -48,9 +60,10 @@ def go_to_shop(screen,clock, player):
 
 
     game_run = True
+    mousepos = (0,0)
     music_Q('Encounter', True)
     while game_run:
-        screen.fill('white')
+        screen.fill('olive')
 
         events = pygame.event.get()
         # Event handling
@@ -68,9 +81,35 @@ def go_to_shop(screen,clock, player):
 
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
-                (xp, yp) = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
-                # do fight logic on player's turn
+                mousepos= pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
+
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    # exit
+                    game_run = False
+                    break
+
+                # buy immediately a tile
+                if player.board.check_tile_exists_in_permanent('Empty'): # only if player has a space to buy a tile
+                    for i in range(len(shop_button_locations)):
+                        tile_name = buyable_tiles[i]
+                        if tile_name in shop_buy_tiles.keys() and check_inside_button(mousepos, shop_button_locations[i], shop_image_button_tolerance): # if there exists remaining tile and clicked
+                            price_of_tile = shop_buy_tiles[tile_name][1]
+                            if player.pay_gold(price_of_tile): # true, which means the player paid
+                                safe_delete_dict_one_depth_2(shop_buy_tiles,0, tile_name) # delete one in the shop
+                                player.board.permanently_replace_a_blank_tile_to(tile_name) # add a tile to a player
+                            else:
+                                pass # notify player that you dont have enough gold! (by blinking gold color e.t.c.)
+
+
+                # attempt to buy a skill
+                if check_inside_button(mousepos, shop_skill_button_loc, shop_image_button_tolerance):
+                    if player.can_buy(price_of_skill): #only when player has enough gold - when to pay?
+                        bought = obtain_skill(screen, clock, player, skill_to_sell)
+                        if bought:
+                            player.pay_gold(price_of_skill)
+
+
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -85,30 +124,64 @@ def go_to_shop(screen,clock, player):
             break
 
 
-        # draw effects
-        write_text(screen, width//2, area_name_Y_level, 'Shop', 30, 'gold')
-
-        # Draw player main info
-        player.draw_player_info_top(screen)
 
 
+
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
         # buy tiles
-        # shop_text_description_level
+        write_text(screen, width//2, shop_text_description_level+40,
+                           "Buy tiles", 20, shop_text_color)
 
+        for i in range(len(shop_button_locations)):
+            tile_name = buyable_tiles[i]
+            if tile_name in shop_buy_tiles.keys(): # draw only when corresponding tile exists
+                remaining_tiles = shop_buy_tiles[tile_name][0]
+
+                screen.blit(shop_image_dict[tile_name],
+                            shop_image_dict[tile_name].get_rect(center=shop_button_locations[i]))
+                write_text(screen, shop_button_locations[i][0], shop_button_locations[i][1] + 50,
+                           tile_name, 15, shop_text_color)
+                price_of_tile = shop_buy_tiles[tile_name][1]
+                write_text(screen, shop_button_locations[i][0], shop_button_locations[i][1] + 65,
+                           "%d g"%price_of_tile, 15, 'gold')
+                write_text(screen, shop_button_locations[i][0], shop_button_locations[i][1] + 80,
+                           "%d left"%remaining_tiles, 15, shop_text_color)
+
+            else:
+                # draw sold out icon
+                screen.blit(sold_out, sold_out.get_rect(center=shop_button_locations[i]))
 
 
 
         # buy a skill (randomly chosen one skill) - but you need to replace a skill for that
+        write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] - 50,
+                           "Buy a skill", 20, shop_text_color)
 
-
-
+        learnable_skills.draw_skill_on_custom_location(screen, skill_to_sell, shop_skill_button_loc)
+        write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 50,
+                           "%s: %d g"%(skill_to_sell, price_of_skill), 15, 'gold')
+        write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 75,
+                           "NOTE: Must be exchanged for previously learned skills", 15, 'white')
+        #
 
 
 
 
         # buy random artifacts - TBU
 
+
+
+
+        # draw effects
+        write_text(screen, width//2, area_name_Y_level, 'Shop', 30, 'gold')
+
+        # Draw player main info
+        player.draw_player_info_top(screen)
 
 
         if mouse_particle_list:  # if not empty

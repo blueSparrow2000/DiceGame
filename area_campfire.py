@@ -10,12 +10,14 @@ from util import *
 
 def go_to_campfire(screen,clock, player):
     game_run = True
+    mousepos = (0,0)
+
     music_Q('cozy', True)
     campfire_heal_amount = 20
     player.enforeced_regen(campfire_heal_amount)
 
     while game_run:
-        screen.fill('white')
+        screen.fill('oldlace')
 
         events = pygame.event.get()
         # Event handling
@@ -33,9 +35,13 @@ def go_to_campfire(screen,clock, player):
 
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
-                (xp, yp) = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
-                # do fight logic on player's turn
+                mousepos = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
+
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    # exit
+                    game_run = False
+                    break
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -49,6 +55,12 @@ def go_to_campfire(screen,clock, player):
         if not game_run:
             break
 
+
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
         # draw effects
         write_text(screen, width//2, area_name_Y_level, 'Campfire', 30, 'gold')

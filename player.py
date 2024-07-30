@@ -43,7 +43,7 @@ class Player(Entity):
 
         ### game variables
         self.current_depth = 0
-        self.golds = 0
+        self.golds = 100
         self.items=[]
         self.giant_HP_width = 30
         self.giant_HP_pos = [width//2,self.giant_HP_width//2]
@@ -153,6 +153,17 @@ class Player(Entity):
     def get_gold(self, amount):
         self.golds += amount
 
+    def pay_gold(self, amount):
+        if self.can_buy(amount):
+            self.golds -= amount
+            return True
+
+        print("not enough gold!")
+        return False
+
+    def can_buy(self, amount):
+        return self.golds >= amount
+
     def get_drop(self, drop_list):
         self.items.extend(drop_list)
 
@@ -235,7 +246,15 @@ class Player(Entity):
         return 0<= idx <= self.max_num_of_skills -1
 
     def confirm_skill_replacement(self):
+        changed_flag = False
+        for i in range(len(self.temp_current_skills)):
+            if not self.temp_current_skills[i] == self.current_skills[i]:
+                changed_flag = True
         self.current_skills = copy.deepcopy(self.temp_current_skills)
+
+        print(changed_flag)
+        return changed_flag
+
     def reset_replacement_of_skill(self):
         self.temp_current_skills = copy.deepcopy(self.current_skills)
 

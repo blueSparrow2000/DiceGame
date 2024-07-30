@@ -6,9 +6,10 @@ from util import *
 
 def go_to_area(screen,clock, player):
     game_run = True
+    mousepos = (0,0)
 
     while game_run:
-        screen.fill('white')
+        screen.fill('oldlace')
 
         events = pygame.event.get()
         # Event handling
@@ -26,9 +27,14 @@ def go_to_area(screen,clock, player):
 
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
-                (xp, yp) = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+                mousepos = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
                 # do fight logic on player's turn
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    # exit
+                    game_run = False
+                    break
+
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -41,6 +47,12 @@ def go_to_area(screen,clock, player):
 
         if not game_run:
             break
+
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
 
         # draw effects

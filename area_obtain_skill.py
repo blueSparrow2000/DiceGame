@@ -41,11 +41,11 @@ def obtain_skill(screen,clock, player,skill_to_learn):
 
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     # confirm changes
-                    player.confirm_skill_replacement()
+                    bought_skill = player.confirm_skill_replacement()
 
                     # exit
                     game_run = False
-                    break
+                    return bought_skill
 
                 elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
                     # go to initial stage and do it again

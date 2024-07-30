@@ -43,6 +43,8 @@ altar_images = dict()
 for name in altar_curse_bless_names:
     altar_images[name] = load_image("altar/%s"%name)
 
+altar_text_color = 'white'
+
 def exit_altar():
     pass
 
@@ -80,7 +82,7 @@ def go_to_altar(screen,clock, player):
     game_run = True
     music_Q('tense', True)
     while game_run:
-        screen.fill('white')
+        screen.fill('darkslateblue')
 
         events = pygame.event.get()
         # Event handling
@@ -146,11 +148,11 @@ def go_to_altar(screen,clock, player):
         write_text(screen, width//2, area_name_Y_level, 'Altar', 30, 'gold')
 
         write_text(screen,width//2 , altar_text_description_level, 'You got a curse', 30, 'maroon')
-        screen.blit(altar_images[curse], altar_images[curse].get_rect(center=[width//2,altar_text_description_level+75 ]))
-        write_text(screen,width//2 , altar_text_description_level+150, curse, 15, 'maroon')
+        screen.blit(altar_images[curse], altar_images[curse].get_rect(center=[width//2,altar_text_description_level+90 ]))
+        write_text(screen,width//2 , altar_text_description_level+150, curse, 20, 'maroon')
 
 
-        write_text(screen,width//2 , altar_text_description_level + 300, 'Choose one of the bless and confirm', 15)
+        write_text(screen,width//2 , altar_text_description_level + 270, 'Choose one of the bless and confirm', 20,altar_text_color)
 
 
         for i in range(len(altar_bless_button_locations)):

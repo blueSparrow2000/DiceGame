@@ -13,16 +13,22 @@ class DummyPlayer():
         pass
     def count_tile(self, name):
         return 0
-
 global_dummy_player = DummyPlayer()
+
+
+
+
+
+
 
 class Skill_Book():
     def __init__(self, book_name, character_skills):
+        global runnable_skill_price_dict
         self.my_name = book_name
 
         self.skill_images = dict()
         # learnable skill names here (only used inside this class)
-        self.learnable_skill_list = ['poison_dart', 'holy_barrier']
+        self.learnable_skill_list = list(runnable_skill_price_dict.keys())
         for skill_name in self.learnable_skill_list:
             self.skill_images[skill_name] = load_image("skills/learnable_skills/%s" % (skill_name))
         self.character_skills = character_skills
