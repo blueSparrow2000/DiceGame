@@ -73,13 +73,12 @@ while meta_run:
     # warning: some tiles cannot reach boss room! Becareful to choose!
 
     player = Player(character_name, character_skills, Board(character_tiles, planar_figure_idx))
-    ######### TILE FIX TEST ##########
-    # tile_name_to_fix = 'Karma'
-    # mousepos = (95,535)#(39,479)#(65,505)
-    # player.board.permenantly_add_fixed_tile_location(player.board.get_index_from_pos(mousepos), tile_name_to_fix)
-    ######### TILE FIX TEST ##########
     map = Map()
     print("Starting a new game!")
+
+    ###### reset global data ########
+    reset_altar()
+
 
     while run_character_selection:
         for event in pygame.event.get():
@@ -105,6 +104,8 @@ while meta_run:
                     break
                 elif event.key == pygame.K_RETURN:
                     run_character_selection = False
+
+                    #### set character abilities (like fixing a tile etc) ####
 
                     # for i in range(1):
                     #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string

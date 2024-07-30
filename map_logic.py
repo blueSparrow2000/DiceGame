@@ -37,7 +37,7 @@ class Map():
         self.imaginary_location = [5,3] # 5,3에서 시작
         self.path_finder_fail = False
 
-        self.move_speed = 2 # must divide self.side_length
+        self.move_speed = 10#2 # must divide self.side_length
 
         self.break_limit = False
 

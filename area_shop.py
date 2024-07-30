@@ -24,7 +24,8 @@ If there is space in your tile list (empty tiles are more than one)
 '''
 
 from util import *
-import random
+from area_obtain_skill import *
+
 def go_to_shop(screen,clock, player):
     game_run = True
     music_Q('Encounter', True)

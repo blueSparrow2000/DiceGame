@@ -168,10 +168,20 @@ class Player(Entity):
         return self.current_depth=='LIMIT'
 
 
+    def set_max_health(self,max_health):
+        self.max_health = max_health
+        if self.health > self.max_health:
+            self.health = self.max_health
+
     def draw_player_info_top(self,screen):
 
         draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100 * self.health / self.max_health, 'coral')
+
+        draw_health = self.max_health
+        if self.max_health<=0:
+            draw_health = 1
+
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100 * self.health / draw_health, 'coral')
         draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , width, 5, 100, 'gray')
 
         write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
@@ -330,6 +340,10 @@ class Player(Entity):
         self.current_skill_idx = -1 # reset this
         self.current_tile = dict()
 
+        # SHUFFLE: this is activated when pressed skip button
+        self.board.turn_end_shuffle()
+
+        time.sleep(0.3)
 
     def new_fight(self):
         for k,v in self.buffs.items():

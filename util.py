@@ -4,6 +4,7 @@ import time
 from music import *
 from variables import *
 import math
+import random
 
 
 def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)

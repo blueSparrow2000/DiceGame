@@ -136,6 +136,28 @@ class Board():
         self.permanent_fix_exist_flag = False
         ##################### FIXED TILE ######################
 
+        self.out_of_board_protection = True
+        self.irregular_shape = False #'stripe'#False#'stripe'
+        self.board_shuffle_every_turn = False
+
+    def set_out_of_board_protection(self, bool_input):
+        self.out_of_board_protection = bool_input
+
+    def set_irregular_shape(self, shape):
+        self.irregular_shape = shape
+
+    def set_board_shuffle(self, bool_input):
+        self.board_shuffle_every_turn = bool_input
+    '''
+    You can change board reset frequency by calling the below function. Initially it is 6 turns.
+    '''
+    def change_board_reset_frequency_by(self, reset_turns=1):
+        if self.board_reset_turn <= reset_turns:
+            print("cannot decrease board reset turn")
+            return
+        self.board_reset_turn -= reset_turns
+
+
     ################################################## permenant changes ##################################################
 
     ##################### FIXED TILE ######################
@@ -272,11 +294,6 @@ class Board():
 
 
 
-    '''
-    You can change board reset frequency by calling the below function. Initially it is 6 turns.
-    '''
-    def change_board_reset_frequency_to(self, reset_turns):
-        self.board_reset_turn = reset_turns
 
     '''
     Re calculate # of empty tiles
@@ -335,7 +352,13 @@ class Board():
 
         self.board_side_length -= 1
         self.shrink_recalculate_board_offsets()
+        for fixed_tile_idx in list(self.permanently_fixed_tiles.keys()):# if index goes beyond, then delete the tile
+            if fixed_tile_idx > (self.board_side_length)**2:
+                del self.permanently_fixed_tiles[fixed_tile_idx]
+
         self.reset_permanent_board_dict()
+
+
 
 
     def shrink_recalculate_board_offsets(self):
@@ -400,10 +423,49 @@ class Board():
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
         self.reset(True)
 
+
     def confirm_using_tile(self):
         self.board = self.temp_board
 
-    def reset(self, enforced=False, irregular_reset_shape = None):  # reset the board (each 6 turn)
+        # SHUFFLE: this is activated when not pressed skip button
+        self.turn_end_shuffle()
+
+    def turn_end_shuffle(self):
+        # check to reshuffle or not - just shuffle the contents!
+        if self.board_shuffle_every_turn:
+            self.shuffle_board()
+
+
+    def shuffle_board(self):
+        not_fixed_tile_index = []
+        locations_to_shuffle = []
+        # get locations to shuffle
+        for i in range(len(self.board)):
+            tile_location, tile_name, is_fixed = self.board[i]
+            if is_fixed:
+                continue
+            not_fixed_tile_index.append(i)
+            locations_to_shuffle.append(tile_location)
+
+        random.shuffle(locations_to_shuffle)
+
+        # assign new location to designated places
+        cnt = 0
+        for i in not_fixed_tile_index:
+            self.board[i][0] = locations_to_shuffle[cnt]
+            cnt += 1
+
+
+
+    def check_a_tile_is_a_fixed_tile_with_index(self, location_index):
+        # check this index is for fixed tile or not
+        if location_index in self.permanently_fixed_tiles.keys():
+            return True
+        return False
+
+
+
+    def reset(self, enforced=False):  # reset the board (each 6 turn)
         '''
         This function only resets content of current board
 
@@ -434,14 +496,16 @@ class Board():
                 board_temp.insert(fixed_tile_idx,self.permanently_fixed_tiles[fixed_tile_idx])
             ######### fixed tile handling ##########
 
-            if irregular_reset_shape:
-                self.irregular_shapify(board_temp, irregular_reset_shape)
+            if self.irregular_shape:
+                self.irregular_shapify(board_temp)
             else:
                 self.boardify(board_temp) # set up a board
             ############### RESET BOARD ###############
             self.current_turn = 0 # reset turn
 
+        # print(self.board)
         self.current_turn += 1
+
 
     def clear_board(self):
         self.board = [] # initialize board
@@ -455,6 +519,7 @@ class Board():
             board_tile_name = self.board[i][1]
             if board_tile_name == target_tile:
                 self.temp_board[i][1] = convert_tile  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
+                self.temp_board[i][2] = False  # not fixed tile
 
 
     def consume_all_tiles_on_board(self, target_tile): # consume all tiles and return how many are (actually) consumed
@@ -463,6 +528,7 @@ class Board():
             current_tile_name = self.board[i][1]
             if current_tile_name == target_tile:
                 self.temp_board[i][1] = 'Used'  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
+                self.temp_board[i][2] = False # not fixed tile
                 how_many_consumed += 1
         return how_many_consumed
 
@@ -475,15 +541,17 @@ class Board():
         return how_many
 
 
-    def irregular_shapify(self, board_temp, irregular_reset_shape = 'stripe'):
+    def irregular_shapify(self, board_temp):
         # calculate irregular locations!
-        if irregular_reset_shape=='stripe':
+        if self.irregular_shape=='stripe':
             for i in range(self.board_side_length):
                 for j in range(self.board_side_length):
-                    board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i * 1.1], board_temp[i*self.board_side_length + j] ]
+                    board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i * 1.1], board_temp[i*self.board_side_length + j] ,False] # False: not a fixed tile
+                    if self.check_a_tile_is_a_fixed_tile_with_index(i*self.board_side_length + j):
+                        board_tile[2]=True
                     self.board.append(board_tile)
 
-        elif irregular_reset_shape=='fragmented':
+        elif self.irregular_shape=='fragmented':
             spiral_coeff = 1
             distance_coeff = 5
             amount = len(board_temp)
@@ -495,11 +563,14 @@ class Board():
                     FRAGMENTED_offsets.append([deviance[0] + purturvation[0],deviance[1] + purturvation[1] ])
             for i in range(len(FRAGMENTED_offsets)):
                 fragment = FRAGMENTED_offsets[i]
-                board_tile = [[width//2 + fragment[0], (height//4)*3 + fragment[1]], board_temp[i] ]
+                board_tile = [[width//2 + fragment[0], (height//4)*3 + fragment[1]], board_temp[i], False]
+                if self.check_a_tile_is_a_fixed_tile_with_index(i):
+                    board_tile[2] = True
+
                 self.board.append(board_tile)
-        elif irregular_reset_shape=='diamond':
+        elif self.irregular_shape=='diamond':
             pass
-        elif irregular_reset_shape == 'circular':
+        elif self.irregular_shape == 'circular':
             pass
 
     def boardify(self,board_temp): # change images where board is changed to used
@@ -510,7 +581,9 @@ class Board():
         '''
         for i in range(self.board_side_length):
             for j in range(self.board_side_length):
-                board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i], board_temp[i*self.board_side_length + j] ]
+                board_tile = [[self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i], board_temp[i*self.board_side_length + j],False ]
+                if self.check_a_tile_is_a_fixed_tile_with_index(i * self.board_side_length + j):
+                    board_tile[2] = True
                 self.board.append(board_tile)
 
     def draw(self,screen, step, mousepos):
@@ -550,7 +623,7 @@ class Board():
         # print(amount_of_tiles)
         return amount_of_tiles == 6
 
-    def collect_tiles(self,mousepos, out_of_board_protection = True): # center tile이 보드의 어느 타일을 가렸는지 준다
+    def collect_tiles(self,mousepos): # center tile이 보드의 어느 타일을 가렸는지 준다
         if mousepos[1] < self.board_Y_selectable:  # not on the board
             return False
 
@@ -564,12 +637,12 @@ class Board():
                 board_tile_name = self.board[i][1]
                 if check_inside_button(pc, board_tile_location, self.side_length//2): # whether ith tile is inside in one sector of planar figure
                     safe_tile_add_one(tiles,board_tile_name)  # add a tile to the current tile collection
-                    self.temp_board[i] = [board_tile_location, 'Used']
+                    self.temp_board[i] = [board_tile_location, 'Used',False] # it becomes not fixed after used
                     #break # only one tile can be inside a pc
 
         # print(tiles)
 
-        if out_of_board_protection and (not self.check_tile_sum_to_6(tiles)): # detect whether planar figure is outside a board when clicking the board: BOSS FIGHT 에서는 out_of_board_protection = False로 줄거임
+        if self.out_of_board_protection and (not self.check_tile_sum_to_6(tiles)): # detect whether planar figure is outside a board when clicking the board: BOSS FIGHT 에서는 out_of_board_protection = False로 줄거임
             return False
 
         # check whether some unusable tile is inside the planar figure

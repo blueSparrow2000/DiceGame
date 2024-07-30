@@ -102,8 +102,6 @@ class Entity():
             self.health -= 5
 
         self.update_buffs()  # update buff counts
-        if self.my_type == 'player':
-            time.sleep(0.3)
 
     def show_hp_attributes(self,screen):
         global buff_icon_container, icon_container
@@ -160,6 +158,7 @@ class Entity():
 
         # consider absorption first
         damage = max(0, damage - self.absorption)
+        # print(self.my_name,'got damage of',  damage_temp)
 
         if (self.toxined): # ignores defence
             self.health -= damage

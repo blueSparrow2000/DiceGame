@@ -3,8 +3,6 @@ from area_ruin import *
 from area_campfire import *
 from area_altar import *
 from area_shop import *
-from area_obtain_skill import *
-from area_fix_a_tile import *
 from area_fight import *
 
 def exit():
@@ -17,6 +15,26 @@ def update_depth_color(player):
     if player.reached_max_depth():
         depth = -100
     return (100 + depth, 130 + depth, 100 + depth)
+
+def player_death_screen(screen,clock,player):
+    run_lost_screen = True
+    while run_lost_screen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                return False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                    run_lost_screen = False
+                    break
+                elif event.key == pygame.K_RETURN:
+                    run_lost_screen = False
+                    break
+        screen.fill(fight_bg_color)
+        write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
+        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+        pygame.display.flip()
+        clock.tick(game_fps)
 
 
 def adventure_loop(screen, clock, player,map):
@@ -39,6 +57,12 @@ def adventure_loop(screen, clock, player,map):
         activate_tile = False
         is_valid, which_event, move_depth = False, False, 0
 
+        if player.health <= 0:  # check player death first
+            print('player lost!')
+            player_death_screen(screen, clock, player)
+            meta_run_adventure = False
+            run_lost_screen = False
+            return True  # try again for other characters
 
         while run_adventure:
             # keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들
@@ -154,26 +178,12 @@ def adventure_loop(screen, clock, player,map):
                         time.sleep(0.5)
                         sound_effects['playerdeath'].play()
                         pygame.mixer.music.stop()
-                        run_lost_screen = True
-                        while run_lost_screen:
-                            for event in pygame.event.get():
-                                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                                    meta_run_adventure = False
-                                    run_lost_screen = False
-                                    return False
 
-                                if event.type == pygame.KEYDOWN:
-                                    if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                                        run_lost_screen = False
-                                        break
-                                    elif event.key == pygame.K_RETURN:
-                                        run_lost_screen = False
-                                        break
-                            screen.fill(fight_bg_color)
-                            write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
-                            write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
-                            pygame.display.flip()
-                            clock.tick(game_fps)
+                        ###############################
+                        player_death_screen(screen, clock, player)
+
+                        meta_run_adventure = False
+                        run_lost_screen = False
 
                         return True # try again for other characters
                     else:
