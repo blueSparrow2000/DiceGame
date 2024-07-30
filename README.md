@@ -27,14 +27,16 @@ A simple dice game
 / you can have upto 6 skills maximum, so you have to dis-learn in order to learn new skills
 
 
-2024.07.30 Altar, Campfire section now works / changed board tile's shape => [location, name, Boolean] where boolean indicates whether it is a fixed tile or not
+2024.07.30 Altar, Shop, Campfire area now works / changed board tile's shape => [location, name, Boolean] where boolean indicates whether it is a fixed tile or not
+
+
+2024.07.31 Make main menu & add relics? (final touch before ruins!)
 
 
 
 # To do
-- Make shop work
-
 - Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)
+- Implement altar completely: tile swap curse
 
 - add relics (few ~ 3)
 - Make ruin work

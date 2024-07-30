@@ -106,6 +106,7 @@ while meta_run:
                     run_character_selection = False
 
                     #### set character abilities (like fixing a tile etc) ####
+                    go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
                     # for i in range(1):

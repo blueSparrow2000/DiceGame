@@ -30,7 +30,6 @@ from util import *
 from area_fix_a_tile import *
 import copy
 
-
 altar_text_description_level = 210
 altar_bless_reference = ['decrease board reset frequency by one','board get shuffled every turn','shrink the board size by one',
                'obtain one fixable tile','planar figure can escape the board', 'change all tile of type_1 to type_2']
@@ -43,7 +42,8 @@ altar_images = dict()
 for name in altar_curse_bless_names:
     altar_images[name] = load_image("altar/%s"%name)
 
-altar_text_color = 'white'
+altar_text_color = 'gold'
+
 
 def exit_altar():
     pass
@@ -158,7 +158,7 @@ def go_to_altar(screen,clock, player):
         for i in range(len(altar_bless_button_locations)):
             bless_name = bless_list[i]
             screen.blit(altar_images[bless_name], altar_images[ bless_name].get_rect(center=altar_bless_button_locations[i]))
-            write_text(screen, altar_bless_button_locations[i][0]+200, altar_bless_button_locations[i][1], bless_name, 15, 'darkgoldenrod')
+            write_text(screen, altar_bless_button_locations[i][0]+200, altar_bless_button_locations[i][1], bless_name, 17, 'darkgoldenrod')
 
         # Draw player main info
         player.draw_player_info_top(screen)
@@ -176,7 +176,7 @@ def go_to_altar(screen,clock, player):
                     mouse_particle_list.remove(mouse_particle)
                 factor = delta / water_draw_time_mouse
                 radi = calc_drop_radius(factor, mouse_particle_radius)
-                pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
+                pygame.draw.circle(screen, altar_effect_color, position, radi, particle_width_mouse)
 
         pygame.display.flip()
         clock.tick_busy_loop(game_fps)

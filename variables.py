@@ -39,10 +39,12 @@ particle_width = 6
 particle_width_mouse = 3
 mouse_particle_radius = 5
 droplet_radius = 33
-effect_color = (150, 200, 240)
+# mouse color
+effect_color = 'darkgoldenrod'#(150, 200, 240)
 adventure_effect_color = 'darkgoldenrod'
 option_effect_color = 'gold'
-
+altar_effect_color = 'black'
+shop_effect_color = 'gold'
 
 # screen colors
 fight_bg_color = 'lightgray' #  'oldlace'
