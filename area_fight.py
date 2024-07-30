@@ -105,13 +105,11 @@ def fight(screen, clock, player):
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
                 player.draw(screen)
                 player.draw_player_info_top(screen)  # Draw player main info
-                for entity in enemies:
-                    entity.draw(screen)
+                for entity_draw in enemies:
+                    entity_draw.draw(screen)
                 pygame.display.flip()
-
                 clock.tick_busy_loop(game_fps)
-
-                # time.sleep(0.2)
+                time.sleep(0.2)
 
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies)

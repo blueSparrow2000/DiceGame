@@ -102,7 +102,8 @@ class Entity():
             self.health -= 5
 
         self.update_buffs()  # update buff counts
-        time.sleep(0.3)
+        if self.my_type == 'player':
+            time.sleep(0.3)
 
     def show_hp_attributes(self,screen):
         global buff_icon_container, icon_container
