@@ -53,6 +53,8 @@ def go_to_shop(screen,clock, player):
     skill_to_sell = random.choice(skill_list)
     price_of_skill = runnable_skill_price_dict[skill_to_sell]
 
+    shop_relic_button_loc = [width//2, shop_text_description_level + 500]
+
 
     shop_image_dict = dict()
     for tile_name in buyable_tiles:
@@ -109,6 +111,7 @@ def go_to_shop(screen,clock, player):
                         if bought:
                             player.pay_gold(price_of_skill)
 
+                # buy relics
 
 
             if event.type == pygame.KEYDOWN:
@@ -122,9 +125,6 @@ def go_to_shop(screen,clock, player):
 
         if not game_run:
             break
-
-
-
 
 
         # draw button
@@ -160,21 +160,22 @@ def go_to_shop(screen,clock, player):
 
         # buy a skill (randomly chosen one skill) - but you need to replace a skill for that
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] - 50,
-                           "Buy a skill", 20, shop_text_color)
+                           "Buy a freshly obtained skill", 20, shop_text_color)
 
         learnable_skills.draw_skill_on_custom_location(screen, skill_to_sell, shop_skill_button_loc)
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 50,
                            "%s: %d g"%(skill_to_sell, price_of_skill), 15, 'gold')
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 75,
                            "NOTE: Must be exchanged for previously learned skills", 15, 'white')
-        #
-
 
 
 
         # buy random artifacts - TBU
+        write_text(screen, shop_relic_button_loc[0], shop_relic_button_loc[1] - 50,
+                           "Buy relics", 20, shop_text_color)
 
-
+        write_text(screen, shop_relic_button_loc[0], shop_relic_button_loc[1],
+                           "TBU", 20, shop_text_color)
 
 
         # draw effects

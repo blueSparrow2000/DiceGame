@@ -47,7 +47,7 @@ option_effect_color = 'gold'
 # screen colors
 fight_bg_color = 'lightgray' #  'oldlace'
 adventure_bg_color = (100,130,100)
-
+terracotta = (120, 110, 100)
 
 ### basic buttons
 bottom_left_button = (40, height - 40)

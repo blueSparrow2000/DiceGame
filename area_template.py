@@ -9,7 +9,7 @@ def go_to_area(screen,clock, player):
     mousepos = (0,0)
 
     while game_run:
-        screen.fill('oldlace')
+        screen.fill(terracotta)
 
         events = pygame.event.get()
         # Event handling

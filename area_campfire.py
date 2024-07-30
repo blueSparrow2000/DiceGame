@@ -17,7 +17,7 @@ def go_to_campfire(screen,clock, player):
     player.enforeced_regen(campfire_heal_amount)
 
     while game_run:
-        screen.fill('oldlace')
+        screen.fill(terracotta)
 
         events = pygame.event.get()
         # Event handling

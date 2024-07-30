@@ -11,8 +11,8 @@ def go_to_ruin(screen,clock, player):
     game_run = True
 
     while game_run:
-        screen.fill('white')
-
+        screen.fill('olivedrab')
+        screen.fill('darkolivegreen')
         events = pygame.event.get()
         # Event handling
         keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들 # SHOULD BE CALLED AFTER pygame.event.get()!

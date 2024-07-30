@@ -43,7 +43,7 @@ class Player(Entity):
 
         ### game variables
         self.current_depth = 0
-        self.golds = 100
+        self.golds = 0
         self.items=[]
         self.giant_HP_width = 30
         self.giant_HP_pos = [width//2,self.giant_HP_width//2]
