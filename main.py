@@ -32,8 +32,9 @@ from player import Player
 from board import *
 from util import *
 from skill_book import *
-
 from area_map import *
+from relic import *
+
 
 pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
@@ -131,8 +132,9 @@ while meta_run:
 
                     run_character_selection = False
                     #### set character abilities here (like fixing a tile etc) ####
-                    fix_a_tile(screen, clock, player, 'Defence')
-                    go_to_altar(screen, clock, player)
+                    # obtain_skill(screen, clock, player, 'poison_dart')
+                    # fix_a_tile(screen, clock, player, 'Defence')
+                    # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
                     # for i in range(1):
@@ -141,6 +143,15 @@ while meta_run:
                     # for i in range(3):
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
+
+
+                    # player.pick_up_relic(Relic())
+                    # player.pick_up_relic(PoisonBottle())
+                    # player.pick_up_relic(SerpentHeart())
+                    # player.pick_up_relic(FearCell())
+                    # player.pick_up_relic(StemCell())
+                    # player.pick_up_relic(Ration())
+                    # player.pick_up_relic(WhiteCube())
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

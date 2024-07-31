@@ -171,7 +171,7 @@ def adventure_loop(screen, clock, player,map):
 
 
             # Draw player main info
-            player.draw_player_info_top(screen)
+            player.draw_player_info_top(screen, mousepos)
             screen.blit(shadow_layer, (0, 0))
 
             if map_choosing_step==1 and not animation_block:

@@ -195,18 +195,33 @@ class Skill_Book():
         return True, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
 
     def poison_dart(self,player, target_list):
+        ### relic effect ###
+        duration = 3
+        damage_multiplier = 3
+        for relic in player.relics:
+            if relic.name=="poison bottle": # exists!
+                duration = 5
+                damage_multiplier = 5
+
         sound_effects['hit'].play()
         A = player.count_tile('Attack')
-        damage = (3*A) * player.get_attack_multiplier()
+        damage = (damage_multiplier*A) * player.get_attack_multiplier()
         for enemy in target_list:
-            enemy.buffs['poison'] = 3
+            enemy.buffs['poison'] = duration
             counter_attack_damage = enemy.take_damage(damage)
             player.health -= counter_attack_damage
 
     def get_detail_poison_dart(self,player):
+        duration = 3
+        damage_multiplier = 3
+        for relic in player.relics:
+            if relic.name=="poison bottle": # exists!
+                duration = 5
+                damage_multiplier = 5
+
         A = player.count_tile('Attack')
-        damage = (3*A) * player.get_attack_multiplier()
-        return "Poison dart|Attack one target with 3*A = %d damage   and inflict poison for 3 turns"%damage
+        damage = (damage_multiplier*A) * player.get_attack_multiplier()
+        return "Poison dart|Attack one target with %d*A = %d damage   and inflict poison for %s turns"%(damage_multiplier,damage, duration)
 
 
 

@@ -5,11 +5,12 @@
 
 '''
 
-from util import *
+from area_fight import *
+
 
 def go_to_ruin(screen,clock, player):
     game_run = True
-
+    mousepos = (0,0)
     while game_run:
         # screen.fill('olivedrab')
         screen.fill('darkolivegreen')
@@ -50,7 +51,7 @@ def go_to_ruin(screen,clock, player):
         write_text(screen, width//2, area_name_Y_level, 'Ruin', 30, 'gold')
 
         # Draw player main info
-        player.draw_player_info_top(screen)
+        player.draw_player_info_top(screen, mousepos)
 
 
         if mouse_particle_list:  # if not empty

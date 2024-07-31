@@ -75,7 +75,7 @@ def obtain_skill(screen,clock, player,skill_to_learn):
 
 
         # Draw player main info
-        player.draw_player_info_top(screen)
+        player.draw_player_info_top(screen, mousepos)
 
         player.show_required_tiles(screen)
         player.draw_skill_to_learn(screen, skill_to_learn)

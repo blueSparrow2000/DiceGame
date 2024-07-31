@@ -1,6 +1,8 @@
 from entity import *
 import copy
 from skill_book import character_max_hp
+from relic import *
+
 
 class Player(Entity):
     def __init__(self, character_name,character_skills, board): # tile_dict
@@ -46,7 +48,7 @@ class Player(Entity):
 
         ### game variables
         self.current_depth = 0
-        self.golds = 0
+        self.golds = 10
         self.items=[]
         self.giant_HP_width = 30
         self.giant_HP_pos = [width//2,self.giant_HP_width//2]
@@ -61,6 +63,23 @@ class Player(Entity):
         self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y) for i in range(len(self.transformable_tiles))]
 
 
+        ######################################## buttons
+        self.relics = [] # PoisonBottle(),SerpentHeart(), StemCell(), FearCell(), # [PoisonBottle() for i in range(20)]
+
+        self.max_relic_in_a_row = 12
+        self.relic_y_start = 95
+        self.relic_delta = 30
+
+
+
+    ######################################### Relic ################################################
+
+    def pick_up_relic(self, relic_obj):
+        self.relics.append(relic_obj)
+        relic_obj.effect_when_first_obtained(self)
+
+
+    ######################################### Relic ################################################
     '''
     Handling Joker tiles
     
@@ -187,7 +206,7 @@ class Player(Entity):
         if self.health > self.max_health:
             self.health = self.max_health
 
-    def draw_player_info_top(self,screen):
+    def draw_player_info_top(self,screen, mousepos):
 
         draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
 
@@ -211,7 +230,20 @@ class Player(Entity):
         write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'gold')
 
         # relics
+        cnt = 0
+        next_row = 0
+        for relic in self.relics:
+            if cnt > self.max_relic_in_a_row:
+                next_row += 1
+                cnt = 0
+            location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
+            relic.draw(screen, location)
+            if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
+                write_text(screen, width // 2, self.relic_y_start - 52, relic.name, 20, relic.color, 'black')
+                relic_effects = relic.description()
+                write_text(screen, width//2, self.relic_y_start - 35, relic_effects, 17, relic.color, 'black')
 
+            cnt += 1
 
     def initialize_step_1(self):
         self.required_tiles = dict()
@@ -356,6 +388,10 @@ class Player(Entity):
         #
         #     cnt+=1
 
+    def refresh_my_turn(self):
+        super().refresh_my_turn()
+        for relic in self.relics:
+            relic.fight_every_turn_beginning_effect(self)
 
     def end_my_turn(self): # do something at the end of the turn
         super().end_my_turn()
@@ -364,6 +400,9 @@ class Player(Entity):
 
         # SHUFFLE: this is activated when pressed skip button
         self.board.turn_end_shuffle()
+
+        for relic in self.relics:
+            relic.fight_every_turn_end_effect(self)
 
         time.sleep(0.3)
 
@@ -377,6 +416,9 @@ class Player(Entity):
 
         # reset the board
         self.board.new_game()
+
+        for relic in self.relics:
+            relic.fight_start_effect(self)
 
 
     def push_tile_infos(self,tile_info):

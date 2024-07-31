@@ -73,15 +73,16 @@ def safe_delete(entity_list):
     ### DELETE DEAD ENEMY ###
 
 def fight(screen, clock, player):
-    global mousepos, TAB_img, rotate_img, back_img, skip_img, bottom_left_button, bottom_right_button, bottom_center_button, mob_Y_level, sound_effects, text_description_level, turn_text_level
+    global TAB_img, rotate_img, back_img, skip_img, bottom_left_button, bottom_right_button, bottom_center_button, mob_Y_level, sound_effects, text_description_level, turn_text_level
     music_Q('Fight', True)
     current_turn = 0
     player_turn = True
     player_turn_step = 0
     number_of_targets_to_specify = 0
     enemy_targets = set()
+    mousepos = (0,0)
 
-    player.new_fight()
+
     # randomly generate enemy following some logic
     trial = random.randint(1, 3)
     enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
@@ -115,10 +116,12 @@ def fight(screen, clock, player):
         enemies.append(enemy)
         mob_X += mob_side_len + mob_gap
 
+
+    player.new_fight()
+    player.refresh_my_turn()
+
     game_run = True
-
     current_display_text = "Hover mouse on a tile for description"
-
     while game_run:
         if player.health <= 0:  # check player death first
             exit_fight()
@@ -153,10 +156,10 @@ def fight(screen, clock, player):
                 # draw again
                 screen.fill(fight_bg_color)
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
-                player.draw(screen)
-                player.draw_player_info_top(screen)  # Draw player main info
+                player.draw(screen, mousepos)
+                player.draw_player_info_top(screen, mousepos)  # Draw player main info
                 for entity_draw in enemies:
-                    entity_draw.draw(screen)
+                    entity_draw.draw(screen,mousepos)
                 pygame.display.flip()
                 clock.tick_busy_loop(game_fps)
                 time.sleep(0.2)
@@ -167,7 +170,8 @@ def fight(screen, clock, player):
 
             ########################################### Just before the player turn starts! ###########################
             player_turn = True
-            player.refresh_my_turn()
+            if not (len(enemies) == 0 or player.health <= 0): # player's turn is refreshed only when game did not end!
+                player.refresh_my_turn()
             player.board.reset()
             current_display_text = "Hover mouse on a tile for description"
             continue
@@ -369,7 +373,7 @@ def fight(screen, clock, player):
                         player.use_skill(listed_enemy_targets)
                     for i in range(len(enemies)):
                         enemies[i].targeted = False
-                        enemies[i].draw(screen)  # redraw
+                        enemies[i].draw(screen,mousepos)  # redraw
                     # end players turn
                     player.end_my_turn()
                     player_turn = False
@@ -384,16 +388,16 @@ def fight(screen, clock, player):
 
 
         # draw player
-        player.draw(screen)
+        player.draw(screen,mousepos)
 
         # draw enemy
         for entity in enemies:
-            entity.draw(screen)
+            entity.draw(screen,mousepos)
 
         # draw effects
 
         # Draw player main info
-        player.draw_player_info_top(screen)
+        player.draw_player_info_top(screen, mousepos)
 
         if mouse_particle_list:  # if not empty
             # print(len(mouse_particle_list))

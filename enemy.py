@@ -24,15 +24,15 @@ class Enemy(Entity):
 
         self.rank = rank
 
-    def draw(self,screen): ################# ENEMY EXCLUSIVE
-        super().draw(screen)
-        self.show_next_move(screen)
+    def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
+        super().draw(screen,mousepos)
+        self.show_next_move(screen,mousepos)
 
     def proceed_next_pattern(self):
         # proceed to the next pattern
         self.current_pattern_idx = (self.current_pattern_idx+1)%self.num_of_patterns
 
-    def show_next_move(self,screen):
+    def show_next_move(self,screen,mousepos):
         current_pattern = self.pattern[self.current_pattern_idx]
 
         # check whether can attack or not

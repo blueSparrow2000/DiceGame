@@ -119,7 +119,7 @@ class Entity():
 
         self.update_buffs()  # update buff counts
 
-    def show_hp_attributes(self,screen):
+    def show_hp_attributes(self,screen,mousepos):
         global buff_icon_container, icon_container
         draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100, 'silver')
         draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100 * self.health / self.max_health, 'coral')
@@ -157,9 +157,9 @@ class Entity():
             write_text(screen, self.absorption_icon_x, self.absorption_icon_y, "%d" % (self.absorption), 15,
                        'khaki')
 
-    def draw(self,screen):
+    def draw(self,screen, mousepos):
         screen.blit(self.image, self.image.get_rect(center=self.mypos))
-        self.show_hp_attributes(screen)
+        self.show_hp_attributes(screen, mousepos)
         if self.targeted:
             screen.blit(target_icon, target_icon.get_rect(center=self.mypos))
 

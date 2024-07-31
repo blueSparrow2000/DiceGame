@@ -70,7 +70,7 @@ def go_to_campfire(screen,clock, player):
 
 
         # Draw player main info
-        player.draw_player_info_top(screen)
+        player.draw_player_info_top(screen, mousepos)
 
 
         if mouse_particle_list:  # if not empty

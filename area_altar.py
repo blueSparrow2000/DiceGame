@@ -82,7 +82,7 @@ def go_to_altar(screen,clock, player):
     altar_bless_button_locations = [
         (altar_button_x, altar_button_y + (4 * altar_image_button_tolerance + altar_button_spacing) * i) for i in range(len(bless_list))]
 
-
+    mousepos = (0,0)
     game_run = True
     music_Q('tense', True)
     while game_run:
@@ -170,7 +170,7 @@ def go_to_altar(screen,clock, player):
             write_text(screen, altar_bless_button_locations[i][0]+200, altar_bless_button_locations[i][1], bless_name, 17, 'darkgoldenrod')
 
         # Draw player main info
-        player.draw_player_info_top(screen)
+        player.draw_player_info_top(screen, mousepos)
 
 
         if mouse_particle_list:  # if not empty

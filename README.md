@@ -30,15 +30,18 @@ A simple dice game
 2024.07.30 Altar, Shop, Campfire area now works / changed board tile's shape => [location, name, Boolean] where boolean indicates whether it is a fixed tile or not
 
 
-2024.07.31 Make main menu: character selection(cannot change once fixed) / planar figure selection - make system + separate planar figure class from the board (for efficient drawing)
-- Implement altar completely: tile swap bless(?)
+2024.07.31 Make main menu: character selection(cannot change once fixed) / planar figure selection - make system + separate planar figure class from the board (for efficient drawing) / Implement altar completely: tile swap bless(?)
 
-2024.08.01 add 1~3 relics? (final touch before ruins!)
+
+2024.08.01 complete adding relic / make Ruin work 
 
 
 
 # To do
 - Make ruin work
+- when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
+- more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name and brief description maybe!   
+
 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn
 - 'thorn': if current tile contains thorn tile, player gets 5 damage (deleted when board resets)

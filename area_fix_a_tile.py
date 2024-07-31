@@ -64,7 +64,7 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
 
 
         # Draw player main info
-        player.draw_player_info_top(screen)
+        player.draw_player_info_top(screen, mousepos)
 
         player.board.draw_fixed_board(screen)
 
