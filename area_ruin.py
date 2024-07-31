@@ -11,7 +11,7 @@ def go_to_ruin(screen,clock, player):
     game_run = True
 
     while game_run:
-        screen.fill('olivedrab')
+        # screen.fill('olivedrab')
         screen.fill('darkolivegreen')
         events = pygame.event.get()
         # Event handling

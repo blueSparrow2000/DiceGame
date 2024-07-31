@@ -18,6 +18,8 @@ requirement_level = 760
 turn_text_level = 160
 area_name_Y_level = 160
 
+middle_button_Y_level = 400
+
 # TILES INIT - need to add new type if nessesary
 tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
 joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
@@ -56,5 +58,7 @@ bottom_left_button = (40, height - 40)
 bottom_right_button = (width - 40, height - 40)
 bottom_center_button = (width//2,height-40)
 
+right_middle_button = (width - 40,middle_button_Y_level)
+left_middle_button = (40,middle_button_Y_level)
 
 button_side_len_half = 25

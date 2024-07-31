@@ -48,11 +48,23 @@ class Entity():
         self.counter_attack = False
         self.confused = False
 
+
         ######## buff & debuffs
         self.buffs = dict()
         for buff in buff_names:
             self.buffs[buff] = 0 #  debuff name: remaining turn duration if exist
 
+        ####################
+        self.can_attack = True
+        self.strength_multiplier = 1
+        self.strength_deplifier = 1
+        self.defence_gain_multiplier = 1
+        self.heal_multiplier = 1
+        self.poisoned = False
+        self.toxined = False
+        self.vulnerability_multiplier = 1
+        self.confused = False
+        ####################
         self.reset_buffs()
 
         ######## relics

@@ -7,13 +7,62 @@ N 명의 적에게 적용되는 공격은 이미 target_list에 적용이 된 �
 '''
 
 from util import *
+from entity import Entity
+from board import Board
 
-class DummyPlayer():
+class DummyPlayer(Entity):
     def __init__(self):
-        pass
+        super().__init__("dummy_player", 100, 100, (100, mob_Y_level))
+        global character_skill_dictionary ,character_tile_dictionary
+        self.character_skill_dictionary = character_skill_dictionary
+        self.character_tile_dictionary = character_tile_dictionary
+
+        self.char_name = 'Mirinae' # default
+        self.skill_book = self.character_skill_dictionary[self.char_name]
+        self.char_skills = self.skill_book.character_skills
+        self.char_tiles = self.character_tile_dictionary[self.char_name]
+        self.board = Board(self.char_tiles, [0,1])
+
+        self.requirement_location = [width // 2 - 40, requirement_level + 30]
+        self.tile_info_location = [width // 2,460]
+        self.character_info_location = [width // 2,middle_button_Y_level]
+
+    def update_char(self,character): # must be called every time when character selection changes
+        self.char_name = character
+        self.skill_book = self.character_skill_dictionary[self.char_name]
+        self.char_skills = self.skill_book.character_skills
+        self.char_tiles = self.character_tile_dictionary[self.char_name]
+
     def count_tile(self, name):
         return 0
-global_dummy_player = DummyPlayer()
+
+    def draw_character(self,screen,mousepos):
+        self.draw_skills(screen,mousepos)
+        self.draw_tiles(screen)
+        self.draw_character_description(screen)
+
+
+    def draw_skills(self,screen,mousepos):
+        for i in range(len(self.char_skills)):
+            skill_name = self.char_skills[i]
+            self.skill_book.draw_skill(screen, skill_name, i)
+
+        for i in range(len(self.char_skills)):
+            if self.skill_book.check_button(mousepos,i):
+                _,_,_, self.required_tiles = getattr(self.skill_book, self.char_skills[i] + '_get_requirement')(self)
+                self.skill_book.show_requirement_mini_tiles(screen, self.requirement_location, self.char_skills[i],self.required_tiles)
+                description = getattr(self.skill_book, "get_detail_%s"%self.char_skills[i])(self)
+                write_text_description(screen, width // 2 + 30, text_description_level, description, 15)
+
+    def draw_tiles(self,screen):
+        write_text(screen, self.tile_info_location[0], self.tile_info_location[1], "%s"%self.char_tiles, 15)
+
+    def draw_character_description(self,screen):
+        write_text(screen, self.character_info_location[0], self.character_info_location[1], self.char_name, 25)
+
+
+
+
 
 
 
@@ -319,3 +368,6 @@ character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Ski
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1} }
 
 learnable_skills = Mirinae_skills() # dummy...
+
+
+global_dummy_player = DummyPlayer()
