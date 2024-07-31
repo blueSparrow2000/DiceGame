@@ -48,6 +48,7 @@ screen.fill((0,0,0))  # background color
 
 # main screen ---------------------------------------------------
 playable_characters = ['Mirinae', 'Cinavro','Narin']
+dummy_net = Net([0],50,100)
 
 
 meta_run = True
@@ -189,8 +190,12 @@ while meta_run:
         if planar_figure_phase < len(planar_figure_idx):
             screen.blit(confirm_img, confirm_img.get_rect(center=right_side_upper_button))
             current_figure = planar_figures[planar_figure_idx[planar_figure_phase]]
-            for i in range(len(current_figure)):
-                write_text(screen, width // 2 - 100, planar_figure_text_Y_level + 50 + i*20, "%s"%(current_figure[i]), 15)
+
+            dummy_net.draw_net_on_location(screen, [ width // 2 - 75, planar_figure_text_Y_level + 50 ], given_shape=current_figure)
+            # for i in range(len(current_figure)):
+            #     write_text(screen, width // 2 - 100, planar_figure_text_Y_level + 50 + i*20, "%s"%(current_figure[i]), 15)
+
+
         screen.blit(back_img, back_img.get_rect(center=right_side_button))
 
         screen.blit(right_button, right_button.get_rect(center=right_upper_button))

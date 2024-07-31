@@ -101,6 +101,17 @@ class Net():
         self.cube_figure = load_image('tiles/cube')
 
 
+    def draw_net_on_location(self, screen, center, given_shape = None):
+        shape = self.current_planar_figure
+        if given_shape:
+            shape = given_shape
+
+        for c in range(self.planar_figure_col):
+            for r in range(self.planar_figure_row):
+                if (shape[c][r])==1: # draw only when exists
+                    location = (center[0] + (r - self.planar_figure_center[1])*self.side_length, center[1] + (c - self.planar_figure_center[0])*self.side_length)
+                    screen.blit(self.cube_figure, self.cube_figure.get_rect(center=location))
+
 
     def refresh_planar_figure(self):
         self.planar_figure_col = len(self.current_planar_figure)
@@ -125,11 +136,12 @@ class Net():
         if mousepos[1] < self.board_Y_selectable:  # not on the board
             return False
 
-        for c in range(self.planar_figure_col):
-            for r in range(self.planar_figure_row):
-                if (self.current_planar_figure[c][r])==1: # draw only when exists
-                    location = (mousepos[0] + (r - self.planar_figure_center[1])*self.side_length, mousepos[1] + (c - self.planar_figure_center[0])*self.side_length)
-                    screen.blit(self.cube_figure, self.cube_figure.get_rect(center=location))
+        self.draw_net_on_location(screen, mousepos)
+        # for c in range(self.planar_figure_col):
+        #     for r in range(self.planar_figure_row):
+        #         if (self.current_planar_figure[c][r])==1: # draw only when exists
+        #             location = (mousepos[0] + (r - self.planar_figure_center[1])*self.side_length, mousepos[1] + (c - self.planar_figure_center[0])*self.side_length)
+        #             screen.blit(self.cube_figure, self.cube_figure.get_rect(center=location))
 
     def get_center_locations_planar_figure(self, mousepos):
         center_locations = []
@@ -661,7 +673,6 @@ class Board():
             return False
 
         return tiles# return tile counts
-
 
 
 
