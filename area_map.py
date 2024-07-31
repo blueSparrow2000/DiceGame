@@ -33,7 +33,7 @@ def adventure_loop(screen, clock, player,map):
 
         map.random_initialize(player)
 
-        player.board.init_turn()
+        player.board.net.init_turn()
         map_choosing_step = 0  # 0: placing planar figure / 1: clicking reachable map tile => fight etc
 
         # reset
@@ -71,9 +71,9 @@ def adventure_loop(screen, clock, player,map):
                     mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
 
                     if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
-                        player.board.change_planar_figure(False)
+                        player.board.net.change_planar_figure(False)
                     elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
-                        player.board.rotate_once()
+                        player.board.net.rotate_once()
 
                     if map_choosing_step == 0: # check map
                         is_valid = map.check_tiles((xp, yp),player.board)
@@ -84,7 +84,7 @@ def adventure_loop(screen, clock, player,map):
                             # go to initial stage and do it again
                             map_choosing_step = 0
                             map.reset()
-                            player.board.init_turn()
+                            player.board.net.init_turn()
                             continue  # skip below
 
 
@@ -107,9 +107,9 @@ def adventure_loop(screen, clock, player,map):
                             run_adventure, meta_run_adventure = exit()
                             break
                         elif event.key == pygame.K_r:
-                            player.board.rotate_once()
+                            player.board.net.rotate_once()
                         elif event.key == pygame.K_TAB:
-                            player.board.change_planar_figure(False)
+                            player.board.net.change_planar_figure(False)
 
                         elif event.key == pygame.K_RETURN:
                             pass
@@ -146,9 +146,9 @@ def adventure_loop(screen, clock, player,map):
                 elif which_event == 'fight':
                     ########################################################## go to fight #################################################
                     # initialize board attributes
-                    player.board.init_turn()
+                    player.board.net.init_turn()
                     player_lost, valid_termination = fight(screen, clock, player)
-                    player.board.init_turn()
+                    player.board.net.init_turn()
                     # initialize board attributes
 
                     if not valid_termination:
@@ -180,7 +180,7 @@ def adventure_loop(screen, clock, player,map):
 
 
             if map_choosing_step==0 and mousepos[1] >= board_Y_level:  # on the board
-                player.board.draw_planar_figure(screen, mousepos)
+                player.board.net.draw_planar_figure(screen, mousepos)
                 screen.blit(TAB_img_white, TAB_img_white.get_rect(center=bottom_left_button))
                 screen.blit(rotate_img_white, rotate_img_white.get_rect(center=bottom_right_button))
 

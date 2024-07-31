@@ -200,9 +200,9 @@ def fight(screen, clock, player):
                 if player_turn:  # listen for the inputs
                     if player_turn_step == 0:
                         if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
-                            player.board.change_planar_figure(player.confused)
+                            player.board.net.change_planar_figure(player.confused)
                         elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
-                            player.board.rotate_once()
+                            player.board.net.rotate_once()
                         elif check_inside_button(mousepos, bottom_center_button, button_side_len_half):
                             # skip player's turn
                             player.end_my_turn()
@@ -310,9 +310,9 @@ def fight(screen, clock, player):
 
                     if player_turn_step == 0:
                         if event.key == pygame.K_r:
-                            player.board.rotate_once()
+                            player.board.net.rotate_once()
                         if event.key == pygame.K_TAB:
-                            player.board.change_planar_figure(player.confused)
+                            player.board.net.change_planar_figure(player.confused)
                     if player_turn_step == 1:
                         pass
 
@@ -337,7 +337,7 @@ def fight(screen, clock, player):
                 screen.blit(rotate_img, rotate_img.get_rect(center=bottom_right_button))
                 screen.blit(skip_img, skip_img.get_rect(center=bottom_center_button))
 
-                player.board.draw_planar_figure(screen, mousepos)
+                player.board.net.draw_planar_figure(screen, mousepos)
 
             elif player_turn_step == 1:
                 ### DRAWING ###

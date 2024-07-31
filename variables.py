@@ -19,6 +19,8 @@ turn_text_level = 160
 area_name_Y_level = 160
 
 middle_button_Y_level = 400
+upper_button_Y_level = 200
+upper_side_Y_level = 225
 
 # TILES INIT - need to add new type if nessesary
 tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
@@ -54,6 +56,8 @@ adventure_bg_color = (100,130,100)
 terracotta = (120, 110, 100)
 
 ### basic buttons
+button_side_len_half = 25 # buttons are all of side 50 pixels
+
 bottom_left_button = (40, height - 40)
 bottom_right_button = (width - 40, height - 40)
 bottom_center_button = (width//2,height-40)
@@ -61,4 +65,8 @@ bottom_center_button = (width//2,height-40)
 right_middle_button = (width - 40,middle_button_Y_level)
 left_middle_button = (40,middle_button_Y_level)
 
-button_side_len_half = 25
+right_upper_button = (width - 40,upper_button_Y_level)
+left_upper_button = (40,upper_button_Y_level)
+
+right_side_button = (width//2 + 75,upper_side_Y_level)
+right_side_upper_button = (width//2 + 75,upper_side_Y_level - 75)

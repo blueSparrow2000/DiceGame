@@ -294,6 +294,7 @@ class Map():
 
 
     def check_tiles(self,position_on_map, board_obj): # board object의 planar figure만 사용한다!
+        net = board_obj.net
         self.bridge_map = [[False for x in range(7)] for y in range(7)]
         self.reachability_map = [[False for x in range(7)] for y in range(7)]
 
@@ -303,11 +304,11 @@ class Map():
 
         at_least_one_flag = False
         must_contain_flag = False
-        for c in range(board_obj.planar_figure_col):
-            for r in range(board_obj.planar_figure_row):
-                if (board_obj.current_planar_figure[c][r])==1: # draw only when exists
-                    row_offset = (r - board_obj.planar_figure_center[1])*self.side_length
-                    col_offset = (c - board_obj.planar_figure_center[0])*self.side_length
+        for c in range(net.planar_figure_col):
+            for r in range(net.planar_figure_row):
+                if (net.current_planar_figure[c][r])==1: # draw only when exists
+                    row_offset = (r - net.planar_figure_center[1])*self.side_length
+                    col_offset = (c - net.planar_figure_center[0])*self.side_length
 
                     # 전개도의 부분 중 해당 위치가 보드의 어느 좌표인지 변환
                     row_board_idx = (center_x+row_offset - self.map_X) // self.side_length

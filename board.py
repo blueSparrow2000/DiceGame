@@ -81,6 +81,71 @@ Chair_2_shape=[[0,0,1],
 #                [0,1,0],
 #                [0,1,0]]
 planar_figures.extend([T_shape, Cross_shape, Worm_shape, Worm_2_shape, Worm_3_shape, Cacti_shape, Diag_shape, Diag_2_shape, Chair_shape, Chair_2_shape])
+
+
+################################################## planar figures ##########################################################
+class Net():
+    def __init__(self,planar_figure_idx, side_length, board_Y_selectable):
+        global planar_figures
+        self.figure_index = 0 # 0 for primary, 1 for secondary
+        self.planar_figures = copy.deepcopy(planar_figures)
+        self.planar_figure_idx = copy.deepcopy(planar_figure_idx) # absolute variants of planar figures
+        self.init_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[i]]) for i in range(len(self.planar_figure_idx))]
+        self.my_planar_figures = [planar_figures[self.planar_figure_idx[i]] for i in range(len(self.planar_figure_idx)) ]
+        self.current_planar_figure = self.my_planar_figures[self.figure_index]
+        self.planar_figure_col = len(self.current_planar_figure)
+        self.planar_figure_row = len(self.current_planar_figure[0])
+        self.planar_figure_center = [1,1] # col, row
+        self.board_Y_selectable = board_Y_selectable
+        self.side_length = side_length
+        self.cube_figure = load_image('tiles/cube')
+
+
+
+    def refresh_planar_figure(self):
+        self.planar_figure_col = len(self.current_planar_figure)
+        self.planar_figure_row = len(self.current_planar_figure[0])
+        # change the center pos accordingly
+        #self.planar_figure_center = [1,1]
+
+    def init_turn(self): # initialize planar figure at every turn starts
+        self.figure_index = 0
+        self.my_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[i]]) for i in range(len(self.planar_figure_idx))]
+        self.current_planar_figure = self.my_planar_figures[self.figure_index]
+        self.refresh_planar_figure()
+
+    def change_planar_figure(self, confused):
+        if confused:
+            return
+        self.figure_index = (self.figure_index+1)%len(self.planar_figure_idx)
+        self.current_planar_figure = self.my_planar_figures[self.figure_index]
+        self.refresh_planar_figure()
+
+    def draw_planar_figure(self,screen,mousepos):
+        if mousepos[1] < self.board_Y_selectable:  # not on the board
+            return False
+
+        for c in range(self.planar_figure_col):
+            for r in range(self.planar_figure_row):
+                if (self.current_planar_figure[c][r])==1: # draw only when exists
+                    location = (mousepos[0] + (r - self.planar_figure_center[1])*self.side_length, mousepos[1] + (c - self.planar_figure_center[0])*self.side_length)
+                    screen.blit(self.cube_figure, self.cube_figure.get_rect(center=location))
+
+    def get_center_locations_planar_figure(self, mousepos):
+        center_locations = []
+        for c in range(self.planar_figure_col):
+            for r in range(self.planar_figure_row):
+                if (self.current_planar_figure[c][r])==1: # draw only when exists
+                    location = (mousepos[0] + (r - self.planar_figure_center[1])*self.side_length, mousepos[1] + (c - self.planar_figure_center[0])*self.side_length)
+                    center_locations.append(location)
+        return center_locations
+
+    def rotate_once(self):
+        self.current_planar_figure = list(zip(*self.current_planar_figure[::-1]))
+        self.refresh_planar_figure()
+################################################## planar figures ##########################################################
+
+
 '''
 BOSS FIGHT PARAMETERS
 
@@ -92,7 +157,7 @@ collect_tiles(self,mousepos, out_of_board_protection = False)
 '''
 class Board():
     def __init__(self,tiles_dict,planar_figure_idx):
-        global tile_names,planar_figures,sound_effects,board_Y_level
+        global tile_names,sound_effects,board_Y_level
         self.board_side_length = 8
         self.board = [] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
         self.temp_board = []
@@ -103,7 +168,6 @@ class Board():
         self.permanent_board_dict['Empty'] = self.board_side_length**2 - tile_count
         # temporary board dict also preserves tiles like permanent one
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict) # 이번 전투에만 영향을 주는거면 이거도 바꿈
-        self.cube_figure = load_image('tiles/cube')
 
         self.image_dict = dict()
         for tile_name in tile_names:
@@ -114,16 +178,6 @@ class Board():
         self.board_Y_level = board_Y_level + self.side_length//2
         self.board_Y_selectable = board_Y_level - self.side_length
         self.board_X = width//2 - self.side_length*4 + self.side_length//2
-
-        self.figure_index = 0 # 0 for primary, 1 for secondary
-        self.planar_figures = copy.deepcopy(planar_figures)
-        self.planar_figure_idx = copy.deepcopy(planar_figure_idx) # absolute variants of planar figures
-        self.init_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[0]]),copy.deepcopy(planar_figures[self.planar_figure_idx[1]])]
-        self.my_planar_figures = [planar_figures[self.planar_figure_idx[0]],planar_figures[self.planar_figure_idx[1]]]
-        self.current_planar_figure = self.my_planar_figures[self.figure_index]
-        self.planar_figure_col = len(self.current_planar_figure)
-        self.planar_figure_row = len(self.current_planar_figure[0])
-        self.planar_figure_center = [1,1] # col, row
 
         self.board_reset_turn = 6
         self.current_turn = 0
@@ -139,6 +193,10 @@ class Board():
         self.out_of_board_protection = True
         self.irregular_shape = False #'stripe'#False#'stripe'
         self.board_shuffle_every_turn = False
+
+        ############# planar figure ##############
+        self.net = Net(planar_figure_idx,self.side_length ,self.board_Y_selectable)
+        ############# planar figure ##############
 
     def set_out_of_board_protection(self, bool_input):
         self.out_of_board_protection = bool_input
@@ -367,54 +425,6 @@ class Board():
     ################################################## permenant changes ##################################################
 
 
-    ################################################## planar figures ##########################################################
-
-    def refresh_planar_figure(self):
-        self.planar_figure_col = len(self.current_planar_figure)
-        self.planar_figure_row = len(self.current_planar_figure[0])
-        # change the center pos accordingly
-        #self.planar_figure_center = [1,1]
-
-    def init_turn(self): # initialize planar figure at every turn starts
-        self.figure_index = 0
-        self.my_planar_figures = [copy.deepcopy(planar_figures[self.planar_figure_idx[0]]), copy.deepcopy(planar_figures[self.planar_figure_idx[1]])]
-        self.current_planar_figure = self.my_planar_figures[self.figure_index]
-        self.refresh_planar_figure()
-
-    def change_planar_figure(self, confused):
-        if confused:
-            return
-        self.figure_index = (self.figure_index+1)%2
-        self.current_planar_figure = self.my_planar_figures[self.figure_index]
-        self.refresh_planar_figure()
-
-    def draw_planar_figure(self,screen,mousepos):
-        if mousepos[1] < self.board_Y_selectable:  # not on the board
-            return False
-
-        for c in range(self.planar_figure_col):
-            for r in range(self.planar_figure_row):
-                if (self.current_planar_figure[c][r])==1: # draw only when exists
-                    location = (mousepos[0] + (r - self.planar_figure_center[1])*self.side_length, mousepos[1] + (c - self.planar_figure_center[0])*self.side_length)
-                    screen.blit(self.cube_figure, self.cube_figure.get_rect(center=location))
-
-
-    def get_center_locations_planar_figure(self, mousepos):
-        center_locations = []
-        for c in range(self.planar_figure_col):
-            for r in range(self.planar_figure_row):
-                if (self.current_planar_figure[c][r])==1: # draw only when exists
-                    location = (mousepos[0] + (r - self.planar_figure_center[1])*self.side_length, mousepos[1] + (c - self.planar_figure_center[0])*self.side_length)
-                    center_locations.append(location)
-        return center_locations
-
-    def rotate_once(self):
-        self.current_planar_figure = list(zip(*self.current_planar_figure[::-1]))
-        self.refresh_planar_figure()
-
-    ################################################## planar figures ##########################################################
-
-
     '''
     reset board & temporary tile dict when the game starts
     '''
@@ -474,7 +484,7 @@ class Board():
         board_temp = list of tile names (no location information when creating)
         '''
 
-        self.init_turn() # initialize planar figures
+        self.net.init_turn() # initialize planar figures
 
         if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
             ############### RESET BOARD ###############
@@ -627,7 +637,7 @@ class Board():
         if mousepos[1] < self.board_Y_selectable:  # not on the board
             return False
 
-        planar_figure_center_locations = self.get_center_locations_planar_figure(mousepos)
+        planar_figure_center_locations = self.net.get_center_locations_planar_figure(mousepos)
         self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
 
         tiles = dict() # current tile collection

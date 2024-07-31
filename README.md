@@ -30,12 +30,15 @@ A simple dice game
 2024.07.30 Altar, Shop, Campfire area now works / changed board tile's shape => [location, name, Boolean] where boolean indicates whether it is a fixed tile or not
 
 
-2024.07.31 Make main menu & add relics? (final touch before ruins!)
+2024.07.31 Make main menu: character selection(cannot change once fixed) / planar figure selection - make system + separate planar figure class from the board (for efficient drawing)
+
+
+2024.08.01 add relics? (final touch before ruins!)
 
 
 
 # To do
-- Main menu: character selection(cannot change once fixed) / can see character's information (number of tiles and skills etc.)
+
 - Implement altar completely: tile swap curse
 
 - add relics (few ~ 3)
