@@ -56,11 +56,12 @@ screen.fill((0,0,0))  # background color
 # main screen ---------------------------------------------------
 
 meta_run = True
+
 while meta_run:
     # The Music in main
     music_Q('Lobby', True)
     run_character_selection = True
-
+    mousepos = (0, 0)
     ###################### call the character selecting function here! ######################
 
 
@@ -89,11 +90,24 @@ while meta_run:
                 break
 
             if event.type == pygame.MOUSEMOTION:
-                continue
+                mousepos = pygame.mouse.get_pos()
+
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
-                (xp, yp) = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+                mousepos = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
+
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+
+                    run_character_selection = False
+                    #### set character abilities here (like fixing a tile etc) ####
+
+                    ############## game start module #################
+                    try_again = adventure_loop(screen, clock, player, map)
+                    if not try_again:
+                        meta_run = False
+                    break
+                    ############## game start module #################
 
             if event.type == pygame.KEYDOWN:
 
@@ -106,7 +120,7 @@ while meta_run:
                     run_character_selection = False
 
                     #### set character abilities (like fixing a tile etc) ####
-                    go_to_altar(screen, clock, player)
+                    # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
                     # for i in range(1):
@@ -129,7 +143,15 @@ while meta_run:
             break
 
         screen.fill('dimgray')
-        write_text(screen, width // 2, height // 2 - 240, 'Choose a character and press enter to start!', 20, 'gold')
+        write_text(screen, width // 2, 100, 'Choose a character and press enter to start!', 20, 'gold')
+
+
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+
 
 
         if mouse_particle_list:  # if not empty

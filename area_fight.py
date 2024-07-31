@@ -5,6 +5,57 @@ from enemy import *
 
 
 
+
+def player_death_screen(screen,clock,player):
+    print('player lost!')
+    sound_effects['playerdeath'].play()
+    pygame.mixer.music.stop()
+
+    run_lost_screen = True
+    while run_lost_screen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                return False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                    run_lost_screen = False
+                    break
+                elif event.key == pygame.K_RETURN:
+                    run_lost_screen = False
+                    break
+        screen.fill(fight_bg_color)
+        write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
+        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+        pygame.display.flip()
+        clock.tick(game_fps)
+
+def player_win_screen(screen,clock,player):
+    run_win_screen = True
+    music_Q("cozy")
+    time.sleep(0.5)
+    while run_win_screen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                run_win_screen = False
+                break
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
+                    run_win_screen = False
+                    break
+                elif event.key == pygame.K_RETURN:
+                    run_win_screen = False
+                    break
+        screen.fill(adventure_bg_color)
+        write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
+        write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
+                   'gray')
+        # show some items dropped etc.
+        pygame.display.flip()
+        clock.tick(game_fps)
+
+
 def exit_fight():
     return
 
