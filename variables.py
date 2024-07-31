@@ -18,7 +18,7 @@ requirement_level = 760
 turn_text_level = 160
 area_name_Y_level = 160
 
-middle_button_Y_level = 400
+middle_button_Y_level = 380
 upper_button_Y_level = 200
 upper_side_Y_level = 225
 

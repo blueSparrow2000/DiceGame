@@ -22,16 +22,34 @@ class DummyPlayer(Entity):
         self.char_skills = self.skill_book.character_skills
         self.char_tiles = self.character_tile_dictionary[self.char_name]
         self.board = Board(self.char_tiles, [0,1])
+        self.hpmax_for_drawing = character_max_hp[self.char_name]
 
         self.requirement_location = [width // 2 - 40, requirement_level + 30]
-        self.tile_info_location = [width // 2,460]
         self.character_info_location = [width // 2,middle_button_Y_level]
+        self.tile_info_location = [width // 2, middle_button_Y_level + 60]
+
+
+        self.char_tiles_list = list(self.char_tiles.keys())
+        image_button_tolerance = 25
+        image_button_spacing = 10
+        self.tile_img_locations = [
+            (40 + (2 * image_button_tolerance + image_button_spacing + 20) * i, self.tile_info_location[1]) for i in
+            range(len(self.char_tiles_list))]
+
+        self.tile_image_dict = dict()
+        for tile_name in self.char_tiles_list:
+            self.tile_image_dict[tile_name] = load_image("tiles/%s" % tile_name)
+
+        self.heart = load_image("icons/HP")
+
 
     def update_char(self,character): # must be called every time when character selection changes
         self.char_name = character
         self.skill_book = self.character_skill_dictionary[self.char_name]
         self.char_skills = self.skill_book.character_skills
         self.char_tiles = self.character_tile_dictionary[self.char_name]
+        self.char_tiles_list = list(self.char_tiles.keys())
+        self.hpmax_for_drawing = character_max_hp[self.char_name]
 
     def count_tile(self, name):
         return 0
@@ -55,10 +73,25 @@ class DummyPlayer(Entity):
                 write_text_description(screen, width // 2 + 30, text_description_level, description, 15)
 
     def draw_tiles(self,screen):
-        write_text(screen, self.tile_info_location[0], self.tile_info_location[1], "%s"%self.char_tiles, 15)
+
+        for i in range(len(self.tile_img_locations)):
+            tile_name = self.char_tiles_list[i]
+            screen.blit(self.tile_image_dict[tile_name],
+                        self.tile_image_dict[tile_name].get_rect(center=self.tile_img_locations[i]))
+            write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 40,
+                       tile_name, 15)
+            write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
+                       "%d"%self.char_tiles[tile_name], 15)
+
+        #write_text(screen, self.tile_info_location[0], self.tile_info_location[1], "%s"%self.char_tiles, 15)
 
     def draw_character_description(self,screen):
         write_text(screen, self.character_info_location[0], self.character_info_location[1], self.char_name, 25)
+        screen.blit(self.heart,
+                    self.heart.get_rect(center=(self.character_info_location[0] + 90, self.character_info_location[1]) ))
+
+        write_text(screen, self.character_info_location[0] + 125, self.character_info_location[1], "%d"%self.hpmax_for_drawing, 20, 'red')
+
 
 
 
@@ -366,6 +399,7 @@ character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skill
 character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1} }
+character_max_hp = {'Mirinae':100,'Cinavro':80, 'Narin': 100}
 
 learnable_skills = Mirinae_skills() # dummy...
 

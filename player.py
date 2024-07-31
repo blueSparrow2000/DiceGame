@@ -1,10 +1,13 @@
 from entity import *
 import copy
+from skill_book import character_max_hp
 
 class Player(Entity):
     def __init__(self, character_name,character_skills, board): # tile_dict
-        global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles     # all the other skills should also be contained
-        super().__init__(character_name, 100, 100, (100,mob_Y_level))
+        global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles, character_max_hp     # all the other skills should also be contained
+
+        hpmax = character_max_hp[character_name]
+        super().__init__(character_name, hpmax, hpmax, (100,mob_Y_level))
         self.my_type = 'player'
         ####################### player only stuffs ############################
         self.current_tile = dict()
