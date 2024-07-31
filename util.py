@@ -69,8 +69,6 @@ def write_text_description(surf, x, y, text, size,color='black',bg_color = None,
 
 
 
-
-
 def check_inside_button(mouse_pos,button_center, button_side_len_half):
     if abs(mouse_pos[0] - button_center[0])<button_side_len_half and abs(mouse_pos[1] - button_center[1])<button_side_len_half:
         return True

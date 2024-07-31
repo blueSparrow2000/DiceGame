@@ -31,8 +31,7 @@ from area_fix_a_tile import *
 import copy
 
 altar_text_description_level = 210
-altar_bless_reference = ['decrease board reset frequency by one','board get shuffled every turn','shrink the board size by one',
-               'obtain one fixable tile','planar figure can escape the board', 'change all tile of type_1 to type_2']
+altar_bless_reference = ['decrease board reset frequency by one','board get shuffled every turn','shrink the board size by one','obtain one fixable tile','planar figure can escape the board', 'change all tile of type_1 to type_2']
 altar_curse_reference = ['delete one skill slot forever','halve maximum health','irregular shaped board'] #['delete one skill slot forever','halve maximum health','irregular shaped board']
 altar_bless = copy.deepcopy(altar_bless_reference)
 altar_curse = copy.deepcopy(altar_curse_reference)
@@ -54,11 +53,16 @@ def reset_altar():
     altar_curse = copy.deepcopy(altar_curse_reference)
 
 def go_to_altar(screen,clock, player):
+    basic_tiles = ['Attack', 'Defence','Regen', 'Skill']
     global altar_bless,altar_curse
     bless_choice_num = min(3, len(altar_bless))
     random.shuffle(altar_bless)
     bless_list = copy.deepcopy(altar_bless[:bless_choice_num])
     curse = altar_curse[random.randint(0,len(altar_curse)-1)]
+
+    change_type_1 = random.choice(basic_tiles)
+    basic_tiles.remove(change_type_1)
+    change_type_2 = random.choice(basic_tiles)
 
     # apply curse here!
     if curse == 'delete one skill slot forever':
@@ -122,7 +126,7 @@ def go_to_altar(screen,clock, player):
                             player.board.set_out_of_board_protection(False)
                             altar_bless.remove(bless_name) # only once
                         elif bless_name == 'change all tile of type_1 to type_2':
-                            pass
+                            player.board.permanently_convert_tile1_to_tile2(change_type_1,change_type_2)
                         elif bless_name == '':
                             pass
 
@@ -158,6 +162,11 @@ def go_to_altar(screen,clock, player):
         for i in range(len(altar_bless_button_locations)):
             bless_name = bless_list[i]
             screen.blit(altar_images[bless_name], altar_images[ bless_name].get_rect(center=altar_bless_button_locations[i]))
+            if bless_name == 'change all tile of type_1 to type_2':
+                write_text(screen, altar_bless_button_locations[i][0] + 200, altar_bless_button_locations[i][1],
+                           'change all tile of %s to %s'%(change_type_1,change_type_2), 17, 'darkgoldenrod')
+
+                continue
             write_text(screen, altar_bless_button_locations[i][0]+200, altar_bless_button_locations[i][1], bless_name, 17, 'darkgoldenrod')
 
         # Draw player main info

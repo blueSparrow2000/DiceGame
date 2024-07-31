@@ -33,12 +33,11 @@ A simple dice game
 2024.07.31 Make main menu: character selection(cannot change once fixed) / planar figure selection - make system + separate planar figure class from the board (for efficient drawing)
 - Implement altar completely: tile swap bless(?)
 
-2024.08.01 add relics? (final touch before ruins!)
+2024.08.01 add 1~3 relics? (final touch before ruins!)
 
 
 
 # To do
-- add relics (few ~ 3)
 - Make ruin work
 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn

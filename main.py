@@ -46,6 +46,7 @@ screen.fill((0,0,0))  # background color
 
 
 
+
 # main screen ---------------------------------------------------
 playable_characters = ['Mirinae', 'Cinavro','Narin']
 dummy_net = Net([0],50,100)
@@ -130,7 +131,8 @@ while meta_run:
 
                     run_character_selection = False
                     #### set character abilities here (like fixing a tile etc) ####
-                    # go_to_altar(screen, clock, player)
+                    fix_a_tile(screen, clock, player, 'Defence')
+                    go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
                     # for i in range(1):

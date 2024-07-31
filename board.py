@@ -346,11 +346,15 @@ class Board():
     
     NOTE: fixed tile's values (strings) are subset of permanent tiles' keys, so theres always exist a tile in temporary_board_dict that fixed_tiles has 
     '''
-    def get_non_fixed_permanent_tiles(self):
-        temp_board_dict_excluding_fixed_tiles = copy.deepcopy(self.temporary_board_dict)
+    def get_non_fixed_permanent_tiles(self, reference_dict = None):
+        if reference_dict is None:
+            reference_dict = self.temporary_board_dict
+
+
+        temp_board_dict_excluding_fixed_tiles = copy.deepcopy(reference_dict)
 
         fixed_tile_names = list(self.permanently_fixed_tiles.values()) # get list of tile names
-        for tile_name, tile_amount in self.temporary_board_dict.items():
+        for tile_name, tile_amount in reference_dict.items():
             for i in range(fixed_tile_names.count(tile_name)):
                 safe_delete_dict_one(temp_board_dict_excluding_fixed_tiles, tile_name) # get rid of amount of fixed tiles in the temp_excluded_fixed array
 
@@ -361,7 +365,6 @@ class Board():
     def display_tile(self,screen,tile_name, location):
         img = self.image_dict[tile_name]
         screen.blit(img, img.get_rect(center=location))
-
 
 
 
@@ -402,6 +405,28 @@ class Board():
             return
         safe_tile_add_one(self.permanent_board_dict, target_tile)
         self.reset_permanent_board_dict() # recalculate the empty tiles
+
+    '''
+    Convert all non-fixed tile of type1 to type2
+    
+    '''
+    def permanently_convert_tile1_to_tile2(self, tile_1,tile_2):
+        not_fixed_permanent_tiles = self.get_non_fixed_permanent_tiles(self.permanent_board_dict)
+        # if tile_1 exists in nfpt and higher than 0
+        # then get its count n
+        # delete a tile_1 n times in permanent
+        # add a tile_2 n times in permanent
+        if tile_1 in not_fixed_permanent_tiles and not_fixed_permanent_tiles[tile_1] > 0:
+            number_to_convert = not_fixed_permanent_tiles[tile_1]
+            for i in range(number_to_convert):
+                safe_tile_add_one(self.permanent_board_dict, tile_2)
+                safe_delete_dict_one(self.permanent_board_dict, tile_1)
+
+        # print(self.temporary_board_dict)
+        # print(self.permanent_board_dict)
+
+        self.reset_permanent_board_dict() # recalculate the empty tiles
+
 
     '''
     Use this function to delete a tile permanently

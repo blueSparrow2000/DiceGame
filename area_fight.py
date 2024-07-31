@@ -7,7 +7,6 @@ from enemy import *
 
 
 def player_death_screen(screen,clock,player):
-    print('player lost!')
     sound_effects['playerdeath'].play()
     pygame.mixer.music.stop()
 
