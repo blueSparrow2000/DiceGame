@@ -7,7 +7,7 @@ mousepos = (0,0)
 board_Y_level = 480
 map_Y_level = 480
 mob_Y_level = 280
-MAX_DEPTH = -100
+MAX_DEPTH = - 1000
 
 mob_side_len = 64
 mob_gap = 28
@@ -53,7 +53,7 @@ shop_effect_color = 'gold'
 # screen colors
 fight_bg_color = 'lightgray' #  'oldlace'
 adventure_bg_color = (100,130,100)
-terracotta = (120, 110, 100)
+terracotta = (150, 140, 120)
 darker_gold = (133, 83, 0)
 
 ### basic buttons

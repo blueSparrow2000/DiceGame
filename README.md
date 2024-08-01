@@ -42,11 +42,10 @@ A simple dice game
 # To do
 - when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
-- Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
 
 
 - 'spike tile': if current tile contains spike tile, player gets 5 damage (deleted when board resets)
-
+- Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn
 

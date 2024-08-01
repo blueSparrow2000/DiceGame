@@ -119,7 +119,7 @@ def get_enemy_class_by_class_name(enemy_name):
 
 
 
-def fight(screen, clock, player, elite = False):
+def fight(screen, clock, player, place = None):
     global TAB_img, rotate_img, back_img, skip_img, bottom_left_button, bottom_right_button, bottom_center_button, mob_Y_level, sound_effects, text_description_level, turn_text_level
     music_Q('Fight', True)
     current_turn = 0
@@ -148,8 +148,13 @@ def fight(screen, clock, player, elite = False):
     enemy_drops = []
     earned_gold = 0
 
-    if elite: # elite mobs => harder!
-        pass
+    background_color = fight_bg_color
+    if place=="ruin": # ruins fight
+        background_color ='darkseagreen'
+        ### different enemy spawn requests
+
+    if player.reached_max_depth(): # boss fight
+        background_color = terracotta
 
     for i in range(len(enemy_request)):
         enemy_class = get_enemy_class_by_class_name(enemy_request[i])
@@ -184,7 +189,7 @@ def fight(screen, clock, player, elite = False):
             print('player wins!')
             return False, True
 
-        screen.fill(fight_bg_color)
+        screen.fill(background_color)
 
 
         if not player_turn:  # enemy turn
@@ -201,7 +206,7 @@ def fight(screen, clock, player, elite = False):
                 entity.behave(player)
                 # check enemy death
                 # draw again
-                screen.fill(fight_bg_color)
+                screen.fill(background_color)
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
                 player.draw(screen, mousepos)
                 player.draw_player_info_top(screen, mousepos)  # Draw player main info

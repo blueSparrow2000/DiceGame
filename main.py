@@ -137,6 +137,7 @@ while meta_run:
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
+                    # go_to_ruin(screen, clock, player)
                     # for i in range(1):
                     #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string
                     #     obtain_skill(screen, clock, player, 'poison_dart')

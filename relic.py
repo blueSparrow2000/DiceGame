@@ -71,6 +71,11 @@ class Relic():
             print("Ruin chance stays the same!")
         return 0
 
+    def relic_spawn_chance_increaser(self):
+        if self.debug:
+            print("Relic chance stays the same!")
+        return 0
+
     ####################################### In progress... ##############################################
     #####################################################################################################
 
@@ -225,21 +230,24 @@ class Thorn(Relic):
 
 class Moss(Relic):
     '''
-    Some luck, maybe..?
+    Better next time!
     '''
     def __init__(self):
         super().__init__(name="moss", rarity = 'common')
 
     def description(self):
-        return "Some luck, maybe..?"
+        return "Better luck next time!"
+
+    def relic_spawn_chance_increaser(self):
+        return 1 # one percent increase
 
 class GoldenTalisman(Relic):
     '''
-    10% chance of getting double gold
+    5% chance of getting double gold
     '''
     def __init__(self):
         super().__init__(name="golden talisman", rarity = 'common')
-        self.chance = 10
+        self.chance = 5
 
     def description(self):
         return "%d%% chance of getting double gold"%self.chance
@@ -253,16 +261,20 @@ class GoldenTalisman(Relic):
 
 class RuinCompass(Relic):
     '''
-    Increase chance of finding a relic in ruins (about 10%)
+    Increase chance of finding a relic in ruins (about 1%)
+    Forward compatibility of the moss
     '''
     def __init__(self):
         super().__init__(name="ruin compass", rarity = 'common')
 
     def description(self):
-        return "Increase chance of finding a relic in ruins"
+        return "Increase the chance of finding a relic in ruins"
 
-    def ruin_chance_increaser(self):
-        return 5
+    def ruin_chance_increaser(self):  # ruin spawns more often
+        return 2
+
+    def relic_spawn_chance_increaser(self):
+        return 1
 
 
 ####################################### In progress... ##############################################

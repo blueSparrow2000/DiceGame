@@ -1,8 +1,10 @@
 '''
-60% change of getting random relics
+60% change of not fighting an enemy
 40% change of fighting elite enemy
 
 
+20% chance of getting a relic
+80% chance of nothing
 '''
 
 from area_fight import *
@@ -25,7 +27,6 @@ for relic_class_name in relic_class_names:
 
 
 def go_to_ruin(screen,clock, player):
-
     ################## chosing a relic ####################
     chance = random.randrange(1, 100)
     relic_rarity = "common"
@@ -44,7 +45,14 @@ def go_to_ruin(screen,clock, player):
     random.shuffle(relic_candidates)
     final_relic_name = relic_candidates[0][0]
     final_relic_sample = relic_candidates[0][1]
-    relic_obtained = False
+
+    relic_spawn_chance = random.randrange(1, 100)
+    for relic in player.relics:
+        relic_spawn_chance -= relic.relic_spawn_chance_increaser()
+
+    relic_obtained = True
+    if relic_spawn_chance <= 50:
+        relic_obtained = False
     ################## chosing a relic ####################
 
 
@@ -113,9 +121,9 @@ def go_to_ruin(screen,clock, player):
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
 
-        write_text(screen, width//2, relic_Y_level - 50, 'Found relic', 30, 'gold')
         # draw relic info
         if not relic_obtained:
+            write_text(screen, width // 2, relic_Y_level - 50, 'Found relic', 30, 'gold')
             final_relic_sample.draw(screen, relic_location, scaled=True)
             write_text(screen, width//2, relic_Y_level + 50, final_relic_sample.name, 20, final_relic_sample.color)
             write_text(screen, width//2, relic_Y_level + 77, final_relic_sample.description(), 17, final_relic_sample.color)
