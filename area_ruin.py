@@ -113,8 +113,6 @@ def go_to_ruin(screen,clock, player):
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
 
-
-        #
         write_text(screen, width//2, relic_Y_level - 50, 'Found relic', 30, 'gold')
         # draw relic info
         if not relic_obtained:

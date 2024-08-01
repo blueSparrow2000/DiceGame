@@ -20,9 +20,8 @@ If there is space in your tile list (empty tiles are more than one)
 
 '''
 
-from util import *
 from area_obtain_skill import *
-
+from area_ruin import *
 
 def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
     if target_tile in dictionary: # only when exists
@@ -34,10 +33,19 @@ def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
 
 
 shop_text_description_level = 210
-
 shop_text_color = 'black'
 
 def go_to_shop(screen,clock, player):
+    global relic_by_rarity_dict
+    relic_price_by_rarity = {'common':10, 'rare':20, 'epic':40, 'special':100, 'legendary':200, 'myth':500}
+    common_relics = relic_by_rarity_dict['common'] # currently only cell common relics
+    random.shuffle(common_relics)
+    final_relic_name = common_relics[0][0]
+    final_relic_sample = common_relics[0][1]
+    relic_obtained = False
+    shop_relic_button_loc = [width//2, shop_text_description_level + 550]
+    relic_price = relic_price_by_rarity[final_relic_sample.rarity]
+
     shop_buy_tiles = {'Attack': [3, 5], 'Defence': [3, 5], 'Regen': [3, 10], 'Skill': [3, 10], 'Joker':[3, 20]}
     buyable_tiles = list(shop_buy_tiles.keys())
 
@@ -48,12 +56,10 @@ def go_to_shop(screen,clock, player):
     shop_button_locations = [
         (shop_button_x+ (3*shop_image_button_tolerance + shop_button_spacing + 10) * i, shop_button_y ) for i in range(len(buyable_tiles))]
 
-    shop_skill_button_loc = [width//2, shop_text_description_level + 300]
+    shop_skill_button_loc = [width//2, shop_text_description_level + 325]
     skill_list = list(runnable_skill_price_dict.keys())
     skill_to_sell = random.choice(skill_list)
     price_of_skill = runnable_skill_price_dict[skill_to_sell]
-
-    shop_relic_button_loc = [width//2, shop_text_description_level + 500]
 
 
     shop_image_dict = dict()
@@ -111,7 +117,14 @@ def go_to_shop(screen,clock, player):
                         if bought:
                             player.pay_gold(price_of_skill)
 
-                # buy relics
+                # buy relic
+                if not relic_obtained and check_inside_button(mousepos, shop_relic_button_loc, button_side_len_half): # clicked relic => get relic! (only for one time!)
+                    if player.pay_gold(relic_price):  # true, which means the player paid
+                        generated_relic = generate_relic_by_class_name(final_relic_name)
+                        player.pick_up_relic(generated_relic)
+                        relic_obtained = True
+                    else:
+                        pass # notify player that you dont have enough gold! (by blinking gold color e.t.c.)
 
 
             if event.type == pygame.KEYDOWN:
@@ -135,7 +148,7 @@ def go_to_shop(screen,clock, player):
 
         # buy tiles
         write_text(screen, width//2, shop_text_description_level+40,
-                           "Buy tiles", 20, shop_text_color)
+                           "TILES", 20, 'gold')
 
         for i in range(len(shop_button_locations)):
             tile_name = buyable_tiles[i]
@@ -160,22 +173,24 @@ def go_to_shop(screen,clock, player):
 
         # buy a skill (randomly chosen one skill) - but you need to replace a skill for that
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] - 50,
-                           "Buy a freshly obtained skill", 20, shop_text_color)
+                           "SKILLS", 20, 'gold')
 
         learnable_skills.draw_skill_on_custom_location(screen, skill_to_sell, shop_skill_button_loc)
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 50,
-                           "%s: %d g"%(skill_to_sell, price_of_skill), 15, 'gold')
-        write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 75,
-                           "NOTE: Must be exchanged for previously learned skills", 15, 'white')
+                           "%s: %d g"%(skill_to_sell, price_of_skill), 17, 'gold')
+        write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 80,
+                           "NOTE: Must be exchanged for previously learned skills", 17, 'white')
 
 
 
-        # buy random artifacts - TBU
+        # buy random artifacts
         write_text(screen, shop_relic_button_loc[0], shop_relic_button_loc[1] - 50,
-                           "Buy relics", 20, shop_text_color)
-
-        write_text(screen, shop_relic_button_loc[0], shop_relic_button_loc[1],
-                           "TBU", 20, shop_text_color)
+                           "RELICS", 20,'gold')
+        if not relic_obtained:  # draw relic info
+            final_relic_sample.draw(screen, shop_relic_button_loc, scaled=True)
+            write_text(screen, width//2, shop_relic_button_loc[1] + 50, final_relic_sample.name, 20, final_relic_sample.color)
+            write_text(screen, width//2, shop_relic_button_loc[1] + 70, final_relic_sample.description(), 17, final_relic_sample.color)
+            write_text(screen, width//2, shop_relic_button_loc[1] + 90, "%d g"%relic_price , 17, 'gold')
 
 
         # draw effects

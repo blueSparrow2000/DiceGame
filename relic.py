@@ -239,7 +239,7 @@ class GoldenTalisman(Relic):
     '''
     def __init__(self):
         super().__init__(name="golden talisman", rarity = 'common')
-        self.chance = 100
+        self.chance = 10
 
     def description(self):
         return "%d%% chance of getting double gold"%self.chance
@@ -250,11 +250,6 @@ class GoldenTalisman(Relic):
         if number <= self.chance:
             final_amount = amount*2
         return final_amount
-
-
-####################################### In progress... ##############################################
-
-
 
 class RuinCompass(Relic):
     '''
@@ -268,6 +263,11 @@ class RuinCompass(Relic):
 
     def ruin_chance_increaser(self):
         return 5
+
+
+####################################### In progress... ##############################################
+
+
 
 
 relic_class_names = ['PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
