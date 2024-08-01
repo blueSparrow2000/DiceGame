@@ -62,7 +62,7 @@ class Map():
         즉 self.map[6][x]는 건드리지 마!! c=6
         
         '''
-        if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= -100: # only boss fight tile is given
+        if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= MAX_DEPTH: # only boss fight tile is given
             self.map[2][3] = ['fight',False]
             self.break_limit = True
         else:
@@ -265,15 +265,6 @@ class Map():
             # delete the block path
             self.block_paths.pop(0)
         return False
-
-        #
-        # # update direction following the bridges and finish when reaching goal tile
-        # # self.moving_X += 1
-        # self.moving_Y -= 1
-        #
-        # if self.moving_Y < -100: # end of animation when block moves is gone
-        #     return True
-        # return False
 
 
     def animate_draw(self,screen):

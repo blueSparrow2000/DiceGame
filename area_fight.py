@@ -47,7 +47,7 @@ def player_death_screen(screen,clock,player):
         pygame.display.flip()
         clock.tick(game_fps)
 
-def player_win_screen(screen,clock,player):
+def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
     run_win_screen = True
     music_Q("cozy")
     mousepos = (0,0)
@@ -152,9 +152,9 @@ def fight(screen, clock, player, place = None):
     if place=="ruin": # ruins fight
         background_color ='darkseagreen'
         ### different enemy spawn requests
-
-    if player.reached_max_depth(): # boss fight
+    elif player.reached_max_depth(): # boss fight
         background_color = terracotta
+
 
     for i in range(len(enemy_request)):
         enemy_class = get_enemy_class_by_class_name(enemy_request[i])
@@ -178,7 +178,7 @@ def fight(screen, clock, player, place = None):
             exit_fight()
             game_run = False
             print('player lost!')
-            return True, True
+            return True, True,enemy_drops, earned_gold
         elif len(enemies) == 0:
             # give player these!
             player.get_gold(earned_gold)
@@ -187,7 +187,7 @@ def fight(screen, clock, player, place = None):
             exit_fight()
             game_run = False
             print('player wins!')
-            return False, True
+            return False, True,enemy_drops, earned_gold
 
         screen.fill(background_color)
 
@@ -238,7 +238,7 @@ def fight(screen, clock, player, place = None):
             if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
                 exit_fight()
                 game_run = False
-                return True, False
+                return True, False,enemy_drops, earned_gold
 
             if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
                 mousepos = pygame.mouse.get_pos()

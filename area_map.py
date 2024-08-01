@@ -10,10 +10,12 @@ def exit():
     return False, False
 
 def update_depth_color(player):
-    depth = player.current_depth
-    #print((110 + depth, 200+depth, 110 + depth))
+    color_limit = -100
     if player.reached_max_depth():
-        depth = -100
+        depth = color_limit
+    else:
+        depth = max(player.current_depth//10 , color_limit)
+
     return (100 + depth, 130 + depth, 100 + depth)
 
 
@@ -226,7 +228,7 @@ def adventure_loop(screen, clock, player,map):
                         ########################################################## go to fight #################################################
                         # initialize board attributes
                         player.board.net.init_turn()
-                        player_lost, valid_termination = fight(screen, clock, player, place = "ruin")
+                        player_lost, valid_termination,enemy_drops, earned_gold = fight(screen, clock, player, place = "ruin")
                         player.board.net.init_turn()
                         # initialize board attributes
                         if not valid_termination:
@@ -242,7 +244,7 @@ def adventure_loop(screen, clock, player,map):
                                 game_win_screen(screen, clock, player)
                                 return True
                             else:
-                                player_win_screen(screen, clock, player)
+                                player_win_screen(screen, clock, player,enemy_drops, earned_gold)
                         ########################################################## go to fight #################################################
                     go_to_ruin(screen, clock, player)
 
@@ -255,7 +257,7 @@ def adventure_loop(screen, clock, player,map):
                     ########################################################## go to fight #################################################
                     # initialize board attributes
                     player.board.net.init_turn()
-                    player_lost, valid_termination = fight(screen, clock, player)
+                    player_lost, valid_termination,enemy_drops, earned_gold = fight(screen, clock, player)
                     player.board.net.init_turn()
                     # initialize board attributes
                     if not valid_termination:
@@ -271,7 +273,7 @@ def adventure_loop(screen, clock, player,map):
                             game_win_screen(screen, clock, player)
                             return True
                         else:
-                            player_win_screen(screen, clock, player)
+                            player_win_screen(screen, clock, player,enemy_drops, earned_gold)
                     ########################################################## go to fight #################################################
 
 
