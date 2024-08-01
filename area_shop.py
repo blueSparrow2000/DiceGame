@@ -46,7 +46,7 @@ def go_to_shop(screen,clock, player):
     shop_relic_button_loc = [width//2, shop_text_description_level + 550]
     relic_price = relic_price_by_rarity[final_relic_sample.rarity]
 
-    shop_buy_tiles = {'Attack': [3, 5], 'Defence': [3, 5], 'Regen': [3, 10], 'Skill': [3, 10], 'Joker':[3, 20]}
+    shop_buy_tiles = {'Attack': [3, 10], 'Defence': [3, 10], 'Regen': [3, 20], 'Skill': [3, 20], 'Joker':[3, 50]} # [cell amount until sold out, price of the tile]
     buyable_tiles = list(shop_buy_tiles.keys())
 
     shop_image_button_tolerance = 25
