@@ -94,3 +94,8 @@ def safe_delete_dict_one(dictionary, target_tile):
             del dictionary[target_tile]
 
 
+def string_capitalizer(input):
+    output = input
+    if 'a' <= input[0] <= 'z':
+        output = input[0].upper() + input[1:]
+    return output

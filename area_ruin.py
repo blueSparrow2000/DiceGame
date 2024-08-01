@@ -6,9 +6,26 @@
 '''
 
 from area_fight import *
+from relic import *
+
+def generate_relic_by_class_name(relic_class_name):
+    relic = getattr(__import__("relic"), relic_class_name)()
+    return relic
+
+
+
+relic_by_rarity_dict =  {'common':[], 'rare':[], 'epic':[], 'special':[], 'legendary':[], 'myth':[]}
+for relic_class_name in relic_class_names:
+    relic = generate_relic_by_class_name(relic_class_name)
+    relic_by_rarity_dict[relic.rarity].append(relic_class_name)
+# this sorts relics by its rarity!
+
+
 
 
 def go_to_ruin(screen,clock, player):
+
+
     game_run = True
     mousepos = (0,0)
     while game_run:

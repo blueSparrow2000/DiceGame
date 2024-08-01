@@ -2,6 +2,7 @@ from util import *
 
 relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowgreen', 'special':'violet', 'legendary':'gold', 'myth':'crimson'}
 
+
 class Relic():
     def __init__(self, name="Relic", type = 'regular', rarity = 'common'):
         global relic_rarity_color
@@ -197,6 +198,17 @@ class Thorn(Relic):
     def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
         enemy.health -= self.thorn_damage
 
-
-
 ####################################### In progress... ##############################################
+
+
+relic_class_names = ['PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' ]
+
+
+
+
+
+
+
+
+
+

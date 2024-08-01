@@ -138,7 +138,29 @@ def adventure_loop(screen, clock, player,map):
                 if which_event == 'campfire':
                     go_to_campfire(screen, clock, player)
                 elif which_event == 'ruin':
-                    go_to_ruin(screen, clock, player)
+                    chance = random.randrange(1, 100)
+                    if (player.my_name == "Arisu") or chance <= 40:  # with 40% probability => get a relic
+                        go_to_ruin(screen, clock, player)
+                    else:   # with probability 60% => elite fight
+                        ########################################################## go to fight #################################################
+                        # initialize board attributes
+                        player.board.net.init_turn()
+                        player_lost, valid_termination = fight(screen, clock, player, elite = True)
+                        player.board.net.init_turn()
+                        # initialize board attributes
+                        if not valid_termination:
+                            meta_run_adventure = False
+                            break
+                        if player_lost:
+                            time.sleep(0.5)
+                            ###############################
+                            player_death_screen(screen, clock, player)
+                            return True  # try again for other characters
+                        else:
+                            player_win_screen(screen, clock, player)
+                        ########################################################## go to fight #################################################
+
+
                 elif which_event == 'shop':
                     go_to_shop(screen, clock, player)
                 elif which_event == 'altar':
@@ -150,18 +172,15 @@ def adventure_loop(screen, clock, player,map):
                     player_lost, valid_termination = fight(screen, clock, player)
                     player.board.net.init_turn()
                     # initialize board attributes
-
                     if not valid_termination:
                         meta_run_adventure = False
                         break
-
                     if player_lost:
                         time.sleep(0.5)
                         ###############################
                         player_death_screen(screen, clock, player)
                         return True # try again for other characters
                     else:
-
                         player_win_screen(screen, clock, player)
                     ########################################################## go to fight #################################################
 

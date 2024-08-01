@@ -42,16 +42,3 @@ import copy
 # print(temp)
 
 
-
-# dd = {1:'hi', 2:'tt', 0:'tt'}
-# vv = list(dd.values())
-# print(vv.count('ss'))
-# kk = list(dd.keys())
-# kk.sort()
-# print(kk)
-
-
-d = [1,2]
-
-x,y = d
-print(x,y)

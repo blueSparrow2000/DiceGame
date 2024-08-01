@@ -34,13 +34,14 @@ A simple dice game
 
 
 2024.08.01 Ruin area now works (+relics!) / more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name
-- when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 
 
 
 # To do
 - add various enemies (few ~ 3)
 - thorny enemy
+
+- when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 
 - 'spike tile': if current tile contains spike tile, player gets 5 damage (deleted when board resets)
 

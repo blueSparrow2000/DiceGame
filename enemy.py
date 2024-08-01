@@ -70,8 +70,6 @@ class Enemy(Entity):
 
 
 
-
-
 class Mob(Enemy):
     def __init__(self, my_name = 'mob', hp=20, hpmax = 20, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)

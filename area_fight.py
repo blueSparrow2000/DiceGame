@@ -110,7 +110,16 @@ def safe_delete(entity_list, player):
         del entity_list[i]
     ### DELETE DEAD ENEMY ###
 
-def fight(screen, clock, player):
+
+
+def get_enemy_class_by_class_name(enemy_name):
+    enemy_class_name = string_capitalizer(enemy_name)
+    enemy_class = getattr(__import__("enemy"), enemy_class_name)
+    return enemy_class
+
+
+
+def fight(screen, clock, player, elite = False):
     global TAB_img, rotate_img, back_img, skip_img, bottom_left_button, bottom_right_button, bottom_center_button, mob_Y_level, sound_effects, text_description_level, turn_text_level
     music_Q('Fight', True)
     current_turn = 0
@@ -131,30 +140,25 @@ def fight(screen, clock, player):
 
     mob_X = width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2
 
-    # Mob(my_name='enemies/mob', hp=30, hpmax=30, attack_damage=5, pos=(mob_X, mob_Y_level))
-    # enemy.update_buffs()
 
     # determine golds / enemy drops
     enemy_drops = []
     earned_gold = 0
 
+    if elite: # elite mobs => harder!
+        pass
+
     for i in range(len(enemy_request)):
-        enemy = None
-        if enemy_request[i] == 'mob':
-            enemy = Mob(pos=(mob_X, mob_Y_level), rank=1)
-
-        elif enemy_request[i] == 'halo':
-            enemy = Halo(pos=(mob_X, mob_Y_level))
-
+        enemy_class = get_enemy_class_by_class_name(enemy_request[i])
+        enemy = enemy_class(pos=(mob_X, mob_Y_level), rank = 1) # rank is determined by current depth (effect not implemented yet)
+        enemy.refresh_my_turn()
         drop = enemy.get_drop()
         if drop:
             enemy_drops.append(drop)
         earned_gold += enemy.get_gold()
-        # enemy.update_buffs()
-        enemy.refresh_my_turn()
         enemies.append(enemy)
-        mob_X += mob_side_len + mob_gap
 
+        mob_X += mob_side_len + mob_gap
 
     player.new_fight()
     player.refresh_my_turn()
