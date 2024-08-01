@@ -1,3 +1,11 @@
+'''
+How to add relics
+
+1. Make a class
+2. Add the class name to relic_class_names
+
+'''
+
 from util import *
 
 relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowgreen', 'special':'violet', 'legendary':'gold', 'myth':'crimson'}
@@ -53,6 +61,10 @@ class Relic():
             print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
         pass
 
+    def activate_when_getting_reward_gold(self, amount):
+        if self.debug:
+            print("Got reward!")
+        return amount
 
 
     ####################################### In progress... ##############################################
@@ -206,10 +218,54 @@ class Thorn(Relic):
     def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
         enemy.health -= self.thorn_damage
 
+
+class Moss(Relic):
+    '''
+    Some luck, maybe..?
+    '''
+    def __init__(self):
+        super().__init__(name="moss", rarity = 'common')
+
+    def description(self):
+        return "Some luck, maybe..?"
+
+class GoldenTalisman(Relic):
+    '''
+    10% chance of getting double gold
+    '''
+    def __init__(self):
+        super().__init__(name="golden talisman", rarity = 'common')
+        self.chance = 100
+
+    def description(self):
+        return "%d%% chance of getting double gold"%self.chance
+
+    def activate_when_getting_reward_gold(self, amount):
+        final_amount = amount
+        number = random.randrange(1,100)
+        if number <= self.chance:
+            final_amount = amount*2
+        return final_amount
+
+
 ####################################### In progress... ##############################################
 
 
-relic_class_names = ['PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' ]
+
+class RuinCompass(Relic):
+    '''
+    Increase chance of finding a relic in ruins (about 10%)
+    '''
+    def __init__(self):
+        super().__init__(name="ruin compass", rarity = 'common')
+
+    def description(self):
+        return "Increase chance of finding a relic in ruins"
+
+
+
+
+relic_class_names = ['PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

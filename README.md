@@ -36,7 +36,7 @@ A simple dice game
 2024.08.01 Ruin area now works (+relics!) / Boss(halo) clear ending credit! / more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name / added thorny enemy
 
 
-2024.08.02 
+2024.08.02 Shop: Add a common relic for the shop! 
 
 
 # To do

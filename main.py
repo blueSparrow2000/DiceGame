@@ -146,14 +146,8 @@ while meta_run:
 
                     # for i in range(13):
                     #     player.pick_up_relic(Relic())
-                    # player.pick_up_relic(PoisonBottle())
-                    # player.pick_up_relic(SerpentHeart())
-                    # player.pick_up_relic(FearCell())
-                    # player.pick_up_relic(StemCell())
-                    # player.pick_up_relic(Ration())
-                    # player.pick_up_relic(WhiteCube())
-                    # player.pick_up_relic(FrenzySkull())
-                    # player.pick_up_relic(Thorn())
+                    # player.pick_up_relic(GoldenTalisman())
+
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

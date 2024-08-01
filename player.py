@@ -173,7 +173,11 @@ class Player(Entity):
         return False, 1, 0  # process_completed (end player turn right away flag), player_turn_step (currently 1), number_of_targets_to_specify (any is fine. default 1)
 
     def get_gold(self, amount):
-        self.golds += amount
+        final_amount = amount
+        for relic in self.relics:
+            final_amount = relic.activate_when_getting_reward_gold(final_amount)
+
+        self.golds += final_amount
 
     def pay_gold(self, amount):
         if self.can_buy(amount):
