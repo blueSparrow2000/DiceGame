@@ -145,14 +145,15 @@ while meta_run:
                     #     fix_a_tile(screen, clock, player,'Defence')
 
 
-                    player.pick_up_relic(Relic())
+                    # player.pick_up_relic(Relic())
                     # player.pick_up_relic(PoisonBottle())
                     # player.pick_up_relic(SerpentHeart())
                     # player.pick_up_relic(FearCell())
                     # player.pick_up_relic(StemCell())
                     # player.pick_up_relic(Ration())
                     # player.pick_up_relic(WhiteCube())
-                    player.pick_up_relic(FrenzySkull())
+                    # player.pick_up_relic(FrenzySkull())
+                    # player.pick_up_relic(Thorn())
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

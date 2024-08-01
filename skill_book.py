@@ -208,8 +208,7 @@ class Skill_Book():
         damage = (damage_multiplier*A) * player.get_attack_multiplier()
         for enemy in target_list:
             enemy.buffs['poison'] = duration
-            counter_attack_damage = enemy.take_damage(damage)
-            player.health -= counter_attack_damage
+            enemy.take_damage(player,damage)
 
     def get_detail_poison_dart(self,player):
         duration = 3
@@ -270,8 +269,7 @@ class Mirinae_skills(Skill_Book):
         A = player.count_tile('Attack')
         damage = (5*A) * player.get_attack_multiplier()
         for enemy in target_list:
-            counter_attack_damage = enemy.take_damage(damage)
-            player.health -= counter_attack_damage
+            enemy.take_damage(player,damage)
 
     def get_detail_martial_art(self,player):
         A = player.count_tile('Attack')
@@ -315,8 +313,7 @@ class Mirinae_skills(Skill_Book):
         A = player.count_tile('Attack')
         damage = (A*5)  * player.get_attack_multiplier()
         for enemy in target_list:
-            counter_attack_damage = enemy.take_damage(damage)
-            player.health -= counter_attack_damage
+            enemy.take_damage(player,damage)
     def get_detail_sword_storm(self,player):
         A = player.count_tile('Attack')
         damage = (A*5) * player.get_attack_multiplier()
@@ -381,8 +378,7 @@ class Mirinae_skills(Skill_Book):
         total_A = player.board.consume_all_tiles_on_board('Attack')
         damage = ( 10 * total_A ) * player.get_attack_multiplier()
         for enemy in target_list:
-            counter_attack_damage = enemy.take_damage(damage)
-            player.health -= counter_attack_damage
+            enemy.take_damage(player,damage)
             enemy.buffs['broken will'] = 1
 
     def get_detail_Excaliber(self, player):

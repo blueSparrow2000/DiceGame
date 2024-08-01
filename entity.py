@@ -84,9 +84,6 @@ class Entity():
         self.absorption = 0
         self.counter_attack = False
 
-    def get_relic_effects(self):
-        pass
-
     def reset_buffs(self):
         self.can_attack = True
         self.strength_multiplier = 1
@@ -105,8 +102,6 @@ class Entity():
         self.reset_state() # refresh state variables that activates on other side's turn
 
         self.get_buff_effect() # get buff effects
-
-        self.get_relic_effects() # get relic effects - 적들도 쓸 수는 있지만 플레이어 위주...
 
         self.defence = 0  # reset the temporal defence
         self.update_defence()
@@ -175,7 +170,7 @@ class Entity():
         # otherwise, do what child classes will do
         return True
 
-    def take_damage(self, damage_temp):
+    def take_damage(self, attacker, damage_temp):
         if (self.buffs['attack immunity']>0): # do not take damage
             print(self.buffs['attack immunity'])
             return 0
@@ -201,10 +196,9 @@ class Entity():
 
         self.death_check()
 
-        if (self.counter_attack):
-            return counter_attack_damage
-        else:
-            return 0
+        if (self.counter_attack): # do a counter attack
+            attacker.health -= counter_attack_damage # immediately damages enemies
+
 
     def is_dead(self):
         return self.health <= 0

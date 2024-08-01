@@ -2,7 +2,7 @@ from entity import *
 
 
 class Enemy(Entity):
-    def __init__(self,my_name, hp, hpmax, attack_damage, pos,attack_pattern,rank):
+    def __init__(self,my_name, hp, hpmax, attack_damage, pos,attack_pattern,rank,gold_reward=1):
         super().__init__('enemies/'+my_name, hp, hpmax, pos) # mypos is calculated as follows: how many enemy in one fight
         global icons, icon_container, sound_effects
         self.my_name = my_name # override
@@ -23,6 +23,8 @@ class Enemy(Entity):
         self.num_of_patterns = len(self.pattern)
 
         self.rank = rank
+
+        self.gold = gold_reward
 
     def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
         super().draw(screen,mousepos)
@@ -64,11 +66,15 @@ class Enemy(Entity):
         return []
 
     def get_gold(self):
-        return 1 # default one gold
+        return self.gold # default one gold
+
+
+
+
 
 class Mob(Enemy):
-    def __init__(self, my_name = 'mob', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank)
+    def __init__(self, my_name = 'mob', hp=20, hpmax = 20, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)
 
     def behave(self, player):
         self.refresh_my_turn()
@@ -77,8 +83,7 @@ class Mob(Enemy):
         if current_pattern=='attack':
             if self.can_attack:
                 sound_effects['hit'].play()
-                counter_attack_damage = player.take_damage(self.get_current_damage())
-                self.health -= counter_attack_damage
+                player.take_damage(self,self.get_current_damage())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
@@ -114,8 +119,7 @@ class Halo(Enemy):
             if self.can_attack:
                 time.sleep(0.3)
                 sound_effects['hit'].play()
-                counter_attack_damage = player.take_damage(self.get_current_damage())
-                self.health -= counter_attack_damage
+                player.take_damage(self,self.get_current_damage())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
@@ -128,7 +132,6 @@ class Halo(Enemy):
         elif current_pattern=='buff':
             player.buffs['confusion'] = 1
             player.buffs['vulnerability'] = 1
-
         elif current_pattern=='regen':
             self.regen()
         elif current_pattern=='unkown':

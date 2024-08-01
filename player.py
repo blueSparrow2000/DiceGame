@@ -409,8 +409,8 @@ class Player(Entity):
     def new_fight(self):
         for k,v in self.buffs.items():
             self.buffs[k] = 0 # reset
-        self.defence = 0
-        self.update_defence()
+        # self.defence = 0
+        # self.update_defence()
         self.current_tile = dict()
         self.current_skill_idx = -1
 
@@ -419,6 +419,11 @@ class Player(Entity):
 
         for relic in self.relics:
             relic.fight_start_effect(self)
+
+
+    def on_enemy_death(self, enemy):
+        for relic in self.relics:
+            relic.activate_on_kill(self, enemy)
 
 
     def push_tile_infos(self,tile_info):
@@ -439,11 +444,17 @@ class Player(Entity):
         sound_effects['sword'].play()
         for enemy in target_list:
             # enemy.take_damage(100)
-            counter_attack_damage = enemy.take_damage(self.get_current_damage())
-            self.health -= counter_attack_damage
+            enemy.take_damage(self,self.get_current_damage())
             # enemy.buffs['broken will'] = 1
             # enemy.buffs['strength'] = 1
             # enemy.buffs['poison'] = 1
+
+    def take_damage(self, attacker, damage_temp):
+        super().take_damage(attacker, damage_temp)
+        # player only stuffs (like relic effects)
+        for relic in self.relics:
+            relic.activate_on_taking_damage(self, attacker,damage_temp)
+
 
     def get_current_damage(self):
         # count number of attack tiles

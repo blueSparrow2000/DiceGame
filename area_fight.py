@@ -97,11 +97,12 @@ def exit_fight():
 
 
 
-def safe_delete(entity_list):
+def safe_delete(entity_list, player):
     ### DELETE DEAD ENEMY ###
     delete_idx = []
     for i in range(len(entity_list)):
         if entity_list[i].is_dead():
+            player.on_enemy_death(entity_list[i])
             delete_idx.append(i)
     delete_idx.reverse()
 
@@ -150,6 +151,7 @@ def fight(screen, clock, player):
             enemy_drops.append(drop)
         earned_gold += enemy.get_gold()
         # enemy.update_buffs()
+        enemy.refresh_my_turn()
         enemies.append(enemy)
         mob_X += mob_side_len + mob_gap
 
@@ -183,13 +185,14 @@ def fight(screen, clock, player):
             player.get_buff_effect()  # update buff effect every turn
 
             ### DELETE DEAD ENEMY ###
-            safe_delete(enemies)
+            safe_delete(enemies, player)
             ### DELETE DEAD ENEMY ###
 
             current_turn += 1
 
             for entity in enemies:
                 entity.behave(player)
+                # check enemy death
                 # draw again
                 screen.fill(fight_bg_color)
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
@@ -202,7 +205,7 @@ def fight(screen, clock, player):
                 time.sleep(0.2)
 
             ### DELETE DEAD ENEMY ###
-            safe_delete(enemies)
+            safe_delete(enemies,player)
             ### DELETE DEAD ENEMY ###
 
             ########################################### Just before the player turn starts! ###########################

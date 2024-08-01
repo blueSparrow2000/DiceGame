@@ -1,17 +1,19 @@
 from util import *
 
-relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowgreen', 'legendary':'gold', 'special':'violet', 'cursed':'crimson'}
+relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowgreen', 'special':'violet', 'legendary':'gold', 'myth':'crimson'}
 
 class Relic():
     def __init__(self, name="Relic", type = 'regular', rarity = 'common'):
         global relic_rarity_color
         self.name = name
         self.image = load_image("relics/%s"%name)
-        self.debug = False
         self.type = type
         self.rarity = rarity
         self.color = relic_rarity_color[self.rarity]
         self.delete = False
+
+        self.debug = False
+
 
     def fight_every_turn_beginning_effect(self, player):
         if self.debug:
@@ -33,17 +35,39 @@ class Relic():
             print("Relic first obtained!")
         pass
 
-    ####################################### In progress... ##############################################
-    def activate_on_death(self, player):
+    def activate_on_death(self, enemy):
         pass
 
+
+    def activate_on_kill(self, player, enemy):
+        if self.debug:
+            print("Detected a kill!")
+        pass
+
+
+
+    def activate_on_taking_damage(self, player, enemy, attack_damage):
+        if self.debug:
+            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
+        pass
+
+
+
+    ####################################### In progress... ##############################################
     #####################################################################################################
+
+
+
     def description(self):
         return "A relic for debugging"
 
     def draw(self, screen, location):
         screen.blit(self.image,
                     self.image.get_rect(center=location))
+
+
+
+
 
 class PoisonBottle(Relic):
     '''
@@ -100,16 +124,16 @@ class StemCell(Relic):
 
 class Ration(Relic):
     '''
-    Recovers 2 hp at the end of each turn in a battle
+    Recovers 1 hp at the end of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="ancient ration",rarity = 'rare')
+        super().__init__(name="ancient ration",rarity = 'common')
 
     def description(self):
-        return "Recovers 2 hp at the end of each turn in a battle"
+        return "Recovers 1 hp at the end of each turn in a battle"
 
     def fight_every_turn_end_effect(self, player):
-        player.enforeced_regen(2)
+        player.enforeced_regen(1)
 
 
 class WhiteCube(Relic):
@@ -128,8 +152,6 @@ class WhiteCube(Relic):
         self.delete = True
 
 
-####################################### In progress... ##############################################
-
 class FrenzySkull(Relic):
     '''
     heal by the amount overkilled # 즉 적의 피가 -대로 깎였을때, 그만큼 내가 회복한다는것 (적의 피가 -10이 되고 죽었으면 내가 10을 회복함 etc.)
@@ -141,8 +163,25 @@ class FrenzySkull(Relic):
     def description(self):
         return "heal by the amount overkilled"
 
+    def activate_on_kill(self, player, enemy):
+        # print(enemy.health)
+        reverse_heal_amt = abs(enemy.health)
+        player.enforeced_regen(reverse_heal_amt)
+
+
+class Thorn(Relic):
+    '''
+    Deals half of the damage received
+    '''
+    def __init__(self):
+        super().__init__(name="thorn", rarity = 'special')
+
+    def description(self):
+        return "Deals half of the damage received"
+
+    def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
+        enemy.health -= attack_damage//2
 
 
 
-
-
+####################################### In progress... ##############################################

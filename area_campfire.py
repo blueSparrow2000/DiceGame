@@ -13,7 +13,7 @@ def go_to_campfire(screen,clock, player):
     mousepos = (0,0)
 
     music_Q('cozy', True)
-    campfire_heal_amount = 20
+    campfire_heal_amount = 50
     player.enforeced_regen(campfire_heal_amount)
 
     while game_run:
@@ -66,7 +66,7 @@ def go_to_campfire(screen,clock, player):
         write_text(screen, width//2, area_name_Y_level, 'Campfire', 30, 'gold')
 
         write_text(screen, width//2, height//2 - 100, 'You took a rest near the campfire', 15, 'darkgoldenrod')
-        write_text(screen, width//2, height//2 - 50, '+20 HP', 15, 'red')
+        write_text(screen, width//2, height//2 - 50, '+%d HP'%campfire_heal_amount, 15, 'red')
 
 
         # Draw player main info
