@@ -133,7 +133,7 @@ def fight(screen, clock, player, elite = False):
     #################### randomly generate enemy following some logic ##################
     enemy_name_list = ['mob', 'fragment']
     trial = random.randint(1, 3)
-    enemy_request = ['halo' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
     if player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     #####################################################################################

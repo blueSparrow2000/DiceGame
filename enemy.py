@@ -159,7 +159,7 @@ class Mob(Enemy):
         self.end_my_turn()
 
 class Fragment(Enemy):
-    def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
         self.thorny = True
 
