@@ -144,12 +144,18 @@ class Entity():
 
                 if (self.my_type == 'player' and buff_name=='attack immunity'): # for attack immunity, decrement 1
                     buff_duration-=1
-
+                location = [self.buff_icon_x + self.icon_delta * cnt, self.buff_icon_y + next_row * self.icon_delta]
                 screen.blit(buff_icon,
-                            buff_icon.get_rect(center=(self.buff_icon_x + self.icon_delta * cnt, self.buff_icon_y + next_row * self.icon_delta)))
-                write_text(screen, self.buff_icon_x + self.icon_delta * cnt + 6, self.buff_icon_y + 6 + next_row * self.icon_delta,
-                           "%d" % (buff_duration), 12,
-                           'dimgray')
+                            buff_icon.get_rect(center=location))
+                write_text(screen, location[0] + 6,location[1] + 6, "%d" % (buff_duration), 12, 'dimgray')
+
+                if check_inside_button(mousepos, location, self.icon_delta // 2):  # if mouse is pointing to the relic
+                    description = buff_name_description_dic[buff_name]
+
+                    write_text(screen, width // 2, turn_text_level + self.icon_delta, description, 17, "white", 'black')
+
+
+
                 cnt += 1
 
         if (self.absorption > 0):

@@ -28,6 +28,10 @@ class Enemy(Entity):
         super().draw(screen,mousepos)
         self.show_next_move(screen,mousepos)
 
+        if check_inside_button(mousepos, self.mypos, self.icon_delta // 2):  # if mouse is pointing to the relic
+            write_text(screen, self.mypos[0], self.mypos[1], self.my_name, 20, "lightgray", 'black')
+
+
     def proceed_next_pattern(self):
         # proceed to the next pattern
         self.current_pattern_idx = (self.current_pattern_idx+1)%self.num_of_patterns
@@ -42,8 +46,16 @@ class Enemy(Entity):
 
         # next_move_img = self.pattern_image[self.pattern_analyzer[current_pattern]]
         next_move_img = self.pattern_image[current_pattern]
-
         screen.blit(next_move_img, next_move_img.get_rect(center=self.next_move_loc))
+
+        if check_inside_button(mousepos, self.next_move_loc, self.icon_delta // 2):  # if mouse is pointing to the relic
+            description = ""
+            if current_pattern == 'no op':
+                description = "does nothing"
+            else:
+                description = "It will try to %s" % current_pattern
+
+            write_text(screen, width // 2, turn_text_level + self.icon_delta, description, 17, "white", 'black')
 
     def get_current_damage(self):
         return self.attack_damage*self.get_attack_multiplier()

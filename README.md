@@ -33,23 +33,20 @@ A simple dice game
 2024.07.31 Make main menu: character selection(cannot change once fixed) / planar figure selection - make system + separate planar figure class from the board (for efficient drawing) / Implement altar completely: tile swap bless(?)
 
 
-2024.08.01 complete adding relic / make Ruin work 
+2024.08.01 more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name 
+- complete adding relic / make Ruin work 
+- when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 
 
 
 # To do
-- Make ruin work
-- when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
-- more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name and brief description maybe!   
-
-
-- New debuff(for player only) 'chained': block the use of a specific tile for one turn
+- add various enemies (few ~ 3)
 - 'thorn': if current tile contains thorn tile, player gets 5 damage (deleted when board resets)
 
-- add various enemies (few ~ 3)
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 - Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles 
 
+- New debuff(for player only) 'chained': block the use of a specific tile for one turn
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
