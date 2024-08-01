@@ -144,8 +144,8 @@ while meta_run:
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
 
-
-                    # player.pick_up_relic(Relic())
+                    # for i in range(13):
+                    #     player.pick_up_relic(Relic())
                     # player.pick_up_relic(PoisonBottle())
                     # player.pick_up_relic(SerpentHeart())
                     # player.pick_up_relic(FearCell())

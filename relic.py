@@ -14,6 +14,7 @@ class Relic():
         self.delete = False
 
         self.debug = False
+        self.scaled_image = pygame.transform.scale(self.image, (50, 50))
 
 
     def fight_every_turn_beginning_effect(self, player):
@@ -62,9 +63,13 @@ class Relic():
     def description(self):
         return "A relic for debugging"
 
-    def draw(self, screen, location):
-        screen.blit(self.image,
-                    self.image.get_rect(center=location))
+    def draw(self, screen, location, scaled = False):
+        if scaled:
+            screen.blit(self.scaled_image,
+                        self.scaled_image.get_rect(center=location))
+        else:
+            screen.blit(self.image,
+                        self.image.get_rect(center=location))
 
 
 
@@ -99,16 +104,17 @@ class SerpentHeart(Relic):
 
 class FearCell(Relic):
     '''
-    Recovers 5 hp at the start of each fight
+    Recovers 4 hp at the start of each fight
     '''
     def __init__(self):
         super().__init__(name="fear cell",rarity = 'common')
+        self.recover_amount = 4
 
     def description(self):
-        return "Recovers 5 hp at the start of each fight"
+        return "Recovers %d hp at the start of each fight"%self.recover_amount
 
     def fight_start_effect(self, player):
-        player.enforeced_regen(5)
+        player.enforeced_regen(self.recover_amount)
 
 class StemCell(Relic):
     '''
@@ -116,12 +122,13 @@ class StemCell(Relic):
     '''
     def __init__(self):
         super().__init__(name="stem cell",rarity = 'epic')
+        self.recover_amount = 2
 
     def description(self):
-        return "Recovers 2 hp at the start of each turn in a battle"
+        return "Recovers %d hp at the start of each turn in a battle"%self.recover_amount
 
     def fight_every_turn_beginning_effect(self, player):
-        player.enforeced_regen(2)
+        player.enforeced_regen(self.recover_amount)
 
 class Ration(Relic):
     '''
@@ -129,12 +136,13 @@ class Ration(Relic):
     '''
     def __init__(self):
         super().__init__(name="ancient ration",rarity = 'rare')
+        self.recover_amount = 1
 
     def description(self):
-        return "Recovers 1 hp at the end of each turn in a battle"
+        return "Recovers %d hp at the end of each turn in a battle"%self.recover_amount
 
     def fight_every_turn_end_effect(self, player):
-        player.enforeced_regen(1)
+        player.enforeced_regen(self.recover_amount)
 
 
 class WhiteCube(Relic):

@@ -29,7 +29,6 @@ def go_to_area(screen,clock, player):
                 sound_effects['confirm'].play()
                 mousepos = pygame.mouse.get_pos()
                 mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
-                # do fight logic on player's turn
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     # exit
                     game_run = False

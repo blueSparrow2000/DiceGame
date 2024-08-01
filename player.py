@@ -233,7 +233,7 @@ class Player(Entity):
         cnt = 0
         next_row = 0
         for relic in self.relics:
-            if cnt > self.max_relic_in_a_row:
+            if cnt >= self.max_relic_in_a_row:
                 next_row += 1
                 cnt = 0
             location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
