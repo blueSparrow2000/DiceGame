@@ -66,6 +66,10 @@ class Relic():
             print("Got reward!")
         return amount
 
+    def ruin_chance_increaser(self):
+        if self.debug:
+            print("Ruin chance stays the same!")
+        return 0
 
     ####################################### In progress... ##############################################
     #####################################################################################################
@@ -262,7 +266,8 @@ class RuinCompass(Relic):
     def description(self):
         return "Increase chance of finding a relic in ruins"
 
-
+    def ruin_chance_increaser(self):
+        return 5
 
 
 relic_class_names = ['PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']

@@ -214,6 +214,12 @@ def adventure_loop(screen, clock, player,map):
                     go_to_campfire(screen, clock, player)
                 elif which_event == 'ruin':
                     chance = random.randrange(1, 100)
+
+                    # relic chance increasing
+                    for relic in player.relics:
+                        chance -= relic.ruin_chance_increaser()
+                    # relic chance increasing
+
                     if (player.my_name == "Arisu") or chance <= 40:  # with 40% probability => get a relic
                         go_to_ruin(screen, clock, player)
                     else:   # with probability 60% => elite fight
