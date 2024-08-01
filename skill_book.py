@@ -81,7 +81,7 @@ class DummyPlayer(Entity):
             write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 40,
                        tile_name, 15)
             write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
-                       "%d"%self.char_tiles[tile_name], 15)
+                       "%d"%self.char_tiles[tile_name], 20)
 
         #write_text(screen, self.tile_info_location[0], self.tile_info_location[1], "%s"%self.char_tiles, 15)
 

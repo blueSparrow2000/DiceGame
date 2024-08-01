@@ -169,6 +169,11 @@ class Entity():
         if self.targeted:
             screen.blit(target_icon, target_icon.get_rect(center=self.mypos))
 
+    def death_check(self):
+        if self.health > 0:
+            return False # not dead
+        # otherwise, do what child classes will do
+        return True
 
     def take_damage(self, damage_temp):
         if (self.buffs['attack immunity']>0): # do not take damage
@@ -193,6 +198,8 @@ class Entity():
                 self.total_defence = 0
                 self.health -= partial_damage
                 # print('got hit!')
+
+        self.death_check()
 
         if (self.counter_attack):
             return counter_attack_damage

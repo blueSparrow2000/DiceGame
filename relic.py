@@ -1,6 +1,6 @@
 from util import *
 
-relic_rarity_color = {'common':'silver', 'epic':'yellowgreen', 'legendary':'gold', 'special':(150, 200, 240)}
+relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowgreen', 'legendary':'gold', 'special':'violet', 'cursed':'crimson'}
 
 class Relic():
     def __init__(self, name="Relic", type = 'regular', rarity = 'common'):
@@ -11,7 +11,7 @@ class Relic():
         self.type = type
         self.rarity = rarity
         self.color = relic_rarity_color[self.rarity]
-
+        self.delete = False
 
     def fight_every_turn_beginning_effect(self, player):
         if self.debug:
@@ -34,7 +34,7 @@ class Relic():
         pass
 
     ####################################### In progress... ##############################################
-    def trigger_on_death(self, player):
+    def activate_on_death(self, player):
         pass
 
     #####################################################################################################
@@ -52,7 +52,7 @@ class PoisonBottle(Relic):
     duration 3 -> 5
     '''
     def __init__(self):
-        super().__init__(name="poison bottle",rarity = 'special')
+        super().__init__(name="poison bottle",rarity = 'rare')
 
     def description(self):
         return "Poison dart: damage multiplier 3 -> 5 / duration 3 -> 5"
@@ -90,7 +90,7 @@ class StemCell(Relic):
     Recovers 2 hp at the beginning of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="stem cell",rarity = 'common')
+        super().__init__(name="stem cell",rarity = 'rare')
 
     def description(self):
         return "Recovers 2 hp at the start of each turn in a battle"
@@ -103,7 +103,7 @@ class Ration(Relic):
     Recovers 2 hp at the end of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="ancient ration",rarity = 'common')
+        super().__init__(name="ancient ration",rarity = 'rare')
 
     def description(self):
         return "Recovers 2 hp at the end of each turn in a battle"
@@ -123,6 +123,12 @@ class WhiteCube(Relic):
     def description(self):
         return "[Exhaust] Can revive once"
 
+    def activate_on_death(self, player):
+        sound_effects['playerdeath'].play()
+        player.enforeced_regen(player.max_health)
+        self.delete = True
+
+
 
 class FrenzySkull(Relic):
     '''
@@ -130,7 +136,7 @@ class FrenzySkull(Relic):
     should be called whenever enemy is getting deleted
     '''
     def __init__(self):
-        super().__init__(name="frenzy skull", rarity = 'legendary')
+        super().__init__(name="frenzy skull", rarity = 'special')
 
     def description(self):
         return "heal by the amount an owner overkilled"

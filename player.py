@@ -465,5 +465,12 @@ class Player(Entity):
         return self.heal_multiplier*self.P(R)
 
 
+    def death_check(self):
+        if not super().death_check(): # returns False when not dead
+            return False
 
+        # relic effect from death check
+        for relic in self.relics:
+            relic.activate_on_death(self)
 
+        self.relics[:] = [relic for relic in self.relics if not relic.delete]

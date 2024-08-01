@@ -9,13 +9,24 @@ from enemy import *
 def player_death_screen(screen,clock,player):
     sound_effects['playerdeath'].play()
     pygame.mixer.music.stop()
-
+    mousepos = (0,0)
     run_lost_screen = True
     while run_lost_screen:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
                 return False
+            if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
+                mousepos = pygame.mouse.get_pos()
 
+            if event.type == pygame.MOUSEBUTTONUP:
+                sound_effects['confirm'].play()
+                mousepos = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
+                # do fight logic on player's turn
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    # exit
+                    run_lost_screen = False
+                    break
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
                     run_lost_screen = False
@@ -25,20 +36,39 @@ def player_death_screen(screen,clock,player):
                     break
         screen.fill(fight_bg_color)
         write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
-        write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+        # write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+
+
         pygame.display.flip()
         clock.tick(game_fps)
 
 def player_win_screen(screen,clock,player):
     run_win_screen = True
     music_Q("cozy")
+    mousepos = (0,0)
     time.sleep(0.5)
     while run_win_screen:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
                 run_win_screen = False
                 break
+            if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
+                mousepos = pygame.mouse.get_pos()
 
+            if event.type == pygame.MOUSEBUTTONUP:
+                sound_effects['confirm'].play()
+                mousepos = pygame.mouse.get_pos()
+                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
+                # do fight logic on player's turn
+                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    # exit
+                    run_win_screen = False
+                    break
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
                     run_win_screen = False
@@ -48,9 +78,16 @@ def player_win_screen(screen,clock,player):
                     break
         screen.fill(adventure_bg_color)
         write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
-        write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
-                   'gray')
+        # write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
+        #            'gray')
         # show some items dropped etc.
+
+        # draw button
+        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+        else:
+            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+
         pygame.display.flip()
         clock.tick(game_fps)
 
