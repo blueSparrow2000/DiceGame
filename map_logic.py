@@ -315,7 +315,7 @@ class Map():
                     col_board_idx = (center_y+col_offset - self.map_Y_level) // self.side_length
                     # check boarder
                     if (row_board_idx < 0 or col_board_idx < 0 or row_board_idx > 6 or col_board_idx > 6):
-                        print("invalid position: outside the border")
+                        # print("invalid position: outside the border")
                         return False
 
                     # check coordinate

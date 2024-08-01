@@ -267,7 +267,7 @@ class Board():
 
         if (row_board_idx < 0 or col_board_idx < 0 or row_board_idx > (self.board_side_length - 1) or col_board_idx > (
                 self.board_side_length - 1)):
-            print("invalid position: outside the border")
+            # print("invalid position: outside the border")
             return -1 # improper location index
 
         return col_board_idx*self.board_side_length + row_board_idx
@@ -304,7 +304,7 @@ class Board():
             return False
 
         if location_index==-1: # when given improper location index
-            print("invalid location index")
+            # print("invalid location index")
             return False
 
         # check whether the tile collides location with existing tiles

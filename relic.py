@@ -112,7 +112,6 @@ class Ration(Relic):
         player.enforeced_regen(2)
 
 
-####################################### In progress... ##############################################
 class WhiteCube(Relic):
     '''
     [Exhaust] Can revive once
@@ -129,17 +128,18 @@ class WhiteCube(Relic):
         self.delete = True
 
 
+####################################### In progress... ##############################################
 
 class FrenzySkull(Relic):
     '''
-    heal by the amount an owner overkilled # 즉 적의 피가 -대로 깎였을때, 그만큼 내가 회복한다는것 (적의 피가 -10이 되고 죽었으면 내가 10을 회복함 etc.)
+    heal by the amount overkilled # 즉 적의 피가 -대로 깎였을때, 그만큼 내가 회복한다는것 (적의 피가 -10이 되고 죽었으면 내가 10을 회복함 etc.)
     should be called whenever enemy is getting deleted
     '''
     def __init__(self):
         super().__init__(name="frenzy skull", rarity = 'special')
 
     def description(self):
-        return "heal by the amount an owner overkilled"
+        return "heal by the amount overkilled"
 
 
 

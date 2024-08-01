@@ -54,6 +54,7 @@ shop_effect_color = 'gold'
 fight_bg_color = 'lightgray' #  'oldlace'
 adventure_bg_color = (100,130,100)
 terracotta = (120, 110, 100)
+darker_gold = (133, 83, 0)
 
 ### basic buttons
 button_side_len_half = 25 # buttons are all of side 50 pixels

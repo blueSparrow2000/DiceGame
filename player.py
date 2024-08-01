@@ -218,7 +218,7 @@ class Player(Entity):
         draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , width, 5, 100, 'gray')
 
         write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
-        write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, 'darkgoldenrod')
+        write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, darker_gold)
 
         # depth
         if self.reached_max_depth():
@@ -239,9 +239,9 @@ class Player(Entity):
             location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
             relic.draw(screen, location)
             if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
-                write_text(screen, width // 2, self.relic_y_start - 52, relic.name, 20, relic.color, 'black')
                 relic_effects = relic.description()
                 write_text(screen, width//2, self.relic_y_start - 35, relic_effects, 17, relic.color, 'black')
+                write_text(screen, width // 2, self.relic_y_start - 52, relic.name, 20, relic.color, 'black')
 
             cnt += 1
 
