@@ -21,6 +21,8 @@ def draw_bar(screen,x,y,bar_length,bar_height, current_percent, color): # x,y is
     pygame.draw.rect(screen,color,[x-bar_length//2, y-bar_height//2,int(bar_length*(current_percent/100)),bar_height])
 
 def write_text(surf, x, y, text, size,color='black',bg_color = None): #(50, 200, 50)
+    if not (0 <= y <= height):
+        return
     font = pygame.font.Font('freesansbold.ttf', size)
     if bg_color is not None:
         text = font.render(text, True, color, bg_color)

@@ -210,6 +210,8 @@ class Board():
         self.net = Net(planar_figure_idx,self.side_length ,self.board_Y_selectable)
         ############# planar figure ##############
 
+        self.number_of_permanent_tiles = 0 # used in ending credit
+
     def set_out_of_board_protection(self, bool_input):
         self.out_of_board_protection = bool_input
 
@@ -226,6 +228,14 @@ class Board():
             print("cannot decrease board reset turn")
             return
         self.board_reset_turn -= reset_turns
+
+    def count_all_permanent_tiles(self):
+        number_of_tiles = 0
+        for tile_name,tile_amount in self.permanent_board_dict.items():
+            if tile_name != 'Empty':
+                number_of_tiles += tile_amount
+
+        self.number_of_permanent_tiles = number_of_tiles
 
 
     ################################################## permenant changes ##################################################

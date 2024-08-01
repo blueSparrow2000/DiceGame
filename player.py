@@ -52,7 +52,7 @@ class Player(Entity):
         self.items=[]
         self.giant_HP_width = 30
         self.giant_HP_pos = [width//2,self.giant_HP_width//2]
-
+        self.killed_enemies = 0
 
         # transform button attributes
         self.transformable_tiles = joker_transformable_tiles #'Joker' is not transformed into joker
@@ -424,6 +424,8 @@ class Player(Entity):
     def on_enemy_death(self, enemy):
         for relic in self.relics:
             relic.activate_on_kill(self, enemy)
+
+        self.killed_enemies += 1
 
 
     def push_tile_infos(self,tile_info):

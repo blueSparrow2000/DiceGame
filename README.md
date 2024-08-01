@@ -33,13 +33,13 @@ A simple dice game
 2024.07.31 Make main menu: character selection(cannot change once fixed) / planar figure selection - make system + separate planar figure class from the board (for efficient drawing) / Implement altar completely: tile swap bless(?)
 
 
-2024.08.01 Ruin area now works (+relics!) / more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name
+2024.08.01 Ruin area now works (+relics!) / Boss(halo) clear ending credit! / more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name
 
 
 
 # To do
-- add various enemies (few ~ 3)
 - thorny enemy
+- add various enemies (few ~ 3)
 
 - when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 
