@@ -43,7 +43,7 @@ class Entity():
         self.base_defence = 0
         self.total_defence = self.defence + self.base_defence
 
-        self.thorns = 0 # some enemy may have default thorns
+        self.thorny = False # some enemy may have default thorns
         self.absorption = 0
         self.counter_attack = False
         self.confused = False
@@ -78,7 +78,7 @@ class Entity():
 
 
     def get_heal_amount(self):
-        return
+        return 0
 
     def reset_state(self): # 상대 변수들. 상대가 공격시 사용되는 변수들. 초기화는 내턴 시작시 수행.
         self.absorption = 0
@@ -177,7 +177,6 @@ class Entity():
 
         damage = self.vulnerability_multiplier * damage_temp
         counter_attack_damage = damage
-
         # consider absorption first
         damage = max(0, damage - self.absorption)
         # print(self.my_name,'got damage of',  damage_temp)
@@ -198,7 +197,8 @@ class Entity():
 
         if (self.counter_attack): # do a counter attack
             attacker.health -= counter_attack_damage # immediately damages enemies
-
+        elif self.thorny:
+            attacker.health -= damage_temp // 2  # take half of damage back
 
     def is_dead(self):
         return self.health <= 0
@@ -206,9 +206,10 @@ class Entity():
     def update_defence(self):
         self.total_defence = self.defence + self.base_defence
 
-    def get_buff_effect(self):
-        # reset buffs
-        self.reset_buffs()
+    def get_buff_effect(self, enforced = True):
+        if enforced:
+            # reset buffs
+            self.reset_buffs()
         for buff_name, buff_duration in self.buffs.items():
             if buff_duration > 0:
                 if buff_name == 'decay':
