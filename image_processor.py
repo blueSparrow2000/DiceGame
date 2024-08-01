@@ -82,6 +82,7 @@ top_down_player = load_image("player_topdown")
 
 shadow_layer = pygame.transform.smoothscale(load_image("background/shadow"), (width, height))
 
+gold_icon = load_image("icons/gold")
 
 ##### basic buttons
 TAB_img = load_image("icons/TAB") # size 50 pixel
@@ -99,3 +100,5 @@ confirm_img_white = load_image("icons/confirm_white")
 sold_out = load_image("icons/sold_out")
 right_button = load_image("icons/right")
 left_button = load_image("icons/left")
+
+

@@ -21,7 +21,6 @@ def player_death_screen(screen,clock,player):
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
                 mousepos = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
                 # do fight logic on player's turn
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     # exit
@@ -48,6 +47,8 @@ def player_death_screen(screen,clock,player):
         clock.tick(game_fps)
 
 def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
+    gold_icon_location = [width//2 - 30, height//2 + 200]
+
     run_win_screen = True
     music_Q("cozy")
     mousepos = (0,0)
@@ -63,7 +64,6 @@ def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
             if event.type == pygame.MOUSEBUTTONUP:
                 sound_effects['confirm'].play()
                 mousepos = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
                 # do fight logic on player's turn
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     # exit
@@ -78,9 +78,12 @@ def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
                     break
         screen.fill(adventure_bg_color)
         write_text(screen, width // 2, height // 2 - 240, 'You won!', 30, 'gold')
-        # write_text(screen, width // 2, height // 2, 'Press enter to confirm', 20,
-        #            'gray')
+        # show some gold earned
+        screen.blit(gold_icon, gold_icon.get_rect(center=gold_icon_location))
+        write_text(screen, gold_icon_location[0] + 50, gold_icon_location[1], '+ %d g'%earned_gold, 20, 'gold')
         # show some items dropped etc.
+
+
 
         # draw button
         if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
