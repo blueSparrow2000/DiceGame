@@ -114,7 +114,7 @@ class StemCell(Relic):
     Recovers 2 hp at the beginning of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="stem cell",rarity = 'rare')
+        super().__init__(name="stem cell",rarity = 'epic')
 
     def description(self):
         return "Recovers 2 hp at the start of each turn in a battle"
@@ -127,7 +127,7 @@ class Ration(Relic):
     Recovers 1 hp at the end of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="ancient ration",rarity = 'common')
+        super().__init__(name="ancient ration",rarity = 'rare')
 
     def description(self):
         return "Recovers 1 hp at the end of each turn in a battle"
@@ -169,18 +169,33 @@ class FrenzySkull(Relic):
         player.enforeced_regen(reverse_heal_amt)
 
 
-class Thorn(Relic):
+class LargeThorn(Relic):
     '''
     Deals half of the damage received
     '''
     def __init__(self):
-        super().__init__(name="thorn", rarity = 'special')
+        super().__init__(name="large thorn", rarity = 'special')
 
     def description(self):
         return "Deals half of the damage received"
 
     def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
         enemy.health -= attack_damage//2
+
+
+class Thorn(Relic):
+    '''
+    Deals 5 damage when attacked
+    '''
+    def __init__(self):
+        super().__init__(name="thorn", rarity = 'rare')
+        self.thorn_damage = 5
+
+    def description(self):
+        return "Deals %s damage when attacked"%self.thorn_damage
+
+    def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
+        enemy.health -= self.thorn_damage
 
 
 
