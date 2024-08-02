@@ -102,4 +102,6 @@ sold_out = load_image("icons/sold_out")
 right_button = load_image("icons/right")
 left_button = load_image("icons/left")
 
-
+mini_tile_icons = dict()
+for mini_tile in tile_names:
+    mini_tile_icons[mini_tile] = (load_image("tiles/mini_tile/%s" % mini_tile))

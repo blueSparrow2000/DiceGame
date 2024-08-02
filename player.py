@@ -6,7 +6,7 @@ from relic import *
 
 class Player(Entity):
     def __init__(self, character_name,character_skills, board): # tile_dict
-        global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles, character_max_hp     # all the other skills should also be contained
+        global mob_Y_level, sound_effects, tile_names ,requirement_level , joker_transformable_tiles, character_max_hp , mini_tile_icons    # all the other skills should also be contained
 
         hpmax = character_max_hp[character_name]
         super().__init__(character_name, hpmax, hpmax, (100,mob_Y_level))
@@ -33,9 +33,9 @@ class Player(Entity):
         self.button_locations=[( self.button_x + (i-1)*self.button_spacing, self.button_y) for i in range(len(self.buttons))]
 
         self.mini_tiles = list(tile_names)
-        self.mini_tile_icons = dict()
-        for mini_tile in self.mini_tiles:
-            self.mini_tile_icons[mini_tile] = (load_image("icons/mini_tile/%s" % mini_tile))
+        self.mini_tile_icons = mini_tile_icons
+        # for mini_tile in self.mini_tiles:
+        #     self.mini_tile_icons[mini_tile] = (load_image("tiles/mini_tile/%s" % mini_tile))
         self.minitile_x = width//2
         self.minitile_y = height-40
         self.minitile_spacing = 50

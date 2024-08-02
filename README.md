@@ -39,11 +39,15 @@ A simple dice game
 2024.08.02 add summoning type enemy / add tile adding enemy / hover over mini tiles to see their names and descriptions
 
 
+2024.08.03 TODO: make spike, proliferation tiles to actually work
+
+
 # To do
-- Proliferation tile: when not eliminated until the board refresh, you get (# of proliferation tile) * 5 damage
 - spike tile: if current tile contains spike tile, player gets 5 damage (deleted when board resets)
-- 
+- Proliferation tile: when not eliminated until the board refresh, you get (# of proliferation tile) * 5 damage
 - self duplicating tiles (like Karma/Proliferation tiles)
+
+
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
 - Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles

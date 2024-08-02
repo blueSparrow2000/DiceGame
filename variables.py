@@ -37,7 +37,7 @@ tile_name_description_dic = {
 , 'Joker':"can turn into 4 basic tiles"
 , 'Karma':"duplicates every turn"
 , 'Proliferation':"duplicates every turn, corroding tiles"
-, 'Chained':"when contained, halves attack damage"
+, 'Slime':"when contained, halves attack damage"
 , 'Spike':"when contained, loose 5 hp"
 }
 tile_names = list(tile_name_description_dic.keys())# ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma', 'Proliferation', 'Chained', 'Spike']

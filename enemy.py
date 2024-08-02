@@ -309,7 +309,7 @@ class Watcher(Enemy):
         elif current_pattern == 'summon':
             pass
         elif current_pattern == 'infiltrate': # place a tile inside the player's tile
-            player.board.insert_a_tile_on_board("Chained")
+            player.board.insert_a_tile_on_board("Slime")
 
         self.proceed_next_pattern()
         self.end_my_turn()

@@ -105,7 +105,7 @@ class DummyPlayer(Entity):
 
 class Skill_Book():
     def __init__(self, book_name, character_skills):
-        global runnable_skill_price_dict
+        global runnable_skill_price_dict, mini_tile_icons
         self.my_name = book_name
 
         self.skill_images = dict()
@@ -126,9 +126,7 @@ class Skill_Book():
 
 
         self.mini_tiles = list(tile_names)
-        self.mini_tile_icons = dict()
-        for mini_tile in self.mini_tiles:
-            self.mini_tile_icons[mini_tile] = (load_image("icons/mini_tile/%s" % mini_tile))
+        self.mini_tile_icons = mini_tile_icons
         self.minitile_x = width//2
         self.minitile_y = height-40
         self.minitile_spacing = 50
