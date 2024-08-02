@@ -1,7 +1,7 @@
 import random
 from util import *
 from enemy import *
-
+from variables import *
 
 
 
@@ -139,6 +139,13 @@ def fight(screen, clock, player, place = None):
     enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
     if player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
+    elif player.check_primary_boss():
+        enemy_request = ['lenz']
+        player.proceed_next_boss_stage()
+    elif player.check_secondary_boss():
+        enemy_request = ['lenz' for i in range(2)]
+        player.proceed_next_boss_stage()
+
     #####################################################################################
 
 

@@ -65,6 +65,10 @@ class Map():
         if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= MAX_DEPTH: # only boss fight tile is given
             self.map[2][3] = ['fight',False]
             self.break_limit = True
+        elif player.check_primary_boss():
+            self.map[3][3] = ['fight', False]
+        elif player.check_secondary_boss():
+            self.map[3][3] = ['fight', False]
         else:
             # spawn island randomly - fight/campfire/shop/boss/ruin/altar
             self.map[4][4] = ['fight',False]

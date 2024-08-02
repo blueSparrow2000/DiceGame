@@ -40,13 +40,14 @@ A simple dice game
 
 
 # To do
+- add summoning type enemy
+- self duplicating tiles (like Karma tiles)
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
-
 
 - 'spike tile': if current tile contains spike tile, player gets 5 damage (deleted when board resets)
 - Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
 
-- New debuff(for player only) 'chained': block the use of a specific tile for one turn
+- New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.

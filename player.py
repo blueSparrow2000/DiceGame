@@ -53,6 +53,8 @@ class Player(Entity):
         self.giant_HP_width = 30
         self.giant_HP_pos = [width//2,self.giant_HP_width//2]
         self.killed_enemies = 0
+        self.boss_stage = 0
+
 
         # transform button attributes
         self.transformable_tiles = joker_transformable_tiles #'Joker' is not transformed into joker
@@ -69,6 +71,8 @@ class Player(Entity):
         self.max_relic_in_a_row = 12
         self.relic_y_start = 95
         self.relic_delta = 30
+
+
 
 
 
@@ -203,6 +207,15 @@ class Player(Entity):
 
     def reached_max_depth(self):
         return self.current_depth=='LIMIT'
+
+    def check_primary_boss(self):
+        return self.boss_stage == 0 and self.current_depth <= PRIMARY_BOSS_DEPTH
+
+    def check_secondary_boss(self):
+        return self.boss_stage == 1 and self.current_depth <= SECONDARY_BOSS_DEPTH
+
+    def proceed_next_boss_stage(self):
+        self.boss_stage += 1
 
 
     def set_max_health(self,max_health):

@@ -281,6 +281,7 @@ def adventure_loop(screen, clock, player,map):
 
 
 
+
             # Draw player main info
             player.draw_player_info_top(screen, mousepos)
             screen.blit(shadow_layer, (0, 0))

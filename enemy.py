@@ -192,3 +192,50 @@ class Fragment(Enemy):
         self.end_my_turn()
 
 
+class Lenz(Enemy):
+    def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
+
+    def behave(self, player):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['sword'].play()
+                player.take_damage(self,self.get_current_damage())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['toxin'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass # no op
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unkown':
+            pass # no op
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
