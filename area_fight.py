@@ -164,8 +164,6 @@ def fight(screen, clock, player, place = None):
     trial = random.randint(1, 3)
     enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
 
-
-
     # for the ruin, we summon different mobs
     if place=="ruin":
         enemy_request = ['watcher']  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴

@@ -273,7 +273,7 @@ class Lenz(Enemy):
 
 
 class Watcher(Enemy):
-    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 4, pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
         self.passive = True
 
