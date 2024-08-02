@@ -519,8 +519,11 @@ class Player(Entity):
         if not super().death_check(): # returns False when not dead
             return False
 
+        # on death
+
         # relic effect from death check
         for relic in self.relics:
             relic.activate_on_death(self)
 
         self.relics[:] = [relic for relic in self.relics if not relic.delete]
+        return True
