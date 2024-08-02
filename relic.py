@@ -243,14 +243,14 @@ class Moss(Relic):
 
 class GoldenTalisman(Relic):
     '''
-    5% chance of getting double gold
+    Each has 5% chance of doubling earned gold
     '''
     def __init__(self):
         super().__init__(name="golden talisman", rarity = 'common')
         self.chance = 5
 
     def description(self):
-        return "%d%% chance of getting double gold"%self.chance
+        return "Each has %d%% chance of doubling earned gold"%self.chance
 
     def activate_when_getting_reward_gold(self, amount):
         final_amount = amount

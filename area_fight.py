@@ -150,9 +150,9 @@ def fight(screen, clock, player, place = None):
 
 
     enemies = []
-
+    mob_number_cap = 3
     mob_X = width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2
-
+    mob_locations = [width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2 + (mob_side_len + mob_gap)*i for i in range(mob_number_cap)]
 
     # determine golds / enemy drops
     enemy_drops = []
@@ -165,18 +165,34 @@ def fight(screen, clock, player, place = None):
     elif player.reached_max_depth(): # boss fight
         background_color = terracotta
 
+    # def spawn_enemy(enemy_list, enemy_name,mob_number_cap):
+    #     if len(enemy_list) >= mob_number_cap: # enemy list is full!
+    #         print("cannot spawn enemy more than %d"%mob_number_cap)
+    #         return
+    #     enemy_class = get_enemy_class_by_class_name(enemy_request[i])
+    #     enemy = enemy_class(pos=(mob_locations[i], mob_Y_level), rank=1)
+    #     # enemy = enemy_class(pos=(mob_X, mob_Y_level), rank = 1) # rank is determined by current depth (effect not implemented yet)
+    #     enemy.refresh_my_turn()
+    #     drop = enemy.get_drop() # drops and gold is determined here (summoned enemies do not give extra gold. They are already considered into the summoner's reward)
+    #     if drop:
+    #         enemy_drops.append(drop)
+    #     earned_gold += enemy.get_gold()
+    #     enemies.append(enemy)
+
+
 
     for i in range(len(enemy_request)):
         enemy_class = get_enemy_class_by_class_name(enemy_request[i])
-        enemy = enemy_class(pos=(mob_X, mob_Y_level), rank = 1) # rank is determined by current depth (effect not implemented yet)
+        enemy = enemy_class(pos=(mob_locations[i], mob_Y_level), rank=1)
+        # enemy = enemy_class(pos=(mob_X, mob_Y_level), rank = 1) # rank is determined by current depth (effect not implemented yet)
         enemy.refresh_my_turn()
-        drop = enemy.get_drop()
+        enemies.append(enemy)
+        drop = enemy.get_drop() # drops and gold is determined here (summoned enemies do not give extra gold. They are already considered into the summoner's reward)
         if drop:
             enemy_drops.append(drop)
         earned_gold += enemy.get_gold()
-        enemies.append(enemy)
 
-        mob_X += mob_side_len + mob_gap
+        # mob_X += mob_side_len + mob_gap
 
     player.new_fight()
     player.refresh_my_turn()
@@ -191,7 +207,8 @@ def fight(screen, clock, player, place = None):
             return True, True,enemy_drops, earned_gold
         elif len(enemies) == 0:
             # give player these!
-            player.get_gold(earned_gold)
+
+            earned_gold = player.get_gold(earned_gold)
             player.get_drop(enemy_drops)
 
             exit_fight()
@@ -229,6 +246,8 @@ def fight(screen, clock, player, place = None):
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies,player)
             ### DELETE DEAD ENEMY ###
+
+
 
             ########################################### Just before the player turn starts! ###########################
             player_turn = True

@@ -182,6 +182,7 @@ class Player(Entity):
             final_amount = relic.activate_when_getting_reward_gold(final_amount)
 
         self.golds += final_amount
+        return final_amount
 
     def pay_gold(self, amount):
         if self.can_buy(amount):
