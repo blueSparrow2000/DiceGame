@@ -26,6 +26,9 @@ class Enemy(Entity):
 
         self.gold = gold_reward
 
+        self.spawn_request = False
+
+
     def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
         super().draw(screen,mousepos)
         self.show_next_move(screen,mousepos)
@@ -58,7 +61,10 @@ class Enemy(Entity):
             pass
         elif current_pattern == 'regen':
             description = "%d"%self.get_heal_amount()
-
+        elif current_pattern == 'summon':
+            description = "+"
+        elif current_pattern == 'infiltrate':
+            description = ""
 
         if description:
             write_text(screen, self.next_move_loc[0]+8, self.next_move_loc[1]+8, description, 15, "black")
@@ -114,7 +120,8 @@ class Halo(Enemy):
             self.regen()
         elif current_pattern=='unkown':
             player.buffs['broken will'] = 1
-
+        elif current_pattern == 'summon':
+            pass
 
         self.proceed_next_pattern()
 
@@ -126,7 +133,7 @@ class Halo(Enemy):
 
 
 class Mob(Enemy):
-    def __init__(self, my_name = 'mob', hp=20, hpmax = 20, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'buff', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'mob', hp=20, hpmax = 20, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['shield', 'buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)
 
     def behave(self, player):
@@ -154,6 +161,8 @@ class Mob(Enemy):
             pass # no op
         elif current_pattern=='unkown':
             pass # no op
+        elif current_pattern == 'summon':
+            pass
 
         self.proceed_next_pattern()
         self.end_my_turn()
@@ -187,14 +196,21 @@ class Fragment(Enemy):
             pass # no op
         elif current_pattern=='unkown':
             pass # no op
+        elif current_pattern == 'summon':
+            pass
 
         self.proceed_next_pattern()
         self.end_my_turn()
 
 
 class Lenz(Enemy):
-    def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
+
+
+    def get_spawn_mob_name(self):
+        self.spawn_request = False
+        return "lenz"
 
     def behave(self, player):
         self.refresh_my_turn()
@@ -220,6 +236,9 @@ class Lenz(Enemy):
             pass # no op
         elif current_pattern=='unkown':
             pass # no op
+        elif current_pattern == 'summon':
+            self.spawn_request = True
+
 
         self.proceed_next_pattern()
         self.end_my_turn()

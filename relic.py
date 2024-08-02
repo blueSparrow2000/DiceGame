@@ -171,7 +171,7 @@ class WhiteCube(Relic):
     [Exhaust] Can revive once
     '''
     def __init__(self):
-        super().__init__(name="white cube", type = 'exhaust',rarity = 'legendary')
+        super().__init__(name="white cube", type = 'exhaust',rarity = 'myth')
 
     def description(self):
         return "[Exhaust] Can revive once"
@@ -188,7 +188,7 @@ class FrenzySkull(Relic):
     should be called whenever enemy is getting deleted
     '''
     def __init__(self):
-        super().__init__(name="frenzy skull", rarity = 'special')
+        super().__init__(name="frenzy skull", rarity = 'legendary')
 
     def description(self):
         return "heal by the amount overkilled"

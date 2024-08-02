@@ -28,6 +28,15 @@ for relic_class_name in relic_class_names:
 
 def go_to_ruin(screen,clock, player):
     ################## chosing a relic ####################
+    relic_spawn_chance = random.randrange(1, 100)
+    for relic in player.relics:
+        relic_spawn_chance -= relic.relic_spawn_chance_increaser()
+
+    relic_obtained = True
+    if relic_spawn_chance <= 50:
+        relic_obtained = False
+
+
     chance = random.randrange(1, 100)
     relic_rarity = "common"
     if chance <= relic_probs['myth']:
@@ -42,17 +51,15 @@ def go_to_ruin(screen,clock, player):
         relic_rarity = 'rare'
 
     relic_candidates = relic_by_rarity_dict[relic_rarity]
-    random.shuffle(relic_candidates)
-    final_relic_name = relic_candidates[0][0]
-    final_relic_sample = relic_candidates[0][1]
+    final_relic_name = ""
+    final_relic_sample = ""
+    if len(relic_candidates)==0: #no relic left
+        relic_obtained = True # relic is gone!
+    else:
+        random.shuffle(relic_candidates)
+        final_relic_name = relic_candidates[0][0]
+        final_relic_sample = relic_candidates[0][1]
 
-    relic_spawn_chance = random.randrange(1, 100)
-    for relic in player.relics:
-        relic_spawn_chance -= relic.relic_spawn_chance_increaser()
-
-    relic_obtained = True
-    if relic_spawn_chance <= 50:
-        relic_obtained = False
     ################## chosing a relic ####################
 
 

@@ -121,6 +121,27 @@ def get_enemy_class_by_class_name(enemy_name):
     return enemy_class
 
 
+def spawn_enemy(enemy_list, enemy_name,mob_number_cap, mob_locations):
+    if len(enemy_list) >= mob_number_cap: # enemy list is full!
+        # print("cannot spawn enemy more than %d"%mob_number_cap)
+        return
+    occupied_x_pos = []
+    for enemy in enemy_list: # there should be at least one place
+        occupied_x_pos.append(enemy.mypos[0])
+    occupied_x_pos.sort()
+    locations_set = set(mob_locations)
+    occupied_set = set(occupied_x_pos)
+    candidate_set = locations_set.difference(occupied_set)
+
+    final_loc = 0
+    for candidate in candidate_set: # just use any
+        final_loc = candidate
+
+    enemy_class = get_enemy_class_by_class_name(enemy_name)
+    enemy = enemy_class(pos=(final_loc, mob_Y_level), rank=1)
+    enemy.refresh_my_turn()
+    enemy_list.insert(0,enemy)
+
 
 def fight(screen, clock, player, place = None):
     global TAB_img, rotate_img, back_img, skip_img, bottom_left_button, bottom_right_button, bottom_center_button, mob_Y_level, sound_effects, text_description_level, turn_text_level
@@ -132,11 +153,12 @@ def fight(screen, clock, player, place = None):
     enemy_targets = set()
     mousepos = (0,0)
 
-
     #################### randomly generate enemy following some logic ##################
     enemy_name_list = ['mob', 'fragment']
     trial = random.randint(1, 3)
-    enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    #enemy_request = ['lenz' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    enemy_request = ['lenz' ]
+
     if player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     elif player.check_primary_boss():
@@ -145,19 +167,7 @@ def fight(screen, clock, player, place = None):
     elif player.check_secondary_boss():
         enemy_request = ['lenz' for i in range(2)]
         player.proceed_next_boss_stage()
-
     #####################################################################################
-
-
-    enemies = []
-    mob_number_cap = 3
-    mob_X = width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2
-    mob_locations = [width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2 + (mob_side_len + mob_gap)*i for i in range(mob_number_cap)]
-
-    # determine golds / enemy drops
-    enemy_drops = []
-    earned_gold = 0
-
     background_color = fight_bg_color
     if place=="ruin": # ruins fight
         background_color ='darkseagreen'
@@ -165,37 +175,31 @@ def fight(screen, clock, player, place = None):
     elif player.reached_max_depth(): # boss fight
         background_color = terracotta
 
-    # def spawn_enemy(enemy_list, enemy_name,mob_number_cap):
-    #     if len(enemy_list) >= mob_number_cap: # enemy list is full!
-    #         print("cannot spawn enemy more than %d"%mob_number_cap)
-    #         return
-    #     enemy_class = get_enemy_class_by_class_name(enemy_request[i])
-    #     enemy = enemy_class(pos=(mob_locations[i], mob_Y_level), rank=1)
-    #     # enemy = enemy_class(pos=(mob_X, mob_Y_level), rank = 1) # rank is determined by current depth (effect not implemented yet)
-    #     enemy.refresh_my_turn()
-    #     drop = enemy.get_drop() # drops and gold is determined here (summoned enemies do not give extra gold. They are already considered into the summoner's reward)
-    #     if drop:
-    #         enemy_drops.append(drop)
-    #     earned_gold += enemy.get_gold()
-    #     enemies.append(enemy)
+    player.new_fight()
+    player.refresh_my_turn()
 
 
+    enemies = []
+    mob_number_cap = 3
+    # mob_X = width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2
+    mob_locations = [width - 148 + ( mob_side_len + mob_gap ) * (i - 1) for i in range(mob_number_cap)]
 
     for i in range(len(enemy_request)):
-        enemy_class = get_enemy_class_by_class_name(enemy_request[i])
-        enemy = enemy_class(pos=(mob_locations[i], mob_Y_level), rank=1)
-        # enemy = enemy_class(pos=(mob_X, mob_Y_level), rank = 1) # rank is determined by current depth (effect not implemented yet)
-        enemy.refresh_my_turn()
-        enemies.append(enemy)
+        spawn_enemy(enemies, enemy_request[i],mob_number_cap, mob_locations)
+        # enemy_class = get_enemy_class_by_class_name(enemy_request[i])
+        # enemy = enemy_class(pos=(mob_locations[i], mob_Y_level), rank=1)
+        # enemy.refresh_my_turn()
+        # enemies.append(enemy)
+
+    # determine golds / enemy drops
+    enemy_drops = []
+    earned_gold = 0
+    for enemy in enemies:
         drop = enemy.get_drop() # drops and gold is determined here (summoned enemies do not give extra gold. They are already considered into the summoner's reward)
         if drop:
             enemy_drops.append(drop)
         earned_gold += enemy.get_gold()
 
-        # mob_X += mob_side_len + mob_gap
-
-    player.new_fight()
-    player.refresh_my_turn()
 
     game_run = True
     current_display_text = "Hover mouse on a tile for description"
@@ -241,7 +245,12 @@ def fight(screen, clock, player, place = None):
                     entity_draw.draw(screen,mousepos)
                 pygame.display.flip()
                 clock.tick_busy_loop(game_fps)
-                time.sleep(0.2)
+                time.sleep(0.3)
+
+            # watch for new spawnings!
+            for entity in enemies:
+                if entity.spawn_request:
+                    spawn_enemy(enemies, entity.get_spawn_mob_name(), mob_number_cap, mob_locations)
 
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies,player)

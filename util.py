@@ -101,3 +101,4 @@ def string_capitalizer(input):
     if 'a' <= input[0] <= 'z':
         output = input[0].upper() + input[1:]
     return output
+
