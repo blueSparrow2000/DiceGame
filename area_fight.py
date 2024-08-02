@@ -153,13 +153,24 @@ def fight(screen, clock, player, place = None):
     enemy_targets = set()
     mousepos = (0,0)
 
+    background_color = fight_bg_color
+    if place=="ruin": # ruins fight
+        background_color ='darkseagreen'
+        ### different enemy spawn requests
+    elif player.reached_max_depth(): # boss fight
+        background_color = terracotta
     #################### randomly generate enemy following some logic ##################
-    enemy_name_list = ['mob', 'fragment']
+    enemy_name_list = ['mob', 'fragment', 'lenz']
     trial = random.randint(1, 3)
-    #enemy_request = ['lenz' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
-    enemy_request = ['lenz' ]
+    enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
 
-    if player.reached_max_depth():
+
+
+    # for the ruin, we summon different mobs
+    if place=="ruin":
+        enemy_request = ['watcher']  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    # for boss stages, we summon these instead
+    elif player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     elif player.check_primary_boss():
         enemy_request = ['lenz']
@@ -168,12 +179,7 @@ def fight(screen, clock, player, place = None):
         enemy_request = ['lenz' for i in range(2)]
         player.proceed_next_boss_stage()
     #####################################################################################
-    background_color = fight_bg_color
-    if place=="ruin": # ruins fight
-        background_color ='darkseagreen'
-        ### different enemy spawn requests
-    elif player.reached_max_depth(): # boss fight
-        background_color = terracotta
+
 
     player.new_fight()
     player.refresh_my_turn()

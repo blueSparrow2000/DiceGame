@@ -6,6 +6,8 @@ class Enemy(Entity):
         super().__init__('enemies/'+my_name, hp, hpmax, pos) # mypos is calculated as follows: how many enemy in one fight
         global icons, icon_container, sound_effects
         self.my_name = my_name # override
+        self.passive = False
+        self.passive_to_aggressive = False
 
         ####################### enemy only stuffs ############################
         # self.pattern_image = dict()
@@ -29,6 +31,27 @@ class Enemy(Entity):
         self.spawn_request = False
 
 
+    def passive_behavior(self, player):
+        if self.passive and self.passive_to_aggressive: # change passive to aggresive
+            self.passive_to_aggressive = False
+            self.passive = False
+            self.refresh_my_turn()
+            current_pattern = 'no op'
+            self.end_my_turn()
+            return False
+        elif self.passive:         # no op until get attacked
+            self.refresh_my_turn()
+            current_pattern = 'no op'
+            self.end_my_turn()
+            return False
+        else:# do behave!
+            return True
+
+
+    def take_damage(self, attacker, damage_temp): # wake up when taken damage!
+        super().take_damage(attacker, damage_temp)
+        self.passive_to_aggressive = True
+
     def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
         super().draw(screen,mousepos)
         self.show_next_move(screen,mousepos)
@@ -47,6 +70,9 @@ class Enemy(Entity):
         # check whether can attack or not
         if current_pattern == 'attack' and (self.buffs['broken will']>0):
             # change to no op
+            current_pattern = 'no op'
+
+        if self.passive:
             current_pattern = 'no op'
 
         # next_move_img = self.pattern_image[self.pattern_analyzer[current_pattern]]
@@ -153,7 +179,8 @@ class Mob(Enemy):
         elif current_pattern=='no op':
             pass # no op
         elif current_pattern=='shield':
-            pass # no op
+            self.defence += 10
+            self.update_defence()
         elif current_pattern=='buff':
             self.buffs['strength'] = 2 # for one turn since it is self buffing
             # self.buffs['attack immunity'] = 2
@@ -245,7 +272,45 @@ class Lenz(Enemy):
 
 
 
+class Watcher(Enemy):
+    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 4, pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
+        self.passive = True
 
+    def behave(self, player):
+        ready_to_behave = self.passive_behavior(player)
+        if not ready_to_behave:
+            return
+
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['lazer'].play()
+                player.take_damage(self,self.get_current_damage())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['toxin'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass # no op
+        elif current_pattern=='buff':
+            player.buffs['weakness'] = 1
+            player.buffs['toxin'] = 1
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unkown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
 
 
 
