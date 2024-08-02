@@ -273,7 +273,7 @@ class Lenz(Enemy):
 
 
 class Watcher(Enemy):
-    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
         self.passive = True
 
@@ -308,6 +308,8 @@ class Watcher(Enemy):
             pass # no op
         elif current_pattern == 'summon':
             pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            player.board.insert_a_tile_on_board("Chained")
 
         self.proceed_next_pattern()
         self.end_my_turn()

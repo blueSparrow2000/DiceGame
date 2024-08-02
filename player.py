@@ -39,6 +39,7 @@ class Player(Entity):
         self.minitile_x = width//2
         self.minitile_y = height-40
         self.minitile_spacing = 50
+        self.minitile_size = self.mini_tile_icons['Attack'].get_height()
         self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
 
         self.required_tiles = dict()
@@ -119,7 +120,7 @@ class Player(Entity):
     '''
     current(selected) tile functions
     '''
-    def show_current_tiles(self, screen):
+    def show_current_tiles(self, screen, mousepos):
         # background
         draw_bar(screen, width//2, self.minitile_y, 312, 50, 100, (120, 120, 120))
         draw_bar(screen, width//2, self.minitile_y, 300, 38, 100, (150, 150, 150))
@@ -133,8 +134,15 @@ class Player(Entity):
         minitile_numbers = len(mini_tile_list)
         self.minitile_x = width//2 - (minitile_numbers - 1) * (self.minitile_spacing) / 2
         for i in range(minitile_numbers):
-            screen.blit(self.mini_tile_icons[mini_tile_list[i]], self.mini_tile_icons[mini_tile_list[i]].get_rect(
-                center=(self.minitile_x + i * self.minitile_spacing, self.minitile_y)))
+            minitile_name = mini_tile_list[i]
+            minitile_location = [self.minitile_x + i * self.minitile_spacing, self.minitile_y]
+            screen.blit(self.mini_tile_icons[minitile_name], self.mini_tile_icons[minitile_name].get_rect(
+                center=minitile_location))
+
+            if check_inside_button(mousepos, minitile_location, self.minitile_size//2): # if mouse is pointing to the relic
+                write_text(screen, width//2,self.minitile_y - 32, tile_name_description_dic[minitile_name], 15, "white", 'black')
+                write_text(screen, width//2,self.minitile_y - 48, "[ %s tile ]"%minitile_name, 17, "white", 'black')
+
 
     def check_exists_in_current_tile(self, tile_name):
         return tile_name in self.current_tile and self.current_tile[tile_name] > 0 # if such tile exists and is having more than one
@@ -369,13 +377,13 @@ class Player(Entity):
                 if (current_button == 'Attack'):
                     if self.can_attack:
                         self.initialize_step_1()
-                        return 'Attack|Attack one target with {} damage'.format(self.get_current_damage()) # string content!
+                        return 'Attack|Attack one target with %d damage'%(self.get_current_damage()) # string content!
                 elif (current_button=='Defence'):
                     self.initialize_step_1()
-                    return 'Defence|Gain {} temporal defence'.format(self.get_defence_gain())
+                    return 'Defence|Gain %d temporal defence'%(self.get_defence_gain())
                 elif (current_button == 'Regen'):
                     self.initialize_step_1()
-                    return 'Regeneration|Heal {} health'.format(self.get_heal_amount())
+                    return 'Regeneration|Heal %d health'%(self.get_heal_amount())
 
         # else, check whether skill
         for i in range(len(self.current_skills)):
@@ -476,10 +484,19 @@ class Player(Entity):
             relic.activate_on_taking_damage(self, attacker,damage_temp)
 
 
+    def get_attack_multiplier(self):
+        base_multiplier = self.strength_multiplier*self.strength_deplifier
+        Chained = self.count_tile('Chained') # chained tile reduces half damage gain
+        if Chained:
+            base_multiplier = base_multiplier/2
+
+        return base_multiplier
+
     def get_current_damage(self):
         # count number of attack tiles
         A = self.count_tile('Attack')
-        return self.P(A)*self.get_attack_multiplier()
+        damage = self.P(A)*self.get_attack_multiplier()
+        return damage
 
     def defend(self):
         self.defence += self.get_defence_gain()

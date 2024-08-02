@@ -480,7 +480,6 @@ class Board():
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
         self.reset(True)
 
-
     def confirm_using_tile(self):
         self.board = self.temp_board
 
@@ -569,6 +568,18 @@ class Board():
 
 
     ############################################################################################################ BOARD INDIRECTION 수정은 여기부터! ############################################################################################################
+    '''
+    Insert a tile into the board (randomly) only if there is a space (which is an empty tile)    
+    '''
+    def insert_a_tile_on_board(self, tile_name):
+        random.shuffle(self.board)
+        self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
+        for i in range(len(self.board)):
+            board_tile_name = self.board[i][1]
+            if board_tile_name == 'Empty': # change the names!
+                self.board[i][1] = tile_name
+                self.temp_board[i][1] = tile_name
+                break # insert one tile!
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles

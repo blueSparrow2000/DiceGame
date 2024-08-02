@@ -36,10 +36,11 @@ A simple dice game
 2024.08.01 Ruin area now works (+relics!) / Boss(halo) clear ending credit! / more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name / added thorny enemy / Shop: Add a common relic for the shop! / when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 
 
-2024.08.02 add summoning type enemy
+2024.08.02 add summoning type enemy / add tile adding enemy
 
 
 # To do
+- hover over mini tiles to see their names and descriptions
 - self duplicating tiles (like Karma tiles)
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 

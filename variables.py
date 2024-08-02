@@ -26,7 +26,23 @@ upper_button_Y_level = 200
 upper_side_Y_level = 225
 
 # TILES INIT - need to add new type if nessesary
-tile_names =['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma']
+tile_name_description_dic = {
+'Attack':"used for attack"
+, 'Defence':"used for defence"
+, 'Regen':"used for healing"
+, 'Skill':"used for skills"
+, 'Used':""
+, 'Empty':""
+,'Unusable':""
+, 'Joker':"can turn into 4 basic tiles"
+, 'Karma':"duplicates every turn"
+, 'Proliferation':"duplicates every turn, corroding tiles"
+, 'Chained':"when contained, halves attack damage"
+, 'Spike':"when contained, loose 5 hp"
+}
+tile_names = list(tile_name_description_dic.keys())# ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma', 'Proliferation', 'Chained', 'Spike']
+
+
 joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 
 # other variables

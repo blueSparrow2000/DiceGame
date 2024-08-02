@@ -443,7 +443,7 @@ def fight(screen, clock, player, place = None):
                 write_text_description(screen, width // 2 + 30, text_description_level, current_display_text, 15)
                 player.show_required_tiles(screen)
                 player.draw_skills(screen)
-                player.show_current_tiles(screen)
+                player.show_current_tiles(screen, mousepos)
                 # if joker is in the current tiles, you should select one!
                 player.draw_tile_transform_button(screen)
 
