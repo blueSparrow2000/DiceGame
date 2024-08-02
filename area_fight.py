@@ -159,6 +159,8 @@ def fight(screen, clock, player, place = None):
         ### different enemy spawn requests
     elif player.reached_max_depth(): # boss fight
         background_color = terracotta
+
+
     #################### randomly generate enemy following some logic ##################
     enemy_name_list = ['mob', 'fragment', 'lenz']
     trial = random.randint(1, 3)
@@ -166,7 +168,14 @@ def fight(screen, clock, player, place = None):
 
     # for the ruin, we summon different mobs
     if place=="ruin":
-        enemy_request = ['watcher']  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+        if player.check_ruin_boss():
+            enemy_request = ['watcher']
+            player.killed_watcher = True
+        else:
+            ### use ruin enemies ###
+            trial = random.randint(1, 3)
+            enemy_request = ['fragment']
+
     # for boss stages, we summon these instead
     elif player.reached_max_depth():
         enemy_request = ['halo']  # boss fight

@@ -36,15 +36,16 @@ A simple dice game
 2024.08.01 Ruin area now works (+relics!) / Boss(halo) clear ending credit! / more UI: hover mouse over buffs(when fight) to see effects of each buffs / on enemy's show next move: what the mark means (it will {attack/defend/regen/buff/???} next turn etc.) / hover over enemy to see their name / added thorny enemy / Shop: Add a common relic for the shop! / when player wins a fight, show what the player earned from that combat (gold / tiles / relics etc.)
 
 
-2024.08.02 add summoning type enemy / add tile adding enemy
+2024.08.02 add summoning type enemy / add tile adding enemy / hover over mini tiles to see their names and descriptions
 
 
 # To do
-- hover over mini tiles to see their names and descriptions
-- self duplicating tiles (like Karma tiles)
+- Proliferation tile: when not eliminated until the board refresh, you get (# of proliferation tile) * 5 damage
+- spike tile: if current tile contains spike tile, player gets 5 damage (deleted when board resets)
+- 
+- self duplicating tiles (like Karma/Proliferation tiles)
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
-- 'spike tile': if current tile contains spike tile, player gets 5 damage (deleted when board resets)
 - Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these

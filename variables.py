@@ -10,7 +10,7 @@ mob_Y_level = 280
 MAX_DEPTH = - 300
 PRIMARY_BOSS_DEPTH = -100
 SECONDARY_BOSS_DEPTH = -200
-
+WATCHER_DEPTH = -150
 
 mob_side_len = 64
 mob_gap = 28
