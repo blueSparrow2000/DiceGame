@@ -424,14 +424,12 @@ class Player(Entity):
     def end_my_turn(self): # do something at the end of the turn
         super().end_my_turn()
 
-
         copy_of_current_tile = copy.deepcopy(self.current_tile)
         # SHUFFLE: this is activated when pressed skip button
         self.board.turn_end_check(self, copy_of_current_tile)
 
         for relic in self.relics:
             relic.fight_every_turn_end_effect(self)
-
 
         self.current_skill_idx = -1  # reset this
         self.current_tile = dict()

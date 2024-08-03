@@ -315,9 +315,52 @@ class Watcher(Enemy):
         self.end_my_turn()
 
 
+
+class Embryo(Enemy):
+    def __init__(self, my_name = 'embryo', hp=16, hpmax = 16, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 3)
+
+    def behave(self, player):
+        ready_to_behave = self.passive_behavior(player)
+        if not ready_to_behave:
+            return
+
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['hit'].play()
+                player.take_damage(self,self.get_current_damage())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['toxin'] = 1
+                # player.buffs['confusion'] = 1
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass # no op
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unkown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            player.board.insert_a_tile_on_board("Proliferation")
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+
+
+
 class Mine(Enemy):
     def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
 
     def behave(self, player):
         ready_to_behave = self.passive_behavior(player)
@@ -356,47 +399,6 @@ class Mine(Enemy):
 
 
 
-
-
-
-class Embryo(Enemy):
-    def __init__(self, my_name = 'embryo', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['infiltrate'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 3)
-
-    def behave(self, player):
-        ready_to_behave = self.passive_behavior(player)
-        if not ready_to_behave:
-            return
-
-        self.refresh_my_turn()
-
-        current_pattern = self.pattern[self.current_pattern_idx]
-        if current_pattern=='attack':
-            if self.can_attack:
-                sound_effects['hit'].play()
-                player.take_damage(self,self.get_current_damage())
-                # print(self.health)
-                # player.buffs['broken will'] = 1
-                # player.buffs['strength'] = 1
-                # player.buffs['toxin'] = 1
-                # player.buffs['confusion'] = 1
-        elif current_pattern=='no op':
-            pass # no op
-        elif current_pattern=='shield':
-            pass # no op
-        elif current_pattern=='buff':
-            pass
-        elif current_pattern=='regen':
-            pass # no op
-        elif current_pattern=='unkown':
-            pass # no op
-        elif current_pattern == 'summon':
-            pass
-        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
-            player.board.insert_a_tile_on_board("Proliferation")
-
-        self.proceed_next_pattern()
-        self.end_my_turn()
 
 
 

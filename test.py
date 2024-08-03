@@ -40,9 +40,11 @@ import copy
 #             temp[i] = [blocks[i][0],'Used']
 #
 # print(temp)
-
-for i in range(10):
-    if i==1:
-        continue
-    print(i)
-
+#
+# for i in range(10):
+#     if i==1:
+#         continue
+#     print(i)
+x = None
+if x is not None:
+    print("x")

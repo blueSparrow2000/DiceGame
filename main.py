@@ -133,7 +133,7 @@ while meta_run:
                     run_character_selection = False
                     #### set character abilities here (like fixing a tile etc) ####
                     # obtain_skill(screen, clock, player, 'poison_dart')
-                    # fix_a_tile(screen, clock, player, 'Defence')
+                    fix_a_tile(screen, clock, player, 'Karma')
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)

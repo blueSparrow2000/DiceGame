@@ -171,7 +171,7 @@ class Board():
     def __init__(self,tiles_dict,planar_figure_idx):
         global tile_names,sound_effects,board_Y_level
         self.board_side_length = 8
-        self.board = [] # 이번 보드에만 영향을 주는건 이것만 바꿈 # has string of tile names
+        self.board = [] # 이번 보드에만 영향을 주는건 이것만 바꿈  # 각 원소의 형태 = [location , tile name , fixed_or_not boolean ]
         self.temp_board = []
         self.permanent_board_dict = copy.deepcopy(tiles_dict) # 영구적인 영향을 주는 거면 이거도 바꿈
         tile_count = 0
@@ -497,11 +497,9 @@ class Board():
         # for current tiles, count number of spikes that deals damage to my self
         for tile_name, amount in copy_of_current_tile.items():
             if tile_name=="Spike": # deal damage
+                sound_effects['hard_hit'].play()
                 spike_damage = 10*amount
                 player.take_damage(None, spike_damage)
-
-        # duplication - proliferate / karma
-        # check for adjacent empty tiles and dup
 
 
     def shuffle_board(self):
@@ -524,7 +522,6 @@ class Board():
             cnt += 1
 
 
-
     def check_a_tile_is_a_fixed_tile_with_index(self, location_index):
         # check this index is for fixed tile or not
         if location_index in self.permanently_fixed_tiles.keys():
@@ -533,13 +530,59 @@ class Board():
 
 
     def tile_effects_on_board_reset(self, player):
+        proliferation_amount = 0
         for i in range(len(self.board)):
             board_tile_name = self.board[i][1]
             if board_tile_name == 'Proliferation':
-                proliferation_damage = 5
-                player.take_damage(None, proliferation_damage)
+                proliferation_amount += 5
 
-    def reset(self, player = None):  # reset the board (each 6 turn)
+
+        if proliferation_amount > 0:
+            sound_effects['water'].play()
+            player.take_damage(None, proliferation_amount)
+
+
+
+    def replicate_tile(self, replication_info):
+        board_index = replication_info[0]
+        tile_name = replication_info[1]
+        # for each neighbors on my board, find empty tile
+        # then replace it to tile_name
+        self.board[board_index][1] = tile_name
+        # self.temp_board[board_index][1] = tile_name
+
+    def find_empty_spot_idx_in_neighbor(self, my_location):
+        # [self.board_X + j * self.side_length, self.board_Y_level + self.side_length * i]
+
+        my_neighbors = []
+        for i in [-1,0,1]:
+            for j in [-1,0,1]:
+                if (i==0 or j==0) and not (i==0 and j==0):
+                    location = [my_location[0] + i*self.side_length, my_location[1] + j*self.side_length]
+                    my_neighbors.append(location)
+
+        irregular_shaped_board_randomizer = []
+        for board_index in range(len(self.board)):
+            tile_location = self.board[board_index][0]
+            tile_name = self.board[board_index][1]
+            is_fixed = self.board[board_index][2]
+            if tile_name=='Empty': # can proliferate
+                # it should be either up down left right of my location (on irregular board, replicate to random location)
+                if tile_location in my_neighbors: # if this tile is neighbor with my current tile
+                    return board_index
+                irregular_shaped_board_randomizer.append(board_index)
+
+
+        if self.irregular_shape:  # get any random non-empty location (no need to be a neighbor)
+            random.shuffle(irregular_shaped_board_randomizer)
+            board_index = irregular_shaped_board_randomizer[0]
+            return board_index
+
+        return None
+
+
+
+    def reset(self, player = None):  # reset the board (each 6 turn) right after the end of the player's turn
         '''
         This function only resets content of current board
 
@@ -579,6 +622,25 @@ class Board():
                 self.boardify(board_temp) # set up a board
             ############### RESET BOARD ###############
             self.current_turn = 0 # reset turn
+        else:
+            ############################ replication ##############################
+            replication_queue = []  # self.board의 index, tile_name to replicate
+            for board_index in range(len(self.board)):
+                tile_location = self.board[board_index][0]
+                tile_name = self.board[board_index][1]
+                # is_fixed = self.board[board_index][2]
+
+                if tile_name == "Karma" or tile_name == "Proliferation":
+                    board_idx_to_replicate = self.find_empty_spot_idx_in_neighbor(
+                        tile_location)  # check for adjacent empty tiles and dup
+                    if board_idx_to_replicate is not None:  # if there is a spot to replicate
+                        replication_queue.append([board_idx_to_replicate, tile_name])
+
+            # replication - proliferate / karma
+            for replication_tile in replication_queue:
+                self.replicate_tile(replication_tile)
+            ############################ replication ##############################
+
 
         # print(self.board)
         self.current_turn += 1
@@ -586,7 +648,6 @@ class Board():
 
     def clear_board(self):
         self.board = [] # initialize board
-
 
     ############################################################################################################ BOARD INDIRECTION 수정은 여기부터! ############################################################################################################
     '''
