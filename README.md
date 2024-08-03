@@ -39,13 +39,13 @@ A simple dice game
 2024.08.02 add summoning type enemy / add tile adding enemy / hover over mini tiles to see their names and descriptions / Added slime tile / bosses spawn past -100, -150 (ruin boss), -200 and at LIMIT
 
 
+2024.08.03 spike tile: if current tile contains spike tile, player gets 5 damage (deleted when board resets) / self duplicating tiles (like Karma/Proliferation tiles) / Proliferation tile: when not eliminated until the board refresh, you get (# of proliferation tile) * 5 damage
+- limit number of relics to 24
 
-2024.08.03 TODO:  spike tile: if current tile contains spike tile, player gets 5 damage (deleted when board resets) / 
+
 
 
 # To do
-- Proliferation tile: when not eliminated until the board refresh, you get (# of proliferation tile) * 5 damage
-- self duplicating tiles (like Karma/Proliferation tiles)
 
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
@@ -56,6 +56,8 @@ A simple dice game
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 
+
+- bug: 가끔 그냥 기본 공격을 했는데 hit소리가 나고 데미지가 martial attack만큼 들어가는 경우가 있다
 WARNING: There might still be a bug in character selection. (초기화되지 않은 것들이 있거나 잠재적 에러가 있을 수 있음. 특히 deep copy를 하지 않고 쓰는 변수를 사용할 경우 저번 게임에 줬던 영향이 지금 줄수도 있으니 새 게임에서 참조하는 변수들은 왠만하면 딥카피해서 가지고 있게 하기 - 상점 변수 같은거 매번 상점 클래스 새로 만드는게 안전하긴 한데, 그럴때 사용하는 리스트나 딕셔너리같은거 내부적으로 딥카피해서 가지고 있기 또는 내부에서 항상 새로 생성하기)
 
 ### beyond beta version (further implementation will use Flutter instead of python)

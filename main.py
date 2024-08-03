@@ -49,7 +49,7 @@ screen.fill((0,0,0))  # background color
 
 
 # main screen ---------------------------------------------------
-playable_characters = ['Mirinae', 'Cinavro','Narin']
+playable_characters = ['Mirinae', 'Cinavro', 'Narin', 'Baron', 'Riri', 'Arisu', 'Ato']
 dummy_net = Net([0],50,100)
 
 
@@ -145,7 +145,7 @@ while meta_run:
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
 
-                    # for i in range(13):
+                    # for i in range(25):
                     #     player.pick_up_relic(Relic())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())

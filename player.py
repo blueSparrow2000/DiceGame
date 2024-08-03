@@ -80,6 +80,9 @@ class Player(Entity):
     ######################################### Relic ################################################
 
     def pick_up_relic(self, relic_obj):
+        if len(self.relics)>=24:
+            print("cannot pick up relics more than 24")
+            return
         self.relics.append(relic_obj)
         relic_obj.effect_when_first_obtained(self)
 

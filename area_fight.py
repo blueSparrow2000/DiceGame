@@ -162,7 +162,7 @@ def fight(screen, clock, player, place = None):
 
 
     #################### randomly generate enemy following some logic ##################
-    enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo']
+    enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm']
     trial = random.randint(1, 3)
     enemy_request = ['embryo' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
 
@@ -180,7 +180,7 @@ def fight(screen, clock, player, place = None):
     elif player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     elif player.check_primary_boss():
-        enemy_request = ['lenz']
+        enemy_request = ['carrier']
         player.proceed_next_boss_stage()
     elif player.check_secondary_boss():
         enemy_request = ['lenz' for i in range(2)]
@@ -248,7 +248,7 @@ def fight(screen, clock, player, place = None):
             current_turn += 1
 
             for entity in enemies:
-                entity.behave(player)
+                entity.behave(player, enemies)
                 # check enemy death
                 # draw again
                 screen.fill(background_color)
