@@ -46,7 +46,9 @@ A simple dice game
 
 
 # To do
-
+- add mirinae relics
+- add basic enemies 
+- add poison / spike learnable skills
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
 - Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
