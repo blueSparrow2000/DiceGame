@@ -101,16 +101,19 @@ class DummyPlayer(Entity):
 
 
 
+# other variables
+learnable_skill_price_dict ={'poison_dart':10, 'holy_barrier':30, 'no_op':10}
+
 
 
 class Skill_Book():
     def __init__(self, book_name, character_skills):
-        global runnable_skill_price_dict, mini_tile_icons
+        global learnable_skill_price_dict, mini_tile_icons
         self.my_name = book_name
 
         self.skill_images = dict()
         # learnable skill names here (only used inside this class)
-        self.learnable_skill_list = list(runnable_skill_price_dict.keys())
+        self.learnable_skill_list = list(learnable_skill_price_dict.keys())
         for skill_name in self.learnable_skill_list:
             self.skill_images[skill_name] = load_image("skills/learnable_skills/%s" % (skill_name))
         self.character_skills = character_skills
@@ -227,14 +230,25 @@ class Skill_Book():
         A = player.count_tile('Attack')
         R = player.count_tile('Regen')
         if (S<3 or A>1 or R<1):
-            return False, 0, True, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums, is_attack
-        return True, 0, True, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums,is_attack
+            return False, 0, False, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums, is_attack
+        return True, 0, False, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums,is_attack
 
     def holy_barrier(self,player, target_list):
         sound_effects['playerdeath'].play()
         player.buffs['attack immunity'] = 2
     def get_detail_holy_barrier(self,player):
         return "Holy barrier|Summon a shield that blocks all attacks once"
+
+
+
+    def no_op_get_requirement(self,player):
+        return True, 0, False, {} # skill_valid, target_nums,is_attack
+    def no_op(self,player, target_list):
+        sound_effects['hard_hit'].play()
+    def get_detail_no_op(self,player):
+        return "no op|Just deletes current tiles"
+
+
 
 
 ################################# skill book

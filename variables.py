@@ -45,10 +45,6 @@ tile_names = list(tile_name_description_dic.keys())# ['Attack', 'Defence', 'Rege
 
 joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 
-# other variables
-runnable_skill_price_dict ={'poison_dart':10, 'holy_barrier':30}
-
-
 
 # move background
 background_y = -470

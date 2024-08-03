@@ -22,6 +22,8 @@ If there is space in your tile list (empty tiles are more than one)
 
 from area_obtain_skill import *
 from area_ruin import *
+from skill_book import *
+
 
 def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
     if target_tile in dictionary: # only when exists
@@ -57,9 +59,9 @@ def go_to_shop(screen,clock, player):
         (shop_button_x+ (3*shop_image_button_tolerance + shop_button_spacing + 10) * i, shop_button_y ) for i in range(len(buyable_tiles))]
 
     shop_skill_button_loc = [width//2, shop_text_description_level + 325]
-    skill_list = list(runnable_skill_price_dict.keys())
+    skill_list = list(learnable_skill_price_dict.keys())
     skill_to_sell = random.choice(skill_list)
-    price_of_skill = runnable_skill_price_dict[skill_to_sell]
+    price_of_skill = learnable_skill_price_dict[skill_to_sell]
 
 
     shop_image_dict = dict()
