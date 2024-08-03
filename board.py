@@ -497,7 +497,7 @@ class Board():
         # for current tiles, count number of spikes that deals damage to my self
         for tile_name, amount in copy_of_current_tile.items():
             if tile_name=="Spike": # deal damage
-                spike_damage = 5*amount
+                spike_damage = 10*amount
                 player.take_damage(None, spike_damage)
 
         # duplication - proliferate / karma
@@ -532,8 +532,14 @@ class Board():
         return False
 
 
+    def tile_effects_on_board_reset(self, player):
+        for i in range(len(self.board)):
+            board_tile_name = self.board[i][1]
+            if board_tile_name == 'Proliferation':
+                proliferation_damage = 5
+                player.take_damage(None, proliferation_damage)
 
-    def reset(self, enforced=False):  # reset the board (each 6 turn)
+    def reset(self, player = None):  # reset the board (each 6 turn)
         '''
         This function only resets content of current board
 
@@ -544,7 +550,10 @@ class Board():
 
         self.net.init_turn() # initialize planar figures
 
-        if (enforced or self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
+        if (self.current_turn % self.board_reset_turn == 0):  # every 6th turn, reset the board
+            if player: # when player is given, consider reset panalties
+                self.tile_effects_on_board_reset(player)
+
             ############### RESET BOARD ###############
             self.clear_board()  # empty the board only when reset
             board_temp = []

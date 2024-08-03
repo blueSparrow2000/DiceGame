@@ -40,14 +40,12 @@ A simple dice game
 
 
 
-2024.08.03 TODO: make spike, proliferation tiles to actually work
+2024.08.03 TODO:  spike tile: if current tile contains spike tile, player gets 5 damage (deleted when board resets) / 
 
 
 # To do
-- spike tile: if current tile contains spike tile, player gets 5 damage (deleted when board resets)
 - Proliferation tile: when not eliminated until the board refresh, you get (# of proliferation tile) * 5 damage
 - self duplicating tiles (like Karma/Proliferation tiles)
-- test 
 
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 

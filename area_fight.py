@@ -164,7 +164,7 @@ def fight(screen, clock, player, place = None):
     #################### randomly generate enemy following some logic ##################
     enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo']
     trial = random.randint(1, 3)
-    enemy_request = ['mine' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    enemy_request = ['embryo' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
 
     # for the ruin, we summon different mobs
     if place=="ruin":
@@ -239,6 +239,7 @@ def fight(screen, clock, player, place = None):
         if not player_turn:  # enemy turn
             ########################################### Just after the player turn ###########################
             player.get_buff_effect(enforced=False)  # update buff effect every turn
+            player.board.reset(player) # clear board just after the player's turn!
 
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies, player)
@@ -275,7 +276,7 @@ def fight(screen, clock, player, place = None):
             player_turn = True
             if not (len(enemies) == 0 or player.health <= 0): # player's turn is refreshed only when game did not end!
                 player.refresh_my_turn()
-            player.board.reset()
+            # player.board.reset(player)
             current_display_text = "Hover mouse on a tile for description"
             continue
 

@@ -38,7 +38,7 @@ tile_name_description_dic = {
 , 'Karma':"[replicate]"
 , 'Proliferation':"[replicate] when board reset, take 5 damage"
 , 'Slime':"when contained in net, halves attack damage"
-, 'Spike':"when contained in net, take 5 damage"
+, 'Spike':"when contained in net, take 10 damage"
 }
 tile_names = list(tile_name_description_dic.keys())# ['Attack', 'Defence', 'Regen', 'Skill', 'Used', 'Empty','Unusable', 'Joker', 'Karma', 'Proliferation', 'Chained', 'Spike']
 
