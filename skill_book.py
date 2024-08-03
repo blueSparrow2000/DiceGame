@@ -271,9 +271,9 @@ class Mirinae_skills(Skill_Book):
 
         S = player.count_tile('Skill')
         A = player.count_tile('Attack')
-        if (S<1 or A>3):
-            return False, 1, True, {'Skill':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
-        return True, 1, True, {'Skill':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
+        if (S<1 or A>3 or A<1):
+            return False, 1, True, {'Skill':(1,0),'Attack':(1,3)} # skill_valid, target_nums, is_attack
+        return True, 1, True, {'Skill':(1,0),'Attack':(1,3)} # skill_valid, target_nums,is_attack
 
 
     def martial_art(self,player, target_list):

@@ -365,7 +365,6 @@ def fight(screen, clock, player, place = None):
                                 # use the skill!
                                 player.use_skill(enemies)
 
-                                player.current_skill_idx = -1
                                 # end players turn
                                 player.board.confirm_using_tile()
                                 player.end_my_turn()

@@ -478,7 +478,7 @@ class Board():
     def new_game(self):
         self.current_turn = 0
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
-        self.reset(True)
+        self.reset()
 
     def confirm_using_tile(self): # this should be called before player.end_my_turn
         self.board = self.temp_board

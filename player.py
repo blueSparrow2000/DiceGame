@@ -370,6 +370,7 @@ class Player(Entity):
         # after skill
 
 
+
     def my_turn_lookahead(self, mousepos): # show details of each skill / basic attacks
         for i in range(len(self.buttons)):
             current_button = self.buttons[i]
