@@ -480,16 +480,28 @@ class Board():
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
         self.reset(True)
 
-    def confirm_using_tile(self):
+    def confirm_using_tile(self): # this should be called before player.end_my_turn
         self.board = self.temp_board
-
-        # SHUFFLE: this is activated when not pressed skip button
-        self.turn_end_shuffle()
 
     def turn_end_shuffle(self):
         # check to reshuffle or not - just shuffle the contents!
         if self.board_shuffle_every_turn:
             self.shuffle_board()
+
+    def turn_end_check(self, player,copy_of_current_tile): # do something with player's current board at the turn end
+        # shuffle if needed
+        self.turn_end_shuffle()
+
+        # do stuffs at my turn end
+
+        # for current tiles, count number of spikes that deals damage to my self
+        for tile_name, amount in copy_of_current_tile.items():
+            if tile_name=="Spike": # deal damage
+                spike_damage = 5*amount
+                player.take_damage(None, spike_damage)
+
+        # duplication - proliferate / karma
+        # check for adjacent empty tiles and dup
 
 
     def shuffle_board(self):

@@ -162,9 +162,9 @@ def fight(screen, clock, player, place = None):
 
 
     #################### randomly generate enemy following some logic ##################
-    enemy_name_list = ['mob', 'fragment', 'lenz']
+    enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo']
     trial = random.randint(1, 3)
-    enemy_request = ['mob' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    enemy_request = ['mine' for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
 
     # for the ruin, we summon different mobs
     if place=="ruin":
@@ -174,7 +174,7 @@ def fight(screen, clock, player, place = None):
         else:
             ### use ruin enemies ###
             trial = random.randint(1, 3)
-            enemy_request = ['fragment']
+            enemy_request = ['fragment' for i in range(trial)]
 
     # for boss stages, we summon these instead
     elif player.reached_max_depth():
@@ -342,10 +342,10 @@ def fight(screen, clock, player, place = None):
 
                         if process_completed:  # defence or regen does not need to modify global variables
                             # end players turn
+                            player.board.confirm_using_tile()
                             player.end_my_turn()
                             player_turn = False
                             player_turn_step = 0
-                            player.board.confirm_using_tile()
                             number_of_targets_to_specify = 0
                             enemy_targets = set()
                             continue  # skip below
@@ -366,10 +366,10 @@ def fight(screen, clock, player, place = None):
 
                                 player.current_skill_idx = -1
                                 # end players turn
+                                player.board.confirm_using_tile()
                                 player.end_my_turn()
                                 player_turn = False
                                 player_turn_step = 0
-                                player.board.confirm_using_tile()
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
 
@@ -478,10 +478,10 @@ def fight(screen, clock, player, place = None):
                         enemies[i].targeted = False
                         enemies[i].draw(screen,mousepos)  # redraw
                     # end players turn
+                    player.board.confirm_using_tile()
                     player.end_my_turn()
                     player_turn = False
                     player_turn_step = 0
-                    player.board.confirm_using_tile()
                     number_of_targets_to_specify = 0
                     enemy_targets = set()
 

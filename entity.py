@@ -195,10 +195,11 @@ class Entity():
 
         if not self.death_check():
         ############### here is only reachable if I am not dead ##########
-            if (self.counter_attack): # do a counter attack
-                attacker.health -= counter_attack_damage # immediately damages enemies
-            elif self.thorny:
-                attacker.health -= damage_temp // 2  # take half of damage back
+            if attacker is not None:
+                if (self.counter_attack): # do a counter attack
+                    attacker.health -= counter_attack_damage # immediately damages enemies
+                elif self.thorny:
+                    attacker.health -= damage_temp // 2  # take half of damage back
 
     def is_dead(self):
         return self.health <= 0
