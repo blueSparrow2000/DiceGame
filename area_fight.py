@@ -175,7 +175,9 @@ def fight(screen, clock, player, place = None):
         else:
             ### use ruin enemies ###
             trial = random.randint(1, 3)
-            enemy_request = ['fragment' for i in range(trial)]
+            ruin_enemies = ['stem', 'golem', 'beast', 'raider', 'shatter']
+            enemy_chosen_one = random.choice(ruin_enemies)
+            enemy_request = [enemy_chosen_one for i in range(trial)]
 
     # for boss stages, we summon these instead
     elif player.reached_max_depth():

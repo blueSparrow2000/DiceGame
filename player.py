@@ -493,8 +493,8 @@ class Player(Entity):
 
     def get_attack_multiplier(self):
         base_multiplier = self.strength_multiplier*self.strength_deplifier
-        Chained = self.count_tile('Chained') # chained tile reduces half damage gain
-        if Chained:
+        slime = self.count_tile('Slime') # chained tile reduces half damage gain
+        if slime>0:
             base_multiplier = base_multiplier/2
 
         return base_multiplier

@@ -38,7 +38,7 @@ def load_image(filename):
         return None
 
 ### icons / buff icons
-icons = ['no op','shield','attack','buff','unkown','regen','absorption', 'summon', 'infiltrate'] #  enemy가 사용하니까 추가할때 이름을 주의하라 (enemy의 기술 명으로 해야함)
+icons = ['no op','shield','attack','buff','unkown','regen','absorption', 'summon', 'infiltrate', 'poison'] #  enemy가 사용하니까 추가할때 이름을 주의하라 (enemy의 기술 명으로 해야함)
 
 buff_name_description_dic = {
 'decay':"defence is halved every turn",
