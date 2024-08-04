@@ -561,7 +561,206 @@ class Carrier(Enemy):
         return 20
 
 
-############################################### ruin enemies #############################################################
+
+class Silent(Enemy):
+    def __init__(self, my_name='silent', hp=500, hpmax=500, attack_damage=[32, 64], pos=(332, mob_Y_level),
+                 attack_pattern=['shield', 'buff', 'attack', 'regen'], rank=1):  #
+        super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=100)
+
+    '''
+    This mob does not show you what it will do (randomly chosen)
+    '''
+
+    def behave(self, player, enemy=None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+
+        if current_pattern == 'attack':
+            if self.can_attack:
+                sound_effects['water'].play()
+                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage * self.get_attack_multiplier())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern == 'no op':
+            pass  # no op
+        elif current_pattern == 'shield':
+            self.defence += 32
+            self.update_defence()
+        elif current_pattern == 'buff':
+            player.buffs['weakness'] = 3
+            player.buffs['vulnerability'] = 3
+            player.buffs['toxin'] = 3
+        elif current_pattern == 'regen':
+            self.regen()
+        elif current_pattern == 'unknown':
+            pass  # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate':  # place a tile inside the player's tile
+            pass
+        elif current_pattern == 'poison':
+            pass
+
+        # next pattern is randomized
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+    def proceed_next_pattern(self):
+        # self.current_pattern_idx = (self.current_pattern_idx + 1) % self.num_of_patterns
+        self.current_pattern_idx = random.randrange(0, len(self.pattern) - 1)  # random pattern
+    def get_heal_amount(self):
+        return 16
+
+    def show_next_move(self,screen,mousepos):
+        if self.health < 250: # phase two
+            next_move_img = self.pattern_image['unknown']
+            screen.blit(next_move_img, next_move_img.get_rect(center=self.next_move_loc))
+
+            if check_inside_button(mousepos, self.next_move_loc, self.icon_delta // 2):  # if mouse is pointing to the relic
+                write_text(screen, width // 2, turn_text_level + self.icon_delta, "what will it do?", 17, "white", 'black')
+        else:
+            super().show_next_move(screen,mousepos)
+
+
+
+class Scalpion(Enemy):
+    def __init__(self, my_name = 'scalpion', hp=80, hpmax = 80, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['toxin', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+    '''
+    This mob does random damage attack
+    '''
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['sword'].play()
+                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage*self.get_attack_multiplier())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass
+        elif current_pattern=='buff':
+            player.buffs['weakness'] = 1
+            player.buffs['vulnerability'] = 1
+        elif current_pattern=='regen':
+            self.regen()
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            pass
+        elif current_pattern == 'toxin':
+            sound_effects['water'].play()
+            player.buffs['toxin'] = 5
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+    def get_heal_amount(self):
+        return 10
+
+
+
+class Snalk(Enemy):
+    def __init__(self, my_name = 'snalk', hp=60, hpmax = 60, attack_damage = [4,8], pos = (332,mob_Y_level), attack_pattern = ['poison', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+    '''
+    This mob does random damage attack
+    '''
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['sword'].play()
+                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage*self.get_attack_multiplier())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            self.regen()
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            pass
+        elif current_pattern == 'poison':
+            sound_effects['water'].play()
+            player.buffs['poison'] = 5
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+    def get_heal_amount(self):
+        return 10
+
+class Snider(Enemy):
+    def __init__(self, my_name = 'snider', hp=60, hpmax = 60, attack_damage = [4,16], pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack', 'regen'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+    '''
+    This mob does random damage attack
+    '''
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['sword'].play()
+                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage*self.get_attack_multiplier())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass
+        elif current_pattern=='buff':
+            sound_effects['water'].play()
+            player.buffs['vulnerability'] = 3
+            player.buffs['confusion'] = 3
+        elif current_pattern=='regen':
+            self.regen()
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+    def get_heal_amount(self):
+        return 10
+
+
+
+########################################################################### ruin enemies ###############################################################################
 class Stem(Enemy):
     def __init__(self, my_name = 'stem', hp=12, hpmax = 12, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['infiltrate', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)
@@ -823,68 +1022,4 @@ class Watcher(Enemy):
         self.proceed_next_pattern()
         self.end_my_turn()
 
-
-class Silent(Enemy):
-    def __init__(self, my_name='silent', hp=500, hpmax=500, attack_damage=[32, 64], pos=(332, mob_Y_level),
-                 attack_pattern=['shield', 'buff', 'attack', 'regen'], rank=1):  #
-        super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=100)
-
-    '''
-    This mob does not show you what it will do (randomly chosen)
-    '''
-
-    def behave(self, player, enemy=None):
-        self.refresh_my_turn()
-
-        current_pattern = self.pattern[self.current_pattern_idx]
-
-        if current_pattern == 'attack':
-            if self.can_attack:
-                sound_effects['water'].play()
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
-                player.take_damage(self, damage * self.get_attack_multiplier())
-                # print(self.health)
-                # player.buffs['broken will'] = 1
-                # player.buffs['strength'] = 1
-                # player.buffs['confusion'] = 1
-
-        elif current_pattern == 'no op':
-            pass  # no op
-        elif current_pattern == 'shield':
-            self.defence += 32
-            self.update_defence()
-        elif current_pattern == 'buff':
-            player.buffs['weakness'] = 3
-            player.buffs['vulnerability'] = 3
-            player.buffs['toxin'] = 3
-        elif current_pattern == 'regen':
-            self.regen()
-        elif current_pattern == 'unknown':
-            pass  # no op
-        elif current_pattern == 'summon':
-            pass
-        elif current_pattern == 'infiltrate':  # place a tile inside the player's tile
-            pass
-        elif current_pattern == 'poison':
-            pass
-
-        # next pattern is randomized
-        self.proceed_next_pattern()
-        self.end_my_turn()
-
-    def proceed_next_pattern(self):
-        # self.current_pattern_idx = (self.current_pattern_idx + 1) % self.num_of_patterns
-        self.current_pattern_idx = random.randrange(0, len(self.pattern) - 1)  # random pattern
-    def get_heal_amount(self):
-        return 16
-
-    def show_next_move(self,screen,mousepos):
-        if self.health < 250: # phase two
-            next_move_img = self.pattern_image['unknown']
-            screen.blit(next_move_img, next_move_img.get_rect(center=self.next_move_loc))
-
-            if check_inside_button(mousepos, self.next_move_loc, self.icon_delta // 2):  # if mouse is pointing to the relic
-                write_text(screen, width // 2, turn_text_level + self.icon_delta, "what will it do?", 17, "white", 'black')
-        else:
-            super().show_next_move(screen,mousepos)
-
+########################################################################### ruin enemies ###############################################################################

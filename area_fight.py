@@ -162,7 +162,7 @@ def fight(screen, clock, player, place = None):
 
 
     #################### randomly generate enemy following some logic ##################
-    enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel']
+    enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel', 'scalpion', 'snider','snalk']
     trial = random.randint(1, 3)
     enemy_chosen_one = random.choice(enemy_name_list)
     enemy_request = [enemy_chosen_one for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴

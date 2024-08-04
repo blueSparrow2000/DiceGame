@@ -43,17 +43,18 @@ A simple dice game
 - limit number of relics to 24
 
 
-2024.08.04 Fixed path finder logic -> DFS / Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles / Added enemies /  add poison learnable skills
+2024.08.04 Fixed path finder logic -> DFS / Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles / Added more enemies 
 
 
-2024.08.05 add spike learnable skills / enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
+2024.08.05 enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
 
 
 
 # To do
 - add mirinae relics
-
+- add poison learnable skills
+- add spike learnable skills 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
