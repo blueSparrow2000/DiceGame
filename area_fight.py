@@ -186,7 +186,7 @@ def fight(screen, clock, player, place = None):
         enemy_request = ['carrier']
         player.proceed_next_boss_stage()
     elif player.check_secondary_boss():
-        enemy_request = ['lenz' for i in range(2)]
+        enemy_request = ['silent']
         player.proceed_next_boss_stage()
     #####################################################################################
 

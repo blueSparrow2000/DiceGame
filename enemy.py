@@ -13,7 +13,7 @@ class Enemy(Entity):
         # self.pattern_image = dict()
         # for i in range(len(icons)):
         #     self.pattern_image[i] = icon_container[icons[i]]
-        # self.pattern_analyzer = {'attack':2, 'defence':1, 'no op':0,'buff':3, 'unkown':4, 'regen':5} # translates pattern to icon key
+        # self.pattern_analyzer = {'attack':2, 'defence':1, 'no op':0,'buff':3, 'unknown':4, 'regen':5} # translates pattern to icon key
         self.pattern_image = icon_container
 
         self.attack_damage = attack_damage
@@ -121,8 +121,8 @@ class Enemy(Entity):
 
 
 class Halo(Enemy):
-    def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = 32, pos = (332,mob_Y_level), attack_pattern = ['unkown', 'buff', 'attack','regen'], rank = 1 ):
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank)
+    def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = 32, pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 999)
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -147,7 +147,7 @@ class Halo(Enemy):
             player.buffs['vulnerability'] = 1
         elif current_pattern=='regen':
             self.regen()
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             player.buffs['broken will'] = 1
         elif current_pattern == 'summon':
             pass
@@ -189,7 +189,7 @@ class Mob(Enemy):
             # self.buffs['attack immunity'] = 2
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -224,7 +224,7 @@ class Fragment(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -264,7 +264,7 @@ class Lenz(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             self.spawn_request = True
@@ -306,7 +306,7 @@ class Embryo(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -348,7 +348,7 @@ class Mine(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -391,7 +391,7 @@ class Norm(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -429,7 +429,7 @@ class Scout(Enemy):
             player.buffs['vulnerability'] = 1
         elif current_pattern=='regen':
             pass
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -466,7 +466,7 @@ class Sentinel(Enemy):
             player.buffs['weakness'] = 1
         elif current_pattern=='regen':
             self.regen()
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -504,7 +504,7 @@ class Observer(Enemy):
             player.buffs['vulnerability'] = 1
         elif current_pattern=='regen':
             pass
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -547,7 +547,7 @@ class Carrier(Enemy):
         elif current_pattern=='regen': # heal all allies
             for entity in enemy:
                 entity.enforced_regen(20)
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             self.spawn_request = True
@@ -589,7 +589,7 @@ class Stem(Enemy):
             pass
         elif current_pattern=='regen':
             pass
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -626,7 +626,7 @@ class Golem(Enemy):
             pass
         elif current_pattern=='regen':
             self.regen()
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -670,7 +670,7 @@ class Raider(Enemy):
             player.buffs['vulnerability'] = 1
         elif current_pattern=='regen':
             self.regen()
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -720,7 +720,7 @@ class Beast(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -769,7 +769,7 @@ class Shatter(Enemy):
             pass
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -812,7 +812,7 @@ class Watcher(Enemy):
             player.buffs['toxin'] = 1
         elif current_pattern=='regen':
             pass # no op
-        elif current_pattern=='unkown':
+        elif current_pattern=='unknown':
             pass # no op
         elif current_pattern == 'summon':
             pass
@@ -824,6 +824,67 @@ class Watcher(Enemy):
         self.end_my_turn()
 
 
+class Silent(Enemy):
+    def __init__(self, my_name='silent', hp=500, hpmax=500, attack_damage=[32, 64], pos=(332, mob_Y_level),
+                 attack_pattern=['shield', 'buff', 'attack', 'regen'], rank=1):  #
+        super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=100)
 
+    '''
+    This mob does not show you what it will do (randomly chosen)
+    '''
 
+    def behave(self, player, enemy=None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+
+        if current_pattern == 'attack':
+            if self.can_attack:
+                sound_effects['water'].play()
+                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage * self.get_attack_multiplier())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['confusion'] = 1
+
+        elif current_pattern == 'no op':
+            pass  # no op
+        elif current_pattern == 'shield':
+            self.defence += 32
+            self.update_defence()
+        elif current_pattern == 'buff':
+            player.buffs['weakness'] = 3
+            player.buffs['vulnerability'] = 3
+            player.buffs['toxin'] = 3
+        elif current_pattern == 'regen':
+            self.regen()
+        elif current_pattern == 'unknown':
+            pass  # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate':  # place a tile inside the player's tile
+            pass
+        elif current_pattern == 'poison':
+            pass
+
+        # next pattern is randomized
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+    def proceed_next_pattern(self):
+        # self.current_pattern_idx = (self.current_pattern_idx + 1) % self.num_of_patterns
+        self.current_pattern_idx = random.randrange(0, len(self.pattern) - 1)  # random pattern
+    def get_heal_amount(self):
+        return 16
+
+    def show_next_move(self,screen,mousepos):
+        if self.health < 250: # phase two
+            next_move_img = self.pattern_image['unknown']
+            screen.blit(next_move_img, next_move_img.get_rect(center=self.next_move_loc))
+
+            if check_inside_button(mousepos, self.next_move_loc, self.icon_delta // 2):  # if mouse is pointing to the relic
+                write_text(screen, width // 2, turn_text_level + self.icon_delta, "what will it do?", 17, "white", 'black')
+        else:
+            super().show_next_move(screen,mousepos)
 
