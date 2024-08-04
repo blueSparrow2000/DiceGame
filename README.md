@@ -43,7 +43,8 @@ A simple dice game
 - limit number of relics to 24
 
 
-2024.08.04 Fixed path finder logic -> DFS / 
+2024.08.04 Fixed path finder logic -> DFS / Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
+
 
 
 # To do
@@ -52,15 +53,14 @@ A simple dice game
 - add poison / spike learnable skills
 - enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
-- Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles
-
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 
-
 - bug: 가끔 그냥 기본 공격을 했는데 hit소리가 나고 데미지가 martial attack만큼 들어가는 경우가 있다
+
+
 WARNING: There might still be a bug in character selection. (초기화되지 않은 것들이 있거나 잠재적 에러가 있을 수 있음. 특히 deep copy를 하지 않고 쓰는 변수를 사용할 경우 저번 게임에 줬던 영향이 지금 줄수도 있으니 새 게임에서 참조하는 변수들은 왠만하면 딥카피해서 가지고 있게 하기 - 상점 변수 같은거 매번 상점 클래스 새로 만드는게 안전하긴 한데, 그럴때 사용하는 리스트나 딕셔너리같은거 내부적으로 딥카피해서 가지고 있기 또는 내부에서 항상 새로 생성하기)
 
 ### beyond beta version (further implementation will use Flutter instead of python)

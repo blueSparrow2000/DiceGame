@@ -137,64 +137,19 @@ class Map():
         '''
         도중에 bridge가 아닌 다른 타일을 거치게 된다면 => 그 타일이 목적지로 재설정 된다!!
         '''
-        # self.block_paths.append() # 일단 한칸 앞으로는 항상 가야함 [+x, -x, +y, -y]의 amount로 저장해두기 right left down up
+        global Node
 
-        class Node():
-            final_path = [] # class variable
-            final_coord_path = [] # path of tile coordinates excluding target (final) tile
-            def __init__(self, how_to_get_here, parent_node, my_coord, bridge_map, target_loc):
-                self.how_to_get_here = how_to_get_here
-                self.parent_node = parent_node
-                self.my_coord = my_coord
-                self.childs = []
-
-                ## global references
-                self.bridge_map = bridge_map
-                self.target_loc =  target_loc # [col,row]
-
-            def found_target(self,how_to_get_child): # make final path correctly
-
-                # print("found target!")
-                Node.final_path.append(how_to_get_child) # the last step to reach a child
-                cur_node = self
-                while cur_node is not None:
-                    # print(cur_node.my_coord)
-                    Node.final_path.append(cur_node.how_to_get_here)
-                    Node.final_coord_path.append(cur_node.my_coord)
-                    cur_node = cur_node.parent_node
-
-                Node.final_path.reverse()
-                Node.final_coord_path.reverse()
-
-            def find_target(self): # [col, row]
-                neighbors = [[1,0], [-1,0], [0,1], [0,-1]]
-                how_to_get_moves = [[0,0,50,0],[0,0,0,50],[50,0,0,0],[0,50,0,0]] #  [+x, -x, +y, -y]
-                for idx in range(len(neighbors)):
-                    col_diff, row_diff = neighbors[idx]
-                    how_to_get_child = how_to_get_moves[idx]
-                    coord = [self.my_coord[0] + col_diff, self.my_coord[1] + row_diff]
-                    if coord == self.target_loc:  # self.map[coord[0]][coord[1]][0]
-                        self.found_target(how_to_get_child)
-                        return True
-                    elif self.bridge_map[coord[0]][coord[1]]: # if neighbor is a bridge - parent==None will not happen
-                        if self.parent_node is None: # just do it
-                            self.childs.append(Node(how_to_get_child, self, coord, self.bridge_map, self.target_loc))
-                        elif coord != self.parent_node.my_coord:
-                            self.childs.append(Node(how_to_get_child, self, coord, self.bridge_map, self.target_loc))
-
-                for child in self.childs:
-                    if child.find_target():
-                        return True
-                # print("Map path finder: one branch failed in Depth first search")
 
         # print(self.target)
         # for i in range(7):
         #     print(self.bridge_map[i])
         start_node = Node([0,0,0,50], None, [5,3], self.bridge_map, self.target)
+        start_node.init_class_var()
+
         start_node.find_target()
 
         self.block_paths = start_node.final_path
-
+        # print(self.block_paths)
         ################### 여기서 현재 블록 패스를 따라가면서 경로 도중에 다른 타일이 있는 경우 해당 타일의 이름이랑 depth를 리턴하고 블록 패스를 현재까지로 끊어서 리턴하기!
         coordinates_while_moving_to_target = start_node.final_coord_path
         for move_idx in range(len(coordinates_while_moving_to_target)):
