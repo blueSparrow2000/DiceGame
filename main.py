@@ -68,7 +68,7 @@ while meta_run:
     planar_figure_phase = 0 # 0 or 1 etc.
     planar_figure_indices = [i for i in range(len(planar_figures))]
     # choose two between 0~9 # currently 10 planar figures available (11th one is different)]
-    planar_figure_idx = [7, 9] # [1,2,3] etc. you can expand to use more tiles
+    planar_figure_idx = [0, 3] # [1,2,3] etc. you can expand to use more tiles
     ### change planar figure ###
 
     ### change character ###

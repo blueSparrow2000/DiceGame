@@ -45,6 +45,6 @@ import copy
 #     if i==1:
 #         continue
 #     print(i)
-x = None
-if x is not None:
-    print("x")
+x = [5,4]
+y = [5,4]
+print(x==y)

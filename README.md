@@ -43,7 +43,7 @@ A simple dice game
 - limit number of relics to 24
 
 
-2024.08.04 
+2024.08.04 Fixed path finder logic -> DFS / 
 
 
 # To do
