@@ -73,7 +73,7 @@ class Entity():
     def regen(self):
         self.health = min(self.max_health,self.health+self.get_heal_amount())
 
-    def enforeced_regen(self, amount):
+    def enforced_regen(self, amount):
         self.health = min(self.max_health,self.health+amount)
 
 

@@ -120,7 +120,7 @@ class SerpentHeart(Relic):
 
     def effect_when_first_obtained(self, player):
         player.max_health += 50
-        player.enforeced_regen(50)
+        player.enforced_regen(50)
 
 
 class FearCell(Relic):
@@ -135,7 +135,7 @@ class FearCell(Relic):
         return "Recovers %d hp at the start of each fight"%self.recover_amount
 
     def fight_start_effect(self, player):
-        player.enforeced_regen(self.recover_amount)
+        player.enforced_regen(self.recover_amount)
 
 class StemCell(Relic):
     '''
@@ -149,7 +149,7 @@ class StemCell(Relic):
         return "Recovers %d hp at the start of each turn in a battle"%self.recover_amount
 
     def fight_every_turn_beginning_effect(self, player):
-        player.enforeced_regen(self.recover_amount)
+        player.enforced_regen(self.recover_amount)
 
 class Ration(Relic):
     '''
@@ -163,7 +163,7 @@ class Ration(Relic):
         return "Recovers %d hp at the end of each turn in a battle"%self.recover_amount
 
     def fight_every_turn_end_effect(self, player):
-        player.enforeced_regen(self.recover_amount)
+        player.enforced_regen(self.recover_amount)
 
 
 class WhiteCube(Relic):
@@ -178,7 +178,7 @@ class WhiteCube(Relic):
 
     def activate_on_death(self, player):
         sound_effects['playerdeath'].play()
-        player.enforeced_regen(player.max_health)
+        player.enforced_regen(player.max_health)
         self.delete = True
 
 
@@ -196,7 +196,7 @@ class FrenzySkull(Relic):
     def activate_on_kill(self, player, enemy):
         # print(enemy.health)
         reverse_heal_amt = abs(enemy.health)
-        player.enforeced_regen(reverse_heal_amt)
+        player.enforced_regen(reverse_heal_amt)
 
 
 class LargeThorn(Relic):

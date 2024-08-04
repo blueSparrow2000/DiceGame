@@ -14,7 +14,7 @@ def go_to_campfire(screen,clock, player):
 
     music_Q('cozy', True)
     campfire_heal_amount = 50
-    player.enforeced_regen(campfire_heal_amount)
+    player.enforced_regen(campfire_heal_amount)
 
     while game_run:
         screen.fill('thistle')
