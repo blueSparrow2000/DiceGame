@@ -63,7 +63,7 @@ class Map():
         
         '''
         if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= MAX_DEPTH: # only boss fight tile is given
-            self.map[2][3] = ['fight',False]
+            self.map[3][3] = ['fight',False]
             self.break_limit = True
         elif player.check_primary_boss():
             self.map[3][3] = ['fight', False]
@@ -71,11 +71,20 @@ class Map():
             self.map[3][3] = ['fight', False]
         else:
             # spawn island randomly - fight/campfire/shop/boss/ruin/altar
-            self.map[4][4] = ['fight',False]
-            self.map[2][5] = ['ruin',False]
-            self.map[2][1] = ['altar',False]
-            self.map[4][2] = ['shop', False]
-            self.map[1][3] = ['campfire', False]
+            util_tiles = ['ruin','altar','shop','campfire']
+            self.map[3][3] = ['fight',False] # you can always reach fight tile
+
+            col_candidate = [1,2,3,4]
+            random.shuffle(col_candidate)
+            row_candidate = [0,1,2,4,5,6]
+            random.shuffle(row_candidate)
+
+            columns = col_candidate
+            rows = row_candidate[:len(util_tiles)]
+
+            for i in range(len(util_tiles)):
+                self.map[columns[i]][rows[i]] = [util_tiles[i],False]
+
 
         # insert at-least-contain-one's in neighbors islands
         for c in range(7):
@@ -124,8 +133,6 @@ class Map():
     def find_path(self):
         '''
         도중에 bridge가 아닌 다른 타일을 거치게 된다면 => 그 타일이 목적지로 재설정 된다!!
-
-
         '''
         fail_counter = 0 # 아직 ㄷ자 형으로된 경로의 경우 이런 알고리즘으로는 가는게 불가능함. 카운터가 너무 크면 그냥 바로 이동시켜
         fail_limit = 20
