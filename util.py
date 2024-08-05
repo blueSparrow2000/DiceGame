@@ -3,9 +3,7 @@ from image_processor import *
 import time
 from music import *
 from variables import *
-import math
-import random
-
+from hard_math import *
 
 def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by float between 0 and 1 (factor changes from 0 to 1)
     if not mouse:

@@ -26,16 +26,19 @@ for relic_class_name in relic_class_names:
 
 
 
-def go_to_ruin(screen,clock, player):
+def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 100% change to obtain relic (ruin enemies are like guardians of the relic, so if there is a relic, they would guard)
     ################## chosing a relic ####################
     relic_spawn_chance = random.randrange(1, 100)
     for relic in player.relics:
         relic_spawn_chance -= relic.relic_spawn_chance_increaser()
 
     relic_obtained = True
-    if relic_spawn_chance <= 50:
+
+    if relic_spawn_chance <= 20: # (if no fight) 20% chance that there is no relic...
         relic_obtained = False
 
+    if fought:
+        relic_obtained = False
 
     chance = random.randrange(1, 100)
     relic_rarity = "common"

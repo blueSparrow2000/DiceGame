@@ -162,25 +162,36 @@ def fight(screen, clock, player, place = None):
 
 
     #################### randomly generate enemy following some logic ##################
-    enemy_name_list = ['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel', 'scalpion', 'snider','snalk']
-    trial = random.randint(1, 3)
-    enemy_chosen_one = random.choice(enemy_name_list)
-    enemy_request = [enemy_chosen_one for i in range(trial)]  # string으로 받으면 Get attr함수 써서 객체로 만들어 받아옴
+    enemy_request = []
+    candidate_enemy_list = []
 
-    # for the ruin, we summon different mobs
-    if place=="ruin":
-        if player.check_ruin_boss():
-            enemy_request = ['watcher']
-            player.killed_watcher = True
-        else:
-            ### use ruin enemies ###
-            trial = random.randint(1, 3)
-            ruin_enemies = ['stem', 'golem', 'beast', 'raider', 'shatter']
-            enemy_chosen_one = random.choice(ruin_enemies)
-            enemy_request = [enemy_chosen_one for i in range(trial)]
+    enemies_by_depth = {1:['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel'], 2:['scalpion', 'snider','snalk'], 3:['observer'], 'ruin':['stem', 'beast', 'raider', 'shatter','golem']}
+    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6] , [30, 6.8], [50, 6.2]], 3:[[25, 8.6] ], 'ruin':[[25, 8.6] , [30, 6.8],[60, 6.2],[70, 6.2],[80,5.4]]}
+
+    if not player.reached_max_depth(): # depth must be int, not string!
+        cur_depth = player.get_depth()
+        candidate_enemy_list = enemies_by_depth[abs(cur_depth)//100 + 1]
+        current_params = params_by_depth[abs(cur_depth)//100 + 1]
+
+        effective_depth = - (abs(cur_depth)%100) # make depth to -100 ~ 0 range (for each stage)
+        enemy_request = get_request(effective_depth,candidate_enemy_list,current_params)
+
+        # for the ruin, we summon different mobs
+        if place=="ruin":
+            if player.check_ruin_boss():
+                enemy_request = ['watcher']
+                player.killed_watcher = True
+            else:
+                ### use ruin enemies ###
+                cur_depth = player.get_depth()
+                candidate_enemy_list = enemies_by_depth['ruin']
+                current_params = params_by_depth['ruin']
+
+                enemy_request = get_request(cur_depth, candidate_enemy_list, current_params) # use the whole depth for ruins!
+
 
     # for boss stages, we summon these instead
-    elif player.reached_max_depth():
+    if player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     elif player.check_primary_boss():
         enemy_request = ['carrier']

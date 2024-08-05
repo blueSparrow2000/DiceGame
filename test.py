@@ -40,11 +40,16 @@ import copy
 #             temp[i] = [blocks[i][0],'Used']
 #
 # print(temp)
-#
-# for i in range(10):
-#     if i==1:
-#         continue
-#     print(i)
-x = [5,4]
-y = [5,4]
-print(x==y)
+
+
+
+
+
+
+
+for x in [0, -5, -74, -99, -100, -101, -199, -200, -201, -298, -299]:
+    y = abs(x)//100 + 1
+
+    print('%4d'%x, y, "  |%d"%(- (abs(x)%100) ))
+
+

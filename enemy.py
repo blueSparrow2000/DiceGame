@@ -401,7 +401,7 @@ class Norm(Enemy):
 
 class Scout(Enemy):
     def __init__(self, my_name = 'scout', hp=32, hpmax = 32, attack_damage = 8, pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
         '''
         This mob gets stronger after attacking
         '''
@@ -439,7 +439,7 @@ class Scout(Enemy):
 
 class Sentinel(Enemy):
     def __init__(self, my_name = 'sentinel', hp=64, hpmax = 64, attack_damage = 16, pos = (332,mob_Y_level), attack_pattern = ['buff', 'shield', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
 
 
     def behave(self, player, enemy = None):
@@ -479,7 +479,7 @@ class Sentinel(Enemy):
 
 class Observer(Enemy):
     def __init__(self, my_name = 'observer', hp=64, hpmax = 64, attack_damage = 12, pos = (332,mob_Y_level), attack_pattern = ['buff',  'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
 
 
     def behave(self, player, enemy = None):
@@ -516,7 +516,7 @@ class Observer(Enemy):
 
 class Carrier(Enemy):
     def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
 
 
     def get_spawn_mob_name(self):
@@ -630,7 +630,7 @@ class Silent(Enemy):
 
 class Scalpion(Enemy):
     def __init__(self, my_name = 'scalpion', hp=80, hpmax = 80, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['toxin', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
     '''
     This mob does random damage attack
     '''
@@ -676,7 +676,7 @@ class Scalpion(Enemy):
 
 class Snalk(Enemy):
     def __init__(self, my_name = 'snalk', hp=60, hpmax = 60, attack_damage = [4,8], pos = (332,mob_Y_level), attack_pattern = ['poison', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 7)
     '''
     This mob does random damage attack
     '''
@@ -719,7 +719,7 @@ class Snalk(Enemy):
 
 class Snider(Enemy):
     def __init__(self, my_name = 'snider', hp=60, hpmax = 60, attack_damage = [4,16], pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 7)
     '''
     This mob does random damage attack
     '''
@@ -885,7 +885,7 @@ class Raider(Enemy):
 
 
 class Beast(Enemy):
-    def __init__(self, my_name = 'beast', hp=32, hpmax = 32, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'beast', hp=24, hpmax = 24, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
         self.passive = True
 
@@ -931,7 +931,7 @@ class Beast(Enemy):
 
 class Shatter(Enemy):
     def __init__(self, my_name = 'shatter', hp=100, hpmax = 100, attack_damage = 15, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
         self.passive = True
         '''
         This mob gains attack when damaged

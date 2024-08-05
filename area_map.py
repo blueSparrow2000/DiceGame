@@ -221,10 +221,11 @@ def adventure_loop(screen, clock, player,map):
                     for relic in player.relics:
                         chance -= relic.ruin_chance_increaser()
                     # relic chance increasing
-
+                    fought = False
                     if (player.my_name == "Arisu") or chance <= 40:  # with 40% probability => get a relic
                         pass
                     else:   # with probability 60% => elite fight
+                        fought = True
                         ########################################################## go to fight #################################################
                         # initialize board attributes
                         player.board.net.init_turn()
@@ -246,7 +247,7 @@ def adventure_loop(screen, clock, player,map):
                             else:
                                 player_win_screen(screen, clock, player,enemy_drops, earned_gold)
                         ########################################################## go to fight #################################################
-                    go_to_ruin(screen, clock, player)
+                    go_to_ruin(screen, clock, player, fought)
 
 
                 elif which_event == 'shop':

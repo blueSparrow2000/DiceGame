@@ -217,6 +217,9 @@ class Player(Entity):
         if self.current_depth <= MAX_DEPTH:
             self.current_depth = 'LIMIT'
 
+    def get_depth(self):
+        return self.current_depth
+
     def reached_max_depth(self):
         return self.current_depth=='LIMIT'
 
