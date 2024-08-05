@@ -122,7 +122,7 @@ class Enemy(Entity):
 
 class Halo(Enemy):
     def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = 32, pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 999)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -478,7 +478,7 @@ class Sentinel(Enemy):
         return 10
 
 class Observer(Enemy):
-    def __init__(self, my_name = 'observer', hp=64, hpmax = 64, attack_damage = 32, pos = (332,mob_Y_level), attack_pattern = ['buff',  'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'observer', hp=64, hpmax = 64, attack_damage = 12, pos = (332,mob_Y_level), attack_pattern = ['buff',  'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
 
 
@@ -516,7 +516,7 @@ class Observer(Enemy):
 
 class Carrier(Enemy):
     def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
 
 
     def get_spawn_mob_name(self):
@@ -617,7 +617,7 @@ class Silent(Enemy):
         return 16
 
     def show_next_move(self,screen,mousepos):
-        if self.health < 250: # phase two
+        if self.health < 200: # phase two
             next_move_img = self.pattern_image['unknown']
             screen.blit(next_move_img, next_move_img.get_rect(center=self.next_move_loc))
 
@@ -980,8 +980,8 @@ class Shatter(Enemy):
 
 
 class Watcher(Enemy):
-    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
+    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 30, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
         self.passive = True
 
     def behave(self, player, enemy = None):
@@ -1023,3 +1023,30 @@ class Watcher(Enemy):
         self.end_my_turn()
 
 ########################################################################### ruin enemies ###############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

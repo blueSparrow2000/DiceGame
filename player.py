@@ -506,6 +506,7 @@ class Player(Entity):
         return damage
 
     def defend(self):
+        sound_effects['block'].play()
         self.defence += self.get_defence_gain()
         self.update_defence()
 

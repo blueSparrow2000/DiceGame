@@ -185,10 +185,13 @@ class Entity():
             self.health -= damage
         else:
             partial_damage = damage - self.total_defence
-            if partial_damage <0: # fully blocked
+            if partial_damage < 0: # fully blocked
+                sound_effects['block'].play()
                 self.total_defence -= damage
                 # print('blocked!')
             else:
+                if self.total_defence  >0: # if there were shield but it broke
+                    sound_effects['break'].play()
                 self.total_defence = 0
                 self.health -= partial_damage
                 # print('got hit!')
