@@ -49,17 +49,17 @@ A simple dice game
 2024.08.05 enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
 
-2024.08.06 game balancing / add mirinae relics
+2024.08.06 game balancing / add some Mirinae & Baron relics
 
 
 
 # To do
 - add Cinavro skills
 - add poison learnable skills
-- New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
+
 
 패스 파인더 업데이트 
 브릿지인 타일 가는 도중에 다른 보이드 아닌 타일이 있는 경우 그걸 재외하고 차일드 만드는걸 먼저 돌려보기
@@ -79,6 +79,8 @@ A simple dice game
 - simple hit animation
 
 - add various enemies: elite enemies drop random tiles that you can permanently obtain 
+- 
+- New debuff 'chained': (for player only) block the use of a specific tile for one turn => ruin mobs will use these
 
 - bug: 가끔 그냥 기본 공격을 했는데 hit소리가 나고 데미지가 martial attack만큼 들어가는 경우가 있다
 
