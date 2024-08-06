@@ -54,8 +54,8 @@ A simple dice game
 
 
 # To do
+- add Cinavro skills
 - add poison learnable skills
-- add spike learnable skills 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!

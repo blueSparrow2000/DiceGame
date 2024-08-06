@@ -139,7 +139,7 @@ while meta_run:
                         fix_a_tile(screen, clock, player, 'Regen')
 
                     #### set character abilities here (like fixing a tile etc) ####
-                    # obtain_skill(screen, clock, player, 'no_op')
+                    # obtain_skill(screen, clock, player, 'holy_barrier')
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
@@ -150,11 +150,12 @@ while meta_run:
                     # for i in range(3):
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
-                    # player.pick_up_relic(Tombstone())
+                    #
                     # for i in range(25):
                     #     player.pick_up_relic(Relic())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
+                    # player.pick_up_relic(WarHorn())
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

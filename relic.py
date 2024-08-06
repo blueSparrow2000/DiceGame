@@ -286,7 +286,6 @@ class RuinCompass(Relic):
         return 2
 
 
-####################################### In progress... ##############################################
 
 '''
 Relics of Mirinae
@@ -354,7 +353,7 @@ class ArcaneBook(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="arcane book",rarity = 'rare')
+        super().__init__(name="arcane book",rarity = 'epic')
 
     def description(self):
         return "Gain strength on the first turn of each battle"
@@ -384,45 +383,10 @@ class RecycledSword(Relic):
         super().__init__(name="recycled sword",rarity = 'rare')
 
     def description(self):
-        return ""
-
-    def fight_every_turn_beginning_effect(self, player):
-        player.enforced_regen(self.recover_amount)
+        return "Each turn, one used tile is converted into an attack tile"
 
     def fight_every_turn_end_effect(self, player,enemies):
-        if self.debug:
-            print("my turn ended!")
-        pass
-
-    def fight_start_effect(self, player, enemies):
-        if self.debug:
-            print("Fight has started!")
-        pass
-
-    def effect_when_first_obtained(self, player):
-        if self.debug:
-            print("Relic first obtained!")
-        pass
-
-    def activate_on_death(self, enemy):
-        pass
-
-
-    def activate_on_kill(self, player, enemy):
-        if self.debug:
-            print("Detected a kill!")
-        pass
-
-
-    def activate_on_taking_damage(self, player, enemy, attack_damage):
-        if self.debug:
-            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
-        pass
-
-    def activate_when_getting_reward_gold(self, amount):
-        if self.debug:
-            print("Got reward!")
-        return amount
+        player.board.replace_a_tile_on_board("Used", "Attack")
 
 class SwordCatalyst(Relic):
     '''
@@ -432,96 +396,37 @@ class SwordCatalyst(Relic):
         super().__init__(name="sword catalyst",rarity = 'common')
 
     def description(self):
-        return ""
-
-    def fight_every_turn_beginning_effect(self, player):
-        player.enforced_regen(self.recover_amount)
-
-    def fight_every_turn_end_effect(self, player,enemies):
-        if self.debug:
-            print("my turn ended!")
-        pass
-
-    def fight_start_effect(self, player, enemies):
-        if self.debug:
-            print("Fight has started!")
-        pass
-
-    def effect_when_first_obtained(self, player):
-        if self.debug:
-            print("Relic first obtained!")
-        pass
-
-    def activate_on_death(self, enemy):
-        pass
-
+        return "For each enemy killed, get temporal attack tile"
 
     def activate_on_kill(self, player, enemy):
-        if self.debug:
-            print("Detected a kill!")
-        pass
+        player.board.insert_a_tile_on_board("Attack")
 
-
-    def activate_on_taking_damage(self, player, enemy, attack_damage):
-        if self.debug:
-            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
-        pass
-
-    def activate_when_getting_reward_gold(self, amount):
-        if self.debug:
-            print("Got reward!")
-        return amount
 
 class WarHorn(Relic):
     '''
 
     '''
     def __init__(self):
-        super().__init__(name="war horn",rarity = 'legendary')
+        super().__init__(name="war horn",rarity = 'epic')
 
     def description(self):
-        return ""
+        return "If no attack tiles on the board, all empty tiles become attack"
 
     def fight_every_turn_beginning_effect(self, player):
-        player.enforced_regen(self.recover_amount)
-
-    def fight_every_turn_end_effect(self, player,enemies):
-        if self.debug:
-            print("my turn ended!")
-        pass
-
-    def fight_start_effect(self, player, enemies):
-        if self.debug:
-            print("Fight has started!")
-        pass
-
-    def effect_when_first_obtained(self, player):
-        if self.debug:
-            print("Relic first obtained!")
-        pass
-
-    def activate_on_death(self, enemy):
-        pass
+        A_board = player.board.count_all_tiles_on_board("Attack")
+        if A_board<=0:
+            sound_effects['horn_high'].play()
+            player.board.convert_all_tiles_on_board_immediately("Empty", "Attack")
 
 
-    def activate_on_kill(self, player, enemy):
-        if self.debug:
-            print("Detected a kill!")
-        pass
+
+####################################### In progress... ##############################################
 
 
-    def activate_on_taking_damage(self, player, enemy, attack_damage):
-        if self.debug:
-            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
-        pass
-
-    def activate_when_getting_reward_gold(self, amount):
-        if self.debug:
-            print("Got reward!")
-        return amount
 
 
-relic_class_names = ['Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+
+relic_class_names = ['WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

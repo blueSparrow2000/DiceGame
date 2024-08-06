@@ -239,17 +239,18 @@ class Skill_Book():
 
     def holy_barrier_get_requirement(self,player):
         S = player.count_tile('Skill')
-        A = player.count_tile('Attack')
-        R = player.count_tile('Regen')
-        if (S<3 or A>1 or R<1):
-            return False, 0, False, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums, is_attack
-        return True, 0, False, {'Skill':(3,0),'Regen':(1,0),'Attack':(0,1)} # skill_valid, target_nums,is_attack
+        D = player.count_tile('Defence')
+        if (S<3 or D<1):
+            return False, 0, False, {'Skill':(3,0),'Defence':(1,0)} # skill_valid, target_nums, is_attack
+        return True, 0, False, {'Skill':(3,0),'Defence':(1,0)} # skill_valid, target_nums,is_attack
 
     def holy_barrier(self,player, target_list):
         sound_effects['playerdeath'].play()
-        player.buffs['attack immunity'] = 2
+        D = player.count_tile('Defence')
+        player.buffs['attack immunity'] += D
     def get_detail_holy_barrier(self,player):
-        return "Holy barrier|Summon a shield that blocks all attacks once"
+        D = player.count_tile('Defence')
+        return "Holy barrier|Summon a shield that blocks any attack  for D = %d times"%D
 
 
 

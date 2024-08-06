@@ -653,14 +653,27 @@ class Board():
     Insert a tile into the board (randomly) only if there is a space (which is an empty tile)    
     '''
     def insert_a_tile_on_board(self, tile_name):
+        self.replace_a_tile_on_board('Empty', tile_name)
+        # random.shuffle(self.board)
+        # self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
+        # for i in range(len(self.board)):
+        #     board_tile_name = self.board[i][1]
+        #     if board_tile_name == 'Empty': # change the names!
+        #         self.board[i][1] = tile_name
+        #         self.temp_board[i][1] = tile_name
+        #         break # insert one tile!
+
+    def replace_a_tile_on_board(self, replaced_tile, replacing_tile):
         random.shuffle(self.board)
         self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
         for i in range(len(self.board)):
             board_tile_name = self.board[i][1]
-            if board_tile_name == 'Empty': # change the names!
-                self.board[i][1] = tile_name
-                self.temp_board[i][1] = tile_name
+            if board_tile_name == replaced_tile: # change the names!
+                self.board[i][1] = replacing_tile
+                self.temp_board[i][1] = replacing_tile
                 break # insert one tile!
+
+        print("replacing failed: no tile named '%s'"%replaced_tile)
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
@@ -669,6 +682,14 @@ class Board():
             if board_tile_name == target_tile:
                 self.temp_board[i][1] = convert_tile  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
                 self.temp_board[i][2] = False  # not fixed tile
+
+    def convert_all_tiles_on_board_immediately(self,target_tile, convert_tile): # convert target tile into convert tile
+        # loop through current board and change all 'tile_name' tiles into 'Used' tiles
+        for i in range(len(self.board)):
+            board_tile_name = self.board[i][1]
+            if board_tile_name == target_tile:
+                self.board[i][1] = convert_tile  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
+                self.board[i][2] = False  # not fixed tile
 
 
     def consume_all_tiles_on_board(self, target_tile): # consume all tiles and return how many are (actually) consumed

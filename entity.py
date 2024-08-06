@@ -137,8 +137,8 @@ class Entity():
                     next_row += 1
                     cnt = 0
 
-                if (self.my_type == 'player' and buff_name=='attack immunity'): # for attack immunity, decrement 1
-                    buff_duration-=1
+                # if (self.my_type == 'player' and buff_name=='attack immunity'): # for attack immunity, decrement 1
+                #     buff_duration-=1
                 location = [self.buff_icon_x + self.icon_delta * cnt, self.buff_icon_y + next_row * self.icon_delta]
                 screen.blit(buff_icon,
                             buff_icon.get_rect(center=location))
@@ -173,6 +173,7 @@ class Entity():
     def take_damage(self, attacker, damage_temp):
         if (self.buffs['attack immunity']>0): # do not take damage
             print(self.buffs['attack immunity'])
+            self.buffs['attack immunity'] -= 1 # discount one
             return 0
 
         damage = self.vulnerability_multiplier * damage_temp
@@ -241,6 +242,8 @@ class Entity():
     def update_buffs(self):
         for buff_name, buff_duration in self.buffs.items():
             if buff_duration > 0:
+                if buff_name == 'attack immunity': # does not decay
+                    continue
                 self.buffs[buff_name] = max(0, buff_duration - 1)  # reduce one turn
 
 
