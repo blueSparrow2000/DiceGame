@@ -25,52 +25,63 @@ for relic_class_name in relic_class_names:
 
 
 
+def determine_rarity():
+    chance = random.randrange(1, 100)
+    rarity = "common"
+    if chance <= relic_probs['myth']:
+        rarity = 'myth'
+    elif chance <= relic_probs['myth'] + relic_probs['legendary']:
+        rarity = 'legendary'
+    elif chance <= relic_probs['myth'] + relic_probs['legendary'] + relic_probs['special']:
+        rarity = 'special'
+    elif chance <= relic_probs['myth'] + relic_probs['legendary'] + relic_probs['special'] + relic_probs['rare']:
+        rarity = 'epic'
+    elif chance <= relic_probs['myth'] + relic_probs['legendary'] + relic_probs['special'] + relic_probs['rare'] + relic_probs['epic']:
+        rarity = 'rare'
+
+    return rarity
+
+
 
 def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 100% change to obtain relic (ruin enemies are like guardians of the relic, so if there is a relic, they would guard)
+    ruin_seed = 3
+    relic_gap = 100 # scaled size
+    relic_Y_level = 400
+    relic_locations = [[width // 2 - (ruin_seed-1)*relic_gap//2 + i*relic_gap  , relic_Y_level] for i in range(ruin_seed)]
+
     ################## chosing a relic ####################
     relic_spawn_chance = random.randrange(1, 100)
     for relic in player.relics:
         relic_spawn_chance -= relic.relic_spawn_chance_increaser()
 
     relic_obtained = True
-
     if relic_spawn_chance <= 20: # (if no fight) 20% chance that there is no relic...
         relic_obtained = False
-
     if fought:
         relic_obtained = False
 
-    chance = random.randrange(1, 100)
-    relic_rarity = "common"
-    if chance <= relic_probs['myth']:
-        relic_rarity = 'myth'
-    elif chance <= relic_probs['myth'] + relic_probs['legendary']:
-        relic_rarity = 'legendary'
-    elif chance <= relic_probs['myth'] + relic_probs['legendary'] + relic_probs['special']:
-        relic_rarity = 'special'
-    elif chance <= relic_probs['myth'] + relic_probs['legendary'] + relic_probs['special'] + relic_probs['rare']:
-        relic_rarity = 'epic'
-    elif chance <= relic_probs['myth'] + relic_probs['legendary'] + relic_probs['special'] + relic_probs['rare'] + relic_probs['epic']:
-        relic_rarity = 'rare'
+    final_relic_names = []
+    final_relic_samples = []
 
-    relic_candidates = relic_by_rarity_dict[relic_rarity]
-    final_relic_name = ""
-    final_relic_sample = ""
-    if len(relic_candidates)==0: #no relic left
+    for i in range(ruin_seed):
+        final_relic_name = ""
+        final_relic_sample = ""
+
+        relic_rarity = determine_rarity()
+        relic_candidates = relic_by_rarity_dict[relic_rarity]
+        if not len(relic_candidates)==0:
+            random.shuffle(relic_candidates)
+            final_relic_name = relic_candidates[0][0]
+            final_relic_sample = relic_candidates[0][1]
+
+        final_relic_names.append(final_relic_name)
+        final_relic_samples.append(final_relic_sample)
+
+
+    if len(final_relic_names)==0: # no relic left in each rarity
         relic_obtained = True # relic is gone!
-    else:
-        random.shuffle(relic_candidates)
-        final_relic_name = relic_candidates[0][0]
-        final_relic_sample = relic_candidates[0][1]
 
     ################## chosing a relic ####################
-
-
-
-    relic_Y_level = 350
-    relic_location=[width//2,relic_Y_level]
-
-
 
     game_run = True
     mousepos = (0,0)
@@ -99,11 +110,12 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
                     # exit
                     game_run = False
                     break
-                elif not relic_obtained and check_inside_button(mousepos, relic_location, button_side_len_half): # clicked relic => get relic! (only for one time!)
-                    generated_relic = generate_relic_by_class_name(final_relic_name)
-                    player.pick_up_relic(generated_relic)
-                    relic_obtained = True
-                    pass
+                elif not relic_obtained: # clicked relic => get relic! (only for one time!)
+                    for i in range(ruin_seed):
+                        if check_inside_button(mousepos, relic_locations[i], button_side_len_half):
+                            generated_relic = generate_relic_by_class_name(final_relic_names[i])
+                            player.pick_up_relic(generated_relic)
+                            relic_obtained = True
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -133,11 +145,15 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
 
         # draw relic info
         if not relic_obtained:
-            write_text(screen, width // 2, relic_Y_level - 50, 'Found relic', 30, 'gold')
-            final_relic_sample.draw(screen, relic_location, scaled=True)
-            write_text(screen, width//2, relic_Y_level + 50, final_relic_sample.name, 20, final_relic_sample.color)
-            write_text(screen, width//2, relic_Y_level + 77, final_relic_sample.description(), 17, final_relic_sample.color)
-            write_text(screen, width//2, relic_Y_level + 110, 'click to obtain', 15, 'gold')
+            write_text(screen, width // 2, relic_Y_level - 150, 'Found relic', 30, 'gold')
+            write_text(screen, width//2, relic_Y_level -120, 'click to obtain', 15, 'gold')
+
+            # relic drawing
+            for i in range(ruin_seed):
+                final_relic_sample = final_relic_samples[i]
+                final_relic_sample.draw(screen, relic_locations[i], scaled=True)
+                final_relic_sample.show_ruin_description(screen, relic_locations[i], [width // 2, relic_Y_level + 150], mousepos)
+
 
 
         if mouse_particle_list:  # if not empty

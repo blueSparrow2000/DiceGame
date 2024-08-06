@@ -62,6 +62,11 @@ A simple dice game
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 
+패스 파인더 업데이트 
+브릿지인 타일 가는 도중에 다른 보이드 아닌 타일이 있는 경우 그걸 재외하고 차일드 만드는걸 먼저 돌려보기
+그랬을때 패스가 안나온다면
+이잔꺼 돌려서 가는걸로 ㄱㄱ
+
 
 ### beyond beta version (further implementation will use Flutter instead of python)
 - (better graphics) add health bar object that saves target value and have a shrinking animation at every update (call update instead of directly changing self.hp and drawing health bar)

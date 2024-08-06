@@ -15,8 +15,11 @@ def weight(current_depth, mean_depth, spreadness):
 def normalizer(this_list):
     ndigit = 3
     total = sum(this_list)
-    return [round(x / total, ndigit) for x in this_list]
 
+    result = [round(x / total, ndigit) for x in this_list]
+    delta = 1 - sum(result)
+    result[0] += delta # add margin
+    return result
 
 def choice_maker(enemy_list, probs):
     max_capacity = 3

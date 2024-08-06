@@ -93,6 +93,11 @@ class Relic():
                         self.image.get_rect(center=location))
 
 
+    def show_ruin_description(self, screen, relic_location, discription_location ,mousepos): #  width // 2, relic_Y_level + 150 # width // 2, relic_Y_level + 177
+        if check_inside_button(mousepos, relic_location, button_side_len_half):
+            write_text(screen, discription_location[0], discription_location[1], self.name, 20, self.color)
+            write_text(screen, discription_location[0], discription_location[1] + 27, self.description(), 17,
+                       self.color)
 
 
 
@@ -243,11 +248,11 @@ class Moss(Relic):
 
 class GoldenTalisman(Relic):
     '''
-    Each has 10% chance of doubling earned gold
+    Each has 20% chance of doubling earned gold
     '''
     def __init__(self):
         super().__init__(name="golden talisman", rarity = 'common')
-        self.chance = 10
+        self.chance = 20
 
     def description(self):
         return "Each has %d%% chance of doubling earned gold"%self.chance
@@ -271,10 +276,10 @@ class RuinCompass(Relic):
         return "Increase the chance of finding a relic in ruins"
 
     def ruin_chance_increaser(self):  # ruin spawns more often
-        return 2
+        return 5
 
     def relic_spawn_chance_increaser(self):
-        return 1
+        return 2
 
 
 ####################################### In progress... ##############################################

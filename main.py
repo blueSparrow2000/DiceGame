@@ -49,7 +49,7 @@ screen.fill((0,0,0))  # background color
 
 
 # main screen ---------------------------------------------------
-playable_characters = ['Mirinae', 'Cinavro', 'Narin', 'Baron', 'Riri', 'Arisu', 'Ato']
+playable_characters = ['Mirinae', 'Cinavro', 'Baron'] #, 'Narin', 'Riri', 'Arisu', 'Ato'
 dummy_net = Net([0],50,100)
 
 
@@ -137,7 +137,7 @@ while meta_run:
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
-                    # go_to_ruin(screen, clock, player)
+                    go_to_ruin(screen, clock, player, True)
                     # for i in range(1):
                     #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string
                     #     obtain_skill(screen, clock, player, 'poison_dart')

@@ -166,7 +166,7 @@ def fight(screen, clock, player, place = None):
     candidate_enemy_list = []
 
     enemies_by_depth = {1:['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel'], 2:['scalpion', 'snider','snalk'], 3:['observer'], 'ruin':['stem', 'beast', 'raider', 'shatter','golem']}
-    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6] , [30, 6.8], [50, 6.2]], 3:[[25, 8.6] ], 'ruin':[[25, 8.6] , [30, 6.8],[60, 6.2],[70, 6.2],[80,5.4]]}
+    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6] , [30, 6.8], [50, 6.2]], 3:[[25, 8.6] ], 'ruin':[[40, 14] , [60, 9.6],[100, 15.4],[120, 10],[135,9]]}
 
     if not player.reached_max_depth(): # depth must be int, not string!
         cur_depth = player.get_depth()
