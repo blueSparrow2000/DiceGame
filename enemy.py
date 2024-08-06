@@ -449,9 +449,9 @@ class Sentinel(Enemy):
         self.refresh_my_turn()
 
         current_pattern = self.pattern[self.current_pattern_idx]
-        if current_pattern=='hard_hit':
+        if current_pattern=='attack':
             if self.can_attack:
-                sound_effects['sword'].play()
+                sound_effects['hard_hit'].play()
                 player.take_damage(self,self.get_current_damage())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -489,9 +489,9 @@ class Observer(Enemy):
         self.refresh_my_turn()
 
         current_pattern = self.pattern[self.current_pattern_idx]
-        if current_pattern=='hard_hit':
+        if current_pattern=='attack':
             if self.can_attack:
-                sound_effects['sword'].play()
+                sound_effects['hard_hit'].play()
                 player.take_damage(self,self.get_current_damage())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -518,7 +518,7 @@ class Observer(Enemy):
 
 
 class Carrier(Enemy):
-    def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'carrier', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
 
 
@@ -986,7 +986,7 @@ class Shatter(Enemy):
 
 
 class Watcher(Enemy):
-    def __init__(self, my_name = 'watcher', hp=300, hpmax = 300, attack_damage = 30, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'watcher', hp=400, hpmax = 400, attack_damage = 30, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
         self.passive = True
 

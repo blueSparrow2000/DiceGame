@@ -79,8 +79,11 @@ class Player(Entity):
 
     ######################################### Relic ################################################
 
+    def have_space_for_relic(self):
+        return len(self.relics) < 24
+
     def pick_up_relic(self, relic_obj):
-        if len(self.relics)>=24:
+        if not self.have_space_for_relic():
             print("cannot pick up relics more than 24")
             return
         self.relics.append(relic_obj)
@@ -224,7 +227,10 @@ class Player(Entity):
         return self.current_depth=='LIMIT'
 
     def check_ruin_boss(self):
-        return (not self.killed_watcher) and self.current_depth <= WATCHER_DEPTH
+        return (not self.killed_ruin_boss()) and self.current_depth <= WATCHER_DEPTH
+
+    def killed_ruin_boss(self):
+        return self.killed_watcher
 
     def check_primary_boss(self):
         return self.boss_stage == 0 and self.current_depth <= PRIMARY_BOSS_DEPTH

@@ -131,9 +131,15 @@ while meta_run:
                     player = Player(character_name, character_skills, Board(character_tiles, planar_figure_idx))
 
                     run_character_selection = False
+                    if character_name=="Mirinae":   # , 'Cinavro', 'Baron'
+                        fix_a_tile(screen, clock, player, 'Attack')
+                    elif character_name=="Baron":
+                        fix_a_tile(screen, clock, player, 'Defence')
+                    elif character_name=="Riri":
+                        fix_a_tile(screen, clock, player, 'Regen')
+
                     #### set character abilities here (like fixing a tile etc) ####
                     # obtain_skill(screen, clock, player, 'no_op')
-                    # fix_a_tile(screen, clock, player, 'Karma')
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
@@ -145,8 +151,8 @@ while meta_run:
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
 
-                    # for i in range(25):
-                    #     player.pick_up_relic(Relic())
+                    for i in range(25):
+                        player.pick_up_relic(Relic())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
                     ############## game start module #################

@@ -270,7 +270,7 @@ class RuinCompass(Relic):
     Forward compatibility of the moss
     '''
     def __init__(self):
-        super().__init__(name="ruin compass", rarity = 'common')
+        super().__init__(name="ruin compass", rarity = 'rare')
 
     def description(self):
         return "Increase the chance of finding a relic in ruins"

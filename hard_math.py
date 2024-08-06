@@ -17,8 +17,32 @@ def normalizer(this_list):
     total = sum(this_list)
 
     result = [round(x / total, ndigit) for x in this_list]
-    delta = 1 - sum(result)
-    result[0] += delta # add margin
+    if sum(result)>1:
+        delta = sum(result) - 1 # > 0
+
+        max_pivot = 0
+        for k in range(len(result)):
+            if result[k] > result[max_pivot]:
+                max_pivot = k
+        if result[max_pivot] >= delta:
+            result[max_pivot] -= delta # subtract margin
+
+        else:
+            print("Max prob is smaller than the total prob! this is problematic!!")
+            for k in range(len(result)):
+                cur_prob = result[k]
+                if cur_prob > 0:
+                    if delta >= cur_prob: # large delta
+                        result[k] = 0
+                        delta -= cur_prob
+                    else: # remaining delta
+                        result[k] -= delta
+                        delta = 0
+
+
+    else:
+        delta = 1 - sum(result)
+        result[0] += delta # add margin
     return result
 
 def choice_maker(enemy_list, probs):

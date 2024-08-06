@@ -222,7 +222,7 @@ def adventure_loop(screen, clock, player,map):
                         chance -= relic.ruin_chance_increaser()
                     # relic chance increasing
                     fought = False
-                    if (player.my_name == "Arisu") or chance <= 40:  # with 40% probability => get a relic
+                    if (player.my_name == "Arisu") or chance <= 40 or player.killed_ruin_boss():  # with 40% probability => get a relic
                         pass
                     else:   # with probability 60% => elite fight
                         fought = True

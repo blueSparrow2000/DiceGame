@@ -15,7 +15,7 @@ def generate_relic_by_class_name(relic_class_name):
     return relic
 
 
-relic_probs = {'common':60, 'rare':20, 'epic':10, 'special':6, 'legendary':3, 'myth':1} # % 기준
+relic_probs = {'common':40, 'rare':33, 'epic':20, 'special':4, 'legendary':2, 'myth':1} # % 기준
 
 relic_by_rarity_dict =  {'common':[], 'rare':[], 'epic':[], 'special':[], 'legendary':[], 'myth':[]} # 각 리스트에는 ['Thorn',Thorn()]이런 형태로 들어있음
 for relic_class_name in relic_class_names:
@@ -55,10 +55,11 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
         relic_spawn_chance -= relic.relic_spawn_chance_increaser()
 
     relic_obtained = True
-    if relic_spawn_chance <= 20: # (if no fight) 20% chance that there is no relic...
+    if relic_spawn_chance <= 90: # (if no fight) 90% chance to get relic
         relic_obtained = False
     if fought:
         relic_obtained = False
+
 
     final_relic_names = []
     final_relic_samples = []
@@ -80,6 +81,7 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
 
     if len(final_relic_names)==0: # no relic left in each rarity
         relic_obtained = True # relic is gone!
+
 
     ################## chosing a relic ####################
 
@@ -111,11 +113,12 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
                     game_run = False
                     break
                 elif not relic_obtained: # clicked relic => get relic! (only for one time!)
-                    for i in range(ruin_seed):
-                        if check_inside_button(mousepos, relic_locations[i], button_side_len_half):
-                            generated_relic = generate_relic_by_class_name(final_relic_names[i])
-                            player.pick_up_relic(generated_relic)
-                            relic_obtained = True
+                    if player.have_space_for_relic():  # bag is not full
+                        for i in range(ruin_seed):
+                            if check_inside_button(mousepos, relic_locations[i], button_side_len_half):
+                                generated_relic = generate_relic_by_class_name(final_relic_names[i])
+                                player.pick_up_relic(generated_relic)
+                                relic_obtained = True
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -146,7 +149,10 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
         # draw relic info
         if not relic_obtained:
             write_text(screen, width // 2, relic_Y_level - 150, 'Found relic', 30, 'gold')
-            write_text(screen, width//2, relic_Y_level -120, 'click to obtain', 15, 'gold')
+            if player.have_space_for_relic():  # bag is not full
+                write_text(screen, width//2, relic_Y_level -110, 'click to obtain', 18, 'gold')
+            else:
+                write_text(screen, width // 2, relic_Y_level - 110, 'your bag is full!', 18, 'red')
 
             # relic drawing
             for i in range(ruin_seed):
