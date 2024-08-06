@@ -143,7 +143,8 @@ while meta_run:
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
                     # go_to_shop(screen, clock, player)
-                    # go_to_ruin(screen, clock, player, True)
+                    for i in range(20):
+                        go_to_ruin(screen, clock, player, True)
                     # for i in range(1):
                     #     obtain_skill(screen, clock, player, 'holy_barrier')  # spell_name: string
                     #     obtain_skill(screen, clock, player, 'poison_dart')
@@ -155,7 +156,7 @@ while meta_run:
                     #     player.pick_up_relic(Relic())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
-                    # player.pick_up_relic(WarHorn())
+                    # player.pick_up_relic(StrawMat()) #
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

@@ -18,8 +18,8 @@ mob_gap = 28
 # text levels
 text_description_level = 640
 requirement_level = 760
-turn_text_level = 155
-area_name_Y_level = 155
+turn_text_level = 165
+area_name_Y_level = 165
 
 middle_button_Y_level = 380
 upper_button_Y_level = 200

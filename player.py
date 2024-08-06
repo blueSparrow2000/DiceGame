@@ -453,7 +453,6 @@ class Player(Entity):
     def new_fight(self,enemies):
         super().refresh_my_turn()
 
-        # self.update_defence()
         self.current_tile = dict()
         self.current_skill_idx = -1
 

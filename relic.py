@@ -421,12 +421,133 @@ class WarHorn(Relic):
 
 
 ####################################### In progress... ##############################################
+'''
+Relics of Baron
+'''
+
+class StrawMat(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="straw mat",rarity = 'epic')
+        self.shield_per_straw = 5
+
+    def description(self):
+        return "Gains %d shield for each defence tile drawn"%self.shield_per_straw
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        D = player.count_tile('Defence')
+        defence_gain = self.shield_per_straw * D
+
+        player.defence += defence_gain
+        player.update_defence()
+
+class Obsidian(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="obsidian",rarity = 'common')
+
+    def description(self):
+        return "On board reset, one empty tile is converted into a defence tile"
+
+    def activate_on_board_reset(self, player, enemy):
+        player.board.insert_a_tile_on_board("Defence")
+
+class RecycledShield(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="recycled shield",rarity = 'rare')
+
+    def description(self):
+        return "Each turn, one used tile is converted into a defence tile"
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        player.board.replace_a_tile_on_board("Used", "Defence")
+
+class ShieldCatalyst(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="shield catalyst",rarity = 'common')
+
+    def description(self):
+        return "For each enemy killed, get temporal defence tile"
+
+    def activate_on_kill(self, player, enemy):
+        player.board.insert_a_tile_on_board("Defence")
+
+class BattleShield(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="battle shield",rarity = 'common')
+        self.shield_gain = 5
+
+    def description(self):
+        return "For each enemy killed, get %d temporal defence"%self.shield_gain
+
+    def activate_on_kill(self, player, enemy):
+        player.defence += self.shield_gain
+        player.update_defence()
 
 
 
+class Paranoia(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="paranoia",rarity = 'epic')
+        self.shield_gain = 2
+
+    def description(self):
+        return "If defense is 0 at turn end, gain %d defense"%self.shield_gain
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        if player.defence==0:
+            player.defence += self.shield_gain
+            player.update_defence()
+
+class IronPlate(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="iron plate",rarity = 'legendary')
+        self.base_defence_gain = 1
+    def description(self):
+        return "Gain %d permanent defence"%self.base_defence_gain
+
+    def effect_when_first_obtained(self, player):
+        player.base_defence += self.base_defence_gain
+        player.update_defence()
+
+class Armadillo(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="armadillo",rarity = 'common')
+        self.defence_multiplier = 5
+
+    def description(self):
+        return "Gain %d*(# of enemies) defence on the first turn"%self.defence_multiplier
+
+    def fight_start_effect(self, player, enemies):
+        num_of_enemies = len(enemies)
+        player.defence += num_of_enemies*self.defence_multiplier
+        player.update_defence()
 
 
-relic_class_names = ['WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+
+relic_class_names = ['StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 
