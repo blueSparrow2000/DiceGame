@@ -15,7 +15,7 @@ def generate_relic_by_class_name(relic_class_name):
     return relic
 
 
-relic_probs = {'common':40, 'rare':33, 'epic':20, 'special':4, 'legendary':2, 'myth':1} # % 기준
+relic_probs = {'common':60, 'rare':23, 'epic':10, 'special':4, 'legendary':2, 'myth':1} # % 기준
 
 relic_by_rarity_dict =  {'common':[], 'rare':[], 'epic':[], 'special':[], 'legendary':[], 'myth':[]} # 각 리스트에는 ['Thorn',Thorn()]이런 형태로 들어있음
 for relic_class_name in relic_class_names:
@@ -44,7 +44,11 @@ def determine_rarity():
 
 
 def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 100% change to obtain relic (ruin enemies are like guardians of the relic, so if there is a relic, they would guard)
-    ruin_seed = 3
+    ruin_artifact_number_list = [1,2,3]
+    ruin_artifact_number_probs = [0.1, 0.4, 0.5]
+    ruin_number_choice = simple_choice_maker(ruin_artifact_number_list, ruin_artifact_number_probs, 1)
+    ruin_seed = int(ruin_number_choice[0])
+
     relic_gap = 100 # scaled size
     relic_Y_level = 400
     relic_locations = [[width // 2 - (ruin_seed-1)*relic_gap//2 + i*relic_gap  , relic_Y_level] for i in range(ruin_seed)]

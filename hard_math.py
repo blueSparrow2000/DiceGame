@@ -59,6 +59,9 @@ def choice_maker(enemy_list, probs):
         result.append(str(choice[0]))
     return result
 
+def simple_choice_maker(candidate_list, candidate_probs, num): # type casting should be done by yourself
+    choice = np.choice(candidate_list, size=num, p=candidate_probs)
+    return choice
 
 
 def get_request(current_depth,current_enemies,dist_params):
@@ -99,5 +102,4 @@ def get_request(current_depth,current_enemies,dist_params):
 #     enemy_request = choice_maker(current_enemies, probs)
 #
 #     print('%4d: '%d,enemy_request)
-
 
