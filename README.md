@@ -49,12 +49,11 @@ A simple dice game
 2024.08.05 enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
 
-2024.08.06 add mirinae relics
+2024.08.06 game balancing / add mirinae relics
 
 
 
 # To do
-
 - add poison learnable skills
 - add spike learnable skills 
 - New debuff(for player only) 'chained': block the use of a specific tile for one turn => ruin mobs will use these

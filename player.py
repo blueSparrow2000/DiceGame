@@ -280,7 +280,7 @@ class Player(Entity):
             relic.draw(screen, location)
             if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
                 relic_effects = relic.description()
-                write_text(screen, width//2, self.relic_y_start - 35, relic_effects, 17, relic.color, 'black')
+                write_text(screen, width//2, self.relic_y_start - 35, relic_effects, 16, relic.color, 'black')
                 write_text(screen, width // 2, self.relic_y_start - 52, relic.name, 20, relic.color, 'black')
 
             cnt += 1
@@ -433,34 +433,43 @@ class Player(Entity):
         super().refresh_my_turn()
         for relic in self.relics:
             relic.fight_every_turn_beginning_effect(self)
+        self.get_buff_effect() # get buff effects
 
-    def end_my_turn(self): # do something at the end of the turn
-        super().end_my_turn()
+    def end_my_turn(self, enemies = None): # do something at the end of the turn
+        super().end_my_turn(enemies)
 
         copy_of_current_tile = copy.deepcopy(self.current_tile)
-        # SHUFFLE: this is activated when pressed skip button
-        self.board.turn_end_check(self, copy_of_current_tile)
 
         for relic in self.relics:
-            relic.fight_every_turn_end_effect(self)
+            relic.fight_every_turn_end_effect(self, enemies)
+
+        # SHUFFLE: this is activated when pressed skip button
+        self.board.turn_end_check(self, copy_of_current_tile)
 
         self.current_skill_idx = -1  # reset this
         self.current_tile = dict()
         time.sleep(0.3)
 
-    def new_fight(self):
-        for k,v in self.buffs.items():
-            self.buffs[k] = 0 # reset
-        # self.defence = 0
+    def new_fight(self,enemies):
+        super().refresh_my_turn()
+
         # self.update_defence()
         self.current_tile = dict()
         self.current_skill_idx = -1
 
         # reset the board
         self.board.new_game()
+        self.board_reset(enemies)
 
+        # fight start
         for relic in self.relics:
-            relic.fight_start_effect(self)
+            relic.fight_start_effect(self,enemies)
+
+        # start turn
+        for relic in self.relics:
+            relic.fight_every_turn_beginning_effect(self)
+
+        self.get_buff_effect() # get buff effects
 
 
     def on_enemy_death(self, enemy):
@@ -542,3 +551,21 @@ class Player(Entity):
 
         self.relics[:] = [relic for relic in self.relics if not relic.delete]
         return True
+
+
+    def board_reset(self, enemies):
+        self.board.reset(self) # clear board just after the player's turn!
+
+        if (self.board.current_turn-1) == 0:
+            for relic in self.relics:
+                relic.activate_on_board_reset(self, enemies)
+
+
+
+
+
+
+
+
+
+

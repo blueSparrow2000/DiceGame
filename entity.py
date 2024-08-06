@@ -107,7 +107,7 @@ class Entity():
         self.update_defence()
 
 
-    def end_my_turn(self): # do something at the end of the turn
+    def end_my_turn(self, others = None): # do something at the end of the turn
         # if poisoned, get damaged
         if (self.poisoned):
             self.health -= 5

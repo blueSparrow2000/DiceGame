@@ -30,12 +30,12 @@ class Relic():
             print("my turn started!")
         pass
 
-    def fight_every_turn_end_effect(self, player):
+    def fight_every_turn_end_effect(self, player, enemies):
         if self.debug:
             print("my turn ended!")
         pass
 
-    def fight_start_effect(self, player):
+    def fight_start_effect(self, player, enemies):
         if self.debug:
             print("Fight has started!")
         pass
@@ -54,7 +54,10 @@ class Relic():
             print("Detected a kill!")
         pass
 
-
+    def activate_on_board_reset(self, player, enemy):
+        if self.debug:
+            print("Board reset!")
+        pass
 
     def activate_on_taking_damage(self, player, enemy, attack_damage):
         if self.debug:
@@ -76,6 +79,7 @@ class Relic():
             print("Relic chance stays the same!")
         return 0
 
+
     ####################################### In progress... ##############################################
     #####################################################################################################
 
@@ -96,7 +100,7 @@ class Relic():
     def show_ruin_description(self, screen, relic_location, discription_location ,mousepos): #  width // 2, relic_Y_level + 150 # width // 2, relic_Y_level + 177
         if check_inside_button(mousepos, relic_location, button_side_len_half):
             write_text(screen, discription_location[0], discription_location[1], self.name, 20, self.color)
-            write_text(screen, discription_location[0], discription_location[1] + 27, self.description(), 17,
+            write_text(screen, discription_location[0], discription_location[1] + 27, self.description(), 16,
                        self.color)
 
 
@@ -104,21 +108,21 @@ class Relic():
 class PoisonBottle(Relic):
     '''
     For poison dart skill
-    Increase damage multiplier 3 -> 5
-    duration 3 -> 5
+    Increase damage multiplier 3 -> 6
+    duration 3 -> 6
     '''
     def __init__(self):
-        super().__init__(name="poison bottle",rarity = 'rare')
+        super().__init__(name="poison bottle",rarity = 'epic')
 
     def description(self):
-        return "Poison dart: damage multiplier 3 -> 5 / duration 3 -> 5"
+        return "Poison dart: damage multiplier 3 -> 6 / duration 3 -> 6"
 
 class SerpentHeart(Relic):
     '''
     Increase max hp by 50
     '''
     def __init__(self):
-        super().__init__(name="serpent heart",rarity = 'epic')
+        super().__init__(name="serpent heart",rarity = 'special')
 
     def description(self):
         return "Increase max hp by 50"
@@ -139,7 +143,7 @@ class FearCell(Relic):
     def description(self):
         return "Recovers %d hp at the start of each fight"%self.recover_amount
 
-    def fight_start_effect(self, player):
+    def fight_start_effect(self, player, enemies):
         player.enforced_regen(self.recover_amount)
 
 class StemCell(Relic):
@@ -167,7 +171,7 @@ class Ration(Relic):
     def description(self):
         return "Recovers %d hp at the end of each turn in a battle"%self.recover_amount
 
-    def fight_every_turn_end_effect(self, player):
+    def fight_every_turn_end_effect(self, player,enemies):
         player.enforced_regen(self.recover_amount)
 
 
@@ -209,7 +213,7 @@ class LargeThorn(Relic):
     Deals half of the damage received
     '''
     def __init__(self):
-        super().__init__(name="large thorn", rarity = 'special')
+        super().__init__(name="large thorn", rarity = 'legendary')
 
     def description(self):
         return "Deals half of the damage received"
@@ -223,7 +227,7 @@ class Thorn(Relic):
     Deals 5 damage when attacked
     '''
     def __init__(self):
-        super().__init__(name="thorn", rarity = 'rare')
+        super().__init__(name="thorn", rarity = 'special')
         self.thorn_damage = 5
 
     def description(self):
@@ -284,10 +288,240 @@ class RuinCompass(Relic):
 
 ####################################### In progress... ##############################################
 
+'''
+Relics of Mirinae
+'''
+
+class Dagger(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="dagger",rarity = 'special')
+        self.damage_per_dagger = 1
+
+    def description(self):
+        return "Deals %d damage to closest enemy for each attack tile drawn"%self.damage_per_dagger
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        A = player.count_tile('Attack')
+        dagger_damage = self.damage_per_dagger * A
+        enemies[0].take_damage(player, dagger_damage)
+
+        # for entity in enemies:
+        #     entity.take_damage(player, dagger_damage)
+
+
+class BagOfDagger(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="bag of dagger",rarity = 'legendary')
+        self.damage_per_dagger = 1
+
+    def description(self):
+        return "Deals %d damage to all enemies for each attack tile drawn"%self.damage_per_dagger
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        A = player.count_tile('Attack')
+        dagger_damage = self.damage_per_dagger * A
+
+        for entity in enemies:
+            entity.take_damage(player, dagger_damage)
 
 
 
-relic_class_names = ['PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+class TiltedScale(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="tilted scale",rarity = 'epic')
+        self.tilt_amount = 5
+
+    def description(self):
+        return "At the start of battle, all enemies take %d damage"%self.tilt_amount
+
+    def fight_start_effect(self, player,enemies):
+        for entity in enemies:
+            entity.take_damage(player, self.tilt_amount)
+
+
+
+class ArcaneBook(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="arcane book",rarity = 'rare')
+
+    def description(self):
+        return "Gain strength on the first turn of each battle"
+
+    def fight_start_effect(self, player, enemies):
+        player.buffs['strength'] = 1
+
+
+class Tombstone(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="tombstone",rarity = 'common')
+
+    def description(self):
+        return "On board reset, one empty tile is converted into an attack tile"
+
+    def activate_on_board_reset(self, player, enemy):
+        player.board.insert_a_tile_on_board("Attack")
+
+class RecycledSword(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="recycled sword",rarity = 'rare')
+
+    def description(self):
+        return ""
+
+    def fight_every_turn_beginning_effect(self, player):
+        player.enforced_regen(self.recover_amount)
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        if self.debug:
+            print("my turn ended!")
+        pass
+
+    def fight_start_effect(self, player, enemies):
+        if self.debug:
+            print("Fight has started!")
+        pass
+
+    def effect_when_first_obtained(self, player):
+        if self.debug:
+            print("Relic first obtained!")
+        pass
+
+    def activate_on_death(self, enemy):
+        pass
+
+
+    def activate_on_kill(self, player, enemy):
+        if self.debug:
+            print("Detected a kill!")
+        pass
+
+
+    def activate_on_taking_damage(self, player, enemy, attack_damage):
+        if self.debug:
+            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
+        pass
+
+    def activate_when_getting_reward_gold(self, amount):
+        if self.debug:
+            print("Got reward!")
+        return amount
+
+class SwordCatalyst(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="sword catalyst",rarity = 'common')
+
+    def description(self):
+        return ""
+
+    def fight_every_turn_beginning_effect(self, player):
+        player.enforced_regen(self.recover_amount)
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        if self.debug:
+            print("my turn ended!")
+        pass
+
+    def fight_start_effect(self, player, enemies):
+        if self.debug:
+            print("Fight has started!")
+        pass
+
+    def effect_when_first_obtained(self, player):
+        if self.debug:
+            print("Relic first obtained!")
+        pass
+
+    def activate_on_death(self, enemy):
+        pass
+
+
+    def activate_on_kill(self, player, enemy):
+        if self.debug:
+            print("Detected a kill!")
+        pass
+
+
+    def activate_on_taking_damage(self, player, enemy, attack_damage):
+        if self.debug:
+            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
+        pass
+
+    def activate_when_getting_reward_gold(self, amount):
+        if self.debug:
+            print("Got reward!")
+        return amount
+
+class WarHorn(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="war horn",rarity = 'legendary')
+
+    def description(self):
+        return ""
+
+    def fight_every_turn_beginning_effect(self, player):
+        player.enforced_regen(self.recover_amount)
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        if self.debug:
+            print("my turn ended!")
+        pass
+
+    def fight_start_effect(self, player, enemies):
+        if self.debug:
+            print("Fight has started!")
+        pass
+
+    def effect_when_first_obtained(self, player):
+        if self.debug:
+            print("Relic first obtained!")
+        pass
+
+    def activate_on_death(self, enemy):
+        pass
+
+
+    def activate_on_kill(self, player, enemy):
+        if self.debug:
+            print("Detected a kill!")
+        pass
+
+
+    def activate_on_taking_damage(self, player, enemy, attack_damage):
+        if self.debug:
+            print("Player got hit by %s with %s damage!" % (enemy.my_name, attack_damage))
+        pass
+
+    def activate_when_getting_reward_gold(self, amount):
+        if self.debug:
+            print("Got reward!")
+        return amount
+
+
+relic_class_names = ['Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

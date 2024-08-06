@@ -124,7 +124,7 @@ class Enemy(Entity):
 
 
 class Halo(Enemy):
-    def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = 32, pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
+    def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = [64,128], pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
 
     def behave(self, player, enemy = None):
@@ -133,9 +133,11 @@ class Halo(Enemy):
         current_pattern = self.pattern[self.current_pattern_idx]
         if current_pattern=='attack':
             if self.can_attack:
-                time.sleep(0.3)
-                sound_effects['hit'].play()
-                player.take_damage(self,self.get_current_damage())
+                time.sleep(0.2)
+                sound_effects['blast'].play()
+                time.sleep(0.1)
+                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage*self.get_attack_multiplier())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
@@ -325,6 +327,7 @@ class Embryo(Enemy):
 class Mine(Enemy):
     def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
+        self.thorny = True
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
@@ -520,7 +523,8 @@ class Observer(Enemy):
 class Carrier(Enemy):
     def __init__(self, my_name = 'carrier', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
-
+        self.base_defence = 4 #
+        self.thorny = True
 
     def get_spawn_mob_name(self):
         self.spawn_request = False
@@ -634,6 +638,7 @@ class Silent(Enemy):
 class Scalpion(Enemy):
     def __init__(self, my_name = 'scalpion', hp=80, hpmax = 80, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['toxin', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
+        self.thorny = True
     '''
     This mob does random damage attack
     '''
@@ -805,8 +810,10 @@ class Stem(Enemy):
         self.end_my_turn()
 
 class Golem(Enemy):
-    def __init__(self, my_name = 'golem', hp=50, hpmax = 50, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack', 'regen'] , rank = 1 ): #
+    def __init__(self, my_name = 'golem', hp=120, hpmax = 120, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack', 'regen'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 15)
+
+        self.base_defence = 4 #
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -936,9 +943,11 @@ class Beast(Enemy):
         self.end_my_turn()
 
 class Shatter(Enemy):
-    def __init__(self, my_name = 'shatter', hp=100, hpmax = 100, attack_damage = 15, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'shatter', hp=60, hpmax = 60, attack_damage = 15, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
         self.passive = True
+
+        self.base_defence = 2 #
         '''
         This mob gains attack when damaged
         '''
@@ -986,9 +995,11 @@ class Shatter(Enemy):
 
 
 class Watcher(Enemy):
-    def __init__(self, my_name = 'watcher', hp=400, hpmax = 400, attack_damage = 30, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'watcher', hp=400, hpmax = 400, attack_damage = 64, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
         self.passive = True
+
+        self.base_defence = 8 #
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)

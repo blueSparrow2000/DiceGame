@@ -80,8 +80,20 @@ class DummyPlayer(Entity):
                         self.tile_image_dict[tile_name].get_rect(center=self.tile_img_locations[i]))
             write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 40,
                        tile_name, 15)
-            write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
-                       "%d"%self.char_tiles[tile_name], 20)
+            # fixed tile
+            if self.char_name == 'Mirinae' and i==0:
+                write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
+                           "%d + 1" % self.char_tiles[tile_name], 20)
+
+            elif self.char_name == 'Baron' and i==2:
+                write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
+                           "%d + 1" % self.char_tiles[tile_name], 20)
+            elif self.char_name == 'Riri' and i==1:
+                write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
+                           "%d + 1" % self.char_tiles[tile_name], 20)
+            else:
+                write_text(screen, self.tile_img_locations[i][0], self.tile_img_locations[i][1] + 60,
+                           "%d"%self.char_tiles[tile_name], 20)
 
         #write_text(screen, self.tile_info_location[0], self.tile_info_location[1], "%s"%self.char_tiles, 15)
 
@@ -201,8 +213,8 @@ class Skill_Book():
         damage_multiplier = 3
         for relic in player.relics:
             if relic.name=="poison bottle": # exists!
-                duration = 5
-                damage_multiplier = 5
+                duration = 6
+                damage_multiplier = 6
 
         sound_effects['hit'].play()
         A = player.count_tile('Attack')
@@ -216,8 +228,8 @@ class Skill_Book():
         damage_multiplier = 3
         for relic in player.relics:
             if relic.name=="poison bottle": # exists!
-                duration = 5
-                damage_multiplier = 5
+                duration = 6
+                damage_multiplier = 6
 
         A = player.count_tile('Attack')
         damage = (damage_multiplier*A) * player.get_attack_multiplier()
@@ -450,11 +462,11 @@ class Ato_skills(Skill_Book):
 ######################### BUILD SKILL BOOK ##########################
 
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills(), 'Baron': Baron_skills(), 'Riri': Riri_skills(), 'Arisu': Arisu_skills(), 'Ato': Ato_skills()}
-character_tile_dictionary = {'Mirinae':{'Attack':9, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
+character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1},
-                             'Baron':{'Attack':4, 'Regen':0, 'Defence':9,  'Skill':4, 'Joker':0,'Karma':0},
-                             'Riri': {'Attack': 2, 'Regen': 7, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
+                             'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':4, 'Joker':0,'Karma':0},
+                             'Riri': {'Attack': 2, 'Regen': 6, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작
                              'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)
                              }

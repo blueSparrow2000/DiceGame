@@ -173,7 +173,7 @@ def fight(screen, clock, player, place = None):
         # for the ruin, we summon different mobs
         if place=="ruin":
             if player.check_ruin_boss():
-                enemy_request = ['watcher']
+                enemy_request = ['shatter', 'golem' , 'watcher'] # you are so dead
                 player.killed_watcher = True
             else:
                 ### use ruin enemies ###
@@ -193,17 +193,12 @@ def fight(screen, clock, player, place = None):
     if player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     elif player.check_primary_boss():
-        enemy_request = ['carrier']
+        enemy_request = ['observer','sentinel','carrier']
         player.proceed_next_boss_stage()
     elif player.check_secondary_boss():
-        enemy_request = ['silent']
+        enemy_request = ['embryo','embryo', 'silent']
         player.proceed_next_boss_stage()
     #####################################################################################
-
-
-    player.new_fight()
-    player.refresh_my_turn()
-
 
     enemies = []
     mob_number_cap = 3
@@ -226,6 +221,8 @@ def fight(screen, clock, player, place = None):
             enemy_drops.append(drop)
         earned_gold += enemy.get_gold()
 
+    #########################################
+    player.new_fight(enemies)
 
     game_run = True
     current_display_text = "Hover mouse on a tile for description"
@@ -252,7 +249,7 @@ def fight(screen, clock, player, place = None):
         if not player_turn:  # enemy turn
             ########################################### Just after the player turn ###########################
             player.get_buff_effect(enforced=False)  # update buff effect every turn
-            player.board.reset(player) # clear board just after the player's turn!
+            player.board_reset(enemies) # clear board just after the player's turn!
 
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies, player)
@@ -289,7 +286,6 @@ def fight(screen, clock, player, place = None):
             player_turn = True
             if not (len(enemies) == 0 or player.health <= 0): # player's turn is refreshed only when game did not end!
                 player.refresh_my_turn()
-            # player.board.reset(player)
             current_display_text = "Hover mouse on a tile for description"
             continue
 
@@ -325,7 +321,7 @@ def fight(screen, clock, player, place = None):
                             player.board.net.rotate_once()
                         elif check_inside_button(mousepos, bottom_center_button, button_side_len_half):
                             # skip player's turn
-                            player.end_my_turn()
+                            player.end_my_turn(enemies)
                             player_turn = False
                             player_turn_step = 0
                             number_of_targets_to_specify = 0
@@ -357,7 +353,7 @@ def fight(screen, clock, player, place = None):
                         if process_completed:  # defence or regen does not need to modify global variables
                             # end players turn
                             player.board.confirm_using_tile()
-                            player.end_my_turn()
+                            player.end_my_turn(enemies)
                             player_turn = False
                             player_turn_step = 0
                             number_of_targets_to_specify = 0
@@ -380,7 +376,7 @@ def fight(screen, clock, player, place = None):
 
                                 # end players turn
                                 player.board.confirm_using_tile()
-                                player.end_my_turn()
+                                player.end_my_turn(enemies)
                                 player_turn = False
                                 player_turn_step = 0
                                 number_of_targets_to_specify = 0
@@ -413,7 +409,7 @@ def fight(screen, clock, player, place = None):
                 if player_turn:  # listen for the inputs
                     sound_effects['confirm'].play()
                     # if event.key == pygame.K_RETURN:    # skip player's turn
-                    #     player.end_my_turn()
+                    #     player.end_my_turn(enemies)
                     #     player_turn = False
                     #     player_turn_step = 0
                     #     number_of_targets_to_specify = 0
@@ -492,7 +488,7 @@ def fight(screen, clock, player, place = None):
                         enemies[i].draw(screen,mousepos)  # redraw
                     # end players turn
                     player.board.confirm_using_tile()
-                    player.end_my_turn()
+                    player.end_my_turn(enemies)
                     player_turn = False
                     player_turn_step = 0
                     number_of_targets_to_specify = 0
