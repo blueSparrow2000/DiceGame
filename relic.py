@@ -243,11 +243,11 @@ class Moss(Relic):
 
 class GoldenTalisman(Relic):
     '''
-    Each has 5% chance of doubling earned gold
+    Each has 10% chance of doubling earned gold
     '''
     def __init__(self):
         super().__init__(name="golden talisman", rarity = 'common')
-        self.chance = 5
+        self.chance = 10
 
     def description(self):
         return "Each has %d%% chance of doubling earned gold"%self.chance

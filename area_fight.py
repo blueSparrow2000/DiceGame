@@ -170,12 +170,6 @@ def fight(screen, clock, player, place = None):
 
     if not player.reached_max_depth(): # depth must be int, not string!
         cur_depth = player.get_depth()
-        candidate_enemy_list = enemies_by_depth[abs(cur_depth)//100 + 1]
-        current_params = params_by_depth[abs(cur_depth)//100 + 1]
-
-        effective_depth = - (abs(cur_depth)%100) # make depth to -100 ~ 0 range (for each stage)
-        enemy_request = get_request(effective_depth,candidate_enemy_list,current_params)
-
         # for the ruin, we summon different mobs
         if place=="ruin":
             if player.check_ruin_boss():
@@ -188,7 +182,12 @@ def fight(screen, clock, player, place = None):
                 current_params = params_by_depth['ruin']
 
                 enemy_request = get_request(cur_depth, candidate_enemy_list, current_params) # use the whole depth for ruins!
+        else:
+            candidate_enemy_list = enemies_by_depth[abs(cur_depth) // 100 + 1]
+            current_params = params_by_depth[abs(cur_depth) // 100 + 1]
 
+            effective_depth = - (abs(cur_depth) % 100)  # make depth to -100 ~ 0 range (for each stage)
+            enemy_request = get_request(effective_depth, candidate_enemy_list, current_params)
 
     # for boss stages, we summon these instead
     if player.reached_max_depth():

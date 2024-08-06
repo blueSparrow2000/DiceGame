@@ -30,9 +30,12 @@ class Enemy(Entity):
 
         self.spawn_request = False
 
+        self.turn_count_threshold = 5
+        self.turn_count = 0
 
     def passive_behavior(self, player):
-        if self.passive and self.passive_to_aggressive: # change passive to aggresive
+        self.turn_count += 1
+        if self.passive and (self.passive_to_aggressive or self.turn_count >= self.turn_count_threshold): # change passive to aggresive
             self.passive_to_aggressive = False
             self.passive = False
             self.refresh_my_turn()
@@ -762,9 +765,12 @@ class Snider(Enemy):
 
 ########################################################################### ruin enemies ###############################################################################
 class Stem(Enemy):
-    def __init__(self, my_name = 'stem', hp=12, hpmax = 12, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['infiltrate', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'stem', hp=12, hpmax = 12, attack_damage = 4, pos = (332,mob_Y_level), attack_pattern = ['infiltrate', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)
 
+    '''
+    This mob has life steal equal to its attack damage
+    '''
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
 
@@ -773,7 +779,7 @@ class Stem(Enemy):
             if self.can_attack:
                 sound_effects['hard_hit'].play()
                 player.take_damage(self,self.get_current_damage())
-                self.enforced_regen(6)
+                self.enforced_regen(4)
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
@@ -885,7 +891,7 @@ class Raider(Enemy):
 
 
 class Beast(Enemy):
-    def __init__(self, my_name = 'beast', hp=24, hpmax = 24, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'beast', hp=24, hpmax = 24, attack_damage = 2, pos = (332,mob_Y_level), attack_pattern = ['attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
         self.passive = True
 
