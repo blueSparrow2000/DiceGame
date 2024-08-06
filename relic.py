@@ -337,7 +337,7 @@ class TiltedScale(Relic):
     '''
     def __init__(self):
         super().__init__(name="tilted scale",rarity = 'epic')
-        self.tilt_amount = 5
+        self.tilt_amount = 2
 
     def description(self):
         return "At the start of battle, all enemies take %d damage"%self.tilt_amount

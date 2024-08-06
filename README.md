@@ -55,7 +55,8 @@ A simple dice game
 
 # To do
 - add Cinavro skills
-- add poison learnable skills
+- add poison learnable skills etc.
+- add Baron skills
 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
