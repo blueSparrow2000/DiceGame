@@ -239,7 +239,7 @@ class Fragment(Enemy):
 
 
 class Lenz(Enemy):
-    def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 4, pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
 
 
@@ -811,7 +811,7 @@ class Stem(Enemy):
 
 class Golem(Enemy):
     def __init__(self, my_name = 'golem', hp=120, hpmax = 120, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 15)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 20)
 
         self.base_defence = 4 #
 
@@ -855,7 +855,7 @@ class Golem(Enemy):
 
 class Raider(Enemy):
     def __init__(self, my_name = 'raider', hp=80, hpmax = 80, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['poison','buff', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 15)
     '''
     This mob does random damage attack
     '''
@@ -944,7 +944,7 @@ class Beast(Enemy):
 
 class Shatter(Enemy):
     def __init__(self, my_name = 'shatter', hp=60, hpmax = 60, attack_damage = 15, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
         self.passive = True
 
         self.base_defence = 2 #

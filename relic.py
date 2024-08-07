@@ -521,7 +521,7 @@ class IronPlate(Relic):
     '''
     def __init__(self):
         super().__init__(name="iron plate",rarity = 'legendary')
-        self.base_defence_gain = 1
+        self.base_defence_gain = 4
     def description(self):
         return "Gain %d permanent defence"%self.base_defence_gain
 

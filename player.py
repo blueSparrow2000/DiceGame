@@ -123,6 +123,8 @@ class Player(Entity):
             screen.blit(self.mini_tile_icons[mini_tile], self.mini_tile_icons[mini_tile].get_rect(center=self.transform_icon_locations[cnt]))
             cnt+=1
 
+
+
     '''
     current(selected) tile functions
     '''
@@ -139,9 +141,18 @@ class Player(Entity):
 
         minitile_numbers = len(mini_tile_list)
         self.minitile_x = width//2 - (minitile_numbers - 1) * (self.minitile_spacing) / 2
+
+        joker_flag = True
         for i in range(minitile_numbers):
             minitile_name = mini_tile_list[i]
             minitile_location = [self.minitile_x + i * self.minitile_spacing, self.minitile_y]
+
+            if minitile_name == 'Joker' and joker_flag:
+                for i in range(len(self.transformable_tiles)):  # draw transform tiles in order
+                    pygame.draw.aaline(screen, terracotta, minitile_location, self.transform_icon_locations[i],
+                                       True)
+                joker_flag = False
+
             screen.blit(self.mini_tile_icons[minitile_name], self.mini_tile_icons[minitile_name].get_rect(
                 center=minitile_location))
 
@@ -436,6 +447,10 @@ class Player(Entity):
         for relic in self.relics:
             relic.fight_every_turn_beginning_effect(self)
         self.get_buff_effect() # get buff effects
+        self.reset_skill_idx()
+
+    def reset_skill_idx(self):
+        self.current_skill_idx = -1  # reset this
 
     def end_my_turn(self, enemies = None): # do something at the end of the turn
         super().end_my_turn(enemies)
@@ -448,7 +463,7 @@ class Player(Entity):
         # SHUFFLE: this is activated when pressed skip button
         self.board.turn_end_check(self, copy_of_current_tile)
 
-        self.current_skill_idx = -1  # reset this
+        self.reset_skill_idx()
         self.current_tile = dict()
         time.sleep(0.3)
 
@@ -456,7 +471,7 @@ class Player(Entity):
         super().refresh_my_turn()
 
         self.current_tile = dict()
-        self.current_skill_idx = -1
+        self.reset_skill_idx()
 
         # reset the board
         self.board.new_game()

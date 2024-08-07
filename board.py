@@ -478,6 +478,8 @@ class Board():
     def new_game(self):
         self.current_turn = 0
         self.temporary_board_dict = copy.deepcopy(self.permanent_board_dict)
+        self.clear_board()
+        self.temp_board = copy.deepcopy(self.board)
 
     def confirm_using_tile(self): # this should be called before player.end_my_turn
         self.board = self.temp_board
@@ -671,9 +673,9 @@ class Board():
             if board_tile_name == replaced_tile: # change the names!
                 self.board[i][1] = replacing_tile
                 self.temp_board[i][1] = replacing_tile
-                break # insert one tile!
+                return # insert one tile! # break
 
-        print("replacing failed: no tile named '%s'"%replaced_tile)
+        print("replacing failed while trying to add %s: no tile named '%s'"%(replacing_tile, replaced_tile))
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles

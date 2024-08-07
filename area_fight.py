@@ -168,14 +168,14 @@ def fight(screen, clock, player, place = None):
     candidate_enemy_list = []
 
     enemies_by_depth = {1:['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel'], 2:['scalpion', 'snider','snalk'], 3:['observer'], 'ruin':['stem', 'beast', 'raider', 'shatter','golem']}
-    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6] , [30, 6.8], [50, 6.2]], 3:[[25, 8.6] ], 'ruin':[[40, 14] , [60, 9.6],[100, 15.4],[120, 10],[135,9]]}
+    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6] , [30, 6.8], [50, 6.2]], 3:[[25, 8.6] ], 'ruin':[[40, 14] , [60, 9.6],[110, 13],[120, 10],[135,9]]}
 
     if not player.reached_max_depth(): # depth must be int, not string!
         cur_depth = player.get_depth()
         # for the ruin, we summon different mobs
         if place=="ruin":
             if player.check_ruin_boss():
-                enemy_request = ['shatter', 'golem' , 'watcher'] # you are so dead
+                enemy_request = ['watcher','shatter', 'golem' ] # you are so dead
                 player.killed_watcher = True
             else:
                 ### use ruin enemies ###
@@ -195,10 +195,10 @@ def fight(screen, clock, player, place = None):
     if player.reached_max_depth():
         enemy_request = ['halo']  # boss fight
     elif player.check_primary_boss():
-        enemy_request = ['observer','sentinel','carrier']
+        enemy_request = ['carrier','observer','sentinel']
         player.proceed_next_boss_stage()
     elif player.check_secondary_boss():
-        enemy_request = ['embryo','embryo', 'silent']
+        enemy_request = [ 'silent','embryo','embryo']
         player.proceed_next_boss_stage()
     #####################################################################################
 
@@ -209,10 +209,6 @@ def fight(screen, clock, player, place = None):
 
     for i in range(len(enemy_request)):
         spawn_enemy(enemies, enemy_request[i],mob_number_cap, mob_locations)
-        # enemy_class = get_enemy_class_by_class_name(enemy_request[i])
-        # enemy = enemy_class(pos=(mob_locations[i], mob_Y_level), rank=1)
-        # enemy.refresh_my_turn()
-        # enemies.append(enemy)
 
     # determine golds / enemy drops
     enemy_drops = []
@@ -341,6 +337,7 @@ def fight(screen, clock, player, place = None):
                     elif player_turn_step == 1:  # choose skill or attack
                         if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
                             # go to initial stage and do it again
+
                             player_turn_step = 0
                             current_display_text = "Hover mouse on a tile for description"  # reset text
                             continue  # skip below
@@ -383,12 +380,15 @@ def fight(screen, clock, player, place = None):
                                 player_turn_step = 0
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
+                        else:
+                            player.reset_skill_idx()
 
 
                     elif player_turn_step == 2:
                         if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
                             # go to initial stage and do it again
                             player_turn_step = 0
+                            player.reset_skill_idx()
                             current_display_text = "Hover mouse on a tile for description"  # reset text
 
                             for i in range(len(enemies)):
