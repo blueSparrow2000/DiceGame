@@ -12,7 +12,7 @@ relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowg
 
 
 class Relic():
-    def __init__(self, name="Relic", type = 'regular', rarity = 'common'):
+    def __init__(self, name="Relic", type = 'regular', rarity = 'myth'):
         global relic_rarity_color
         self.name = name
         self.image = load_image("relics/%s"%name)

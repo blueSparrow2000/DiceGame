@@ -49,7 +49,7 @@ A simple dice game
 2024.08.05 enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
 
 
-2024.08.06 game balancing / add some Mirinae & Baron relics
+2024.08.06 game balancing / add some Mirinae & Baron relics / ruin design change / map design change
 
 
 2024.08.07

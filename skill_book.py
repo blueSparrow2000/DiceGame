@@ -471,7 +471,7 @@ character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Ski
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작
                              'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)
                              }
-character_max_hp = {'Mirinae':100,'Cinavro':80, 'Narin': 100,'Baron':150, 'Riri':80, 'Arisu':100, 'Ato':100}
+character_max_hp = {'Mirinae':100,'Cinavro':80, 'Narin': 100,'Baron':150, 'Riri':60, 'Arisu':100, 'Ato':100}
 
 learnable_skills = Mirinae_skills() # dummy...
 
