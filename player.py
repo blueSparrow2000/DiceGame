@@ -247,18 +247,20 @@ class Player(Entity):
             self.health = self.max_health
 
     def draw_player_info_top(self,screen, mousepos):
+        if not super().death_check():  # not dead
 
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
+            draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
 
-        draw_health = self.max_health
-        if self.max_health<=0:
-            draw_health = 1
+            draw_health = self.max_health
+            if self.max_health<=0:
+                draw_health = 1
 
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100 * self.health / draw_health, 'coral')
-        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , width, 5, 100, 'gray')
+            draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100 * self.health / draw_health, 'coral')
+            draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , width, 5, 100, 'gray')
 
-        write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
-        write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, darker_gold)
+            write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
+
+            write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, darker_gold)
 
         # depth
         if self.reached_max_depth():

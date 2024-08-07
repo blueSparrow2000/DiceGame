@@ -52,6 +52,9 @@ A simple dice game
 2024.08.06 game balancing / add some Mirinae & Baron relics
 
 
+2024.08.07
+
+
 
 # To do
 - add Cinavro skills

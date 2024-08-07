@@ -35,7 +35,9 @@ def player_death_screen(screen,clock,player):
                     break
         screen.fill(fight_bg_color)
         write_text(screen, width // 2, height // 2 - 60, 'Wasted', 30, 'red')
-        # write_text(screen, width // 2, height // 2, 'Press enter to quit', 20, 'red')
+        # write_text(screen, width // 2, height // 2 + 60, 'Depth record: '+str(player.current_depth), 20, 'black')
+        player.draw_player_info_top(screen, mousepos)
+
         # draw button
         if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
             write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
