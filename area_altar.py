@@ -86,7 +86,7 @@ def go_to_altar(screen,clock, player):
     game_run = True
     music_Q('tense', True)
     while game_run:
-        screen.fill('darkslateblue')
+        screen.fill(pastel_purple)
 
         events = pygame.event.get()
         # Event handling

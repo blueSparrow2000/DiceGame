@@ -170,37 +170,37 @@ def fight(screen, clock, player, place = None):
     enemies_by_depth = {1:['mob', 'fragment', 'lenz', 'mine', 'embryo', 'norm', 'scout', 'observer', 'sentinel'], 2:['scalpion', 'snider','snalk'], 3:['observer'], 'ruin':['stem', 'beast', 'raider', 'shatter','golem']}
     params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6] , [30, 6.8], [50, 6.2]], 3:[[25, 8.6] ], 'ruin':[[40, 14] , [60, 9.6],[110, 13],[120, 10],[135,9]]}
 
-    if not player.reached_max_depth(): # depth must be int, not string!
-        cur_depth = player.get_depth()
-        # for the ruin, we summon different mobs
-        if place=="ruin":
-            if player.check_ruin_boss():
-                enemy_request = ['watcher','shatter', 'golem' ] # you are so dead
-                player.killed_watcher = True
-            else:
-                ### use ruin enemies ###
-                cur_depth = player.get_depth()
-                candidate_enemy_list = enemies_by_depth['ruin']
-                current_params = params_by_depth['ruin']
+    cur_depth = player.get_depth()
 
-                enemy_request = get_request(cur_depth, candidate_enemy_list, current_params) # use the whole depth for ruins!
-        else:
-            candidate_enemy_list = enemies_by_depth[abs(cur_depth) // 100 + 1]
-            current_params = params_by_depth[abs(cur_depth) // 100 + 1]
 
-            effective_depth = - (abs(cur_depth) % 100)  # make depth to -100 ~ 0 range (for each stage)
-            enemy_request = get_request(effective_depth, candidate_enemy_list, current_params)
-
-    # for boss stages, we summon these instead
-    if player.reached_max_depth():
+    if player.reached_max_depth(): # boss fight happens whenever depth is on -300
         enemy_request = ['halo']  # boss fight
-    elif player.check_primary_boss():
+    elif place == "ruin": # for the ruin, we summon different mobs
+        if player.check_ruin_boss():
+            enemy_request = ['watcher', 'shatter', 'golem']  # you are so dead
+            player.killed_watcher = True
+        else:
+            ### use ruin enemies ###
+            cur_depth = player.get_depth()
+            candidate_enemy_list = enemies_by_depth['ruin']
+            current_params = params_by_depth['ruin']
+
+            enemy_request = get_request(cur_depth, candidate_enemy_list,
+                                        current_params)  # use the whole depth for ruins!
+    elif player.check_primary_boss():# for boss stages, we summon these instead
         enemy_request = ['carrier','observer','sentinel']
         player.proceed_next_boss_stage()
-    elif player.check_secondary_boss():
+    elif player.check_secondary_boss():# for boss stages, we summon these instead
         enemy_request = [ 'silent','embryo','embryo']
         player.proceed_next_boss_stage()
+    else:
+        candidate_enemy_list = enemies_by_depth[abs(cur_depth) // 100 + 1]
+        current_params = params_by_depth[abs(cur_depth) // 100 + 1]
+
+        effective_depth = - (abs(cur_depth) % 100)  # make depth to -100 ~ 0 range (for each stage)
+        enemy_request = get_request(effective_depth, candidate_enemy_list, current_params)
     #####################################################################################
+    # enemy_request = ['raider']
 
     enemies = []
     mob_number_cap = 3

@@ -263,7 +263,7 @@ class GoldenTalisman(Relic):
 
     def activate_when_getting_reward_gold(self, amount):
         final_amount = amount
-        number = random.randrange(1,100)
+        number = random.randint(1,100)
         if number <= self.chance:
             final_amount = amount*2
         return final_amount
@@ -344,7 +344,7 @@ class TiltedScale(Relic):
 
     def fight_start_effect(self, player,enemies):
         for entity in enemies:
-            entity.take_damage(player, self.tilt_amount)
+            entity.take_damage(player, self.tilt_amount, no_fightback = True)
 
 
 
@@ -420,7 +420,6 @@ class WarHorn(Relic):
 
 
 
-####################################### In progress... ##############################################
 '''
 Relics of Baron
 '''
@@ -487,7 +486,7 @@ class BattleShield(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="battle shield",rarity = 'common')
+        super().__init__(name="battle shield",rarity = 'rare')
         self.shield_gain = 5
 
     def description(self):
@@ -545,9 +544,54 @@ class Armadillo(Relic):
         player.defence += num_of_enemies*self.defence_multiplier
         player.update_defence()
 
+####################################### In progress... ##############################################
 
 
-relic_class_names = ['StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+class Antidote(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="antidote",rarity = 'legendary')
+
+    def description(self):
+        return "Become immune to poison and toxin"
+
+    def effect_when_first_obtained(self, player):
+        player.immune_to_toxin = True
+        player.immune_to_poison = True
+
+class Oil(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="oil",rarity = 'special')
+
+    def description(self):
+        return "Become immune to weakness"
+
+    def effect_when_first_obtained(self, player):
+        player.immune_to_weakness = True
+
+class Encyclopedia(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="encyclopedia",rarity = 'legendary')
+        self.decrease_rate = 5
+
+    def description(self):
+        return "Reduces the maximum health of all enemies by %d%%"%self.decrease_rate
+
+    def fight_start_effect(self, player, enemies):
+        for entity in enemies:
+            entity.set_max_health(round(entity.max_health*(1 - self.decrease_rate/100)))
+
+
+
+relic_class_names = ['Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

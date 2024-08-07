@@ -70,6 +70,8 @@ fight_bg_color = 'lightgray' #  'oldlace'
 adventure_bg_color = (100,130,100)
 terracotta = (150, 140, 120)
 darker_gold = (133, 83, 0)
+pastel_purple = (195, 177, 225)
+
 
 ### basic buttons
 button_side_len_half = 25 # buttons are all of side 50 pixels

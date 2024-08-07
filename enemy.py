@@ -51,8 +51,8 @@ class Enemy(Entity):
             return True
 
 
-    def take_damage(self, attacker, damage_temp): # wake up when taken damage!
-        super().take_damage(attacker, damage_temp)
+    def take_damage(self, attacker, damage_temp, no_fightback = False): # wake up when taken damage!
+        super().take_damage(attacker, damage_temp, no_fightback)
         self.passive_to_aggressive = True
 
     def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
@@ -122,7 +122,6 @@ class Enemy(Entity):
 
 
 
-
 class Halo(Enemy):
     def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = [64,128], pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
@@ -136,7 +135,7 @@ class Halo(Enemy):
                 time.sleep(0.2)
                 sound_effects['blast'].play()
                 time.sleep(0.1)
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage*self.get_attack_multiplier())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -521,7 +520,7 @@ class Observer(Enemy):
 
 
 class Carrier(Enemy):
-    def __init__(self, my_name = 'carrier', hp=300, hpmax = 300, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
         self.base_defence = 4 #
         self.thorny = True
@@ -571,11 +570,14 @@ class Carrier(Enemy):
 
 class Silent(Enemy):
     def __init__(self, my_name='silent', hp=500, hpmax=500, attack_damage=[32, 64], pos=(332, mob_Y_level),
-                 attack_pattern=['shield', 'buff', 'attack', 'regen'], rank=1):  #
+                 attack_pattern=['shield', 'buff', 'attack', 'infiltrate'], rank=1):  #
         super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=100)
+
+        self.immune_to_poison = True
 
     '''
     This mob does not show you what it will do (randomly chosen)
+    immune to poison
     '''
 
     def behave(self, player, enemy=None):
@@ -586,12 +588,8 @@ class Silent(Enemy):
         if current_pattern == 'attack':
             if self.can_attack:
                 sound_effects['water'].play()
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage * self.get_attack_multiplier())
-                # print(self.health)
-                # player.buffs['broken will'] = 1
-                # player.buffs['strength'] = 1
-                # player.buffs['confusion'] = 1
 
         elif current_pattern == 'no op':
             pass  # no op
@@ -609,7 +607,10 @@ class Silent(Enemy):
         elif current_pattern == 'summon':
             pass
         elif current_pattern == 'infiltrate':  # place a tile inside the player's tile
-            pass
+            print("unusable infiltration!")
+            for i in range(3):
+                player.board.insert_a_tile_on_board("Unusable")
+
         elif current_pattern == 'poison':
             pass
 
@@ -619,7 +620,8 @@ class Silent(Enemy):
 
     def proceed_next_pattern(self):
         # self.current_pattern_idx = (self.current_pattern_idx + 1) % self.num_of_patterns
-        self.current_pattern_idx = random.randrange(0, len(self.pattern) - 1)  # random pattern
+        self.current_pattern_idx = random.randint(0, len(self.pattern) - 1)  # random pattern
+
     def get_heal_amount(self):
         return 16
 
@@ -649,7 +651,7 @@ class Scalpion(Enemy):
         if current_pattern=='attack':
             if self.can_attack:
                 sound_effects['sword'].play()
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage*self.get_attack_multiplier())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -695,7 +697,7 @@ class Snalk(Enemy):
         if current_pattern=='attack':
             if self.can_attack:
                 sound_effects['sword'].play()
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage*self.get_attack_multiplier())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -738,7 +740,7 @@ class Snider(Enemy):
         if current_pattern=='attack':
             if self.can_attack:
                 sound_effects['sword'].play()
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage*self.get_attack_multiplier())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -866,7 +868,7 @@ class Raider(Enemy):
         if current_pattern=='attack':
             if self.can_attack:
                 sound_effects['sword'].play()
-                damage = random.randrange(self.attack_damage[0], self.attack_damage[1])
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage*self.get_attack_multiplier())
                 # print(self.health)
                 # player.buffs['broken will'] = 1
@@ -951,8 +953,8 @@ class Shatter(Enemy):
         '''
         This mob gains attack when damaged
         '''
-    def take_damage(self, attacker, damage_temp): # wake up when taken damage!
-        super().take_damage(attacker, damage_temp)
+    def take_damage(self, attacker, damage_temp, no_fightback = False): # wake up when taken damage!
+        super().take_damage(attacker, damage_temp,no_fightback)
 
         self.attack_damage += 5
 

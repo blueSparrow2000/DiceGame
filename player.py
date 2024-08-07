@@ -252,10 +252,7 @@ class Player(Entity):
     def proceed_next_boss_stage(self):
         self.boss_stage += 1
 
-    def set_max_health(self,max_health):
-        self.max_health = max_health
-        if self.health > self.max_health:
-            self.health = self.max_health
+
 
     def draw_player_info_top(self,screen, mousepos):
         if not super().death_check():  # not dead
@@ -518,8 +515,8 @@ class Player(Entity):
             # enemy.buffs['strength'] = 1
             # enemy.buffs['poison'] = 1
 
-    def take_damage(self, attacker, damage_temp):
-        super().take_damage(attacker, damage_temp)
+    def take_damage(self, attacker, damage_temp, no_fightback = False):
+        super().take_damage(attacker, damage_temp, no_fightback)
         # player only stuffs (like relic effects)
         for relic in self.relics:
             relic.activate_on_taking_damage(self, attacker,damage_temp)

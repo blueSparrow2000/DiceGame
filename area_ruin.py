@@ -26,7 +26,7 @@ for relic_class_name in relic_class_names:
 
 
 def determine_rarity():
-    chance = random.randrange(1, 100)
+    chance = random.randint(1, 100)
     rarity = "common"
     if chance <= relic_probs['myth']:
         rarity = 'myth'
@@ -42,7 +42,6 @@ def determine_rarity():
     return rarity
 
 
-
 def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 100% change to obtain relic (ruin enemies are like guardians of the relic, so if there is a relic, they would guard)
     ruin_artifact_number_list = [1,2,3]
     ruin_artifact_number_probs = [0.1, 0.4, 0.5]
@@ -54,7 +53,7 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
     relic_locations = [[width // 2 - (ruin_seed-1)*relic_gap//2 + i*relic_gap  , relic_Y_level] for i in range(ruin_seed)]
 
     ################## chosing a relic ####################
-    relic_spawn_chance = random.randrange(1, 100)
+    relic_spawn_chance = random.randint(1, 100)
     for relic in player.relics:
         relic_spawn_chance -= relic.relic_spawn_chance_increaser()
 

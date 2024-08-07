@@ -48,6 +48,10 @@ class Entity():
         self.counter_attack = False
         self.confused = False
 
+        # immunities
+        self.immune_to_poison = False
+        self.immune_to_toxin = False
+        self.immune_to_weakness = False
 
         ######## buff & debuffs
         self.buffs = dict()
@@ -69,6 +73,11 @@ class Entity():
 
         ######## relics
         self.relics = []
+
+    def set_max_health(self,max_health):
+        self.max_health = max_health
+        if self.health > self.max_health:
+            self.health = self.max_health
 
     def regen(self):
         self.health = min(self.max_health,self.health+self.get_heal_amount())
@@ -109,7 +118,7 @@ class Entity():
 
     def end_my_turn(self, others = None): # do something at the end of the turn
         # if poisoned, get damaged
-        if (self.poisoned):
+        if (self.poisoned) and (not self.immune_to_poison):
             self.health -= 5
 
         self.update_buffs()  # update buff counts
@@ -170,7 +179,7 @@ class Entity():
         # otherwise, do what child classes will do
         return True
 
-    def take_damage(self, attacker, damage_temp):
+    def take_damage(self, attacker, damage_temp, no_fightback = False):
         if (self.buffs['attack immunity']>0): # do not take damage
             print(self.buffs['attack immunity'])
             self.buffs['attack immunity'] -= 1 # discount one
@@ -182,7 +191,7 @@ class Entity():
         damage = max(0, damage - self.absorption)
         # print(self.my_name,'got damage of',  damage_temp)
 
-        if (self.toxined): # ignores defence
+        if (self.toxined and (not self.immune_to_toxin)): # ignores defence
             self.health -= damage
         else:
             partial_damage = damage - self.total_defence
@@ -199,7 +208,7 @@ class Entity():
 
         if not self.death_check():
         ############### here is only reachable if I am not dead ##########
-            if attacker is not None:
+            if attacker is not None and (not no_fightback):
                 if (self.counter_attack): # do a counter attack
                     attacker.health -= counter_attack_damage # immediately damages enemies
                 elif self.thorny:
@@ -222,7 +231,8 @@ class Entity():
                 elif buff_name == 'strength':
                     self.strength_multiplier = 2
                 elif buff_name == 'weakness':
-                    self.strength_deplifier = 0.5
+                    if not self.immune_to_weakness:
+                        self.strength_deplifier = 0.5
                 elif buff_name == 'broken will':
                     self.can_attack = False
                 elif buff_name == 'confusion':

@@ -133,10 +133,13 @@ while meta_run:
                     run_character_selection = False
                     if character_name=="Mirinae":   # , 'Cinavro', 'Baron'
                         fix_a_tile(screen, clock, player, 'Attack')
+                        # player.pick_up_relic(BagOfDagger())
                     elif character_name=="Baron":
                         fix_a_tile(screen, clock, player, 'Defence')
+                        # player.pick_up_relic(IronPlate())
                     elif character_name=="Riri":
                         fix_a_tile(screen, clock, player, 'Regen')
+
 
                     #### set character abilities here (like fixing a tile etc) ####
                     # obtain_skill(screen, clock, player, 'holy_barrier')
@@ -152,8 +155,10 @@ while meta_run:
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
                     #
+                    # player.pick_up_relic(Oil())
+
                     # for i in range(25):
-                    #     player.pick_up_relic(Relic())
+                    #     player.pick_up_relic(TiltedScale())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
                     # player.pick_up_relic(StrawMat()) #

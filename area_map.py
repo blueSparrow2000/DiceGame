@@ -209,13 +209,14 @@ def adventure_loop(screen, clock, player,map):
 
             if activate_tile:
                 player.update_depth(move_depth)
+                # player.update_depth(50)
                 adventure_bg_color = update_depth_color(player)
                 run_adventure = False
 
                 if which_event == 'campfire':
                     go_to_campfire(screen, clock, player)
                 elif which_event == 'ruin':
-                    chance = random.randrange(1, 100)
+                    chance = random.randint(1, 100)
 
                     # relic chance increasing
                     for relic in player.relics:
