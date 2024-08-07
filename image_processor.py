@@ -105,3 +105,8 @@ left_button = load_image("icons/left")
 mini_tile_icons = dict()
 for mini_tile in tile_names:
     mini_tile_icons[mini_tile] = (load_image("tiles/mini_tile/%s" % mini_tile))
+
+
+pedestal_img = load_image("map_tiles/pedestal")
+scaled_pedestal_img = pygame.transform.scale(pedestal_img, (200, 200))
+

@@ -49,8 +49,8 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
     ruin_seed = int(ruin_number_choice[0])
 
     relic_gap = 100 # scaled size
-    relic_Y_level = 400
-    relic_locations = [[width // 2 - (ruin_seed-1)*relic_gap//2 + i*relic_gap  , relic_Y_level] for i in range(ruin_seed)]
+    relic_Y_level = 350
+    relic_locations = [[width // 2 - (ruin_seed-1)*relic_gap//2 + i*relic_gap, relic_Y_level] for i in range(ruin_seed)]
 
     ################## chosing a relic ####################
     relic_spawn_chance = random.randint(1, 100)
@@ -148,20 +148,25 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
         else:
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
+        for i in range(ruin_seed):
+            screen.blit(scaled_pedestal_img , scaled_pedestal_img .get_rect(center=(relic_locations[i][0], relic_locations[i][1] + 70)))
 
         # draw relic info
         if not relic_obtained:
-            write_text(screen, width // 2, relic_Y_level - 150, 'Found relic', 30, 'gold')
+            write_text(screen, width // 2, relic_Y_level - 100, 'Found relic', 30, 'gold')
             if player.have_space_for_relic():  # bag is not full
-                write_text(screen, width//2, relic_Y_level -110, 'click to obtain', 18, 'gold')
+                write_text(screen, width//2, relic_Y_level -60, 'click to obtain', 18, 'gold')
             else:
-                write_text(screen, width // 2, relic_Y_level - 110, 'your bag is full!', 18, 'red')
+                write_text(screen, width // 2, relic_Y_level - 60, 'your bag is full!', 18, 'red')
 
             # relic drawing
             for i in range(ruin_seed):
+                # screen.blit(scaled_pedestal_img , scaled_pedestal_img .get_rect(center=(relic_locations[i][0], relic_locations[i][1] + 70)))
+
                 final_relic_sample = final_relic_samples[i]
                 final_relic_sample.draw(screen, relic_locations[i], scaled=True)
-                final_relic_sample.show_ruin_description(screen, relic_locations[i], [width // 2, relic_Y_level + 150], mousepos)
+
+                final_relic_sample.show_ruin_description(screen, relic_locations[i], [width // 2, relic_Y_level + 180], mousepos)
 
 
 

@@ -49,7 +49,7 @@ screen.fill((0,0,0))  # background color
 
 
 # main screen ---------------------------------------------------
-playable_characters = ['Mirinae', 'Cinavro', 'Baron','Narin', 'Riri', 'Arisu', 'Ato'] #,
+playable_characters = ['Mirinae', 'Baron', 'Cinavro'] #,'Narin', 'Riri', 'Arisu', 'Ato'
 dummy_net = Net([0],50,100)
 
 
@@ -142,6 +142,8 @@ while meta_run:
 
 
                     #### set character abilities here (like fixing a tile etc) ####
+                    for i in range(20):
+                        go_to_ruin(screen, clock, player, False)
                     # obtain_skill(screen, clock, player, 'holy_barrier')
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
