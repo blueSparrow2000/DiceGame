@@ -490,7 +490,7 @@ class Cinavro_skills(Skill_Book):
 
     def get_detail_gacha(self, player):
         S = player.count_tile('Skill')
-        return "Gacha|Random S+2 = %d blank spaces on the      current board are converted into Jokers"%S
+        return "Gacha|Random S+2 = %d blank tiles on the       current board are converted into Jokers"%S
     ###############################################################################
 
     ##################################### 3 #########################################
@@ -524,7 +524,7 @@ class Cinavro_skills(Skill_Book):
             enemy.buffs['decay'] = 1
             enemy.buffs['vulnerability'] = 1
     def get_detail_bluff(self, player):
-        return "Bluff|Inflict weakness, vulnerability, and decay on one enemy"
+        return "Bluff|Inflict weakness, vulnerability, and    decay on one enemy"
     ###############################################################################
 
     #################################### 5 #########################################

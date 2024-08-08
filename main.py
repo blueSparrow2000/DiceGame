@@ -162,6 +162,8 @@ while meta_run:
 
                     # for i in range(20):
                     #     player.pick_up_relic(TiltedScale())
+                    # for i in range(10):
+                    #     player.pick_up_relic(Paranoia())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
 
