@@ -17,7 +17,7 @@ SOUND_EFFECT = current_dir+'/sound_effects/'
 
 
 # # sound effects
-sound_effect_list = ['bell','confirm','dash','drink','fist','get','hard_hit','hit','item_put_down','lazer','playerdeath','sword','water', 'break' ,'block', 'blast', 'shruff', 'small_hit', 'horn_low','horn_high','jackpot','coin_drop','register']
+sound_effect_list = ['bell','confirm','dash','drink','fist','get','hard_hit','hit','item_put_down','lazer','playerdeath','sword','water', 'break' ,'block', 'blast', 'shruff', 'small_hit', 'horn_low','horn_high','jackpot','coin_drop','register', 'bandage']
 ############## not needed ###############
 confirm_sound = pygame.mixer.Sound(SOUND_EFFECT+"confirm.mp3")
 hit_sound = pygame.mixer.Sound(SOUND_EFFECT+"hit.mp3")

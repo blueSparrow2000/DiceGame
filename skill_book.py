@@ -117,7 +117,7 @@ class DummyPlayer(Entity):
 
 
 # other variables
-learnable_skill_price_dict ={'poison_dart':10, 'holy_barrier':30, 'no_op':10}
+learnable_skill_price_dict ={'holy_barrier':20, 'no_op':10,'poison_dart':10,'metastasis':10 , 'vaccine':10,'chronic':20 ,'acute':10 ,'gas':10 }
 
 
 
@@ -199,48 +199,6 @@ class Skill_Book():
     
     '''
 
-    '''
-    poison spell (poison dart relic will increase its power)
-    attacks one target
-    inflict 
-    '''
-    def poison_dart_get_requirement(self,player):
-        S = player.count_tile('Skill')
-        A = player.count_tile('Attack')
-        R = player.count_tile('Regen')
-        if (S<1 or A>3 or R<1):
-            return False, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
-        return True, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
-
-    def poison_dart(self,player, target_list):
-        ### relic effect ###
-        duration = 3
-        damage_multiplier = 3
-        for relic in player.relics:
-            if relic.name=="poison bottle": # exists!
-                duration = 6
-                damage_multiplier = 6
-
-        sound_effects['hit'].play()
-        A = player.count_tile('Attack')
-        damage = (damage_multiplier*A) * player.get_attack_multiplier()
-        for enemy in target_list:
-            enemy.buffs['poison'] = duration
-            enemy.take_damage(player,damage)
-
-    def get_detail_poison_dart(self,player):
-        duration = 3
-        damage_multiplier = 3
-        for relic in player.relics:
-            if relic.name=="poison bottle": # exists!
-                duration = 6
-                damage_multiplier = 6
-
-        A = player.count_tile('Attack')
-        damage = (damage_multiplier*A) * player.get_attack_multiplier()
-        return "Poison dart|Attack one target with %d*A = %d damage   and inflict poison for %s turns"%(damage_multiplier,damage, duration)
-
-
 
     def holy_barrier_get_requirement(self,player):
         S = player.count_tile('Skill')
@@ -265,6 +223,186 @@ class Skill_Book():
         sound_effects['hard_hit'].play()
     def get_detail_no_op(self,player):
         return "no op|Just deletes current tiles"
+
+
+    '''
+    poison spells (poison dart relic will increase its power)
+    attacks one target
+    inflict 
+    '''
+    def poison_dart_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        R = player.count_tile('Regen')
+        if (S<1 or A>3 or R<1):
+            return False, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums, is_attack
+        return True, 1, True, {'Skill':(1,0),'Regen':(1,0),'Attack':(0,3)} # skill_valid, target_nums,is_attack
+
+    def poison_dart(self,player, target_list):
+        ### relic effect ###
+        duration = 3
+        damage_multiplier = 3
+        for relic in player.relics:
+            if relic.name=="poison bottle": # exists!
+                duration = 6
+                damage_multiplier = 6
+
+        sound_effects['hit'].play()
+        A = player.count_tile('Attack')
+        damage = (damage_multiplier*A) * player.get_attack_multiplier()
+        for enemy in target_list:
+            enemy.buffs['poison'] += duration
+            enemy.take_damage(player,damage)
+
+    def get_detail_poison_dart(self,player):
+        duration = 3
+        damage_multiplier = 3
+        for relic in player.relics:
+            if relic.name=="poison bottle": # exists!
+                duration = 6
+                damage_multiplier = 6
+
+        A = player.count_tile('Attack')
+        damage = (damage_multiplier*A) * player.get_attack_multiplier()
+        return "Poison dart|Attack one target with %d*A = %d damage   and inflict poison for %s turns"%(damage_multiplier,damage, duration)
+
+        #'metastasis': 10, 'vaccine': 10, 'chronic': 20, 'acute': 10, 'gas': 10
+
+    ###########################################################################################################################
+    def metastasis_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        R = player.count_tile('Regen')
+        if (S<1 or R<2):
+            return False, 3, False, {'Skill':(1,0),'Regen':(2,0)} # skill_valid, target_nums, is_attack
+        return True, 3, False, {'Skill':(1,0),'Regen':(2,0)} # skill_valid, target_nums,is_attack
+
+    def metastasis(self,player, target_list):
+        sound_effects['water'].play()
+        time.sleep(0.1)
+
+        for enemy in target_list:
+            remaining_duration = enemy.buffs['poison']
+            enemy.buffs['vulnerability'] += remaining_duration
+            enemy.buffs['weakness'] += remaining_duration
+            enemy.buffs['toxin'] += remaining_duration
+
+    def get_detail_metastasis(self,player):
+        return "Metastasis|Apply vulnerability, weakness, toxin to all enemies for the remaining duration  of their poison"
+    ###########################################################################################################################
+
+
+    ###########################################################################################################################
+    def vaccine_get_requirement(self, player):
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        R = player.count_tile('Regen')
+        if (S < 2 or D < 1 or R < 1):
+            return False, 0, False, {'Skill': (2, 0), 'Regen': (1, 0),'Defence': (1, 0)}  # skill_valid, target_nums, is_attack
+        return True, 0, False, {'Skill': (2, 0), 'Regen': (1, 0),'Defence': (1, 0)}  # skill_valid, target_nums,is_attack
+
+    def vaccine(self, player, target_list):
+        sound_effects['bandage'].play()
+        time.sleep(0.1)
+
+        duration = player.buffs['poison']
+        healamt = max(0 , duration*10)
+        player.enforced_regen(healamt)
+        player.buffs['poison'] = 0
+        player.buffs['toxin'] = 0
+        player.buffs['weakness'] = 0
+        player.buffs['vulnerability'] = 0
+        player.get_buff_effect()
+
+    def get_detail_vaccine(self, player):
+        duration = player.buffs['poison']
+        return "Vaccine|Instantly recovers (duration of poison) * 10 = %d health and removes poison,     toxin, weakness, vulnerability" % (duration*10)
+    ###########################################################################################################################
+
+
+    ###########################################################################################################################
+    def chronic_get_requirement(self, player):
+        S = player.count_tile('Skill')
+        R = player.count_tile('Regen')
+        if (S < 2 or R < 2):
+            return False, 1, False, {'Skill': (2, 0), 'Regen': (2, 0)}  # skill_valid, target_nums, is_attack
+        return True, 1, False, {'Skill': (2, 0), 'Regen': (2, 0)}  # skill_valid, target_nums,is_attack
+
+    def chronic(self, player, target_list):
+        sound_effects['water'].play()
+        time.sleep(0.1)
+        for enemy in target_list:
+            duration = enemy.buffs['poison']
+            enemy.buffs['poison'] = 2*(duration) # +1
+
+    def get_detail_chronic(self, player):
+        return "Chronic|Doubles the duration of poison applied  to one enemy"
+    ###########################################################################################################################
+
+
+    ###########################################################################################################################
+    def acute_get_requirement(self, player):
+        '''
+        weakness is also applied in damaging, so it is OP skill
+        :param player:
+        :return:
+        '''
+        S = player.count_tile('Skill')
+        R = player.count_tile('Regen')
+        if (S < 3 or R < 1):
+            return False, 1, False, {'Skill': (3, 0), 'Regen': (1, 0)}  # skill_valid, target_nums, is_attack
+        return True, 1, False, {'Skill': (3, 0), 'Regen': (1, 0)}  # skill_valid, target_nums,is_attack
+
+    def acute(self, player, target_list):
+        sound_effects['bell'].play()
+        time.sleep(0.1)
+
+        for enemy in target_list:
+            duration = enemy.buffs['poison']
+            damage = duration * 5
+            enemy.take_damage(player, damage, True) # no fight back - this is not considered a normal attack
+            enemy.buffs['poison'] = 0 # remove the poison
+
+    def get_detail_acute(self, player):
+        return "Acute|Instantly deal poison damage equal to   the remaining duration of the poison    applied to one enemy and removes the    poison"
+    ###########################################################################################################################
+
+
+    ###########################################################################################################################
+    def gas_get_requirement(self, player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        R = player.count_tile('Regen')
+        if (S < 1 or A < 1 or R < 1):
+            return False, 3, False, {'Skill': (3, 0), 'Regen': (1, 0),'Attack': (1, 0)}  # skill_valid, target_nums, is_attack
+        return True, 3, False, {'Skill': (3, 0), 'Regen': (1, 0),'Attack': (1, 0)}  # skill_valid, target_nums,is_attack
+
+    def gas(self, player, target_list):
+        ### relic effect ###
+        duration = 5
+        for relic in player.relics:
+            if relic.name=="poison mask": # exists!
+                duration *= 2
+
+        sound_effects['shruff'].play()
+        time.sleep(0.1)
+
+        for enemy in target_list:
+            enemy.buffs['poison'] = duration
+
+            current_pattern = enemy.get_next_move_on_player_turn()
+            if current_pattern == 'attack':
+                enemy.buffs['broken will'] += 1
+            elif current_pattern == 'shield':
+                enemy.buffs['toxin'] += 1
+
+
+    def get_detail_gas(self, player):
+        duration = 5
+        for relic in player.relics:
+            if relic.name=="poison mask": # exists!
+                duration *= 2
+        return "Gas|Apply poison on all enemies for %d turns, broken will on enemies trying to attack, and toxin on enemies trying to defend"%duration
+    ###########################################################################################################################
 
 
 
@@ -324,7 +462,7 @@ class Mirinae_skills(Skill_Book):
         sound_effects['hit'].play()
         D = player.count_tile('Defence')
         for enemy in target_list:
-            enemy.buffs['vulnerability'] = 3
+            enemy.buffs['vulnerability'] += 3
             enemy.total_defence -= 5*D
 
     def get_detail_head_start(self,player):
@@ -439,7 +577,7 @@ class Mirinae_skills(Skill_Book):
         damage = ( 5 * total_A ) * player.get_attack_multiplier()
         for enemy in target_list:
             enemy.take_damage(player,damage)
-            enemy.buffs['broken will'] = 1
+            enemy.buffs['broken will'] += 1
 
     def get_detail_Excaliber(self, player):
         total_A = player.board.count_all_tiles_on_board('Attack')
@@ -520,9 +658,9 @@ class Cinavro_skills(Skill_Book):
         time.sleep(0.1)
 
         for enemy in target_list:
-            enemy.buffs['weakness'] = 1
-            enemy.buffs['decay'] = 1
-            enemy.buffs['vulnerability'] = 1
+            enemy.buffs['weakness'] += 1
+            enemy.buffs['decay'] += 1
+            enemy.buffs['vulnerability'] += 1
     def get_detail_bluff(self, player):
         return "Bluff|Inflict weakness, vulnerability, and    decay on one enemy"
     ###############################################################################
@@ -610,7 +748,7 @@ class Arisu_skills(Skill_Book):
 
 class Ato_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Ato_skills',[])
+        super().__init__('Ato_skills',['poison_dart','metastasis' , 'vaccine','chronic' ,'acute' ,'gas' ])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
@@ -619,6 +757,9 @@ class Ato_skills(Skill_Book):
         pass
 ######################### BUILD SKILL BOOK ##########################
 
+
+
+
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills(), 'Baron': Baron_skills(), 'Riri': Riri_skills(), 'Arisu': Arisu_skills(), 'Ato': Ato_skills()}
 character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
@@ -626,7 +767,7 @@ character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Ski
                              'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':4, 'Joker':0,'Karma':0},
                              'Riri': {'Attack': 2, 'Regen': 6, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작
-                             'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)
+                             'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 30, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)
                              }
 character_max_hp = {'Mirinae':100,'Cinavro':80, 'Narin': 100,'Baron':150, 'Riri':60, 'Arisu':100, 'Ato':100}
 

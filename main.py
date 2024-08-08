@@ -49,7 +49,7 @@ screen.fill((0,0,0))  # background color
 
 
 # main screen ---------------------------------------------------
-playable_characters = ['Mirinae', 'Baron', 'Cinavro'] #,'Narin', 'Riri', 'Arisu', 'Ato'
+playable_characters = ['Mirinae', 'Baron', 'Cinavro','Ato'] #,'Narin', 'Riri', 'Arisu',
 dummy_net = Net([0],50,100)
 
 
@@ -165,7 +165,7 @@ while meta_run:
                     # for i in range(10):
                     #     player.pick_up_relic(Paranoia())
                     # player.pick_up_relic(GoldenTalisman())
-                    # player.pick_up_relic(RuinCompass())
+                    player.pick_up_relic(PoisonMask())
 
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)

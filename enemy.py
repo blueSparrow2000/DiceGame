@@ -62,6 +62,8 @@ class Enemy(Entity):
         if check_inside_button(mousepos, self.mypos, self.icon_delta // 2):  # if mouse is pointing to the relic
             write_text(screen, self.mypos[0], self.mypos[1], self.my_name, 20, "lightgray", 'black')
 
+    def get_next_move_on_player_turn(self):
+        return self.pattern[self.current_pattern_idx]
 
     def proceed_next_pattern(self):
         # proceed to the next pattern
@@ -147,12 +149,12 @@ class Halo(Enemy):
         elif current_pattern=='shield':
             pass # no op
         elif current_pattern=='buff':
-            player.buffs['confusion'] = 1
-            player.buffs['vulnerability'] = 1
+            player.buffs['confusion'] += 1
+            player.buffs['vulnerability'] += 1
         elif current_pattern=='regen':
             self.regen()
         elif current_pattern=='unknown':
-            player.buffs['broken will'] = 1
+            player.buffs['broken will'] += 1
         elif current_pattern == 'summon':
             pass
 
@@ -189,7 +191,7 @@ class Mob(Enemy):
             self.defence += 10
             self.update_defence()
         elif current_pattern=='buff':
-            self.buffs['strength'] = 2 # for one turn since it is self buffing
+            self.buffs['strength'] += 2 # for one turn since it is self buffing
             # self.buffs['attack immunity'] = 2
         elif current_pattern=='regen':
             pass # no op
@@ -431,7 +433,7 @@ class Scout(Enemy):
         elif current_pattern=='shield':
             pass
         elif current_pattern=='buff':
-            player.buffs['vulnerability'] = 1
+            player.buffs['vulnerability'] += 1
         elif current_pattern=='regen':
             pass
         elif current_pattern=='unknown':
@@ -468,7 +470,7 @@ class Sentinel(Enemy):
                 entity.defence += 16
                 entity.update_defence()
         elif current_pattern=='buff':
-            player.buffs['weakness'] = 1
+            player.buffs['weakness'] += 1
         elif current_pattern=='regen':
             self.regen()
         elif current_pattern=='unknown':
@@ -506,7 +508,7 @@ class Observer(Enemy):
         elif current_pattern=='shield':
             pass
         elif current_pattern=='buff':
-            player.buffs['vulnerability'] = 1
+            player.buffs['vulnerability'] += 1
         elif current_pattern=='regen':
             pass
         elif current_pattern=='unknown':
@@ -597,9 +599,9 @@ class Silent(Enemy):
             self.defence += 32
             self.update_defence()
         elif current_pattern == 'buff':
-            player.buffs['weakness'] = 3
-            player.buffs['vulnerability'] = 3
-            player.buffs['toxin'] = 3
+            player.buffs['weakness'] += 3
+            player.buffs['vulnerability'] += 3
+            player.buffs['toxin'] += 3
         elif current_pattern == 'regen':
             self.regen()
         elif current_pattern == 'unknown':
@@ -663,8 +665,7 @@ class Scalpion(Enemy):
         elif current_pattern=='shield':
             pass
         elif current_pattern=='buff':
-            player.buffs['weakness'] = 1
-            player.buffs['vulnerability'] = 1
+            pass
         elif current_pattern=='regen':
             self.regen()
         elif current_pattern=='unknown':
@@ -675,7 +676,7 @@ class Scalpion(Enemy):
             pass
         elif current_pattern == 'toxin':
             sound_effects['water'].play()
-            player.buffs['toxin'] = 5
+            player.buffs['toxin'] += 5
         self.proceed_next_pattern()
         self.end_my_turn()
 
@@ -720,7 +721,7 @@ class Snalk(Enemy):
             pass
         elif current_pattern == 'poison':
             sound_effects['water'].play()
-            player.buffs['poison'] = 5
+            player.buffs['poison'] += 5
         self.proceed_next_pattern()
         self.end_my_turn()
 
@@ -753,8 +754,8 @@ class Snider(Enemy):
             pass
         elif current_pattern=='buff':
             sound_effects['water'].play()
-            player.buffs['vulnerability'] = 3
-            player.buffs['confusion'] = 3
+            player.buffs['vulnerability'] += 3
+            player.buffs['confusion'] += 3
         elif current_pattern=='regen':
             self.regen()
         elif current_pattern=='unknown':
@@ -880,8 +881,8 @@ class Raider(Enemy):
         elif current_pattern=='shield':
             pass
         elif current_pattern=='buff':
-            player.buffs['weakness'] = 1
-            player.buffs['vulnerability'] = 1
+            player.buffs['weakness'] += 1
+            player.buffs['vulnerability'] += 1
         elif current_pattern=='regen':
             self.regen()
         elif current_pattern=='unknown':
@@ -891,7 +892,7 @@ class Raider(Enemy):
         elif current_pattern == 'infiltrate': # place a tile inside the player's tile
             pass
         elif current_pattern == 'poison':
-            player.buffs['poison'] = 3
+            player.buffs['poison'] += 3
         self.proceed_next_pattern()
         self.end_my_turn()
 
@@ -1026,8 +1027,8 @@ class Watcher(Enemy):
         elif current_pattern=='shield':
             pass # no op
         elif current_pattern=='buff':
-            player.buffs['weakness'] = 1
-            player.buffs['toxin'] = 1
+            player.buffs['weakness'] += 1
+            player.buffs['toxin'] += 1
         elif current_pattern=='regen':
             pass # no op
         elif current_pattern=='unknown':

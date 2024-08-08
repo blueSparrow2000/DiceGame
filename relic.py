@@ -122,6 +122,18 @@ class PoisonBottle(Relic):
     def description(self):
         return "Poison dart: damage multiplier 3 -> 6 / duration 3 -> 6"
 
+class PoisonMask(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="poison mask",rarity = 'epic')
+
+    def description(self):
+        return "Gas: Double the poison duration"
+
+
+
 class SerpentHeart(Relic):
     '''
     Increase max hp by 50
@@ -630,7 +642,7 @@ class Equipment(Relic):
         return 3
 
 
-relic_class_names = ['Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+relic_class_names = ['PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 
