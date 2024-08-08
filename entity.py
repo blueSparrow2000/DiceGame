@@ -155,11 +155,7 @@ class Entity():
 
                 if check_inside_button(mousepos, location, self.icon_delta // 2):  # if mouse is pointing to the relic
                     description = buff_name_description_dic[buff_name]
-
                     write_text(screen, width // 2, turn_text_level + self.icon_delta, description, 17, "white", 'black')
-
-
-
                 cnt += 1
 
         if (self.absorption > 0):

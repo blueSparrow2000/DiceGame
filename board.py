@@ -356,7 +356,7 @@ class Board():
     
     NOTE: fixed tile's values (strings) are subset of permanent tiles' keys, so theres always exist a tile in temporary_board_dict that fixed_tiles has 
     '''
-    def get_non_fixed_permanent_tiles(self, reference_dict = None):
+    def get_non_fixed_tiles(self, reference_dict = None):
         if reference_dict is None:
             reference_dict = self.temporary_board_dict
 
@@ -421,7 +421,7 @@ class Board():
     
     '''
     def permanently_convert_tile1_to_tile2(self, tile_1,tile_2):
-        not_fixed_permanent_tiles = self.get_non_fixed_permanent_tiles(self.permanent_board_dict)
+        not_fixed_permanent_tiles = self.get_non_fixed_tiles(self.permanent_board_dict)
         # if tile_1 exists in nfpt and higher than 0
         # then get its count n
         # delete a tile_1 n times in permanent
@@ -470,6 +470,32 @@ class Board():
         self.board_X = width//2 - (self.side_length//2) * self.board_side_length + self.side_length//2 # centerize
 
     ################################################## permenant changes ##################################################
+
+    '''
+    Is there at least one tile?
+    '''
+    def check_tile_exists_in_temporal(self, given_tile):
+        return given_tile in self.temporary_board_dict and self.temporary_board_dict[given_tile] > 0 # if such tile exists and is having more than one
+
+    '''
+    Re calculate # of empty tiles for temporal board
+    '''
+    def reset_temporal_board_dict(self):
+        tile_count = 0
+        for k,v in self.temporary_board_dict.items():
+            if k != 'Empty': # count non-empty tiles only
+                tile_count+=v
+        self.temporary_board_dict['Empty'] = self.board_side_length**2 - tile_count # reset empty tiles
+
+    '''
+    Use this function to add a tile on a battle (but not permanently)
+    '''
+    def temporarily_replace_a_blank_tile_to(self, target_tile):
+        if not self.check_tile_exists_in_temporal('Empty'):
+            print("My tiles are full!!! Can not add more!")
+            return
+        safe_tile_add_one(self.temporary_board_dict, target_tile)
+        self.reset_temporal_board_dict() # recalculate the empty tiles
 
 
     '''
@@ -581,7 +607,8 @@ class Board():
 
         return None
 
-
+    def force_reset_next_turn(self):
+        self.current_turn = 0
 
     def reset(self, player = None):  # reset the board (each 6 turn) right after the end of the player's turn
         '''
@@ -603,7 +630,7 @@ class Board():
             board_temp = []
 
             ######### fixed tile handling ##########
-            non_fixed_tile_to_use = self.get_non_fixed_permanent_tiles()
+            non_fixed_tile_to_use = self.get_non_fixed_tiles()
             for k, v in non_fixed_tile_to_use.items(): # fetch board content to an array
                 tile = k
                 for i in range(v):
@@ -677,7 +704,7 @@ class Board():
 
         print("replacing failed while trying to add %s: no tile named '%s'"%(replacing_tile, replaced_tile))
 
-    def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile
+    def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile after confirmation
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
         for i in range(len(self.board)):
             board_tile_name = self.board[i][1]
@@ -685,7 +712,7 @@ class Board():
                 self.temp_board[i][1] = convert_tile  # temp 를 바꿔야 변경사항이 적용됨 confirm에서!
                 self.temp_board[i][2] = False  # not fixed tile
 
-    def convert_all_tiles_on_board_immediately(self,target_tile, convert_tile): # convert target tile into convert tile
+    def convert_all_tiles_on_board_immediately(self,target_tile, convert_tile): # convert target tile into convert tile immediately
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
         for i in range(len(self.board)):
             board_tile_name = self.board[i][1]

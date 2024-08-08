@@ -52,38 +52,32 @@ A simple dice game
 2024.08.06 game balancing / add some Mirinae & Baron relics / ruin design change / map design change
 
 
-2024.08.07
+2024.08.07 Mirinae skill rework (guard attack) / Added relics / add Cinavro skills
 
 
+2024.08.08 add poison learnable skills etc.
 
-# To do
-- add Cinavro skills
-- add poison learnable skills etc.
-- add Baron skills
 
+2024.08.09 add Baron skills
+
+
+2024.08.10 (Final update on April)
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 
 
-패스 파인더 업데이트 
+
+# Future 
+- Advanced path finder
 브릿지인 타일 가는 도중에 다른 보이드 아닌 타일이 있는 경우 그걸 재외하고 차일드 만드는걸 먼저 돌려보기
-그랬을때 패스가 안나온다면
-이잔꺼 돌려서 가는걸로 ㄱㄱ
+그랬을때 패스가 안나온다면 이전꺼 돌려서 가는걸로
 
 
 ### beyond beta version (further implementation will use Flutter instead of python)
-- (better graphics) add health bar object that saves target value and have a shrinking animation at every update (call update instead of directly changing self.hp and drawing health bar)
-
-- add relics
-
-- add enemy spawning logics
-
-- add characters
-
 - simple hit animation
 
-- add various enemies: elite enemies drop random tiles that you can permanently obtain 
-- 
+- (better graphics) add health bar object that saves target value and have a shrinking animation at every update (call update instead of directly changing self.hp and drawing health bar)
+
 - New debuff 'chained': (for player only) block the use of a specific tile for one turn => ruin mobs will use these
 
 - bug: 가끔 그냥 기본 공격을 했는데 hit소리가 나고 데미지가 martial attack만큼 들어가는 경우가 있다
@@ -102,27 +96,35 @@ A deck that focuses on attack rather than defense and recovery.
 She has an ultimate ability that allows her to collect a lot of attack tiles and inflict great damage, making it advantageous against strong enemies. Vulnerability can provide synergy.
 A martial art skill can withstand situations with few attack tiles. 
 In addition, it has wide-area and counterattacks, so it can stably deal with multiple enemies. 
-You can take advantage of the opportunity to turn the tables by using the skill to convert all defense tiles into attack tiles.
+Overall, she is specialized on focusing attack on one enemy.
+
 
 ### Cinavro the gambler
 "It's not manipulation, it's my skills"
 
 
 A deck that exploits 'Joker' tiles that can be used as any tiles you want. 
-This makes the game easy, so his skills are weakened compared to other characters.
+This makes the game easy, but his skill values are weak compared to other characters.
+Hence it is essential to learn powerful skills bought in the shop.
+
+
+### Baron the knight
+"Protection, Protection, ... Protection"
+
+
+A deck that is focused on building defence to negate any incoming damage. 
+He is specialized on crushing multiple enemies at once due to his fissure skill etc.
+The more defence gained, the stronger he gets.
+
 
 
 ### Narin the conservator of Karma
-"???"
+TBU (To Be Updated)
 
 
 Karma, a substance that replicates itself, is a tile that returns as harm to you when the board is reset.
 Hence you must either wait for Karma to duplicate and use them all or must eliminate from the beginning.
 Use various skills to explore the synergy! The most fun deck.
-
-
-### Baron the knight
-TBU (To Be Updated)
 
 
 
@@ -131,13 +133,15 @@ TBU (To Be Updated)
 
 
 
+### Arisu the explorer
+TBU (To Be Updated)
+
+
+
 ### Ato the noble
 TBU (To Be Updated)
 
 
-
-### Arisu the explorer
-TBU (To Be Updated)
 
 
 

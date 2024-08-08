@@ -90,11 +90,12 @@ def go_to_shop(screen,clock, player):
                 mousepos = pygame.mouse.get_pos()
 
             if event.type == pygame.MOUSEBUTTONUP:
-                sound_effects['confirm'].play()
+                # sound_effects['confirm'].play()
                 mousepos= pygame.mouse.get_pos()
                 mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
 
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    sound_effects['confirm'].play()
                     # exit
                     game_run = False
                     break
@@ -108,6 +109,7 @@ def go_to_shop(screen,clock, player):
                             if player.pay_gold(price_of_tile): # true, which means the player paid
                                 safe_delete_dict_one_depth_2(shop_buy_tiles,0, tile_name) # delete one in the shop
                                 player.board.permanently_replace_a_blank_tile_to(tile_name) # add a tile to a player
+                                sound_effects['register'].play()
                             else:
                                 pass # notify player that you dont have enough gold! (by blinking gold color e.t.c.)
 
@@ -118,6 +120,7 @@ def go_to_shop(screen,clock, player):
                         bought = obtain_skill(screen, clock, player, skill_to_sell)
                         if bought:
                             player.pay_gold(price_of_skill)
+                            sound_effects['register'].play()
 
                 # buy relic
                 if not relic_obtained and check_inside_button(mousepos, shop_relic_button_loc, button_side_len_half): # clicked relic => get relic! (only for one time!)
@@ -125,6 +128,7 @@ def go_to_shop(screen,clock, player):
                         generated_relic = generate_relic_by_class_name(final_relic_name)
                         player.pick_up_relic(generated_relic)
                         relic_obtained = True
+                        sound_effects['register'].play()
                     else:
                         pass # notify player that you dont have enough gold! (by blinking gold color e.t.c.)
 

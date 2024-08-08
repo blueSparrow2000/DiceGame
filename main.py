@@ -160,8 +160,8 @@ while meta_run:
                     #
                     # player.pick_up_relic(Oil())
 
-                    # for i in range(25):
-                    #     player.pick_up_relic(TiltedScale())
+                    for i in range(9):
+                        player.pick_up_relic(TiltedScale())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
 

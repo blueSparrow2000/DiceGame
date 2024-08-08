@@ -449,7 +449,7 @@ class Mirinae_skills(Skill_Book):
 
 class Cinavro_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Cinavro_skills',[])
+        super().__init__('Cinavro_skills',['abuse','gacha','flat_betting','bluff','Jackpot','All_in'])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
@@ -457,6 +457,115 @@ class Cinavro_skills(Skill_Book):
 
     def init_each_fight(self):# initialize skill book parameters
         pass
+
+    ###################################### 1 ########################################
+    def abuse_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<1):
+            return False, 0, False, {'Skill':(1,0)}
+        return True, 0, False, {'Skill':(1,0)} # skill_valid, target_nums,is_attack
+    def abuse(self,player, target_list):
+        sound_effects['register'].play()
+        time.sleep(0.1)
+
+        player.board.temporarily_replace_a_blank_tile_to("Joker")
+
+    def get_detail_abuse(self, player):
+        return "Abuse|Add one Joker tile to the board during  this battle"
+    ###############################################################################
+
+    ##################################### 2 #########################################
+    def gacha_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<1):
+            return False, 0, False, {'Skill':(1,0)}
+        return True, 0, False, {'Skill':(1,0)} # skill_valid, target_nums,is_attack
+    def gacha(self,player, target_list):
+        sound_effects['jackpot'].play()
+        time.sleep(0.1)
+
+        S = player.count_tile('Skill')
+        for i in range(S+2):
+            player.board.insert_a_tile_on_board("Joker")
+
+    def get_detail_gacha(self, player):
+        S = player.count_tile('Skill')
+        return "Gacha|Random S+2 = %d blank spaces on the      current board are converted into Jokers"%S
+    ###############################################################################
+
+    ##################################### 3 #########################################
+    def flat_betting_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<2):
+            return False, 0, False, {'Skill':(2,0)}
+        return True, 0, False, {'Skill':(2,0)} # skill_valid, target_nums,is_attack
+    def flat_betting(self,player, target_list):
+        sound_effects['coin_drop'].play()
+        time.sleep(0.1)
+
+        player.board.convert_all_tiles_on_board('Used', 'Joker')
+
+    def get_detail_flat_betting(self, player):
+        return "Flat betting|Convert all used tiles into Joker tiles"
+    ###############################################################################
+
+    #################################### 4 #########################################
+    def bluff_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<2):
+            return False, 1, False, {'Skill':(2,0)}
+        return True, 1, False, {'Skill':(2,0)} # skill_valid, target_nums,is_attack
+    def bluff(self,player, target_list):
+        sound_effects['dash'].play()
+        time.sleep(0.1)
+
+        for enemy in target_list:
+            enemy.buffs['weakness'] = 1
+            enemy.buffs['decay'] = 1
+            enemy.buffs['vulnerability'] = 1
+    def get_detail_bluff(self, player):
+        return "Bluff|Inflict weakness, vulnerability, and decay on one enemy"
+    ###############################################################################
+
+    #################################### 5 #########################################
+    def Jackpot_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<3):
+            return False, 0, False, {'Skill':(3,0)}
+        return True, 0, False, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+    def Jackpot(self,player, target_list):
+        sound_effects['jackpot'].play()
+        time.sleep(0.1)
+        player.board.force_reset_next_turn()
+
+    def get_detail_Jackpot(self, player):
+        return "Jackpot|Force the board to reset on the next    turn"
+    ###############################################################################
+
+    ##################################### 6 #########################################
+    def All_in_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<3):
+            return False, 0, False, {'Skill':(3,0)}
+        return True, 0, False, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+    def All_in(self,player, target_list):
+        sound_effects['bell'].play()
+        time.sleep(0.1)
+
+        all_tile_names = list(tile_name_description_dic.keys())
+        for tile_name in all_tile_names:
+            if tile_name == 'Unusable':
+                continue
+            elif tile_name == 'Empty':
+                player.board.convert_all_tiles_on_board('Empty', 'Unusable')
+            else:
+                player.board.convert_all_tiles_on_board(tile_name, 'Joker')
+
+    def get_detail_All_in(self, player):
+        return "All in|Convert all tiles into jokers, except   all empty/unusable tiles on the board   become unusable"
+    ###############################################################################
+
+
 
 
 class Baron_skills(Skill_Book):
