@@ -582,7 +582,7 @@ class Mirinae_skills(Skill_Book):
     def get_detail_Excaliber(self, player):
         total_A = player.board.count_all_tiles_on_board('Attack')
         damage = ( 5 * total_A ) * player.get_attack_multiplier()
-        return "Excaliber|Use up all attack tiles in the board and gives 5 times the amount of damage =  %d to one enemy and apply 'broken will' for 1 turn"%damage
+        return "Excaliber|Use up all attack tiles in the board and give 5 times the amount of damage =   %d to one enemy and apply 'broken will' for 1 turn"%damage
 
 
 class Cinavro_skills(Skill_Book):
@@ -708,13 +708,123 @@ class Cinavro_skills(Skill_Book):
 
 class Baron_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Baron_skills',[])
+        super().__init__('Baron_skills',['guard','zone','fissure','smash','Mortal_strike','Build'])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
     def init_each_fight(self):# initialize skill book parameters
         pass
+
+
+    ##############################################################################
+    def guard_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        if (S<1 or D<1):
+            return False, 0, False, {'Skill':(1,0), 'Defence':(1,0)}
+        return True, 0, False, {'Skill':(1,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
+    def guard(self,player, target_list):
+        sound_effects['block'].play()
+        time.sleep(0.1)
+        D = player.count_tile('Defence')
+        player.defence += 5*D
+        player.update_defence()
+
+    def get_detail_guard(self, player):
+        D = player.count_tile('Defence')
+        return "Guard|Gain defence 5*D = %d"%(D*5)
+    ###############################################################################
+    ##############################################################################
+    def zone_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        if (S<1 or A<1):
+            return False, 0, False, {'Skill':(1,0),'Attack':(1,0) }
+        return True, 0, False, {'Skill':(1,0),'Attack':(1,0) } # skill_valid, target_nums,is_attack
+    def zone(self,player, target_list):
+        sound_effects['item_put_down'].play()
+        time.sleep(0.1)
+        player.board.convert_all_tiles_on_board('Attack', 'Defence')
+        player.board.convert_all_tiles_on_board('Regen', 'Defence')
+
+    def get_detail_zone(self, player):
+        return "Zone|Convert all attack and regen tiles on   the board into defence tile"
+    ###############################################################################
+    ##############################################################################
+    def fissure_get_requirement(self,player): # this is an attack!
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        if (S<2 or D<1):
+            return False, 0, True, {'Skill':(2,0), 'Defence':(1,0)}
+        return True, 0, True, {'Skill':(2,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
+    def fissure(self,player, target_list):
+        for i in range(2):
+            sound_effects['block'].play()
+            time.sleep(0.15)
+
+        # player.get_attack_multiplier()
+
+    def get_detail_fissure(self, player):
+        return "Fissure|At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust"
+    ###############################################################################
+    ##############################################################################
+    def smash_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        A = player.count_tile('Attack')
+        if (S < 2 or A < 1):
+            return False, 1, False, {'Skill': (2, 0), 'Attack': (1, 0)}
+        return True, 1, False, {'Skill': (2, 0), 'Attack': (1, 0)}  # skill_valid, target_nums,is_attack
+    def smash(self,player, target_list):
+        sound_effects['hard_hit'].play()
+        time.sleep(0.1)
+
+    def get_detail_smash(self, player):
+        return "Smash|Absorb and remove all defense from one  enemy"
+    ###############################################################################
+    ##############################################################################
+    def Mortal_strike_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        if (S<3):
+            return False, 0, False, {'Skill':(3,0)}
+        return True, 0, False, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+    def Mortal_strike(self,player, target_list):
+        sound_effects['shruff'].play()
+        time.sleep(0.1)
+
+        player.counter_attack = True
+
+        total_D = player.board.consume_all_tiles_on_board('Defence')
+        player.defence += total_D * 5
+        player.update_defence()
+
+    def get_detail_Mortal_strike(self, player):
+        total_D = player.board.count_all_tiles_on_board('Defence')
+        return "Mortal strike|Use up all defence tiles in the board   and gain 5 times the amount of defence =  %d and counterattack all enemy attacks"%(total_D*5)
+    ###############################################################################
+    ##############################################################################
+    def Build_get_requirement(self,player):
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        if (S<3 or D<1):
+            return False, 0, False, {'Skill':(3,0), 'Defence':(1,0)}
+        return True, 0, False, {'Skill':(3,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
+    def Build(self,player, target_list):
+        for i in range(3):
+            sound_effects['block'].play()
+            time.sleep(0.12)
+
+        D = player.count_tile('Defence')
+        player.defence += 10*D
+        player.update_defence()
+
+    def get_detail_Build(self, player):
+        D = player.count_tile('Defence')
+        return "Build|Defence stacks until the board reset    Also gain 10*D = %d defence"%(D*10)
+    ###############################################################################
+
+
+
 
 
 class Narin_skills(Skill_Book):
@@ -763,8 +873,8 @@ class Ato_skills(Skill_Book):
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills(), 'Baron': Baron_skills(), 'Riri': Riri_skills(), 'Arisu': Arisu_skills(), 'Ato': Ato_skills()}
 character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
-                             'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1},
                              'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':4, 'Joker':0,'Karma':0},
+                             'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1},
                              'Riri': {'Attack': 2, 'Regen': 6, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작
                              'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)

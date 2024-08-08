@@ -52,18 +52,23 @@ A simple dice game
 2024.08.06 game balancing / add some Mirinae & Baron relics / ruin design change / map design change
 
 
-2024.08.07 Mirinae skill rework (guard attack) / Added relics / add Cinavro skills / add poison learnable skills etc.
+2024.08.07 Mirinae skill rework (guard attack) / Added relics / add Cinavro skills / add poison learnable skills etc. / Baron skill framework done!
 
 
 2024.08.08 add Baron skills
+- fissure
+- smash
+- build
+
+- skill arts
 
 
-2024.08.09 
+2024.08.9
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 
 
-2024.08.10 Testing & Bug fix (Final update on April)
+2024.08.10~11 Testing & Bug fix (Final update on April)
 
 
 
