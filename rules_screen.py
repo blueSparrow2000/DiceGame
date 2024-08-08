@@ -10,7 +10,7 @@ Some basic rules
 
 - you can progress the map using only one 'click' of planar figure
 
-- altar gives you a curse and you can choose one blessing among three
+- altar gives you a curse (with prob 80%) and you can choose one blessing among three
 - ruin give you 0~3 choices of relics / note that you could come across a battle before reaching ruin
 - campfire will heal 50 hp
 - you can buy 1 relic / 1 skill / and 3 of each tiles in the shop
@@ -18,6 +18,7 @@ Some basic rules
 - there are currently three bosses on depth -100, -200, -300 and one ruin boss at -150
 
 
+- All buffs like poison, toxin, strength, weakness, decay, vulnerability etc. does not stack!
 
 
 '''

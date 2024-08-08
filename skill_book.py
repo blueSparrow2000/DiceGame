@@ -42,6 +42,9 @@ class DummyPlayer(Entity):
 
         self.heart = load_image("icons/HP")
 
+    def P(self,num):
+        return 2**(num)
+
 
     def update_char(self,character): # must be called every time when character selection changes
         self.char_name = character
@@ -147,6 +150,8 @@ class Skill_Book():
         self.minitile_spacing = 50
         self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
 
+    def init_each_fight(self):
+        pass
 
     def draw_skill_on_custom_location(self,screen, skill_name, skill_location):
         screen.blit(self.skill_images[skill_name], self.skill_images[skill_name].get_rect(center=skill_location))
@@ -268,11 +273,16 @@ class Skill_Book():
 class Mirinae_skills(Skill_Book):
 
     def __init__(self):
-        super().__init__('Mirinae_skills',['martial_art','head_start','sword_storm','self_defence','guard_attack','Excaliber'])
+        super().__init__('Mirinae_skills',['martial_art','head_start','sword_storm','self_defence','Antifragile','Excaliber']) # 'guard_attack'
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
+        self.antifragile_multiplier = 4
+
+    def init_each_fight(self):# initialize skill book parameters
+        self.antifragile_multiplier = 4
+
 
     def martial_art_get_requirement(self,player):
         ''' 1
@@ -303,9 +313,7 @@ class Mirinae_skills(Skill_Book):
 
 
     def head_start_get_requirement(self,player):
-        ''' 3
-
-
+        ''' 2
         '''
         S = player.count_tile('Skill')
         if (S<1):
@@ -325,8 +333,7 @@ class Mirinae_skills(Skill_Book):
         return "Head start|Apply vulnerability to S+1 = %d targets  (3 turns) and removes 5*D = %d defence"%(S+1,D*5)
 
     def sword_storm_get_requirement(self,player):
-        ''' 2
-
+        ''' 3
 
         '''
         S = player.count_tile('Skill')
@@ -350,7 +357,6 @@ class Mirinae_skills(Skill_Book):
         다음 턴에 받는 (데미지 - S* 5*(R+D)) 만큼만 받고 그대로 돌려준다. 공격을 안당하면 무효 (R+D=0이면 모든 데미지를 받게됨)
         데미지를 반사 데미지로써 저장해두면 됨. 공격받을때 일부를 반사함 
         absorbtion이라는 파라미터에 임시로 데미지 흡수 함
-
         #회복 및 방어가 공격으로 전환된다: S*P(R+D)만큼 피해를 준다
         '''
         S = player.count_tile('Skill')
@@ -372,21 +378,49 @@ class Mirinae_skills(Skill_Book):
         absorption_amt = 5 * S * (R+D)
         return "Self defence|For all the incoming attacks next turn, absorb 5*S*(R+D) = %d damage and reflect each damage back"%(absorption_amt)
 
-    def guard_attack_get_requirement(self,player):
+    # def guard_attack_get_requirement(self,player):
+    #     ''' 5
+    #
+    #     '''
+    #     S = player.count_tile('Skill')
+    #     if (S<3):
+    #         return False, 0, True, {'Skill':(3,0),'Defence':(1,0)}
+    #     return True, 0, True, {'Skill':(3,0),'Defence':(1,0)}
+    #
+    # def guard_attack(self,player, target_list):
+    #     sound_effects['get'].play()
+    #     player.board.convert_all_tiles_on_board('Defence', 'Attack')
+    #
+    # def get_detail_guard_attack(self, player):
+    #     return "Guard attack|All defence tiles become attack tiles on current board"
+
+    def Antifragile_get_requirement(self,player):
         ''' 5
 
         '''
+        A = player.count_tile('Attack')
         S = player.count_tile('Skill')
-        if (S<3):
-            return False, 0, True, {'Skill':(3,0),'Defence':(1,0)}
-        return True, 0, True, {'Skill':(3,0),'Defence':(1,0)}
+        if (S<3 or A<1):
+            return False, 1, True, {'Skill':(3,0),'Attack':(1,0)}
+        return True, 1, True, {'Skill':(3,0),'Attack':(1,0)} # skill_valid, target_nums,is_attack
 
-    def guard_attack(self,player, target_list):
-        sound_effects['get'].play()
-        player.board.convert_all_tiles_on_board('Defence', 'Attack')
+    def Antifragile(self,player, target_list):
+        for i in range(4):
+            sound_effects['sword'].play()
+            time.sleep(0.11)
 
-    def get_detail_guard_attack(self, player):
-        return "Guard attack|All defence tiles become attack tiles on current board"
+        A = player.count_tile('Attack')
+        damage = player.P(A)  * player.get_attack_multiplier() * self.antifragile_multiplier
+        for enemy in target_list:
+            enemy.take_damage(player,damage)
+
+        self.antifragile_multiplier *= 2
+
+    def get_detail_Antifragile(self, player):
+        A = player.count_tile('Attack')
+        damage = player.P(A) * player.get_attack_multiplier() * self.antifragile_multiplier
+        return "Antifragile|Damage is doubled with each attack in   game. Current damage: P(A)x%d = %d "%( self.antifragile_multiplier, damage)
+
 
     def Excaliber_get_requirement(self,player):
         ''' 6
@@ -399,17 +433,18 @@ class Mirinae_skills(Skill_Book):
 
     def Excaliber(self,player, target_list):
         sound_effects['playerdeath'].play()
+        time.sleep(0.1)
 
         total_A = player.board.consume_all_tiles_on_board('Attack')
-        damage = ( 10 * total_A ) * player.get_attack_multiplier()
+        damage = ( 5 * total_A ) * player.get_attack_multiplier()
         for enemy in target_list:
             enemy.take_damage(player,damage)
             enemy.buffs['broken will'] = 1
 
     def get_detail_Excaliber(self, player):
         total_A = player.board.count_all_tiles_on_board('Attack')
-        damage = ( 10 * total_A ) * player.get_attack_multiplier()
-        return "Excaliber|Use up all attack tiles in the board and gives 10 times the amount of damage =  %d to one enemy and apply 'broken will' for 1 turn"%damage
+        damage = ( 5 * total_A ) * player.get_attack_multiplier()
+        return "Excaliber|Use up all attack tiles in the board and gives 5 times the amount of damage =  %d to one enemy and apply 'broken will' for 1 turn"%damage
 
 
 class Cinavro_skills(Skill_Book):
@@ -420,14 +455,9 @@ class Cinavro_skills(Skill_Book):
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
 
+    def init_each_fight(self):# initialize skill book parameters
+        pass
 
-class Narin_skills(Skill_Book):
-    def __init__(self):
-        super().__init__('Narin_skills',[])
-        # A = player.count_tile('Attack')
-        # S = player.count_tile('Skill')
-        # D = player.count_tile('Defence')
-        # R = player.count_tile('Regen')
 
 class Baron_skills(Skill_Book):
     def __init__(self):
@@ -436,6 +466,19 @@ class Baron_skills(Skill_Book):
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
+    def init_each_fight(self):# initialize skill book parameters
+        pass
+
+
+class Narin_skills(Skill_Book):
+    def __init__(self):
+        super().__init__('Narin_skills',[])
+        # A = player.count_tile('Attack')
+        # S = player.count_tile('Skill')
+        # D = player.count_tile('Defence')
+        # R = player.count_tile('Regen')
+    def init_each_fight(self):# initialize skill book parameters
+        pass
 
 class Riri_skills(Skill_Book):
     def __init__(self):
@@ -444,7 +487,8 @@ class Riri_skills(Skill_Book):
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
-
+    def init_each_fight(self):# initialize skill book parameters
+        pass
 class Arisu_skills(Skill_Book):
     def __init__(self):
         super().__init__('Arisu_skills',[])
@@ -452,6 +496,8 @@ class Arisu_skills(Skill_Book):
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
+    def init_each_fight(self):# initialize skill book parameters
+        pass
 
 class Ato_skills(Skill_Book):
     def __init__(self):
@@ -460,6 +506,8 @@ class Ato_skills(Skill_Book):
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
+    def init_each_fight(self):# initialize skill book parameters
+        pass
 ######################### BUILD SKILL BOOK ##########################
 
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills(), 'Baron': Baron_skills(), 'Riri': Riri_skills(), 'Arisu': Arisu_skills(), 'Ato': Ato_skills()}

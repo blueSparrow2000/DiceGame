@@ -163,7 +163,7 @@ while meta_run:
                     #     player.pick_up_relic(TiltedScale())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
-                    # player.pick_up_relic(StrawMat()) #
+                    # player.pick_up_relic(Candle()) #
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

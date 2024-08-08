@@ -402,7 +402,7 @@ class Player(Entity):
                 if (current_button == 'Attack'):
                     if self.can_attack:
                         self.initialize_step_1()
-                        return 'Attack|Attack one target with %d damage'%(self.get_current_damage()) # string content!
+                        return 'Attack|Attack one target with P(A)= %d damage'%(self.get_current_damage()) # string content!
                 elif (current_button=='Defence'):
                     self.initialize_step_1()
                     return 'Defence|Gain %d temporal defence'%(self.get_defence_gain())
@@ -466,6 +466,7 @@ class Player(Entity):
 
     def new_fight(self,enemies):
         super().refresh_my_turn()
+        self.skill_book.init_each_fight() # initialize skill book parameters
 
         self.current_tile = dict()
         self.reset_skill_idx()

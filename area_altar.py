@@ -58,7 +58,18 @@ def go_to_altar(screen,clock, player):
     bless_choice_num = min(3, len(altar_bless))
     random.shuffle(altar_bless)
     bless_list = copy.deepcopy(altar_bless[:bless_choice_num])
-    curse = altar_curse[random.randint(0,len(altar_curse)-1)]
+
+
+    curse_chance = random.randint(1, 100)
+
+    for relic in player.relics:
+        curse_chance -= relic.curse_chance_decreaser()
+
+    curse = ''
+    if curse_chance <= 20: # no curse
+        curse = ''
+    else:
+        curse = altar_curse[random.randint(0,len(altar_curse)-1)]
 
     change_type_1 = random.choice(basic_tiles)
     basic_tiles.remove(change_type_1)
@@ -151,9 +162,10 @@ def go_to_altar(screen,clock, player):
         # draw effects
         write_text(screen, width//2, area_name_Y_level, 'Altar', 30, 'gold')
 
-        write_text(screen,width//2 , altar_text_description_level, 'You got a curse', 30, 'maroon')
-        screen.blit(altar_images[curse], altar_images[curse].get_rect(center=[width//2,altar_text_description_level+90 ]))
-        write_text(screen,width//2 , altar_text_description_level+150, curse, 20, 'maroon')
+        if curse != '':
+            write_text(screen,width//2 , altar_text_description_level, 'You got a curse', 30, 'maroon')
+            screen.blit(altar_images[curse], altar_images[curse].get_rect(center=[width//2,altar_text_description_level+90 ]))
+            write_text(screen,width//2 , altar_text_description_level+150, curse, 20, 'maroon')
 
 
         write_text(screen,width//2 , altar_text_description_level + 270, 'Choose one of the bless and confirm', 20,altar_text_color)

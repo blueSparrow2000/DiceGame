@@ -79,6 +79,8 @@ class Relic():
             print("Relic chance stays the same!")
         return 0
 
+    def curse_chance_decreaser(self):
+        return 0
 
     ####################################### In progress... ##############################################
     #####################################################################################################
@@ -589,9 +591,21 @@ class Encyclopedia(Relic):
         for entity in enemies:
             entity.set_max_health(round(entity.max_health*(1 - self.decrease_rate/100)))
 
+class Candle(Relic):
+    '''
+
+    '''
+    def __init__(self):
+        super().__init__(name="candle",rarity = 'special')
+
+    def description(self):
+        return "decrease chance of getting cursed by the altar by 30%"
+
+    def curse_chance_decreaser(self):
+        return 30
 
 
-relic_class_names = ['Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+relic_class_names = ['Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 
