@@ -142,8 +142,8 @@ while meta_run:
 
 
                     #### set character abilities here (like fixing a tile etc) ####
-                    for i in range(20):
-                        go_to_ruin(screen, clock, player, False)
+                    # for i in range(20):
+                    #     go_to_ruin(screen, clock, player, False)
                     # obtain_skill(screen, clock, player, 'holy_barrier')
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)

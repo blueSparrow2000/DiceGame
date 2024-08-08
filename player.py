@@ -149,7 +149,7 @@ class Player(Entity):
 
             if minitile_name == 'Joker' and joker_flag:
                 for i in range(len(self.transformable_tiles)):  # draw transform tiles in order
-                    pygame.draw.aaline(screen, terracotta, minitile_location, self.transform_icon_locations[i],
+                    pygame.draw.aaline(screen, 'black', [minitile_location[0],minitile_location[1] - (self.minitile_size//2 - 5) ], [self.transform_icon_locations[i][0], self.transform_icon_locations[i][1] + (self.minitile_size//2 - 5) ],
                                        True)
                 joker_flag = False
 
