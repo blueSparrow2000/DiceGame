@@ -148,7 +148,8 @@ while meta_run:
                     # obtain_skill(screen, clock, player, 'holy_barrier')
                     # go_to_altar(screen, clock, player)
                     # go_to_campfire(screen, clock, player)
-                    # go_to_shop(screen, clock, player)
+                    # for i in range(10):
+                    #     go_to_shop(screen, clock, player)
                     # for i in range(20):
                     #     go_to_ruin(screen, clock, player, True)
                     # for i in range(1):
@@ -165,7 +166,7 @@ while meta_run:
                     # for i in range(10):
                     #     player.pick_up_relic(Paranoia())
                     # player.pick_up_relic(GoldenTalisman())
-                    player.pick_up_relic(PoisonMask())
+                    # player.pick_up_relic(PoisonMask())
 
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)

@@ -401,7 +401,7 @@ class Skill_Book():
         for relic in player.relics:
             if relic.name=="poison mask": # exists!
                 duration *= 2
-        return "Gas|Apply poison on all enemies for %d turns, broken will on enemies trying to attack, and toxin on enemies trying to defend"%duration
+        return "Gas|Apply poison on all enemies for %d turns, broken will on enemies trying to       attack, and toxin on enemies trying to       defend"%duration
     ###########################################################################################################################
 
 

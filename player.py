@@ -320,7 +320,7 @@ class Player(Entity):
         self.skill_book.draw_skill_on_custom_location(screen, skill_to_learn, display_location)
         # else, check whether skill
         skill_detail = getattr(self.skill_book, "get_detail_%s"%skill_to_learn)(self)
-        write_text_description(screen, width // 2, turn_text_level + 120, skill_detail, 15, bg_color = None, requirement_shown = True, requirement_pos = [width // 2, turn_text_level + 170] )
+        write_text_description(screen, width // 2, turn_text_level + 120, skill_detail, 15, bg_color = None, requirement_shown = False, requirement_pos = [width // 2, turn_text_level + 170] )
 
     def draw_skill_to_swap(self,screen):
         # draw existing skills

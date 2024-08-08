@@ -200,7 +200,7 @@ def fight(screen, clock, player, place = None):
         effective_depth = - (abs(cur_depth) % 100)  # make depth to -100 ~ 0 range (for each stage)
         enemy_request = get_request(effective_depth, candidate_enemy_list, current_params)
     #####################################################################################
-    enemy_request = ['raider'for i in range(3)] #
+    # enemy_request = ['raider'for i in range(3)] #
 
     enemies = []
     mob_number_cap = 3
