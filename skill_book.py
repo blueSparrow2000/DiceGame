@@ -117,7 +117,7 @@ class DummyPlayer(Entity):
 
 
 # other variables
-learnable_skill_price_dict ={'holy_barrier':20, 'no_op':10,'poison_dart':10,'metastasis':10 , 'vaccine':10,'chronic':20 ,'acute':10 ,'gas':10 }
+learnable_skill_price_dict ={'holy_barrier':20, 'no_op':5,'poison_dart':10,'metastasis':10, 'vaccine':10,'chronic':20 ,'acute':20 ,'gas':20 }
 
 
 
@@ -748,7 +748,7 @@ class Arisu_skills(Skill_Book):
 
 class Ato_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Ato_skills',['poison_dart','metastasis' , 'vaccine','chronic' ,'acute' ,'gas' ])
+        super().__init__('Ato_skills',[]) # ['poison_dart','metastasis' , 'vaccine','chronic' ,'acute' ,'gas' ]
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
@@ -767,7 +767,7 @@ character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Ski
                              'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':4, 'Joker':0,'Karma':0},
                              'Riri': {'Attack': 2, 'Regen': 6, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작
-                             'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 30, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)
+                             'Ato': {'Attack': 5, 'Regen': 2, 'Defence': 5, 'Skill': 4, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 돈 많이 가지고 시작 (50원)
                              }
 character_max_hp = {'Mirinae':100,'Cinavro':80, 'Narin': 100,'Baron':150, 'Riri':60, 'Arisu':100, 'Ato':100}
 

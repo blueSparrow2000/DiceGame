@@ -46,10 +46,8 @@ pygame.display.set_caption('Dice Game')  # window title
 screen.fill((0,0,0))  # background color
 
 
-
-
 # main screen ---------------------------------------------------
-playable_characters = ['Mirinae', 'Baron', 'Cinavro','Ato'] #,'Narin', 'Riri', 'Arisu',
+playable_characters = ['Mirinae', 'Baron', 'Cinavro'] #,'Narin', 'Riri', 'Arisu','Ato'
 dummy_net = Net([0],50,100)
 
 
@@ -139,7 +137,6 @@ while meta_run:
                         # player.pick_up_relic(IronPlate())
                     elif character_name=="Riri":
                         fix_a_tile(screen, clock, player, 'Regen')
-
 
                     #### set character abilities here (like fixing a tile etc) ####
                     # player.pick_up_relic(Equipment()) #

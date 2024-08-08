@@ -53,11 +53,7 @@ A simple dice game
 
 
 2024.08.07 Mirinae skill rework (guard attack) / Added relics / add Cinavro skills / add poison learnable skills etc.
-make poison skill design
-ato에서 poison skill list 제거
-플레이어블 캐릭터에서 ato 제거
-샵 가격 조정
-ato 조커 개수 0개로 조정
+
 
 2024.08.08 add Baron skills
 
