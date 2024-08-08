@@ -48,6 +48,10 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
     ruin_number_choice = simple_choice_maker(ruin_artifact_number_list, ruin_artifact_number_probs, 1)
     ruin_seed = int(ruin_number_choice[0])
 
+    for relic in player.relics:
+        if 1 <= relic.fix_artifact_number() <= 3 and ruin_seed < relic.fix_artifact_number(): # 가장 많은 걸 따른다
+            ruin_seed = relic.fix_artifact_number()
+
     relic_gap = 100 # scaled size
     relic_Y_level = 350
     relic_locations = [[width // 2 - (ruin_seed-1)*relic_gap//2 + i*relic_gap, relic_Y_level] for i in range(ruin_seed)]
@@ -60,8 +64,11 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
     relic_obtained = True
     if relic_spawn_chance <= 90: # (if no fight) 90% chance to get relic
         relic_obtained = False
-    if fought:
+    if fought: # after fight, always relic exists
         relic_obtained = False
+    for relic in player.relics: # fixing artifact number always makes relic exist
+        if 1 <= relic.fix_artifact_number() <= 3:
+            relic_obtained = False
 
 
     final_relic_names = []

@@ -142,6 +142,7 @@ while meta_run:
 
 
                     #### set character abilities here (like fixing a tile etc) ####
+                    # player.pick_up_relic(Equipment()) #
                     # for i in range(20):
                     #     go_to_ruin(screen, clock, player, False)
                     # obtain_skill(screen, clock, player, 'holy_barrier')
@@ -163,7 +164,7 @@ while meta_run:
                     #     player.pick_up_relic(TiltedScale())
                     # player.pick_up_relic(GoldenTalisman())
                     # player.pick_up_relic(RuinCompass())
-                    # player.pick_up_relic(Candle()) #
+
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
                     if not try_again:

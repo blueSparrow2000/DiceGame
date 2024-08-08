@@ -79,6 +79,9 @@ class Relic():
             print("Relic chance stays the same!")
         return 0
 
+    def fix_artifact_number(self):
+        return 0
+
     def curse_chance_decreaser(self):
         return 0
 
@@ -604,8 +607,22 @@ class Candle(Relic):
     def curse_chance_decreaser(self):
         return 30
 
+class Equipment(Relic):
+    '''
 
-relic_class_names = ['Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+    '''
+
+    def __init__(self):
+        super().__init__(name="equipment", rarity='legendary')
+
+    def description(self):
+        return "There are always 3 artifact options in the ruins"
+
+    def fix_artifact_number(self):
+        return 3
+
+
+relic_class_names = ['Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 
