@@ -240,6 +240,9 @@ def fight(screen, clock, player, place = None):
             game_run = False
             print('player wins!')
             return False, True,enemy_drops, earned_gold
+        ### DELETE DEAD ENEMY ###
+        safe_delete(enemies, player)
+        ### DELETE DEAD ENEMY ###
 
         screen.fill(background_color)
 

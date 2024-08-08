@@ -338,7 +338,7 @@ class BagOfDagger(Relic):
 
 class TiltedScale(Relic):
     '''
-
+    NOTE: You cannot get frenzy skull effect or enemy's thorny effect due to this relic
     '''
     def __init__(self):
         super().__init__(name="tilted scale",rarity = 'epic')
@@ -349,7 +349,8 @@ class TiltedScale(Relic):
 
     def fight_start_effect(self, player,enemies):
         for entity in enemies:
-            entity.take_damage(player, self.tilt_amount, no_fightback = True)
+            # entity.take_damage(player, self.tilt_amount, no_fightback=True)
+            entity.take_damage(None, self.tilt_amount, no_fightback=True)
 
 
 
@@ -515,9 +516,16 @@ class Paranoia(Relic):
         return "If defense is 0 at turn end, gain %d defense"%self.shield_gain
 
     def fight_every_turn_end_effect(self, player,enemies):
-        if player.defence==0:
-            player.defence += self.shield_gain
+        if player.defence == 0: # one paranoia will take care of all other paranoias
+            for relic in player.relics:
+                if relic.name == 'paranoia':
+                    player.defence += self.shield_gain
+
             player.update_defence()
+
+        # if player.defence==0:
+        #     player.defence += self.shield_gain
+        #     player.update_defence()
 
 class IronPlate(Relic):
     '''

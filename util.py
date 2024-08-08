@@ -144,7 +144,7 @@ class Node():
             if coord == self.target_loc:  # self.map[coord[0]][coord[1]][0]
                 self.found_target(how_to_get_child)
                 return True
-            elif self.bridge_map[coord[0]][coord[1]]:  # if neighbor is a bridge - parent==None will not happen
+            elif (0 <= coord[0] <= len(self.bridge_map)-1) and (0 <= coord[1] <= len(self.bridge_map[0])-1) and self.bridge_map[coord[0]][coord[1]]:  # if neighbor is a bridge - parent==None will not happen
                 if self.parent_node is None:  # just do it
                     self.childs.append(Node(how_to_get_child, self, coord, self.bridge_map, self.target_loc))
                 elif coord != self.parent_node.my_coord:
