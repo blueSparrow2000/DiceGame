@@ -457,8 +457,7 @@ class StrawMat(Relic):
         D = player.count_tile('Defence')
         defence_gain = self.shield_per_straw * D
 
-        player.defence += defence_gain
-        player.update_defence()
+        player.get_defence(defence_gain)
 
 class Obsidian(Relic):
     '''
@@ -511,8 +510,7 @@ class BattleShield(Relic):
         return "For each enemy killed, get %d temporal defence"%self.shield_gain
 
     def activate_on_kill(self, player, enemy):
-        player.defence += self.shield_gain
-        player.update_defence()
+        player.get_defence(self.shield_gain)
 
 
 
@@ -531,7 +529,7 @@ class Paranoia(Relic):
         if player.defence == 0: # one paranoia will take care of all other paranoias
             for relic in player.relics:
                 if relic.name == 'paranoia':
-                    player.defence += self.shield_gain
+                    player.get_defence(self.shield_gain)
 
             player.update_defence()
 
@@ -566,8 +564,7 @@ class Armadillo(Relic):
 
     def fight_start_effect(self, player, enemies):
         num_of_enemies = len(enemies)
-        player.defence += num_of_enemies*self.defence_multiplier
-        player.update_defence()
+        player.get_defence(num_of_enemies*self.defence_multiplier)
 
 ####################################### In progress... ##############################################
 

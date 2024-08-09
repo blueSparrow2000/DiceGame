@@ -73,7 +73,7 @@ class Player(Entity):
         self.relic_y_start = 95
         self.relic_delta = 30
 
-
+        self.all_def_to_temporal_def = False
 
 
 
@@ -441,10 +441,20 @@ class Player(Entity):
 
     def refresh_my_turn(self):
         super().refresh_my_turn()
+
+        if (self.board.current_turn-1) == 0: # 보드 리셋 하고 나서 다시 내 턴 시작으로 돌아올때
+            self.all_def_to_temporal_def = False  # 방어도가 모두 temp_def로 전환되게 하는 플래그 리셋
+            self.temporal_defence = 0  # 임시방어도도 혹시나 있으면 리셋
+            self.update_defence()
+
         for relic in self.relics:
             relic.fight_every_turn_beginning_effect(self)
         self.get_buff_effect() # get buff effects
         self.reset_skill_idx()
+
+
+
+
 
     def reset_skill_idx(self):
         self.current_skill_idx = -1  # reset this
@@ -537,10 +547,18 @@ class Player(Entity):
         damage = self.P(A)*self.get_attack_multiplier()
         return damage
 
+
+    def get_defence(self, amount):
+        if self.all_def_to_temporal_def:  # 이번에 얻는 모든 방어도는 defence가 아닌 temporal_def로 들어감
+            self.temporal_defence += amount
+        else:
+            self.defence += amount
+
+        self.update_defence()
+
     def defend(self):
         sound_effects['block'].play()
-        self.defence += self.get_defence_gain()
-        self.update_defence()
+        self.get_defence(self.get_defence_gain())
 
     def get_defence_gain(self):
         # count number of defence tiles
@@ -570,9 +588,10 @@ class Player(Entity):
     def board_reset(self, enemies):
         self.board.reset(self) # clear board just after the player's turn!
 
-        if (self.board.current_turn-1) == 0:
+        if (self.board.current_turn-1) == 0: # 보드 리셋시
             for relic in self.relics:
                 relic.activate_on_board_reset(self, enemies)
+
 
 
 

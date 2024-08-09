@@ -728,8 +728,7 @@ class Baron_skills(Skill_Book):
         sound_effects['block'].play()
         time.sleep(0.1)
         D = player.count_tile('Defence')
-        player.defence += 5*D
-        player.update_defence()
+        player.get_defence(5 * D)
 
     def get_detail_guard(self, player):
         D = player.count_tile('Defence')
@@ -795,8 +794,7 @@ class Baron_skills(Skill_Book):
         player.counter_attack = True
 
         total_D = player.board.consume_all_tiles_on_board('Defence')
-        player.defence += total_D * 5
-        player.update_defence()
+        player.get_defence(total_D * 5)
 
     def get_detail_Mortal_strike(self, player):
         total_D = player.board.count_all_tiles_on_board('Defence')
@@ -814,9 +812,20 @@ class Baron_skills(Skill_Book):
             sound_effects['block'].play()
             time.sleep(0.12)
 
+
         D = player.count_tile('Defence')
-        player.defence += 10*D
-        player.update_defence()
+        player.get_defence(10*D)
+        
+        # 현재까지 가지고 있는 기본 방어력을 모두 temporal defence로 옮긴다  (기본방어는 0로 만든다)
+        volatile_defence = player.defence
+        player.temporal_defence += volatile_defence # 이미 가지고 있을수도 있으니
+        player.defence = 0
+
+        # 지금부터 얻는 디펜스는 전부 템포랄 디펜스로 전환하도록 해야함 (보드 리셋시 다시 초기화되는 플래그)
+        player.all_def_to_temporal_def = True
+
+
+        # 보드가 리셋될때 템포랄 디펜스도 리셋되고 저 플래그도 리셋됨
 
     def get_detail_Build(self, player):
         D = player.count_tile('Defence')
@@ -873,7 +882,7 @@ class Ato_skills(Skill_Book):
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills(), 'Baron': Baron_skills(), 'Riri': Riri_skills(), 'Arisu': Arisu_skills(), 'Ato': Ato_skills()}
 character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
-                             'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':4, 'Joker':0,'Karma':0},
+                             'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':34, 'Joker':0,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1},
                              'Riri': {'Attack': 2, 'Regen': 6, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작

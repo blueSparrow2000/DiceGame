@@ -39,9 +39,11 @@ class Entity():
         self.icon_delta = 30
         self.targeted = False
 
-        self.defence = 0
-        self.base_defence = 0
-        self.total_defence = self.defence + self.base_defence
+        self.defence = 0 # 한 턴만 유지도는 방어도
+        self.temporal_defence = 0 # 여러턴 유지되는 방어도. 깨지면 복구되지 않음 (언제 리셋되는지는 플레이어냐, 적이냐에 따라 다름. 적은 보통 리셋 안되는 방어도)
+        self.base_defence = 0 # 기본적으로 깨져도 계속 복구되는 방어도. 방어구 같은 개념)
+        self.base_defence_for_turn = self.base_defence # 매 턴 보호할 수 있는 최대량으로, self.base_defence만큼으로 시작해서 공격 받을때마다 줄어드는 량이다 / 내 턴으로 리프레시할때 다시 base defence로 리셋됨
+        self.total_defence = self.defence + self.temporal_defence + self.base_defence_for_turn
 
         self.thorny = False # some enemy may have default thorns
         self.absorption = 0
@@ -112,7 +114,8 @@ class Entity():
 
         self.get_buff_effect() # get buff effects
 
-        self.defence = 0  # reset the temporal defence
+        self.defence = 0  # reset the defence
+        self.base_defence_for_turn = self.base_defence # reset base defence
         self.update_defence()
 
 
@@ -191,13 +194,33 @@ class Entity():
             self.health -= damage
         else:
             partial_damage = damage - self.total_defence
-            if partial_damage < 0: # fully blocked
+            if partial_damage < 0: # can be fully blocked
                 sound_effects['block'].play()
-                self.total_defence -= damage
+                ################################# defence algorithm #####################################
+                # self.base_defence_for_turn은 매 턴 시작시 self.base_defence값으로 초기화됨
+                # self.defence는 매턴 시작시 0으로 초기화됨
+                # self.temporal_defence는 매 턴마다 사라지는 방어도가 아님! 누적되는 방어도
+
+                D1 = damage - self.base_defence_for_turn
+                if D1 <= 0:
+                    self.base_defence_for_turn = self.base_defence_for_turn - damage
+                else: # base defence 뚫림
+                    self.base_defence_for_turn = 0
+                    D2 = D1 - self.defence
+                    if D2 <= 0:
+                        self.defence = self.defence - D1
+                    else: # defence 뚫림
+                        self.defence = 0
+                        self.temporal_defence = self.temporal_defence - D2  # temporal defence를 소진함, 근데 토탈 디펜스가 더 컸으니 다 막을 수 있음
+
+                self.update_defence()
+                ################################# defence algorithm #####################################
                 # print('blocked!')
             else:
-                if self.total_defence  >0: # if there were shield but it broke
+                if self.total_defence > 0: # if there were shield but it broke
                     sound_effects['break'].play()
+                self.defence = 0
+                self.temporal_defence = 0
                 self.total_defence = 0
                 self.health -= partial_damage
                 # print('got hit!')
@@ -214,7 +237,7 @@ class Entity():
         return self.health <= 0
 
     def update_defence(self):
-        self.total_defence = self.defence + self.base_defence
+        self.total_defence = self.defence + self.temporal_defence + self.base_defence_for_turn
 
     def get_buff_effect(self, enforced = True):
         if enforced:
