@@ -762,7 +762,7 @@ class Baron_skills(Skill_Book):
             sound_effects['block'].play()
             time.sleep(0.15)
 
-        # player.get_attack_multiplier()
+        # player.get_attack_multiplier() # should use this, and this skill is attack
 
     def get_detail_fissure(self, player):
         return "Fissure|At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust"
@@ -777,6 +777,16 @@ class Baron_skills(Skill_Book):
     def smash(self,player, target_list):
         sound_effects['hard_hit'].play()
         time.sleep(0.1)
+
+        gain_shield = 0
+        for enemy in target_list:
+            gain_shield += enemy.total_defence
+            enemy.defence = 0
+            enemy.temporal_defence = 0
+            enemy.base_defence_for_turn= 0
+            enemy.update_defence()
+
+        player.get_defence(gain_shield)
 
     def get_detail_smash(self, player):
         return "Smash|Absorb and remove all defense from one  enemy"

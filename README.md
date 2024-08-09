@@ -59,8 +59,8 @@ A simple dice game
 - fissure
 - smash
 
-
 - skill arts
+바론 스킬 포인트 34개 있는거 4개로 되돌리기
 
 
 2024.08.9
