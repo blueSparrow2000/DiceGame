@@ -43,7 +43,7 @@ A simple dice game
 - limit number of relics to 24
 
 
-2024.08.04 Fixed path finder logic -> DFS / Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles / Added more enemies 
+2024.08.04 Fixed pathfinder logic -> DFS / Map generation logic: randomize location of adventure/shop/campfire/fight/ruin tiles / Added more enemies 
 
 
 2024.08.05 enemy deploying logic: enemy combination/amount/poser changes as depth gets higher
@@ -52,17 +52,17 @@ A simple dice game
 2024.08.06 game balancing / add some Mirinae & Baron relics / ruin design change / map design change
 
 
-2024.08.07 Mirinae skill rework (guard attack) / Added relics / add Cinavro skills / 
+2024.08.07 Mirinae skill rework (guard attack) / Added relics / add Cinavro skills 
 
 
 2024.08.08 add poison learnable skills etc. / Baron skill framework done!
 
 
 2024.08.9 add Baron skills
-- add altar: board reset count증가시키는 bless (baron한테는 더 좋음)
 
 
 2024.08.10 
+- add altar: board reset count증가시키는 bless (baron한테는 더 좋음)
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 
@@ -132,22 +132,17 @@ Use various skills to explore the synergy! The most fun deck.
 
 
 ### Riri the cleric
-TBU (To Be Updated)
+TBU 
 
 
 
 ### Arisu the explorer
-TBU (To Be Updated)
+TBU 
 
 
 
 ### Ato the noble
-TBU (To Be Updated)
-
-
-
-
-
+TBU 
 
 
 
