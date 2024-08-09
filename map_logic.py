@@ -38,7 +38,7 @@ class Map():
         self.path_finder_fail = False
         self.bridge_map = [[False for x in range(7)] for y in range(7)]
 
-        self.move_speed = 10#2 # must divide self.side_length
+        self.move_speed = 5#2 # must divide self.side_length
 
         self.break_limit = False
 

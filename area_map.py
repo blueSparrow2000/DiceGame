@@ -315,5 +315,5 @@ def adventure_loop(screen, clock, player,map):
                     pygame.draw.circle(screen, adventure_effect_color, position, radi, particle_width_mouse)
 
             pygame.display.flip()
-            clock.tick(game_fps)
+            clock.tick(fast_fps)
 

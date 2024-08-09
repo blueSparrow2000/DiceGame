@@ -89,4 +89,4 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
                 pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
 
         pygame.display.flip()
-        clock.tick_busy_loop(game_fps)
+        clock.tick_busy_loop(slow_fps)

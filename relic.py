@@ -385,7 +385,7 @@ class Tombstone(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="tombstone",rarity = 'common')
+        super().__init__(name="tombstone",rarity = 'rare')
 
     def description(self):
         return "On board reset, one empty tile is converted into an attack tile"
@@ -556,7 +556,7 @@ class Armadillo(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="armadillo",rarity = 'common')
+        super().__init__(name="armadillo",rarity = 'rare')
         self.defence_multiplier = 5
 
     def description(self):
