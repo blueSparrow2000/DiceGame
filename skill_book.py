@@ -762,10 +762,13 @@ class Baron_skills(Skill_Book):
             sound_effects['block'].play()
             time.sleep(0.15)
 
-        # player.get_attack_multiplier() # should use this, and this skill is attack
+        D = player.count_tile('Defence')
+        player.get_defence(5 * D)
+        player.fissure_flag = True
 
     def get_detail_fissure(self, player):
-        return "Fissure|At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust"
+        D = player.count_tile('Defence')
+        return "Fissure|Gain defence 5*D = %d                    At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust all defence"%(D*5)
     ###############################################################################
     ##############################################################################
     def smash_get_requirement(self,player):
@@ -776,15 +779,13 @@ class Baron_skills(Skill_Book):
         return True, 1, False, {'Skill': (2, 0), 'Attack': (1, 0)}  # skill_valid, target_nums,is_attack
     def smash(self,player, target_list):
         sound_effects['hard_hit'].play()
-        time.sleep(0.1)
+        time.sleep(0.2)
+        sound_effects['block'].play()
 
         gain_shield = 0
         for enemy in target_list:
             gain_shield += enemy.total_defence
-            enemy.defence = 0
-            enemy.temporal_defence = 0
-            enemy.base_defence_for_turn= 0
-            enemy.update_defence()
+            enemy.set_zero_defence()
 
         player.get_defence(gain_shield)
 
@@ -892,7 +893,7 @@ class Ato_skills(Skill_Book):
 character_skill_dictionary = {'Mirinae':Mirinae_skills(),'Cinavro':Cinavro_skills(), 'Narin': Narin_skills(), 'Baron': Baron_skills(), 'Riri': Riri_skills(), 'Arisu': Arisu_skills(), 'Ato': Ato_skills()}
 character_tile_dictionary = {'Mirinae':{'Attack':8, 'Regen':0, 'Defence':4, 'Skill':4, 'Joker':0, 'Karma':0},
                              'Cinavro':{'Attack':4, 'Regen':0, 'Defence':6,  'Skill':6, 'Joker':1,'Karma':0},
-                             'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':34, 'Joker':0,'Karma':0},
+                             'Baron':{'Attack':4, 'Regen':0, 'Defence':8,  'Skill':4, 'Joker':0,'Karma':0},
                              'Narin':  {'Attack':4, 'Regen':0, 'Defence':4,  'Skill':8, 'Joker':0,'Karma':1},
                              'Riri': {'Attack': 2, 'Regen': 6, 'Defence': 2, 'Skill': 6, 'Joker': 0, 'Karma': 0},
                              'Arisu': {'Attack': 3, 'Regen': 1, 'Defence': 5, 'Skill': 7, 'Joker': 0, 'Karma': 0}, # 타일 수 하나 적은 대신 유물 가지고 시작

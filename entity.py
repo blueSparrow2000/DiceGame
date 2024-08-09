@@ -76,6 +76,13 @@ class Entity():
         ######## relics
         self.relics = []
 
+    def set_zero_defence(self):
+        self.defence = 0
+        self.temporal_defence = 0
+        self.base_defence_for_turn = 0
+        self.update_defence()
+
+
     def set_max_health(self,max_health):
         self.max_health = max_health
         if self.health > self.max_health:

@@ -74,10 +74,29 @@ class Player(Entity):
         self.relic_delta = 30
 
         self.all_def_to_temporal_def = False
-
+        self.fissure_flag = False
 
 
     ######################################### Relic ################################################
+
+
+    def fissure_attack(self, enemies):
+        if self.fissure_flag:
+            self.fissure_flag = False
+            if self.total_defence>0:
+                sound_effects['hard_hit'].play()
+                time.sleep(0.15)
+
+                ######## do fissure here
+                spread_damage = self.total_defence//len(enemies)
+                damage = (spread_damage) * self.get_attack_multiplier()
+
+                for enemy in enemies:
+                    enemy.take_damage(self, damage)
+
+                self.set_zero_defence()
+
+
 
     def have_space_for_relic(self):
         return len(self.relics) < 24

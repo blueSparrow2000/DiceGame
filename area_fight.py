@@ -277,6 +277,8 @@ def fight(screen, clock, player, place = None):
                 if entity.spawn_request:
                     spawn_enemy(enemies, entity.get_spawn_mob_name(), mob_number_cap, mob_locations)
 
+            player.fissure_attack(enemies)
+
             ### DELETE DEAD ENEMY ###
             safe_delete(enemies,player)
             ### DELETE DEAD ENEMY ###
