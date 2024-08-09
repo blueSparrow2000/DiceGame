@@ -708,7 +708,7 @@ class Cinavro_skills(Skill_Book):
 
 class Baron_skills(Skill_Book):
     def __init__(self):
-        super().__init__('Baron_skills',['guard','zone','fissure','smash','Mortal_strike','Build'])
+        super().__init__('Baron_skills',['guard','zone','smash','fissure','Mortal_strike','Build'])
         # A = player.count_tile('Attack')
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
@@ -751,26 +751,6 @@ class Baron_skills(Skill_Book):
         return "Zone|Convert all attack and regen tiles on   the board into defence tile"
     ###############################################################################
     ##############################################################################
-    def fissure_get_requirement(self,player): # this is an attack!
-        S = player.count_tile('Skill')
-        D = player.count_tile('Defence')
-        if (S<2 or D<1):
-            return False, 0, True, {'Skill':(2,0), 'Defence':(1,0)}
-        return True, 0, True, {'Skill':(2,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
-    def fissure(self,player, target_list):
-        for i in range(2):
-            sound_effects['block'].play()
-            time.sleep(0.15)
-
-        D = player.count_tile('Defence')
-        player.get_defence(5 * D)
-        player.fissure_flag = True
-
-    def get_detail_fissure(self, player):
-        D = player.count_tile('Defence')
-        return "Fissure|Gain defence 5*D = %d                    At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust all defence"%(D*5)
-    ###############################################################################
-    ##############################################################################
     def smash_get_requirement(self,player):
         S = player.count_tile('Skill')
         A = player.count_tile('Attack')
@@ -791,6 +771,26 @@ class Baron_skills(Skill_Book):
 
     def get_detail_smash(self, player):
         return "Smash|Absorb and remove all defense from one  enemy"
+    ###############################################################################
+    ##############################################################################
+    def fissure_get_requirement(self,player): # this is an attack!
+        S = player.count_tile('Skill')
+        D = player.count_tile('Defence')
+        if (S<2 or D<1):
+            return False, 0, True, {'Skill':(2,0), 'Defence':(1,0)}
+        return True, 0, True, {'Skill':(2,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
+    def fissure(self,player, target_list):
+        for i in range(2):
+            sound_effects['block'].play()
+            time.sleep(0.15)
+
+        D = player.count_tile('Defence')
+        player.get_defence(5 * D)
+        player.fissure_flag = True
+
+    def get_detail_fissure(self, player):
+        D = player.count_tile('Defence')
+        return "Fissure|          Gain defence 5*D = %d          At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust all defence"%(D*5)
     ###############################################################################
     ##############################################################################
     def Mortal_strike_get_requirement(self,player):

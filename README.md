@@ -56,10 +56,8 @@ A simple dice game
 
 
 2024.08.08 add Baron skills
-- fissure
-
 - skill arts
-바론 스킬 포인트 34개 있는거 4개로 되돌리기
+
 
 
 2024.08.9
