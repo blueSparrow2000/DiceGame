@@ -739,16 +739,24 @@ class Baron_skills(Skill_Book):
         S = player.count_tile('Skill')
         A = player.count_tile('Attack')
         if (S<1 or A<1):
-            return False, 0, False, {'Skill':(1,0),'Attack':(1,0) }
-        return True, 0, False, {'Skill':(1,0),'Attack':(1,0) } # skill_valid, target_nums,is_attack
+            return False, 3, True, {'Skill':(1,0),'Attack':(1,0) }
+        return True, 3, True, {'Skill':(1,0),'Attack':(1,0) } # skill_valid, target_nums,is_attack
     def zone(self,player, target_list):
         sound_effects['item_put_down'].play()
         time.sleep(0.1)
+        convert_num = player.board.count_all_tiles_on_board('Attack') + player.board.count_all_tiles_on_board('Regen')
+        damage = convert_num * 5
+
         player.board.convert_all_tiles_on_board('Attack', 'Defence')
         player.board.convert_all_tiles_on_board('Regen', 'Defence')
 
+        for enemy in target_list:
+            enemy.take_damage(player,damage)
+
     def get_detail_zone(self, player):
-        return "Zone|Convert all attack and regen tiles on   the board into defence tile"
+        convert_num = player.board.count_all_tiles_on_board('Attack') + player.board.count_all_tiles_on_board('Regen')
+        damage = convert_num * 5
+        return "Zone|Convert all attack and regen tiles on   the board into defence tile and deal    damage to all enemies equal to the      5 * converted amount: %d"%damage
     ###############################################################################
     ##############################################################################
     def smash_get_requirement(self,player):
@@ -772,7 +780,7 @@ class Baron_skills(Skill_Book):
         player.get_defence(gain_shield)
 
     def get_detail_smash(self, player):
-        return "Smash|Absorb and remove all defence from one  enemy and give damage equal to the defence"
+        return "Smash|Absorb and remove all defence from one  enemy and give damage equal to the      defence"
     ###############################################################################
     ##############################################################################
     def fissure_get_requirement(self,player): # this is an attack!
