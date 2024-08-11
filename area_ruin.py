@@ -15,7 +15,7 @@ def generate_relic_by_class_name(relic_class_name):
     return relic
 
 
-relic_probs = {'common':60, 'rare':23, 'epic':10, 'special':4, 'legendary':2, 'myth':1} # % 기준
+relic_probs = {'common':30, 'rare':25, 'epic':20, 'special':15, 'legendary':8, 'myth':2} # % 기준
 
 relic_by_rarity_dict =  {'common':[], 'rare':[], 'epic':[], 'special':[], 'legendary':[], 'myth':[]} # 각 리스트에는 ['Thorn',Thorn()]이런 형태로 들어있음
 for relic_class_name in relic_class_names:

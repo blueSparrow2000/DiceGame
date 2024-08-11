@@ -476,8 +476,8 @@ class Mirinae_skills(Skill_Book):
         '''
         S = player.count_tile('Skill')
         if (S<2):
-            return False, 3, True, {'Skill':(2,0),}
-        return True, 3, True, {'Skill':(2,0),}  # skill_valid, target_nums,is_attack
+            return False, 3, True, {'Skill':(2,0),'Attack':(1,0)}
+        return True, 3, True, {'Skill':(2,0),'Attack':(1,0)}  # skill_valid, target_nums,is_attack
     def sword_storm(self,player, target_list):
         sound_effects['sword'].play()
         A = player.count_tile('Attack')
@@ -582,7 +582,7 @@ class Mirinae_skills(Skill_Book):
     def get_detail_Excaliber(self, player):
         total_A = player.board.count_all_tiles_on_board('Attack')
         damage = ( 5 * total_A ) * player.get_attack_multiplier()
-        return "Excaliber|Use up all attack tiles in the board and give 5 times the amount of damage =   %d to one enemy and apply 'broken will' for 1 turn"%damage
+        return "Excaliber|Use up all attack tiles in the board and give 5 times the amount of damage =   %d to one enemy and apply 'broken will'   for 1 turn"%damage
 
 
 class Cinavro_skills(Skill_Book):
@@ -628,7 +628,7 @@ class Cinavro_skills(Skill_Book):
 
     def get_detail_gacha(self, player):
         S = player.count_tile('Skill')
-        return "Gacha|Random S+2 = %d blank tiles on the       current board are converted into Jokers"%S
+        return "Gacha|   Random S+2 = %d blank tiles on the    current board are converted into Jokers"%S
     ###############################################################################
 
     ##################################### 3 #########################################

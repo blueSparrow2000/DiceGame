@@ -398,7 +398,7 @@ class RecycledSword(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="recycled sword",rarity = 'rare')
+        super().__init__(name="recycled sword",rarity = 'common')
 
     def description(self):
         return "Each turn, one used tile is converted into an attack tile"
@@ -464,7 +464,7 @@ class Obsidian(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="obsidian",rarity = 'common')
+        super().__init__(name="obsidian",rarity = 'rare')
 
     def description(self):
         return "On board reset, one empty tile is converted into a defence tile"
@@ -477,7 +477,7 @@ class RecycledShield(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="recycled shield",rarity = 'rare')
+        super().__init__(name="recycled shield",rarity = 'common')
 
     def description(self):
         return "Each turn, one used tile is converted into a defence tile"

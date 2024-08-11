@@ -31,7 +31,7 @@ from area_fix_a_tile import *
 import copy
 
 altar_text_description_level = 210
-altar_bless_reference = ['decrease board reset frequency by one','board get shuffled every turn','shrink the board size by one','obtain one fixable tile','planar figure can escape the board', 'change all tile of type_1 to type_2']
+altar_bless_reference = ['decrease board reset frequency by one','increase board reset frequency by one','board get shuffled every turn','shrink the board size by one','obtain one fixable tile','planar figure can escape the board', 'change all tile of type_1 to type_2']
 altar_curse_reference = ['delete one skill slot forever','halve maximum health','irregular shaped board'] #['delete one skill slot forever','halve maximum health','irregular shaped board']
 altar_bless = copy.deepcopy(altar_bless_reference)
 altar_curse = copy.deepcopy(altar_curse_reference)
@@ -124,6 +124,8 @@ def go_to_altar(screen,clock, player):
                         bless_name = bless_list[i]
                         if bless_name == 'decrease board reset frequency by one':
                             player.board.change_board_reset_frequency_by(1)
+                        elif bless_name == 'increase board reset frequency by one':
+                            player.board.change_board_reset_frequency_by(-1)
                         elif bless_name == 'board get shuffled every turn':
                             player.board.set_board_shuffle(True)
                             altar_bless.remove(bless_name) # only once
