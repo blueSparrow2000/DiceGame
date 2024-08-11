@@ -765,12 +765,14 @@ class Baron_skills(Skill_Book):
         gain_shield = 0
         for enemy in target_list:
             gain_shield += enemy.total_defence
+            damage = enemy.total_defence
             enemy.set_zero_defence()
+            enemy.take_damage(player,damage)
 
         player.get_defence(gain_shield)
 
     def get_detail_smash(self, player):
-        return "Smash|Absorb and remove all defense from one  enemy"
+        return "Smash|Absorb and remove all defence from one  enemy and give damage equal to the defence"
     ###############################################################################
     ##############################################################################
     def fissure_get_requirement(self,player): # this is an attack!
@@ -785,12 +787,12 @@ class Baron_skills(Skill_Book):
             time.sleep(0.15)
 
         D = player.count_tile('Defence')
-        player.get_defence(5 * D)
+        player.get_defence(10 * D)
         player.fissure_flag = True
 
     def get_detail_fissure(self, player):
         D = player.count_tile('Defence')
-        return "Fissure|          Gain defence 5*D = %d          At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust all defence"%(D*5)
+        return "Fissure|          Gain defence 10*D = %d          At turn end, if enemies fail to remove  all my defence, the remaining defense is distributed as attack to all enemies   and exhaust all defence"%(D*10)
     ###############################################################################
     ##############################################################################
     def Mortal_strike_get_requirement(self,player):
@@ -805,11 +807,11 @@ class Baron_skills(Skill_Book):
         player.counter_attack = True
 
         total_D = player.board.consume_all_tiles_on_board('Defence')
-        player.get_defence(total_D * 5)
+        player.get_defence(total_D * 10)
 
     def get_detail_Mortal_strike(self, player):
         total_D = player.board.count_all_tiles_on_board('Defence')
-        return "Mortal strike|Use up all defence tiles in the board   and gain 5 times the amount of defence =  %d and counterattack all enemy attacks"%(total_D*5)
+        return "Mortal strike|Use up all defence tiles in the board   and gain 10 times the amount of defence =  %d and counterattack all enemy attacks"%(total_D*10)
     ###############################################################################
     ##############################################################################
     def Build_get_requirement(self,player):
@@ -824,7 +826,7 @@ class Baron_skills(Skill_Book):
             time.sleep(0.12)
 
         D = player.count_tile('Defence')
-        player.get_defence(10*D)
+        player.get_defence(20*D)
         
         # 현재까지 가지고 있는 기본 방어력을 모두 temporal defence로 옮긴다  (기본방어는 0로 만든다)
         volatile_defence = player.defence
@@ -837,7 +839,7 @@ class Baron_skills(Skill_Book):
 
     def get_detail_Build(self, player):
         D = player.count_tile('Defence')
-        return "Build|Defence stacks until the board reset    Also gain 10*D = %d defence"%(D*10)
+        return "Build|Defence stacks until the board reset    Also gain 20*D = %d defence"%(D*20)
     ###############################################################################
 
 
