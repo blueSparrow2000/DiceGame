@@ -745,7 +745,7 @@ class Baron_skills(Skill_Book):
         sound_effects['item_put_down'].play()
         time.sleep(0.1)
         convert_num = player.board.count_all_tiles_on_board('Attack') + player.board.count_all_tiles_on_board('Regen')
-        damage = convert_num * 5
+        damage = convert_num * 4
 
         player.board.convert_all_tiles_on_board('Attack', 'Defence')
         player.board.convert_all_tiles_on_board('Regen', 'Defence')
@@ -755,8 +755,8 @@ class Baron_skills(Skill_Book):
 
     def get_detail_zone(self, player):
         convert_num = player.board.count_all_tiles_on_board('Attack') + player.board.count_all_tiles_on_board('Regen')
-        damage = convert_num * 5
-        return "Zone|Convert all attack and regen tiles on   the board into defence tile and deal    damage to all enemies equal to the      5 * converted amount: %d"%damage
+        damage = convert_num * 4
+        return "Zone|Convert all attack and regen tiles on   the board into defence tile and deal    damage to all enemies equal to the      4 * converted amount: %d"%damage
     ###############################################################################
     ##############################################################################
     def smash_get_requirement(self,player):

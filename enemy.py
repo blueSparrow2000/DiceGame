@@ -1047,6 +1047,76 @@ class Watcher(Enemy):
 
 
 
+class Operator(Enemy):
+    def __init__(self, my_name = 'operator', hp=100, hpmax = 100, attack_damage = 100, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield', 'shield','no op','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 20)
+
+
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['lazer'].play()
+                player.take_damage(self,self.get_current_damage())
+                # player.buffs['broken will'] = 1
+                player.buffs['vulnerability'] = 1
+                player.buffs['weakness'] = 1
+                player.buffs['confusion'] = 1
+
+        elif current_pattern=='no op':
+            sound_effects['railgun_reload'].play()
+            time.sleep(0.1)
+            self.buffs['vulnerability'] = 2
+        elif current_pattern=='shield':
+            self.defence += 32
+            self.update_defence()
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+
+
+class Guard(Enemy):
+    def __init__(self, my_name = 'guard', hp=100, hpmax = 100, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield', 'shield','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 10)
+
+
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['hard_hit'].play()
+                player.take_damage(self,self.get_current_damage())
+                # player.buffs['broken will'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            self.defence += 64
+            self.update_defence()
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
 
 
 
@@ -1054,13 +1124,90 @@ class Watcher(Enemy):
 
 
 
+################### 진화형 mobs
+
+class Urchin(Enemy):
+    def __init__(self, my_name = 'urchin', hp=60, hpmax = 60, attack_damage = 16, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+        self.thorny = True
+
+    def behave(self, player, enemy = None):
+        ready_to_behave = self.passive_behavior(player)
+        if not ready_to_behave:
+            return
+
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['hard_hit'].play()
+                player.take_damage(self,self.get_current_damage())
+                # print(self.health)
+                # player.buffs['broken will'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['toxin'] = 1
+                # player.buffs['confusion'] = 1
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass # no op
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            for i in range(3): # insert 3 spikes at once
+                player.board.insert_a_tile_on_board("Spike")
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
 
 
+class Parasite(Enemy):
+    def __init__(self, my_name = 'parasite', hp=24, hpmax = 24, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+
+    def behave(self, player, enemy = None):
+        ready_to_behave = self.passive_behavior(player)
+        if not ready_to_behave:
+            return
+
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['water'].play()
+                player.take_damage(self,self.get_current_damage())
+                # print(self.health)
+                player.buffs['weakness'] = 1
+                # player.buffs['strength'] = 1
+                # player.buffs['toxin'] = 1
+                # player.buffs['confusion'] = 1
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass # no op
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            for i in range(2):
+                player.board.insert_a_tile_on_board("Proliferation")
 
 
-
-
-
+        self.proceed_next_pattern()
+        self.end_my_turn()
 
 
 

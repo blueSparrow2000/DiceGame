@@ -1,6 +1,20 @@
 # DiceGame
 A simple dice game
 
+
+## Sample run
+<img src="../main/run_images/character.png" width="250" height="604" align="left">
+<img src="../main/run_images/map.png" width="250" height="604" align="left">
+<img src="../main/run_images/fight.png" width="250" height="604" align="left">
+<img src="../main/run_images/ruin.png" width="250" height="604" align="left">
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br>
+
+
+
+
 # history
 2024.07.21 Create basics
 
@@ -65,9 +79,10 @@ A simple dice game
 - add altar: board reset count증가시키는 bless (baron한테는 더 좋음)
 
 
-2024.08.
+2024.08.22 Added new enemy: urchin, parasite 
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
+- Easy, normal, hard, hardcore mode (each start with 20 ruin choices + 3 free bless, 10 choices + 1 free bless, 3 choices + 1 free bless, 0 choices): of course I suggest hardcore
 
 
 # Future 
