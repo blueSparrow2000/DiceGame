@@ -314,7 +314,7 @@ class Dagger(Relic):
     '''
     def __init__(self):
         super().__init__(name="dagger",rarity = 'special')
-        self.damage_per_dagger = 1
+        self.damage_per_dagger = 3
 
     def description(self):
         return "Deals %d damage to closest enemy for each attack tile drawn"%self.damage_per_dagger
@@ -334,7 +334,7 @@ class BagOfDagger(Relic):
     '''
     def __init__(self):
         super().__init__(name="bag of dagger",rarity = 'legendary')
-        self.damage_per_dagger = 1
+        self.damage_per_dagger = 2
 
     def description(self):
         return "Deals %d damage to all enemies for each attack tile drawn"%self.damage_per_dagger

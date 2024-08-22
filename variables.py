@@ -3,7 +3,7 @@ game_fps = 30 #60
 fast_fps = 60
 slow_fps = 30
 
-width,height = 480, 960#480, 960
+width,height = 480, 960#480, 960#480, 960
 mousepos = (0,0)
 
 
