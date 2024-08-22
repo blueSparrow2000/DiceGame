@@ -3,13 +3,13 @@ A simple dice game
 
 
 ## Sample run
-<img src="./run_images/mirinae.png" width="250" height="500" align="left">
-<img src="./run_images/baron.png" width="250" height="500" align="left">
-<img src="./run_images/cinavro.png" width="250" height="500" align="left">
+<img src="./run_images/mirinae.png" width="260" height="500" align="left">
+<img src="./run_images/baron.png" width="260" height="500" align="left">
+<img src="./run_images/cinavro.png" width="260" height="500" align="left">
 
-<img src="./run_images/map.png" width="250" height="500" align="left">
-<img src="./run_images/fight.png" width="250" height="500" align="left">
-<img src="./run_images/ruin.png" width="250" height="500" align="left">
+<img src="./run_images/map.png" width="260" height="500" align="left">
+<img src="./run_images/fight.png" width="260" height="500" align="left">
+<img src="./run_images/ruin.png" width="260" height="500" align="left">
 
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
