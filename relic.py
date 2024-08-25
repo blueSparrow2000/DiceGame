@@ -619,10 +619,10 @@ class Candle(Relic):
         super().__init__(name="candle",rarity = 'special')
 
     def description(self):
-        return "decrease chance of getting cursed on the altar by 30%"
+        return "decrease chance of getting cursed on the altar by 50%"
 
     def curse_chance_decreaser(self):
-        return 30
+        return 50
 
 class Equipment(Relic):
     '''
