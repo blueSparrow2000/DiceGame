@@ -805,10 +805,11 @@ class Board():
 
             screen.blit(self.board_reset_icon,self.board_reset_icon.get_rect(center=(width-40, self.board_Y_level - self.side_length)))
 
+            y_loc = height - 500#460
             if check_inside_button(mousepos, (width-40, self.board_Y_level - self.side_length), button_side_len_half):
-                write_text(screen, width//2, 460, "turns left until board reset", 15)
+                write_text(screen, width//2, y_loc , "turns left until board reset", 15)
             else:
-                write_text(screen, width//2, 460, "Click: confirm", 15)
+                write_text(screen, width//2, y_loc , "Click: confirm", 15)
 
         elif step==1:
             pass

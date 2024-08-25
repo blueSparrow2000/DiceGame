@@ -34,9 +34,6 @@ def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
             del dictionary[target_tile]
 
 
-shop_text_description_level = 210
-shop_text_color = 'black'
-
 def go_to_shop(screen,clock, player):
     global relic_by_rarity_dict
     relic_price_by_rarity = {'common':10, 'rare':20, 'epic':40, 'special':100, 'legendary':200, 'myth':500}
@@ -123,7 +120,7 @@ def go_to_shop(screen,clock, player):
                             sound_effects['register'].play()
 
                 # buy relic
-                if not relic_obtained and check_inside_button(mousepos, shop_relic_button_loc, button_side_len_half): # clicked relic => get relic! (only for one time!)
+                if not relic_obtained and player.have_space_for_relic and check_inside_button(mousepos, shop_relic_button_loc, button_side_len_half): # clicked relic => get relic! (only for one time!)
                     if player.pay_gold(relic_price):  # true, which means the player paid
                         generated_relic = generate_relic_by_class_name(final_relic_name)
                         player.pick_up_relic(generated_relic)

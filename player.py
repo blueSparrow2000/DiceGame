@@ -60,7 +60,7 @@ class Player(Entity):
         # transform button attributes
         self.transformable_tiles = joker_transformable_tiles #'Joker' is not transformed into joker
         self.transform_x = width//2 - 40
-        self.transform_y = 870
+        self.transform_y = height - 90 #870
         self.transform_spacing = 50
         self.transform_tolerance = 15
         self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y) for i in range(len(self.transformable_tiles))]
@@ -296,7 +296,7 @@ class Player(Entity):
             write_text(screen, width - 60,self.giant_HP_width *2, " %3d m"%self.current_depth,30, 'black')
 
         # gold
-        write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'gold')
+        write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'darkgoldenrod')
 
         # relics
         cnt = 0

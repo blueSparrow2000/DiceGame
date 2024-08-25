@@ -3,15 +3,16 @@ game_fps = 30 #60
 fast_fps = 60
 slow_fps = 30
 
-width,height = 480, 960#480, 960#480, 960
+width,height = 480, 900#480, 960#480, 960
 mousepos = (0,0)
 
 
 
 # game variables
-board_Y_level = 480
-map_Y_level = 480
-mob_Y_level = 280
+board_Y_level = height - 480 #480
+map_Y_level = height - 480 #480
+mob_Y_level = 280 #height - 680 # 280
+
 MAX_DEPTH = - 300
 PRIMARY_BOSS_DEPTH = -100
 SECONDARY_BOSS_DEPTH = -200
@@ -21,8 +22,11 @@ mob_side_len = 64
 mob_gap = 28
 
 # text levels
-text_description_level = 640
-requirement_level = 760
+text_description_level = height - 320 #640
+shop_text_description_level = height - 750 #210
+shop_text_color = 'black'
+
+requirement_level = height-200 #760
 turn_text_level = 165
 area_name_Y_level = 165
 

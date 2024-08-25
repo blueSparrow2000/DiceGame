@@ -448,7 +448,7 @@ def fight(screen, clock, player, place = None):
 
         if player_turn:
             ### DRAWING ###
-            write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'gold')
+            write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'darkgoldenrod')
             player.board.draw(screen, player_turn_step, mousepos)
 
             if player_turn_step == 0:  # listen for the inputs
