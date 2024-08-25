@@ -91,8 +91,7 @@ A simple dice game (actually a planar figure game)
 2024.08.9 add Baron skills
 
 
-2024.08.11 Testing & Bug fix (Final update) + Baron balancing
-- add altar: board reset count증가시키는 bless (baron한테는 더 좋음)
+2024.08.11 Testing & Bug fix (Final update) + Baron balancing / added bless: board reset count증가시키는 bless (baron한테는 더 좋음)
 
 
 2024.08.22 Added new enemy: urchin, parasite 
