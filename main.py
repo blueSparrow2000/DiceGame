@@ -40,7 +40,7 @@ pygame.init()  # 파이게임 초기화
 clock = pygame.time.Clock()
 # computer screen size: 1920 x 1080
 screen = pygame.display.set_mode((width,height))  # window 생성
-pygame.display.set_caption('Dice Game')  # window title
+pygame.display.set_caption('Diagramiz')  # window title
 # width, height = pygame.display.get_surface().get_size()  # window width, height
 
 screen.fill((0,0,0))  # background color

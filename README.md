@@ -1,5 +1,5 @@
-# DiceGame
-A simple dice game
+# Diagramiz
+A simple dice game (actually a planar figure game)
 
 
 ## Sample run
@@ -96,6 +96,10 @@ A simple dice game
 
 
 2024.08.22 Added new enemy: urchin, parasite 
+
+
+2024.08.25 Smaller window size available
+
 - Make a title screen at the beginning (before character selection) => this increases completeness of the game!
 - options screen: see player information etc.
 - Easy, normal, hard, hardcore mode (each start with 20 ruin choices + 3 free bless, 10 choices + 1 free bless, 3 choices + 1 free bless, 0 choices): of course I suggest hardcore

@@ -1048,7 +1048,7 @@ class Watcher(Enemy):
 
 
 class Operator(Enemy):
-    def __init__(self, my_name = 'operator', hp=100, hpmax = 100, attack_damage = 100, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield', 'shield','no op','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'operator', hp=150, hpmax = 150, attack_damage = 100, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield', 'shield','no op','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 20)
 
 
@@ -1087,8 +1087,8 @@ class Operator(Enemy):
 
 
 class Guard(Enemy):
-    def __init__(self, my_name = 'guard', hp=100, hpmax = 100, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield', 'shield','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 10)
+    def __init__(self, my_name = 'guard', hp=300, hpmax = 300, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 15)
 
 
     def behave(self, player, enemy = None):
@@ -1127,8 +1127,8 @@ class Guard(Enemy):
 ################### 진화형 mobs
 
 class Urchin(Enemy):
-    def __init__(self, my_name = 'urchin', hp=60, hpmax = 60, attack_damage = 16, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+    def __init__(self, my_name = 'urchin', hp=200, hpmax = 200, attack_damage = 60, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 30)
         self.thorny = True
 
     def behave(self, player, enemy = None):
@@ -1169,8 +1169,8 @@ class Urchin(Enemy):
 
 
 class Parasite(Enemy):
-    def __init__(self, my_name = 'parasite', hp=24, hpmax = 24, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
+    def __init__(self, my_name = 'parasite', hp=240, hpmax = 240, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 20)
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
