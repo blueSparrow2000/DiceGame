@@ -33,6 +33,14 @@ class Enemy(Entity):
         self.turn_count_threshold = 5
         self.turn_count = 0
 
+    def get_description(self): # override
+        return None
+    def write_description(self, screen, mousepos):
+        if check_inside_button(mousepos, self.mypos, self.icon_delta // 2):  # if mouse is pointing to the relic
+            description = self.get_description()
+            if description:
+                write_text(screen, width // 2, turn_text_level + self.icon_delta, description, 17, "white", 'black')
+
     def passive_behavior(self, player):
         self.turn_count += 1
         if self.passive and (self.passive_to_aggressive or self.turn_count >= self.turn_count_threshold): # change passive to aggresive
@@ -58,8 +66,9 @@ class Enemy(Entity):
     def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
         super().draw(screen,mousepos)
         self.show_next_move(screen,mousepos)
+        self.write_description(screen,mousepos)
 
-        if check_inside_button(mousepos, self.mypos, self.icon_delta // 2):  # if mouse is pointing to the relic
+        if check_inside_button(mousepos, self.mypos, self.icon_delta // 2):
             write_text(screen, self.mypos[0], self.mypos[1], self.my_name, 20, "lightgray", 'black')
 
     def get_next_move_on_player_turn(self):
@@ -86,7 +95,7 @@ class Enemy(Entity):
 
 
         description = ""
-        if current_pattern == 'attack':
+        if current_pattern == 'attack' or current_pattern == 'lifesteal':
             if isinstance(self.attack_damage, list):
                 description = "%d~%d" %(self.attack_damage[0],self.attack_damage[1])
             else:
@@ -207,6 +216,8 @@ class Fragment(Enemy):
     def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
         self.thorny = True
+    def get_description(self): # override
+        return "Thorny mob: inflict half damage to attacker"
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -329,6 +340,8 @@ class Mine(Enemy):
     def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
         self.thorny = True
+    def get_description(self): # override
+        return "Thorny mob: inflict half damage to attacker"
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
@@ -647,6 +660,9 @@ class Scalpion(Enemy):
     '''
     This mob does random damage attack
     '''
+    def get_description(self): # override
+        return "Thorny mob: inflict half damage to attacker"
+
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
 
@@ -780,6 +796,9 @@ class Stem(Enemy):
     '''
     This mob has life steal equal to its attack damage
     '''
+    def get_description(self): # override
+        return "A mob that can life steal"
+
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
 
@@ -1131,6 +1150,8 @@ class Urchin(Enemy):
     def __init__(self, my_name = 'urchin', hp=200, hpmax = 200, attack_damage = 60, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 30)
         self.thorny = True
+    def get_description(self): # override
+        return "Thorny mob: inflict half damage to attacker"
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)

@@ -76,6 +76,7 @@ class Entity():
         ######## relics
         self.relics = []
 
+
     def set_zero_defence(self):
         self.defence = 0
         self.temporal_defence = 0
