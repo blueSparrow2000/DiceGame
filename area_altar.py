@@ -162,7 +162,7 @@ def go_to_altar(screen,clock, player):
 
 
         # draw effects
-        write_text(screen, width//2, area_name_Y_level, 'Altar', 30, 'gold')
+        write_text(screen, width//2, area_name_Y_level, 'Altar', 30, 'maroon')
 
         if curse != '':
             write_text(screen,width//2 , altar_text_description_level, 'You got a curse', 30, 'maroon')
@@ -178,10 +178,10 @@ def go_to_altar(screen,clock, player):
             screen.blit(altar_images[bless_name], altar_images[ bless_name].get_rect(center=altar_bless_button_locations[i]))
             if bless_name == 'change all tile of type_1 to type_2':
                 write_text(screen, altar_bless_button_locations[i][0] + 200, altar_bless_button_locations[i][1],
-                           'change all tile of %s to %s'%(change_type_1,change_type_2), 17, 'darkgoldenrod')
+                           'change all tile of %s to %s'%(change_type_1,change_type_2), 17, 'black')
 
                 continue
-            write_text(screen, altar_bless_button_locations[i][0]+200, altar_bless_button_locations[i][1], bless_name, 17, 'darkgoldenrod')
+            write_text(screen, altar_bless_button_locations[i][0]+200, altar_bless_button_locations[i][1], bless_name, 17, 'black')
 
         # Draw player main info
         player.draw_player_info_top(screen, mousepos)

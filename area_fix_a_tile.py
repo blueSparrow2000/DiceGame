@@ -70,7 +70,7 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
 
         # draw a tile to fix
         player.board.display_tile(screen, tile_to_fix, [width//2, turn_text_level+70])
-        write_text(screen, width//2, turn_text_level+160, "Choose the location to fix %s tile"%tile_to_fix, 20, 'darkgoldenrod')
+        write_text(screen, width//2, turn_text_level+160, "Choose the location to fix a(n) %s tile"%tile_to_fix, 20, 'darkgoldenrod')
 
 
 

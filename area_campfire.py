@@ -65,7 +65,7 @@ def go_to_campfire(screen,clock, player):
         # draw effects
         write_text(screen, width//2, area_name_Y_level, 'Campfire', 30, 'gold')
 
-        write_text(screen, width//2, height//2 - 100, 'You took a rest near the campfire', 15, 'darkgoldenrod')
+        write_text(screen, width//2, height//2 - 100, 'You took a rest near the campfire', 20, 'darkgoldenrod')
         write_text(screen, width//2, height//2 - 50, '+%d HP'%campfire_heal_amount, 15, 'red')
 
 

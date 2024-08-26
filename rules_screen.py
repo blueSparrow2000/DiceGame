@@ -3,6 +3,7 @@ Some basic rules
 
 - you cannot have more than 24 relics, so think carefully to take it or not
 - at a battle, up to 3 enemies can spawn
+- player always start first, then enemy does its behavior
 
 - your planar figure must not leave the board, and must not contain used/unusable tiles
 - three basic moves (attack, defense, regen) increase in proportion to the power of the number of each tiles drawn

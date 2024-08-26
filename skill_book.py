@@ -455,9 +455,9 @@ class Mirinae_skills(Skill_Book):
         '''
         S = player.count_tile('Skill')
         if (S<1):
-            return False, S+1, True, {'Skill':(1,0),}
-        return True, S+1, True, {'Skill':(1,0),}
-
+            return False, S+1, False, {'Skill':(1,0),}
+        return True, S+1, False, {'Skill':(1,0),}
+    
     def head_start(self,player, target_list):
         sound_effects['hit'].play()
         D = player.count_tile('Defence')
@@ -499,8 +499,8 @@ class Mirinae_skills(Skill_Book):
         '''
         S = player.count_tile('Skill')
         if (S<2):
-            return False, 0, True, {'Skill':(2,0),}
-        return True, 0, True, {'Skill':(2,0),}
+            return False, 0, False, {'Skill':(2,0),}
+        return True, 0, False, {'Skill':(2,0),}
     def self_defence(self,player, target_list):
         sound_effects['get'].play()
         S = player.count_tile('Skill')
