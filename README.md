@@ -100,10 +100,9 @@ A simple dice game (actually a planar figure game)
 2024.08.25 Smaller window size available
 
 
-2024.08.26 Added Title screen
+2024.08.26 Added Title screen / Make detailed description of enemy when mouse hover
 
 
-- mouse hover시 enemy의 상세 설명 나오도록 만들기
 - options screen: see player information etc.
 - Easy, normal, hard, hardcore mode (each start with 20 ruin choices + 3 free bless, 10 choices + 1 free bless, 3 choices + 1 free bless, 0 choices): of course I suggest hardcore
 
