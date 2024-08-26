@@ -13,7 +13,9 @@ def falling_coeff(target_y, cur_y, coeff):
 
 
 def title_screen(screen,clock):
+    ########## particle ############
     particle_list = []
+    ########## particle ############
     screen_y = 0
     first_drop = True
     game_run = True
@@ -69,7 +71,9 @@ def title_screen(screen,clock):
 
         if first_drop and fall_delta<0.5:
             first_drop = False
+            ########## particle ############
             particle_list.append((pygame.time.get_ticks(), (width//2, 240), 45, 5, 'gold'))
+            ########## particle ############
 
 
         # draw effects
@@ -91,6 +95,7 @@ def title_screen(screen,clock):
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
 
+        ########## particle ############
         if particle_list:  # if not empty
             current_run_time = pygame.time.get_ticks()
             for particle in particle_list:
@@ -105,7 +110,7 @@ def title_screen(screen,clock):
                 factor = delta / water_draw_time_mouse
                 radi = calc_drop_radius(factor, particle_radius)
                 pygame.draw.circle(screen, particle_color, position, radi, particle_width)
-
+        ########## particle ############
 
         pygame.display.flip()
         clock.tick_busy_loop(slow_fps)
