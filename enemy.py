@@ -525,7 +525,6 @@ class Carrier(Enemy):
     def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
         self.base_defence = 4 #
-        self.thorny = True
 
     def get_spawn_mob_name(self):
         self.spawn_request = False

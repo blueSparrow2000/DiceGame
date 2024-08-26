@@ -638,8 +638,23 @@ class Equipment(Relic):
     def fix_artifact_number(self):
         return 3
 
+class GoldenClover(Relic):
+    '''
 
-relic_class_names = ['PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+    '''
+    def __init__(self):
+        super().__init__(name="golden clover",rarity = 'legendary')
+
+    def description(self):
+        return "Each turn, one used tile is converted into a joker tile"
+
+    def fight_every_turn_end_effect(self, player,enemies):
+        player.board.replace_a_tile_on_board("Used", "Joker")
+
+
+
+
+relic_class_names = ['GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

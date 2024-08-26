@@ -17,7 +17,6 @@ Some basic rules
 
 - there are currently three bosses on depth -100, -200, -300 and one ruin boss at -150
 
-
 - All buffs like poison, toxin, strength, weakness, decay, vulnerability etc. does not stack!
 
 

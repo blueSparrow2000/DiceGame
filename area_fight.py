@@ -86,6 +86,8 @@ def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
         # show some items dropped etc.
 
 
+        # Draw player main info
+        player.draw_player_info_top(screen, mousepos)
 
         # draw button
         if check_inside_button(mousepos, bottom_center_button, button_side_len_half):

@@ -163,7 +163,7 @@ while meta_run:
                     #     player.pick_up_relic(TiltedScale())
                     # for i in range(10):
                     #     player.pick_up_relic(Paranoia())
-                    # player.pick_up_relic(IronPlate())
+                    player.pick_up_relic(GoldenClover())
                     # player.pick_up_relic(PoisonMask())
 
                     ############## game start module #################
