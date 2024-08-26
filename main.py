@@ -34,6 +34,8 @@ from util import *
 from skill_book import *
 from area_map import *
 from relic import *
+from title_screen import *
+
 
 
 pygame.init()  # 파이게임 초기화
@@ -51,10 +53,16 @@ playable_characters = ['Mirinae', 'Baron', 'Cinavro'] #,'Narin', 'Riri', 'Arisu'
 dummy_net = Net([0],50,100)
 
 
+first_run = True
+music_Q('Lobby', True)
+title_screen(screen,clock)
+
 meta_run = True
 
 while meta_run:
-    music_Q('Lobby', True)     # The Music in main
+    if not first_run:
+        music_Q('Lobby', True)     # The Music in main
+
     run_character_selection = True
     mousepos = (0, 0)
 
@@ -163,18 +171,20 @@ while meta_run:
                     #     player.pick_up_relic(TiltedScale())
                     # for i in range(10):
                     #     player.pick_up_relic(Paranoia())
-                    player.pick_up_relic(GoldenClover())
                     # player.pick_up_relic(PoisonMask())
 
+                    # if not first_run:
+                    #     # 일종의 축복 스타터 보너스..? 유물 개수 24개 제한이니 없는게 나을지도..?
+                    #     player.pick_up_relic(GoldenClover())
                     ############## game start module #################
                     try_again = adventure_loop(screen, clock, player, map)
+                    first_run = False
                     if not try_again:
                         meta_run = False
                     break
                     ############## game start module #################
 
             if event.type == pygame.KEYDOWN:
-
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
                     run_character_selection = False
                     meta_run = False
@@ -183,6 +193,7 @@ while meta_run:
                 # elif event.key == pygame.K_RETURN:
                 #     run_character_selection = False
                 #     try_again = adventure_loop(screen, clock,player,map)
+                #     first_run = False
                 #     if not try_again:
                 #         meta_run = False
                 #     break
