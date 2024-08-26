@@ -206,7 +206,6 @@ def fight(screen, clock, player, place = None):
     # enemy_request = ['raider'for i in range(3)] #
     # enemy_request = ['parasite','urchin']
 
-
     enemies = []
     mob_number_cap = 3
     # mob_X = width - 148 - (len(enemy_request) - 1) * (mob_side_len + mob_gap) / 2

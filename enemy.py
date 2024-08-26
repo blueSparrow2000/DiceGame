@@ -928,6 +928,9 @@ class Beast(Enemy):
         '''
         This mob gets stronger after attacking
         '''
+    def get_description(self):
+        return 'attack increases by 2 each turn after awakened'
+
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
         if not ready_to_behave:
