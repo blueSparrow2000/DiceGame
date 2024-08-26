@@ -522,7 +522,7 @@ class Observer(Enemy):
 
 
 class Carrier(Enemy):
-    def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'regen','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'healall','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
         self.base_defence = 4 #
 
@@ -547,11 +547,13 @@ class Carrier(Enemy):
         elif current_pattern=='no op':
             pass # no op
         elif current_pattern=='shield':
+            sound_effects['block'].play()
             self.defence += 100
             self.update_defence()
         elif current_pattern=='buff':
             pass
-        elif current_pattern=='regen': # heal all allies
+        elif current_pattern=='healall': # heal all allies
+            sound_effects['shruff'].play()
             for entity in enemy:
                 entity.enforced_regen(20)
         elif current_pattern=='unknown':
@@ -772,7 +774,7 @@ class Snider(Enemy):
 
 ########################################################################### ruin enemies ###############################################################################
 class Stem(Enemy):
-    def __init__(self, my_name = 'stem', hp=12, hpmax = 12, attack_damage = 4, pos = (332,mob_Y_level), attack_pattern = ['infiltrate', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'stem', hp=12, hpmax = 12, attack_damage = 4, pos = (332,mob_Y_level), attack_pattern = ['infiltrate', 'lifesteal'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)
 
     '''
@@ -782,7 +784,7 @@ class Stem(Enemy):
         self.refresh_my_turn()
 
         current_pattern = self.pattern[self.current_pattern_idx]
-        if current_pattern=='attack':
+        if current_pattern=='lifesteal':
             if self.can_attack:
                 sound_effects['hard_hit'].play()
                 player.take_damage(self,self.get_current_damage())

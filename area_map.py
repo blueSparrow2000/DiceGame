@@ -137,7 +137,6 @@ def adventure_loop(screen, clock, player,map):
 
             if activate_tile:
                 player.update_depth(move_depth)
-                # player.update_depth(100)
                 adventure_bg_color = update_depth_color(player)
                 run_adventure = False
 

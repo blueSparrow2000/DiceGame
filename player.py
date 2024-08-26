@@ -296,7 +296,7 @@ class Player(Entity):
             write_text(screen, width - 60,self.giant_HP_width *2, " %3d m"%self.current_depth,30, 'black')
 
         # gold
-        write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'darkgoldenrod')
+        write_text(screen, 60,self.giant_HP_width*2, "Gold %3d g"%self.golds,20, 'gold')
 
         # relics
         cnt = 0
