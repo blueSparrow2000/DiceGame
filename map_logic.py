@@ -255,7 +255,7 @@ class Map():
                         return False
 
                     # check base is included
-                    if row_board_idx==3 and col_board_idx==5:
+                    if (row_board_idx==3 and col_board_idx==5) or (row_board_idx==2 and col_board_idx==6) or (row_board_idx==4 and col_board_idx==6):
                         must_contain_flag = True
 
                     # collect tiles
