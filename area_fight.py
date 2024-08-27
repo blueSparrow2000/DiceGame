@@ -156,6 +156,8 @@ def fight(screen, clock, player, place = None):
     number_of_targets_to_specify = 0
     enemy_targets = set()
     mousepos = (0,0)
+    busy_drawing_ticks = 60
+    battle_finished = False
 
     background_color = fight_bg_color
     if place=="ruin": # ruins fight
@@ -173,9 +175,6 @@ def fight(screen, clock, player, place = None):
     params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6], [30, 6.8], [50, 6.2],[50, 6.2]], 3:[[25, 8.6], [30, 6.8],[50, 6.2],[50, 6.2]], 'ruin':[[40, 14] , [60, 9.6],[110, 13],[120, 10],[135,9]]}
 
     cur_depth = player.get_depth()
-
-
-
 
     if player.reached_max_depth(): # boss fight happens whenever depth is on -300
         music_Q('BossTheme', True)
@@ -247,13 +246,19 @@ def fight(screen, clock, player, place = None):
         elif len(enemies) == 0:
             # give player these!
 
-            earned_gold = player.get_gold(earned_gold)
-            player.get_drop(enemy_drops)
+            busy_drawing_ticks -= 1
+            if not battle_finished:
+                battle_finished = True
+                pygame.mixer.music.stop()  # no music
 
-            exit_fight()
-            game_run = False
-            print('player wins!')
-            return False, True,enemy_drops, earned_gold
+            if busy_drawing_ticks <= 0 and battle_finished:
+                earned_gold = player.get_gold(earned_gold)
+                player.get_drop(enemy_drops)
+
+                exit_fight()
+                game_run = False
+                print('player wins!')
+                return False, True,enemy_drops, earned_gold
         ### DELETE DEAD ENEMY ###
         safe_delete(enemies, player)
         ### DELETE DEAD ENEMY ###
@@ -261,7 +266,7 @@ def fight(screen, clock, player, place = None):
         screen.fill(background_color)
 
 
-        if not player_turn:  # enemy turn
+        if not player_turn and (not battle_finished):  # enemy turn
             ########################################### Just after the player turn ###########################
             player.get_buff_effect(enforced=False)  # update buff effect every turn
             player.board_reset(enemies) # clear board just after the player's turn!
@@ -306,92 +311,70 @@ def fight(screen, clock, player, place = None):
             current_display_text = "Hover mouse on a tile for description"
             continue
 
-        events = pygame.event.get()
-        # Event handling
-        keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들 # SHOULD BE CALLED AFTER pygame.event.get()!
+        if (not battle_finished):
+            events = pygame.event.get()
+            # Event handling
+            keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들 # SHOULD BE CALLED AFTER pygame.event.get()!
 
-        if keys[pygame.K_f]:
-            pass
-        for event in events:
-            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                exit_fight()
-                game_run = False
-                return True, False,enemy_drops, earned_gold
+            if keys[pygame.K_f]:
+                pass
+            for event in events:
+                if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
+                    exit_fight()
+                    game_run = False
+                    return True, False,enemy_drops, earned_gold
 
-            if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
-                mousepos = pygame.mouse.get_pos()
-                if player_turn_step == 1:  # choose skill or attack
-                    new_text = player.my_turn_lookahead(mousepos)
-                    if new_text is not None:  # optimization (change only when needed)
-                        current_display_text = new_text
+                if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
+                    mousepos = pygame.mouse.get_pos()
+                    if player_turn_step == 1:  # choose skill or attack
+                        new_text = player.my_turn_lookahead(mousepos)
+                        if new_text is not None:  # optimization (change only when needed)
+                            current_display_text = new_text
 
-            if event.type == pygame.MOUSEBUTTONUP:
-                sound_effects['confirm'].play()
-                (xp, yp) = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
-                # do fight logic on player's turn
-                if player_turn:  # listen for the inputs
-                    if player_turn_step == 0:
-                        if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
-                            player.board.net.change_planar_figure(player.confused)
-                        elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
-                            player.board.net.rotate_once()
-                        elif check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-                            # skip player's turn
-                            player.end_my_turn(enemies)
-                            player_turn = False
-                            player_turn_step = 0
-                            number_of_targets_to_specify = 0
-                            enemy_targets = set()
-                            current_display_text = "Hover mouse on a tile for description"  # reset text
-                        else:
-                            valid_location = player.board.collect_tiles((xp, yp))
-                            player.initialize_step_1()
-                            if not valid_location:
-                                pass
+                if event.type == pygame.MOUSEBUTTONUP:
+                    sound_effects['confirm'].play()
+                    (xp, yp) = pygame.mouse.get_pos()
+                    mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
+                    # do fight logic on player's turn
+                    if player_turn:  # listen for the inputs
+                        if player_turn_step == 0:
+                            if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
+                                player.board.net.change_planar_figure(player.confused)
+                            elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
+                                player.board.net.rotate_once()
+                            elif check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+                                # skip player's turn
+                                player.end_my_turn(enemies)
+                                player_turn = False
+                                player_turn_step = 0
+                                number_of_targets_to_specify = 0
+                                enemy_targets = set()
+                                current_display_text = "Hover mouse on a tile for description"  # reset text
                             else:
-                                player.push_tile_infos(valid_location)
-                                player_turn_step = 1  # progress to next stage
+                                valid_location = player.board.collect_tiles((xp, yp))
+                                player.initialize_step_1()
+                                if not valid_location:
+                                    pass
+                                else:
+                                    player.push_tile_infos(valid_location)
+                                    player_turn_step = 1  # progress to next stage
 
-                    elif player_turn_step == 1:  # choose skill or attack
-                        if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
-                            # go to initial stage and do it again
+                        elif player_turn_step == 1:  # choose skill or attack
+                            if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
+                                # go to initial stage and do it again
 
-                            player_turn_step = 0
-                            current_display_text = "Hover mouse on a tile for description"  # reset text
-                            continue  # skip below
+                                player_turn_step = 0
+                                current_display_text = "Hover mouse on a tile for description"  # reset text
+                                continue  # skip below
 
-                        # check whether to transform joker tiles if exists
-                        player.tile_transform_button(mousepos)
+                            # check whether to transform joker tiles if exists
+                            player.tile_transform_button(mousepos)
 
-                        # basic buttons
-                        process_completed, player_turn_step, number_of_targets_to_specify = player.check_activate_button(
-                            mousepos)  # -1: not selected / 0,1,2: attack, defence, regen
+                            # basic buttons
+                            process_completed, player_turn_step, number_of_targets_to_specify = player.check_activate_button(
+                                mousepos)  # -1: not selected / 0,1,2: attack, defence, regen
 
-                        if process_completed:  # defence or regen does not need to modify global variables
-                            # end players turn
-                            player.board.confirm_using_tile()
-                            player.end_my_turn(enemies)
-                            player_turn = False
-                            player_turn_step = 0
-                            number_of_targets_to_specify = 0
-                            enemy_targets = set()
-                            continue  # skip below
-
-                        ### skill buttons here!
-                        is_valid_move = False
-                        skill_num = player.check_skill_button(mousepos)
-                        if skill_num >= 0:
-                            is_valid_move, number_of_targets_to_specify = player.skill_ready(skill_num)
-
-                        if is_valid_move:
-                            if number_of_targets_to_specify > 0:
-                                player_turn_step = 2
-
-                            else:
-                                # use the skill!
-                                player.use_skill(enemies)
-
+                            if process_completed:  # defence or regen does not need to modify global variables
                                 # end players turn
                                 player.board.confirm_using_tile()
                                 player.end_my_turn(enemies)
@@ -399,65 +382,88 @@ def fight(screen, clock, player, place = None):
                                 player_turn_step = 0
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
-                        else:
-                            player.reset_skill_idx()
+                                continue  # skip below
+
+                            ### skill buttons here!
+                            is_valid_move = False
+                            skill_num = player.check_skill_button(mousepos)
+                            if skill_num >= 0:
+                                is_valid_move, number_of_targets_to_specify = player.skill_ready(skill_num)
+
+                            if is_valid_move:
+                                if number_of_targets_to_specify > 0:
+                                    player_turn_step = 2
+
+                                else:
+                                    # use the skill!
+                                    player.use_skill(enemies)
+
+                                    # end players turn
+                                    player.board.confirm_using_tile()
+                                    player.end_my_turn(enemies)
+                                    player_turn = False
+                                    player_turn_step = 0
+                                    number_of_targets_to_specify = 0
+                                    enemy_targets = set()
+                            else:
+                                player.reset_skill_idx()
 
 
-                    elif player_turn_step == 2:
-                        if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
+                        elif player_turn_step == 2:
+                            if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
+                                # go to initial stage and do it again
+                                player_turn_step = 0
+                                player.reset_skill_idx()
+                                current_display_text = "Hover mouse on a tile for description"  # reset text
+
+                                for i in range(len(enemies)):
+                                    enemies[i].targeted = False
+                                number_of_targets_to_specify = 0
+                                enemy_targets = set()
+                                # continue  # skip below
+
+                            else:
+                                for i in range(len(enemies)):
+                                    if check_inside_button(mousepos, enemies[i].mypos, mob_side_len // 2):
+                                        enemy_targets.add(enemies[i])
+                                        enemies[i].targeted = True
+
+                if event.type == pygame.KEYDOWN:
+                    # if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 pause
+                    #     exit_fight()
+                    #     game_run = False
+                    #     break
+                    if player_turn:  # listen for the inputs
+                        sound_effects['confirm'].play()
+                        # if event.key == pygame.K_RETURN:    # skip player's turn
+                        #     player.end_my_turn(enemies)
+                        #     player_turn = False
+                        #     player_turn_step = 0
+                        #     number_of_targets_to_specify = 0
+                        # enemy_targets = set()
+                        if event.key == pygame.K_BACKSPACE:
                             # go to initial stage and do it again
                             player_turn_step = 0
-                            player.reset_skill_idx()
                             current_display_text = "Hover mouse on a tile for description"  # reset text
-
                             for i in range(len(enemies)):
                                 enemies[i].targeted = False
                             number_of_targets_to_specify = 0
                             enemy_targets = set()
-                            # continue  # skip below
 
-                        else:
-                            for i in range(len(enemies)):
-                                if check_inside_button(mousepos, enemies[i].mypos, mob_side_len // 2):
-                                    enemy_targets.add(enemies[i])
-                                    enemies[i].targeted = True
-
-            if event.type == pygame.KEYDOWN:
-                # if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 pause
-                #     exit_fight()
-                #     game_run = False
-                #     break
-                if player_turn:  # listen for the inputs
-                    sound_effects['confirm'].play()
-                    # if event.key == pygame.K_RETURN:    # skip player's turn
-                    #     player.end_my_turn(enemies)
-                    #     player_turn = False
-                    #     player_turn_step = 0
-                    #     number_of_targets_to_specify = 0
-                    # enemy_targets = set()
-                    if event.key == pygame.K_BACKSPACE:
-                        # go to initial stage and do it again
-                        player_turn_step = 0
-                        current_display_text = "Hover mouse on a tile for description"  # reset text
-                        for i in range(len(enemies)):
-                            enemies[i].targeted = False
-                        number_of_targets_to_specify = 0
-                        enemy_targets = set()
-
-                    if player_turn_step == 0:
-                        if event.key == pygame.K_r:
-                            player.board.net.rotate_once()
-                        if event.key == pygame.K_TAB:
-                            player.board.net.change_planar_figure(player.confused)
-                    if player_turn_step == 1:
-                        pass
+                        if player_turn_step == 0:
+                            if event.key == pygame.K_r:
+                                player.board.net.rotate_once()
+                            if event.key == pygame.K_TAB:
+                                player.board.net.change_planar_figure(player.confused)
+                        if player_turn_step == 1:
+                            pass
 
         if not game_run:
             break
 
 
 
-        if player_turn:
+        if player_turn and (not battle_finished):
             ### DRAWING ###
             write_text(screen, width // 2, turn_text_level, "Player's turn", 30, 'darkgoldenrod')
             player.board.draw(screen, player_turn_step, mousepos)

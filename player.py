@@ -48,7 +48,7 @@ class Player(Entity):
         self.requirement_spacing = 25
 
         ### game variables
-        self.current_depth = 0
+        self.current_depth = 0#-299
         self.golds = 10
         self.items=[]
         self.giant_HP_width = 30
@@ -76,7 +76,7 @@ class Player(Entity):
         self.all_def_to_temporal_def = False
         self.fissure_flag = False
 
-
+        self.gamemode = 'player'
     ######################################### Relic ################################################
 
 
@@ -548,6 +548,9 @@ class Player(Entity):
             # enemy.buffs['poison'] = 1
 
     def take_damage(self, attacker, damage_temp, no_fightback = False):
+        if self.gamemode=='creator': # invincible
+            return
+
         super().take_damage(attacker, damage_temp, no_fightback)
         # player only stuffs (like relic effects)
         for relic in self.relics:
@@ -563,6 +566,8 @@ class Player(Entity):
         return base_multiplier
 
     def get_current_damage(self):
+        if self.gamemode == 'creator':
+            return 999
         # count number of attack tiles
         A = self.count_tile('Attack')
         damage = self.P(A)*self.get_attack_multiplier()

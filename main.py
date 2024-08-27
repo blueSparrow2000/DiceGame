@@ -149,6 +149,7 @@ while meta_run:
                     #### set character abilities here (like fixing a tile etc) ####
                     # player.pick_up_relic(Equipment()) #
                     # player.golds = 1000
+                    player.gamemode = 'creator'
                     # for i in range(30):
                     #     go_to_ruin(screen, clock, player, False)
                     # for i in range(10):
