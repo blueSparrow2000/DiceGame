@@ -203,9 +203,9 @@ class Skill_Book():
     def holy_barrier_get_requirement(self,player):
         S = player.count_tile('Skill')
         D = player.count_tile('Defence')
-        if (S<3 or D<1):
-            return False, 0, False, {'Skill':(3,0),'Defence':(1,0)} # skill_valid, target_nums, is_attack
-        return True, 0, False, {'Skill':(3,0),'Defence':(1,0)} # skill_valid, target_nums,is_attack
+        if (S<2 or D<1):
+            return False, 0, False, {'Skill':(2,0),'Defence':(1,0)} # skill_valid, target_nums, is_attack
+        return True, 0, False, {'Skill':(2,0),'Defence':(1,0)} # skill_valid, target_nums,is_attack
 
     def holy_barrier(self,player, target_list):
         sound_effects['playerdeath'].play()
