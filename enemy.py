@@ -217,7 +217,7 @@ class Fragment(Enemy):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
         self.thorny = True
     def get_description(self): # override
-        return "Thorny mob: inflict half damage to attacker"
+        return "Thorny: inflict half of the damage to attacker"
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -341,7 +341,7 @@ class Mine(Enemy):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
         self.thorny = True
     def get_description(self): # override
-        return "Thorny mob: inflict half damage to attacker"
+        return "Thorny: inflict half of the damage to attacker"
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
@@ -661,7 +661,7 @@ class Scalpion(Enemy):
     This mob does random damage attack
     '''
     def get_description(self): # override
-        return "Thorny mob: inflict half damage to attacker"
+        return "Thorny: inflict half of the damage to attacker"
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -1154,7 +1154,7 @@ class Urchin(Enemy):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 30)
         self.thorny = True
     def get_description(self): # override
-        return "Thorny mob: inflict half damage to attacker"
+        return "Thorny: inflict half of the damage to attacker"
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)

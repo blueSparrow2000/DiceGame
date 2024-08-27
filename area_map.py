@@ -206,11 +206,6 @@ def adventure_loop(screen, clock, player,map):
                     ########################################################## go to fight #################################################
 
 
-
-
-
-
-
             # Draw player main info
             player.draw_player_info_top(screen, mousepos)
             screen.blit(shadow_layer, (0, 0))
@@ -218,7 +213,14 @@ def adventure_loop(screen, clock, player,map):
             if map_choosing_step==1 and not animation_block:
                 map.highlight_reachable_locations(screen)
                 screen.blit(back_img_white, back_img_white.get_rect(center=bottom_center_button))
-
+                preview_tile_depth = map.get_closest_tile_depth(mousepos)
+                if preview_tile_depth >= 0:
+                    if not player.reached_max_depth() and player.current_depth>-297:
+                        # depth_preview = str(-preview_tile_depth)
+                        depth_preview = str(player.get_depth() - preview_tile_depth)+" m"
+                        write_text(screen, mousepos[0], mousepos[1]-15,depth_preview,20, 'gold')
+                    else:
+                        write_text(screen, mousepos[0], mousepos[1]-15, '???', 20, 'gold')
 
             if map_choosing_step==0 and mousepos[1] >= board_Y_level:  # on the board
                 player.board.net.draw_planar_figure(screen, mousepos)

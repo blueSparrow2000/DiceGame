@@ -1,6 +1,14 @@
 '''
 Some basic rules
 
+- tile abbreviations (줄임말)
+A: Attack
+S: Skill
+R: Regen
+D: Defence
+J: Joker
+K: Karma
+
 - you cannot have more than 24 relics, so think carefully to take it or not
 - at a battle, up to 3 enemies can spawn
 - player always start first, then enemy does its behavior

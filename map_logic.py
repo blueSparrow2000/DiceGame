@@ -325,3 +325,15 @@ class Map():
                         self.update_target([c,r])
                         return True, map_tile_name , 6-c # is_valid, which_event, depth = 6-c
         return False, False , 0
+
+
+    def get_closest_tile_depth(self, mousepos):
+        for c in range(7):
+            for r in range(7):
+                if self.map[c][r][1]: # reachable
+                    if check_inside_button(mousepos, (self.map_X + r*self.side_length + self.side_length//2, self.map_Y_level + self.side_length*c + self.side_length//2), self.image_button_tolerance): # 이게 버튼 센터가 아닐 수 있음 (self.map_X + r*self.side_length, self.map_Y_level + self.side_length*c)
+                        map_tile_name = self.map[c][r][0]
+                        # print("current map tile choice: "+self.map[c][r])
+                        return 6-c
+        return -1
+
