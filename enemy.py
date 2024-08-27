@@ -486,9 +486,12 @@ class Sentinel(Enemy):
         elif current_pattern=='no op':
             pass # no op
         elif current_pattern=='shield':
-            for entity in enemy:
-                entity.defence += 16
-                entity.update_defence()
+            sound_effects['block'].play()
+            self.defence += 16
+            self.update_defence()
+            # for entity in enemy:
+            #     entity.defence += 16
+            #     entity.update_defence()
         elif current_pattern=='buff':
             player.buffs['weakness'] += 1
         elif current_pattern=='regen':

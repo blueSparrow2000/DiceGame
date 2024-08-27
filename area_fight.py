@@ -205,6 +205,7 @@ def fight(screen, clock, player, place = None):
     #####################################################################################
     # enemy_request = ['raider'for i in range(3)] #
     # enemy_request = ['parasite','urchin']
+    # enemy_request = ['sentinel' for i in range(3)]
 
     enemies = []
     mob_number_cap = 3

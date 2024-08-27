@@ -203,10 +203,11 @@ class WhiteCube(Relic):
         return "[Exhaust] Can revive once"
 
     def activate_on_death(self, player):
-        sound_effects['playerdeath'].play()
-        # player.enforced_regen(player.max_health)
-        player.set_health(player.max_health)
-        self.delete = True
+        if player.health <= 0: # activate only when health is below
+            sound_effects['playerdeath'].play()
+            # player.enforced_regen(player.max_health)
+            player.set_health(player.max_health)
+            self.delete = True
 
 
 

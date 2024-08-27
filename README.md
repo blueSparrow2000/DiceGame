@@ -11,8 +11,8 @@ A simple dice game (actually a planar figure game)
 <img src="./run_images/fight.png" width="255" height="503" align="left">
 <img src="./run_images/fight2.png" width="255" height="503" align="left">
 
-<img src="./run_images/ruin.png" width="255" height="503" align="left">
 <img src="./run_images/altar.png" width="255" height="503" align="left">
+<img src="./run_images/ruin.png" width="255" height="503" align="left">
 <img src="./run_images/shop.png" width="255" height="503" align="left">
 
 

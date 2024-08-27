@@ -174,7 +174,8 @@ while meta_run:
                     #     player.pick_up_relic(TiltedScale())
                     # for i in range(10):
                     #     player.pick_up_relic(Paranoia())
-                    # player.pick_up_relic(PoisonMask())
+                    # for i in range(3):
+                    #     player.pick_up_relic(WhiteCube())
 
                     # if not first_run:
                     #     # 일종의 축복 스타터 보너스..? 유물 개수 24개 제한이니 없는게 나을지도..?
