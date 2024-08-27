@@ -4,6 +4,7 @@ def game_win_screen(screen,clock,player):
     player.board.count_all_permanent_tiles()
     ending_roll_Y_level = height
     ending_roll_capacity = - height - 3000
+    credit_Y_level = ending_roll_Y_level + 1900
     run_win_screen = True
     music_Q("EndingCredit")
     mousepos = (0,0)
@@ -50,22 +51,23 @@ def game_win_screen(screen,clock,player):
         write_text(screen, width // 2, ending_roll_Y_level + 800, "%d"%player.board.number_of_permanent_tiles, 17, 'gold')
 
 
-        write_text(screen, width // 2, ending_roll_Y_level + 2000, 'Credits', 30, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2200, 'Producer / Creative director', 20, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2250, 'SSH', 17, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2350, 'Game Design', 20, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2400, 'SSH', 17, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2500, 'Art Design', 20, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2550, 'SSH', 17, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2650, 'Programmer', 20, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 2700, 'SSH', 17, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 3000, 'Special thanks', 30, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 3100, 'Alpha tester', 20, 'gold')
-        write_text(screen, width // 2, ending_roll_Y_level + 3150, 'Seyeong Choi', 17, 'gold')
+        write_text(screen, width // 2, credit_Y_level, 'Credits', 30, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 200, 'Producer / Creative director', 20, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 250, 'SSH', 17, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 350, 'Game Design', 20, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 400, 'SSH', 17, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 500, 'Art Design', 20, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 550, 'SSH', 17, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 650, 'Programmer', 20, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 700, 'SSH', 17, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 1000, 'Special thanks', 30, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 1100, 'Beta tester', 20, 'gold')
+        write_text(screen, width // 2, credit_Y_level + 1150, 'Seyeong Choi', 17, 'gold')
 
 
         if ending_roll_Y_level > ending_roll_capacity:
             ending_roll_Y_level -= 1
+            credit_Y_level = ending_roll_Y_level + 1900
 
         if ending_roll_Y_level <= ending_roll_capacity:
             # draw button

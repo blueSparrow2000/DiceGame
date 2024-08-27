@@ -193,6 +193,8 @@ TBU
 
 
 # Music Credits
+### Dove syndrome
+
 sanctuary: EN_OKAWA
 
 
@@ -212,6 +214,25 @@ Summer Wind
 
 
 極東の羊、テレキャスターと踊る:しゃろう
+
+
+Ending credit: パステルハウス
+
+
+Tutorial: Forest of summer
+
+
+Boss theme: Will you still cry?
+
+
+Anxiety: ハルシオン
+
+
+Trick style
+
+
+Aquatic: カナリアスキップ
+
 
 # LICENSE
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]

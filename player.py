@@ -495,6 +495,8 @@ class Player(Entity):
 
     def new_fight(self,enemies):
         super().refresh_my_turn()
+        super().reset_buff_count()
+
         self.skill_book.init_each_fight() # initialize skill book parameters
 
         self.current_tile = dict()

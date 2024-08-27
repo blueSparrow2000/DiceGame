@@ -170,6 +170,8 @@ def adventure_loop(screen, clock, player,map):
                             return True  # try again for other characters
                         else:
                             if player.reached_max_depth():
+                                sound_effects['playerdeath'].play()
+                                time.sleep(1)
                                 game_win_screen(screen, clock, player)
                                 return True
                             else:

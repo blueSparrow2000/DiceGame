@@ -116,6 +116,11 @@ class Entity():
         self.vulnerability_multiplier = 1
         self.confused = False
 
+    def reset_buff_count(self):
+        for buff in buff_names:
+            self.buffs[buff] = 0 #  debuff name: remaining turn duration if exist
+
+
     def get_attack_multiplier(self):
         return self.strength_multiplier*self.strength_deplifier
 

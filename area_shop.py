@@ -68,7 +68,7 @@ def go_to_shop(screen,clock, player):
 
     game_run = True
     mousepos = (0,0)
-    music_Q('Encounter', True)
+    music_Q('Tutorial', True)
     while game_run:
         screen.fill('olive')
 
@@ -120,7 +120,7 @@ def go_to_shop(screen,clock, player):
                             sound_effects['register'].play()
 
                 # buy relic
-                if not relic_obtained and player.have_space_for_relic and check_inside_button(mousepos, shop_relic_button_loc, button_side_len_half): # clicked relic => get relic! (only for one time!)
+                if (not relic_obtained) and player.have_space_for_relic() and check_inside_button(mousepos, shop_relic_button_loc, button_side_len_half): # clicked relic => get relic! (only for one time!)
                     if player.pay_gold(relic_price):  # true, which means the player paid
                         generated_relic = generate_relic_by_class_name(final_relic_name)
                         player.pick_up_relic(generated_relic)

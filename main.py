@@ -149,7 +149,7 @@ while meta_run:
                     #### set character abilities here (like fixing a tile etc) ####
                     # player.pick_up_relic(Equipment()) #
                     # player.golds = 1000
-                    # for i in range(20):
+                    # for i in range(30):
                     #     go_to_ruin(screen, clock, player, False)
                     # for i in range(10):
                     #     go_to_shop(screen, clock, player)
@@ -181,6 +181,7 @@ while meta_run:
                     #     # 일종의 축복 스타터 보너스..? 유물 개수 24개 제한이니 없는게 나을지도..?
                     #     player.pick_up_relic(GoldenClover())
                     ############## game start module #################
+                    # game_win_screen(screen,clock,player)
                     try_again = adventure_loop(screen, clock, player, map)
                     first_run = False
                     if not try_again:

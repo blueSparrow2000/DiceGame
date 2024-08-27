@@ -304,7 +304,6 @@ class Embryo(Enemy):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 3)
 
 
-
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
         if not ready_to_behave:

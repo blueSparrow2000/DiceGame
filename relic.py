@@ -239,7 +239,8 @@ class LargeThorn(Relic):
         return "Deals half of the damage received"
 
     def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
-        enemy.health -= attack_damage//2
+        if enemy is not None:
+            enemy.health -= attack_damage//2
 
 
 class Thorn(Relic):
@@ -254,7 +255,8 @@ class Thorn(Relic):
         return "Deals %s damage when attacked"%self.thorn_damage
 
     def activate_on_taking_damage(self, player, enemy, attack_damage): # called when player got attacked by enemy
-        enemy.health -= self.thorn_damage
+        if enemy is not None:
+            enemy.health -= self.thorn_damage
 
 
 class Moss(Relic):

@@ -149,7 +149,7 @@ def spawn_enemy(enemy_list, enemy_name,mob_number_cap, mob_locations):
 
 def fight(screen, clock, player, place = None):
     global TAB_img, rotate_img, back_img, skip_img, bottom_left_button, bottom_right_button, bottom_center_button, mob_Y_level, sound_effects, text_description_level, turn_text_level
-    music_Q('Fight', True)
+
     current_turn = 0
     player_turn = True
     player_turn_step = 0
@@ -175,13 +175,19 @@ def fight(screen, clock, player, place = None):
     cur_depth = player.get_depth()
 
 
+
+
     if player.reached_max_depth(): # boss fight happens whenever depth is on -300
+        music_Q('BossTheme', True)
         enemy_request = ['halo']  # boss fight
     elif place == "ruin": # for the ruin, we summon different mobs
+
         if player.check_ruin_boss():
+            music_Q('Trick_style', True)
             enemy_request = ['watcher', 'shatter', 'golem']  # you are so dead
             player.killed_watcher = True
         else:
+            music_Q('Anxiety', True)
             ### use ruin enemies ###
             cur_depth = player.get_depth()
             candidate_enemy_list = enemies_by_depth['ruin']
@@ -191,12 +197,15 @@ def fight(screen, clock, player, place = None):
                                         current_params)  # use the whole depth for ruins!
     elif player.check_primary_boss():# for boss stages, we summon these instead
         # enemy_request = ['carrier','observer','sentinel']
+        music_Q('Encounter', True)
         enemy_request = ['carrier']
         player.proceed_next_boss_stage()
     elif player.check_secondary_boss():# for boss stages, we summon these instead
+        music_Q('Aquatic', True)
         enemy_request = ['silent','embryo','embryo']
         player.proceed_next_boss_stage()
     else:
+        music_Q('Fight', True)
         candidate_enemy_list = enemies_by_depth[abs(cur_depth) // 100 + 1]
         current_params = params_by_depth[abs(cur_depth) // 100 + 1]
 
