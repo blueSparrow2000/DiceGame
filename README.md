@@ -103,7 +103,7 @@ A simple dice game (actually a planar figure game)
 2024.08.26 Added Title screen / Make detailed description of enemy when mouse hover
 
 
-2024.08.27 Added depth preview
+2024.08.27 Added depth preview / Now you can place the planar figure in any location as long as it is connected to the base tile
 
 
 
