@@ -549,7 +549,8 @@ class Mirinae_skills(Skill_Book):
 
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
-        damage = player.P(A+S) * player.get_attack_multiplier() * self.antifragile_multiplier
+        # damage = player.P(A+S) * player.get_attack_multiplier() * self.antifragile_multiplier
+        damage = 5 * (A + S) * player.get_attack_multiplier() * self.antifragile_multiplier
         for enemy in target_list:
             enemy.take_damage(player,damage)
 
@@ -558,8 +559,9 @@ class Mirinae_skills(Skill_Book):
     def get_detail_Antifragile(self, player):
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
-        damage = player.P(A+S) * player.get_attack_multiplier() * self.antifragile_multiplier
-        return "Antifragile|Damage is doubled with each attack in   a fight. Current damage: P(A+S)x%d = %d "%( self.antifragile_multiplier, damage)
+        # damage = player.P(A+S) * player.get_attack_multiplier() * self.antifragile_multiplier
+        damage = 5*(A + S) * player.get_attack_multiplier() * self.antifragile_multiplier
+        return "Antifragile|Damage is doubled with each attack in   a fight. Current damage: 5*(A+S)x%d = %d "%( self.antifragile_multiplier, damage)
 
 
     def Excaliber_get_requirement(self,player):
