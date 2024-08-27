@@ -62,7 +62,7 @@ def title_screen(screen,clock):
 
         # draw button
         if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-            write_text(screen, bottom_center_button[0], bottom_center_button[1], "PLAY", 20)
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "PLAY", 40)
         else:
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
@@ -78,7 +78,7 @@ def title_screen(screen,clock):
 
         # draw effects
         write_text(screen, width//2, screen_y, 'Diagramiz', 30, 'gold')
-        write_text(screen, width // 2, screen_y + 40, 'beta 1.3.2', 15, 'gold')
+        write_text(screen, width // 2, screen_y + 40, 'beta 1.3.3', 15, 'gold')
         # write_text(screen, width//2, screen_y+40, 'since 2024.07.21', 15, 'gold')
 
 
