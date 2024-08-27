@@ -108,9 +108,9 @@ A simple dice game (actually a planar figure game)
 
 
 2024.08.27 Added depth preview / Now you can place the planar figure in any location as long as it is connected to the base tile
-/ More musics
+/ More musics / fight end more smooth 
 
-
+- rule screen: show some basic rules 
 - options screen: see player information etc.
 - Easy, normal, hard, hardcore mode (each start with 20 ruin choices + 3 free bless, 10 choices + 1 free bless, 3 choices + 1 free bless, 0 choices): of course I suggest hardcore
 
