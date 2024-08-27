@@ -137,6 +137,9 @@ class Halo(Enemy):
     def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = [64,128], pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
 
+    def get_description(self): # override
+        return "??? "
+
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
 
@@ -253,6 +256,8 @@ class Fragment(Enemy):
 class Lenz(Enemy):
     def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
+    def get_description(self): # override
+        return "Can duplicate itself"
 
 
     def get_spawn_mob_name(self):
@@ -297,6 +302,8 @@ class Lenz(Enemy):
 class Embryo(Enemy):
     def __init__(self, my_name = 'embryo', hp=16, hpmax = 16, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 3)
+
+
 
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
@@ -538,6 +545,8 @@ class Carrier(Enemy):
     def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'healall','attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
         self.base_defence = 4 #
+    def get_description(self): # override
+        return "Boss: 4 base defence, summons norm"
 
     def get_spawn_mob_name(self):
         self.spawn_request = False
@@ -595,7 +604,8 @@ class Silent(Enemy):
     This mob does not show you what it will do (randomly chosen)
     immune to poison
     '''
-
+    def get_description(self): # override
+        return "Boss: Immune to poison / next moves are randomized"
     def behave(self, player, enemy=None):
         self.refresh_my_turn()
 
@@ -837,6 +847,8 @@ class Golem(Enemy):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 20)
 
         self.base_defence = 4 #
+    def get_description(self):  # override
+        return "has 4 base defence"
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -977,6 +989,10 @@ class Shatter(Enemy):
         '''
         This mob gains attack when damaged
         '''
+
+    def get_description(self):  # override
+        return "has 2 base defence"
+
     def take_damage(self, attacker, damage_temp, no_fightback = False): # wake up when taken damage!
         super().take_damage(attacker, damage_temp,no_fightback)
 
@@ -1026,7 +1042,8 @@ class Watcher(Enemy):
         self.passive = True
 
         self.base_defence = 8 #
-
+    def get_description(self):  # override
+        return "Ruin boss: 8 base defence"
     def behave(self, player, enemy = None):
         ready_to_behave = self.passive_behavior(player)
         if not ready_to_behave:
