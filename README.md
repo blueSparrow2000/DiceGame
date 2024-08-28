@@ -111,7 +111,7 @@ A simple dice game (actually a planar figure game)
 / More musics / fight end more smooth 
 
 
-2024.08.28 Added skill masks / help screen: show some basic rules  / enhanced toggle buttons / bug fix: CINAVRO 스킬 사용 후 사용처리가 안되는 것
+2024.08.28 Added skill masks / help screen: show some basic rules  / enhanced toggle buttons / bug fix: CINAVRO 스킬 사용 후 사용처리가 안되는 것 해결
 
 
 - options screen: see player information etc.

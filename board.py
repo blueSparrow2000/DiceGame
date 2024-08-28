@@ -683,14 +683,6 @@ class Board():
     '''
     def insert_a_tile_on_board(self, tile_name):
         self.replace_a_tile_on_board('Empty', tile_name)
-        # random.shuffle(self.board)
-        # self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
-        # for i in range(len(self.board)):
-        #     board_tile_name = self.board[i][1]
-        #     if board_tile_name == 'Empty': # change the names!
-        #         self.board[i][1] = tile_name
-        #         self.temp_board[i][1] = tile_name
-        #         break # insert one tile!
 
     def replace_a_tile_on_board(self, replaced_tile, replacing_tile):
         # random.shuffle(self.board)
@@ -707,6 +699,13 @@ class Board():
         # self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
         indices = [i for i in range(len(self.board))]
         random.shuffle(indices)
+        if self.temp_board ==[]:
+            self.temp_board = copy.deepcopy(self.board)
+        elif len(self.temp_board) != len(self.board):
+            print('='*20)
+            print("Error: Board size mismatch!")
+            print('='*20)
+
         for i in indices:
             board_tile_name = self.temp_board[i][1]
             if board_tile_name == replaced_tile: # change the names!

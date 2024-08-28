@@ -237,7 +237,7 @@ def fight(screen, clock, player, place = None):
     game_run = True
     current_display_text = "Hover mouse on a tile for description"
     while game_run:
-        if player.health <= 0:  # check player death first
+        if player.death_check():  # check player death first
             exit_fight()
             game_run = False
             print('player lost!')
