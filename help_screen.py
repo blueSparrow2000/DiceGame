@@ -170,7 +170,7 @@ def help_screen(screen,clock):
                                    requirement_shown=False)
         elif help_page_idx==6:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Bosses", 30, 'gold')
-            boss =[load_image("enemies/carrier"),load_image("enemies/silent") ,load_image("enemies/watcher")]
+            boss =[load_image("enemies/carrier"),load_image("enemies/silent") ,load_image("enemies/halo")]
             for i in range(len(boss)):
                 screen.blit(boss[i],
                             boss[i].get_rect(center=(tile_explanation_location[0]+(i-1)*150, tile_explanation_location[1]+50)))
@@ -196,7 +196,8 @@ def help_screen(screen,clock):
 
                 if check_inside_button(mousepos, location, help_icon_delta // 2):  # if mouse is pointing to the relic
                     description = buff_name_description_dic[buff_name]
-                    write_text(screen, width // 2, tile_explanation_location[1], description, 17, "black")
+                    write_text(screen, width // 2, tile_explanation_location[1]-18, buff_name, 20, "black")
+                    write_text(screen, width // 2, tile_explanation_location[1]+10, description, 17, "black")
                 cnt += 1
 
 
