@@ -45,7 +45,7 @@ buff_name_description_dic = {
 'strength':"deals double damage",
 'weakness':"deals half damage",
 'broken will':"cannot attack",
-'confusion':"(player): cannot use secondary planar figure\n(enemies): misses an attack",
+'confusion':"Player: cannot use secondary planar figure", #(enemies): misses an attack
 'heal ban':"cannot heal",
 'poison':"takes 5 damage at the end of every turn",
 'toxin':"incoming attacks penetrates defence",
@@ -122,3 +122,5 @@ pedestal_img = load_image("map_tiles/pedestal")
 scaled_pedestal_img = pygame.transform.scale(pedestal_img, (200, 200))
 
 skill_mask = load_image("skills/skill_mask")
+
+map_progression = load_image("map_tiles/map_progression")
