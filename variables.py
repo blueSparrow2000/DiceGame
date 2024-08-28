@@ -55,6 +55,9 @@ tile_names = list(tile_name_description_dic.keys())# ['Attack', 'Defence', 'Rege
 joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 
 
+map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight','boss_fight']
+event_tile_names = ['campfire','fight','ruin','shop','altar']
+
 # move background
 background_y = -470
 background_layer_y = 100

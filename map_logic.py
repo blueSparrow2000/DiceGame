@@ -8,19 +8,18 @@ from util import *
 import copy
 import random
 
-map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight','boss_fight']
-event_tile_names = ['campfire','fight','ruin','shop','altar']
 class Map():
     def __init__(self):
-        global map_tile_names,event_tile_names,map_Y_level
+        global map_tile_names,event_tile_names,map_Y_level, map_tile_image_dict
         self.map = [[['void',False] for x in range(7)] for y in range(7)] # tile name, reachability
         self.must_contain_at_least_one = [[False for x in range(7)] for y in range(7)]
 
         self.map_save = copy.deepcopy(self.map) # for reset
 
-        self.image_dict = dict() # load map tile images!
-        for tile_name in map_tile_names:
-            self.image_dict[tile_name] = (load_image("map_tiles/%s" % tile_name))
+        self.image_dict = map_tile_image_dict
+        # self.image_dict = dict() # load map tile images!
+        # for tile_name in map_tile_names:
+        #     self.image_dict[tile_name] = (load_image("map_tiles/%s" % tile_name))
 
         self.side_length = 50 # map tile's length
         self.image_button_tolerance = self.side_length//2

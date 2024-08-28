@@ -159,6 +159,8 @@ class Skill_Book():
     def draw_skill(self,screen, skill_name, skill_location_index):
         screen.blit(self.skill_images[skill_name], self.skill_images[skill_name].get_rect(center=self.button_locations[skill_location_index]))
 
+    def draw_skill_mask(self,screen, skill_location_index):
+        screen.blit(skill_mask,skill_mask.get_rect(center=self.button_locations[skill_location_index]))
 
     def check_button(self,mousepos,skill_location_index):
         if check_inside_button(mousepos, self.button_locations[skill_location_index], self.image_button_tolerance):

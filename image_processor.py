@@ -65,6 +65,12 @@ for ic in buff_names:
     buff_icon_container[ic] = load_image("icons/buffs/%s"%ic)
 
 
+
+map_tile_image_dict = dict()
+for tile_name in map_tile_names:
+    map_tile_image_dict[tile_name] = (load_image("map_tiles/%s" % tile_name))
+
+
 ### load enemy images
 # mob_img = load_image("enemies/mob")
 
@@ -98,9 +104,14 @@ back_img_white = load_image("icons/back_white")
 skip_img_white = load_image("icons/skip_white")
 confirm_img_white = load_image("icons/confirm_white")
 
+
+back_img_gold = load_image("icons/back_gold")
+
 sold_out = load_image("icons/sold_out")
 right_button = load_image("icons/right")
 left_button = load_image("icons/left")
+right_button_gold = load_image("icons/right_gold")
+left_button_gold = load_image("icons/left_gold")
 
 mini_tile_icons = dict()
 for mini_tile in tile_names:
@@ -110,3 +121,4 @@ for mini_tile in tile_names:
 pedestal_img = load_image("map_tiles/pedestal")
 scaled_pedestal_img = pygame.transform.scale(pedestal_img, (200, 200))
 
+skill_mask = load_image("skills/skill_mask")

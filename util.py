@@ -76,6 +76,13 @@ def check_inside_button(mouse_pos,button_center, button_side_len_half):
         return False
 
 
+def draw_toggle_button(screen,mousepos, base_image, toggle_image, location, side_len_half):
+    if check_inside_button(mousepos, location, side_len_half):
+        screen.blit(toggle_image, toggle_image.get_rect(center=location))
+    else:
+        screen.blit(base_image, base_image.get_rect(center=location))
+
+
 '''
 safely add a tile in a dictionary
 '''
@@ -154,3 +161,4 @@ class Node():
             if child.find_target():
                 return True
         # print("Map path finder: one branch failed in Depth first search")
+

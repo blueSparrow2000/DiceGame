@@ -221,8 +221,9 @@ while meta_run:
         ### change character ###
         write_text(screen, width // 2, middle_button_Y_level - 40, 'Choose a character', 20, 'gold')
         global_dummy_player.draw_character(screen,mousepos) # draw character attributes
-        screen.blit(right_button, right_button.get_rect(center=right_middle_button))
-        screen.blit(left_button, left_button.get_rect(center=left_middle_button))
+
+        draw_toggle_button(screen, mousepos, right_button, right_button_gold, right_middle_button, button_side_len_half)
+        draw_toggle_button(screen, mousepos, left_button, left_button_gold, left_middle_button, button_side_len_half)
 
         ### change character ###
 
@@ -240,10 +241,11 @@ while meta_run:
             # for i in range(len(current_figure)):
             #     write_text(screen, width // 2 - 100, planar_figure_text_Y_level + 50 + i*20, "%s"%(current_figure[i]), 15)
 
-        screen.blit(back_img, back_img.get_rect(center=right_side_button))
+        draw_toggle_button(screen, mousepos, back_img, back_img_gold, right_side_button, button_side_len_half)
 
-        screen.blit(right_button, right_button.get_rect(center=right_upper_button))
-        screen.blit(left_button, left_button.get_rect(center=left_upper_button))
+        draw_toggle_button(screen, mousepos, right_button, right_button_gold, right_upper_button, button_side_len_half)
+        draw_toggle_button(screen, mousepos, left_button, left_button_gold, left_upper_button, button_side_len_half)
+
         ### change planar figure ###
 
 

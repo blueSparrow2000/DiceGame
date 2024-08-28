@@ -3,6 +3,7 @@ Rename the function go_to_area
 
 '''
 from util import *
+from help_screen import *
 
 def falling_coeff(target_y, cur_y, coeff):
     fall_amount = (target_y - cur_y)//(10*coeff)
@@ -20,6 +21,9 @@ def title_screen(screen,clock):
     first_drop = True
     game_run = True
     mousepos = (0,0)
+
+    help_Y_location = 700
+    help_button = (width//2, help_Y_location)
 
     while game_run:
         screen.fill(terracotta)
@@ -46,6 +50,8 @@ def title_screen(screen,clock):
                     # exit
                     game_run = False
                     break
+                if check_inside_button(mousepos, help_button, button_side_len_half): # help screen
+                    help_screen(screen,clock)
 
 
             if event.type == pygame.KEYDOWN:
@@ -62,9 +68,15 @@ def title_screen(screen,clock):
 
         # draw button
         if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-            write_text(screen, bottom_center_button[0], bottom_center_button[1], "PLAY", 40)
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "PLAY", 40,'gold')
         else:
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+
+        if check_inside_button(mousepos, help_button, button_side_len_half):
+            write_text(screen, help_button[0], help_button[1], "HELP", 20, 'gold')
+        else:
+            write_text(screen, help_button[0], help_button[1], "HELP", 20)
+
 
         fall_delta = falling_coeff(240,screen_y, 2.5) # 240
         screen_y += fall_delta
@@ -78,7 +90,7 @@ def title_screen(screen,clock):
 
         # draw effects
         write_text(screen, width//2, screen_y, 'Diagramiz', 30, 'gold')
-        write_text(screen, width // 2, screen_y + 40, 'beta 1.3.5', 15, 'gold')
+        write_text(screen, width // 2, screen_y + 40, 'beta 1.3.6', 15, 'gold')
         # write_text(screen, width//2, screen_y+40, 'since 2024.07.21', 15, 'gold')
 
 

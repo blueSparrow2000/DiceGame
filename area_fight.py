@@ -156,7 +156,7 @@ def fight(screen, clock, player, place = None):
     number_of_targets_to_specify = 0
     enemy_targets = set()
     mousepos = (0,0)
-    busy_drawing_ticks = 40
+    busy_drawing_ticks = 20
     battle_finished = False
 
     background_color = fight_bg_color

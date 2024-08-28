@@ -66,6 +66,8 @@ class Player(Entity):
         self.transform_icon_locations = [( self.transform_x + (i-1)*self.transform_spacing,self.transform_y) for i in range(len(self.transformable_tiles))]
 
 
+        self.skill_bitmask = [0 for i in range(self.max_num_of_skills)]
+
         ######################################## buttons
         self.relics = [] # PoisonBottle(),SerpentHeart(), StemCell(), FearCell(), # [PoisonBottle() for i in range(20)]
 
@@ -110,6 +112,16 @@ class Player(Entity):
 
 
     ######################################### Relic ################################################
+    def do_after_updating_current_tile(self):
+        for i in range(len(self.current_skills)):
+            skill_valid, _, _, _ = getattr(self.skill_book, self.current_skills[
+                i] + '_get_requirement')(self)
+
+            if not skill_valid:
+                self.skill_bitmask[i] = 1 # mask
+            else:
+                self.skill_bitmask[i] = 0
+
     '''
     Handling Joker tiles
     
@@ -118,7 +130,7 @@ class Player(Entity):
         # remove one joker
         safe_delete_dict_one(self.current_tile, 'Joker')
         safe_tile_add_one(self.current_tile, transformed_tile_name)
-
+        self.do_after_updating_current_tile()
 
     def tile_transform_button(self,mousepos):
         if not self.check_exists_in_current_tile('Joker'):
@@ -344,7 +356,7 @@ class Player(Entity):
     def draw_skill_to_swap(self,screen):
         # draw existing skills
         write_text(screen, self.button_x,self.button_y + 50, "Choose a skill to replace", 20, 'darkgoldenrod')
-        self.draw_skills(screen, self.temp_current_skills)
+        self.draw_skills(screen, temporary_skill_list = self.temp_current_skills)
 
     def check_valid_skill_index(self,idx): # also covers case when idx == -1
         return 0<= idx <= self.max_num_of_skills -1
@@ -377,10 +389,15 @@ class Player(Entity):
             for i in range(len(temporary_skill_list)):
                 skill_name = temporary_skill_list[i]
                 self.skill_book.draw_skill(screen, skill_name, i)
-        else:
+        else: # optimize: 처음 커런트 스킬 습득할때 / 조커 타일 업데이트가 일어날떄 만 체크하면 됨
             for i in range(len(self.current_skills)):
+                # skill_valid, _, _, requirement_dict = getattr(self.skill_book, self.current_skills[
+                #     i] + '_get_requirement')(self)
+
                 skill_name = self.current_skills[i]
                 self.skill_book.draw_skill(screen, skill_name, i)
+                if self.skill_bitmask[i]:
+                    self.skill_book.draw_skill_mask(screen, i)
 
 
     def check_skill_button(self,mousepos):
@@ -526,6 +543,7 @@ class Player(Entity):
 
     def push_tile_infos(self,tile_info):
         self.current_tile = tile_info
+        self.do_after_updating_current_tile()
 
 
     def count_tile(self,name):
