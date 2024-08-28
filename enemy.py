@@ -135,7 +135,7 @@ class Enemy(Entity):
 
 class Halo(Enemy):
     def __init__(self, my_name = 'halo', hp=999, hpmax = 999, attack_damage = [64,128], pos = (332,mob_Y_level), attack_pattern = ['unknown', 'buff', 'attack','regen'], rank = 1 ):
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 300)
 
     def get_description(self): # override
         return "??? "
@@ -181,7 +181,7 @@ class Halo(Enemy):
 
 class Mob(Enemy):
     def __init__(self, my_name = 'mob', hp=20, hpmax = 20, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['shield', 'buff', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 1)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 3)
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
@@ -217,7 +217,7 @@ class Mob(Enemy):
 
 class Fragment(Enemy):
     def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
         self.thorny = True
     def get_description(self): # override
         return "Thorny: inflict half of the damage to attacker"
@@ -255,7 +255,7 @@ class Fragment(Enemy):
 
 class Lenz(Enemy):
     def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 2)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
     def get_description(self): # override
         return "Can duplicate itself"
 
@@ -301,7 +301,7 @@ class Lenz(Enemy):
 
 class Embryo(Enemy):
     def __init__(self, my_name = 'embryo', hp=16, hpmax = 16, attack_damage = 3, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 3)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
 
 
     def behave(self, player, enemy = None):
@@ -344,7 +344,7 @@ class Embryo(Enemy):
 
 class Mine(Enemy):
     def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
         self.thorny = True
     def get_description(self): # override
         return "Thorny: inflict half of the damage to attacker"
@@ -545,7 +545,7 @@ class Observer(Enemy):
 
 class Carrier(Enemy):
     def __init__(self, my_name = 'carrier', hp=200, hpmax = 200, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['summon','shield', 'healall','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 50)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
         self.base_defence = 4 #
     def get_description(self): # override
         return "Boss: 4 base defence, summons norm"
@@ -598,7 +598,7 @@ class Carrier(Enemy):
 class Silent(Enemy):
     def __init__(self, my_name='silent', hp=500, hpmax=500, attack_damage=[32, 64], pos=(332, mob_Y_level),
                  attack_pattern=['shield', 'buff', 'attack', 'infiltrate'], rank=1):  #
-        super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=100)
+        super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=200)
 
         self.immune_to_poison = True
 
@@ -1040,7 +1040,7 @@ class Shatter(Enemy):
 
 class Watcher(Enemy):
     def __init__(self, my_name = 'watcher', hp=400, hpmax = 400, attack_damage = 64, pos = (332,mob_Y_level), attack_pattern = ['infiltrate','buff', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 100)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 150)
         self.passive = True
 
         self.base_defence = 8 #
