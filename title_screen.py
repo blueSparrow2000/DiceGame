@@ -24,6 +24,7 @@ def title_screen(screen,clock):
 
     help_Y_location = 700
     help_button = (width//2, help_Y_location)
+    PLAY_BUTTON_SIDE_LENGTH = 50
 
     while game_run:
         screen.fill(terracotta)
@@ -46,10 +47,11 @@ def title_screen(screen,clock):
                 sound_effects['confirm'].play()
                 mousepos = pygame.mouse.get_pos()
                 mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
-                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                if check_inside_button(mousepos, bottom_center_button, PLAY_BUTTON_SIDE_LENGTH): # confirmed
                     # exit
                     game_run = False
                     break
+
                 if check_inside_button(mousepos, help_button, button_side_len_half): # help screen
                     help_screen(screen,clock)
 
@@ -67,10 +69,11 @@ def title_screen(screen,clock):
             break
 
         # draw button
-        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
+        if check_inside_button(mousepos, bottom_center_button, PLAY_BUTTON_SIDE_LENGTH):
             write_text(screen, bottom_center_button[0], bottom_center_button[1], "PLAY", 40,'gold')
         else:
-            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+            write_text(screen, bottom_center_button[0], bottom_center_button[1], "PLAY", 40, 'black')
+            # screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
         if check_inside_button(mousepos, help_button, button_side_len_half):
             write_text(screen, help_button[0], help_button[1], "HELP", 20, 'gold')
