@@ -634,7 +634,7 @@ class Cinavro_skills(Skill_Book):
 
     def get_detail_gacha(self, player):
         S = player.count_tile('Skill')
-        return "Gacha|   Random S+2 = %d blank tiles on the    current board are converted into Jokers"%S
+        return "Gacha|   Random S+2 = %d blank tiles on the    current board are converted into Jokers"%(S+2)
     ###############################################################################
 
     ##################################### 3 #########################################

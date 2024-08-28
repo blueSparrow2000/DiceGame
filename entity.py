@@ -158,7 +158,7 @@ class Entity():
         next_row = 0
         for buff_name, buff_duration in self.buffs.items():
             # draw only when buff is on
-            if buff_duration > 0 or (buff_name=='toxin' and self.toxined == True) or (buff_name=='vulnerability' and self.vulnerability_multiplier>1): # buff is on when corresponding state is also on # or (
+            if buff_duration > 0 or (buff_name=='toxin' and self.toxined == True) or (buff_name=='vulnerability' and self.vulnerability_multiplier>1) or (buff_name=='weakness' and self.strength_deplifier<1) or (buff_name=='decay' and self.defence_gain_multiplier<1) or (buff_name=='heal ban' and self.heal_multiplier<1): # buff is on when corresponding state is also on # or (
                 buff_icon = buff_icon_container[buff_name]
                 if cnt > 2:
                     next_row += 1

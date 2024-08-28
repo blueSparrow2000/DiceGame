@@ -693,16 +693,34 @@ class Board():
         #         break # insert one tile!
 
     def replace_a_tile_on_board(self, replaced_tile, replacing_tile):
-        random.shuffle(self.board)
-        self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
-        for i in range(len(self.board)):
-            board_tile_name = self.board[i][1]
+        # random.shuffle(self.board)
+        # self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
+        # for i in range(len(self.board)):
+        #     board_tile_name = self.board[i][1]
+        #     if board_tile_name == replaced_tile: # change the names!
+        #         self.board[i][1] = replacing_tile
+        #         self.temp_board[i][1] = replacing_tile
+        #         return # insert one tile! # break
+        #
+
+        # random.shuffle(self.board)
+        # self.temp_board = copy.deepcopy(self.board) # temp board is an exact copy (also deep copy) of self.board : use the same method to access
+        indices = [i for i in range(len(self.board))]
+        random.shuffle(indices)
+        for i in indices:
+            board_tile_name = self.temp_board[i][1]
             if board_tile_name == replaced_tile: # change the names!
                 self.board[i][1] = replacing_tile
                 self.temp_board[i][1] = replacing_tile
                 return # insert one tile! # break
 
-        print("replacing failed while trying to add %s: no tile named '%s'"%(replacing_tile, replaced_tile))
+        # random.shuffle(self.temp_board)
+        # for i in range(len(self.temp_board)):
+        #     board_tile_name = self.temp_board[i][1]
+        #     if board_tile_name == replaced_tile: # change the names!
+        #         self.temp_board[i][1] = replacing_tile
+        #         return # insert one tile! # break
+        # print("replacing failed while trying to add %s: no tile named '%s'"%(replacing_tile, replaced_tile))
 
     def convert_all_tiles_on_board(self,target_tile, convert_tile): # convert target tile into convert tile after confirmation
         # loop through current board and change all 'tile_name' tiles into 'Used' tiles
