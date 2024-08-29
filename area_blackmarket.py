@@ -8,11 +8,20 @@ from area_ruin import *
 def go_to_blackmarket(screen,clock, player):
     global relic_by_rarity_dict, relic_price_by_rarity
     high_tier_relics = relic_by_rarity_dict['legendary'] + relic_by_rarity_dict['special']
+    random.shuffle(high_tier_relics)
+    relic_samples = 3
+    final_relic_name = [high_tier_relics[i][0] for i in range(relic_samples)]
+    final_relic_sample = [high_tier_relics[i][1] for i in range(relic_samples)]
+    relic_obtained = [False for i in range(relic_samples)]
+    relic_base_Y_location = shop_text_description_level + 250
+    shop_relic_button_loc = [[width//2, relic_base_Y_location + i*150] for i in range(relic_samples)]
+    relic_price = [relic_price_by_rarity[final_relic_sample[i].rarity] for i in range(relic_samples)]
+
 
     music_Q('Anxiety', True)
     game_run = True
     mousepos = (0,0)
-    market_text_level = turn_text_level+20
+    market_text_level = turn_text_level+10
 
     while game_run:
         screen.fill(dark_brown)
@@ -46,6 +55,19 @@ def go_to_blackmarket(screen,clock, player):
                     player.get_gold(sell_price)
                     sound_effects['jackpot'].play()
 
+                # buy relic
+                for i in range(relic_samples):
+                    if (not relic_obtained[i]) and player.have_space_for_relic():
+                        if check_inside_button(mousepos,shop_relic_button_loc[i],button_side_len_half):  # clicked relic => get relic! (only for one time!)
+                            if player.pay_gold(relic_price[i]):  # true, which means the player paid
+                                generated_relic = generate_relic_by_class_name(final_relic_name[i])
+                                player.pick_up_relic(generated_relic)
+                                relic_obtained[i] = True
+                                sound_effects['register'].play()
+                            else:
+                                pass  # notify player that you dont have enough gold! (by blinking gold color e.t.c.)
+
+
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
@@ -69,15 +91,18 @@ def go_to_blackmarket(screen,clock, player):
         # draw sell
         write_text(screen, width//2, market_text_level, 'Blackmarket', 30, 'white')
 
-        write_text(screen, width//2, market_text_level + 100, 'Click a relic to sell', 20, 'white')
+        write_text(screen, width//2, market_text_level + 60, 'Click a relic to sell', 20, 'white')
 
-        player.show_estimated_relic_price(screen, mousepos, (width//2, market_text_level + 150))
+        player.show_estimated_relic_price(screen, mousepos, (width//2, market_text_level + 100))
 
         # buy random high tier relic with double price
-
-
-
-
+        write_text(screen, width//2, relic_base_Y_location - 50, 'MERCHANDISE', 20, 'white')
+        for i in range(relic_samples):
+            if not relic_obtained[i]:  # draw relic info
+                final_relic_sample[i].draw(screen, shop_relic_button_loc[i], scaled=True)
+                write_text(screen, width//2, shop_relic_button_loc[i][1] + 50, final_relic_sample[i].name, 20, final_relic_sample[i].color)
+                write_text(screen, width//2, shop_relic_button_loc[i][1] + 70, final_relic_sample[i].description(), 17, final_relic_sample[i].color)
+                write_text(screen, width//2, shop_relic_button_loc[i][1] + 90, "%d g"%relic_price[i] , 17, 'gold')
 
 
 

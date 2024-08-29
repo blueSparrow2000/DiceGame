@@ -24,6 +24,13 @@ class Relic():
         self.debug = False
         self.scaled_image = pygame.transform.scale(self.image, (50, 50))
 
+    def count_relic_with_same_name(self,player, my_name):
+        num_of_relics = 0
+        for relic in player.relics:
+            if relic.name == my_name:
+                num_of_relics+= 1
+        return num_of_relics
+
     def fight_every_turn_beginning_effect(self, player):
         if self.debug:
             print("my turn started!")
@@ -216,7 +223,6 @@ class WhiteCube(Relic):
 
 class BlackCube(Relic):
     '''
-    [Exhaust] Can revive once
     '''
     def __init__(self):
         super().__init__(name="black cube", rarity = 'myth')
@@ -227,10 +233,14 @@ class BlackCube(Relic):
     def effect_when_first_obtained(self, player):
         player.board.used_tile_as_empty_tile = True
 
-    def effect_when_discard(self, player):
-        player.board.used_tile_as_empty_tile = False
-
-
+    def effect_when_discard(self, player): # 이런식의 toggle effect같은 경우, 같은 이름의 유물이 더이상 존재하지 않을떄 토글을 꺼줘야 한다
+        relic_num = self.count_relic_with_same_name(player, self.name)
+        if relic_num == 1: # 1일때는 나밖에 없을떄
+            player.board.used_tile_as_empty_tile = False
+        elif relic_num == 0:
+            print("ERROR! I exist but not counted")
+        else:
+            pass
 
 class FrenzySkull(Relic):
     '''
@@ -612,8 +622,15 @@ class Antidote(Relic):
         player.immune_to_toxin = True
         player.immune_to_poison = True
     def effect_when_discard(self, player):
-        player.immune_to_toxin = False
-        player.immune_to_poison = False
+        relic_num = self.count_relic_with_same_name(player, self.name)
+        if relic_num == 1: # 1일때는 나밖에 없을떄
+            player.immune_to_toxin = False
+            player.immune_to_poison = False
+        elif relic_num == 0:
+            print("ERROR! I exist but not counted")
+        else:
+            pass
+
 
 class Oil(Relic):
     '''
@@ -628,7 +645,14 @@ class Oil(Relic):
     def effect_when_first_obtained(self, player):
         player.immune_to_weakness = True
     def effect_when_discard(self, player):
-        player.immune_to_weakness = False
+        relic_num = self.count_relic_with_same_name(player, self.name)
+        if relic_num == 1: # 1일때는 나밖에 없을떄
+            player.immune_to_weakness = False
+        elif relic_num == 0:
+            print("ERROR! I exist but not counted")
+        else:
+            pass
+
 
 
 class Encyclopedia(Relic):

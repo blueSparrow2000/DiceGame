@@ -59,7 +59,7 @@ class Map():
         즉 self.map[6][x]는 건드리지 마!! c=6
         
         '''
-        if self.break_limit or player.current_depth=='LIMIT' or player.current_depth <= MAX_DEPTH: # only boss fight tile is given
+        if self.break_limit or player.current_depth=='LIMIT' or player.current_depth - 3 <= MAX_DEPTH: # only boss fight tile is given
             self.map[3][3] = ['fight',False]
             self.break_limit = True
         elif player.check_primary_boss():
