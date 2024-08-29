@@ -24,6 +24,9 @@ class Relic():
         self.debug = False
         self.scaled_image = pygame.transform.scale(self.image, (50, 50))
 
+    def get_discount_factor(self):
+        return 1
+
     def count_relic_with_same_name(self,player, my_name):
         num_of_relics = 0
         for relic in player.relics:
@@ -605,8 +608,6 @@ class Armadillo(Relic):
         num_of_enemies = len(enemies)
         player.get_defence(num_of_enemies*self.defence_multiplier)
 
-####################################### In progress... ##############################################
-
 
 class Antidote(Relic):
     '''
@@ -710,10 +711,38 @@ class GoldenClover(Relic):
     def fight_every_turn_end_effect(self, player,enemies):
         player.board.replace_a_tile_on_board("Used", "Joker")
 
+class YellowCube(Relic):
+    '''
+
+    '''
+
+    def __init__(self):
+        super().__init__(name="yellow cube", rarity='myth')
+
+    def description(self):
+        return "All prices in the shop are half off per yellow cube"
+
+
+    def get_discount_factor(self):
+        return 2
+
+
+####################################### In progress... ##############################################
+
+class RedCube(Relic):
+    '''
+
+    '''
+
+    def __init__(self):
+        super().__init__(name="red cube", rarity='myth')
+
+    def description(self):
+        return "Reduce the cost of skills with 3 required skill tiles by 1"
 
 
 
-relic_class_names = ['BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+relic_class_names = ['RedCube','YellowCube','BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

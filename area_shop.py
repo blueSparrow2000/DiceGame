@@ -36,6 +36,13 @@ def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
 
 def go_to_shop(screen,clock, player):
     global relic_by_rarity_dict,relic_price_by_rarity
+    price_tag_color = "gold"
+    shop_discount = 1
+    for relic in player.relics:
+        shop_discount *= relic.get_discount_factor()
+
+    if shop_discount>1:
+        price_tag_color = "maroon"
 
     common_relics = relic_by_rarity_dict['common'] # currently only cell common relics
     random.shuffle(common_relics)
@@ -43,9 +50,9 @@ def go_to_shop(screen,clock, player):
     final_relic_sample = common_relics[0][1]
     relic_obtained = False
     shop_relic_button_loc = [width//2, shop_text_description_level + 550]
-    relic_price = relic_price_by_rarity[final_relic_sample.rarity]
+    relic_price = relic_price_by_rarity[final_relic_sample.rarity]//shop_discount
 
-    shop_buy_tiles = {'Attack': [3, 10], 'Defence': [3, 10], 'Regen': [3, 15], 'Skill': [3, 20], 'Joker':[3, 40]} # [cell amount until sold out, price of the tile]
+    shop_buy_tiles = {'Attack': [3, 10//shop_discount], 'Defence': [3, 10//shop_discount], 'Regen': [3, 15//shop_discount], 'Skill': [3, 20//shop_discount], 'Joker':[3, 40//shop_discount]} # [cell amount until sold out, price of the tile]
     buyable_tiles = list(shop_buy_tiles.keys())
 
     shop_image_button_tolerance = 25
@@ -58,7 +65,7 @@ def go_to_shop(screen,clock, player):
     shop_skill_button_loc = [width//2, shop_text_description_level + 325]
     skill_list = list(learnable_skill_price_dict.keys())
     skill_to_sell = random.choice(skill_list)
-    price_of_skill = learnable_skill_price_dict[skill_to_sell]
+    price_of_skill = learnable_skill_price_dict[skill_to_sell]//shop_discount
 
 
     shop_image_dict = dict()
@@ -164,7 +171,7 @@ def go_to_shop(screen,clock, player):
                            tile_name, 15, shop_text_color)
                 price_of_tile = shop_buy_tiles[tile_name][1]
                 write_text(screen, shop_button_locations[i][0], shop_button_locations[i][1] + 65,
-                           "%d g"%price_of_tile, 15, 'gold')
+                           "%d g"%price_of_tile, 15, price_tag_color)
                 write_text(screen, shop_button_locations[i][0], shop_button_locations[i][1] + 80,
                            "%d left"%remaining_tiles, 15, shop_text_color)
 
@@ -180,7 +187,7 @@ def go_to_shop(screen,clock, player):
 
         learnable_skills.draw_skill_on_custom_location(screen, skill_to_sell, shop_skill_button_loc)
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 50,
-                           "%s: %d g"%(skill_to_sell, price_of_skill), 17, 'gold')
+                           "%s: %d g"%(skill_to_sell, price_of_skill), 17, price_tag_color)
         write_text(screen, shop_skill_button_loc[0], shop_skill_button_loc[1] + 80,
                            "NOTE: Must be exchanged for previously learned skills", 17, 'white')
 
@@ -193,7 +200,7 @@ def go_to_shop(screen,clock, player):
             final_relic_sample.draw(screen, shop_relic_button_loc, scaled=True)
             write_text(screen, width//2, shop_relic_button_loc[1] + 50, final_relic_sample.name, 20, final_relic_sample.color)
             write_text(screen, width//2, shop_relic_button_loc[1] + 70, final_relic_sample.description(), 17, final_relic_sample.color)
-            write_text(screen, width//2, shop_relic_button_loc[1] + 90, "%d g"%relic_price , 17, 'gold')
+            write_text(screen, width//2, shop_relic_button_loc[1] + 90, "%d g"%relic_price , 17, price_tag_color)
 
 
         # draw effects

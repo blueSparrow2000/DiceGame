@@ -247,6 +247,7 @@ def fight(screen, clock, player, place = None):
 
             busy_drawing_ticks -= 1
             if not battle_finished:
+                print('player wins!')
                 battle_finished = True
                 pygame.mixer.music.stop()  # no music
 
@@ -256,7 +257,6 @@ def fight(screen, clock, player, place = None):
 
                 exit_fight()
                 game_run = False
-                print('player wins!')
                 return False, True,enemy_drops, earned_gold
         ### DELETE DEAD ENEMY ###
         safe_delete(enemies, player)
@@ -375,7 +375,7 @@ def fight(screen, clock, player, place = None):
 
                             if process_completed:  # defence or regen does not need to modify global variables
                                 # end players turn
-                                player.board.confirm_using_tile()
+
                                 player.end_my_turn(enemies)
                                 player_turn = False
                                 player_turn_step = 0
@@ -398,7 +398,6 @@ def fight(screen, clock, player, place = None):
                                     player.use_skill(enemies)
 
                                     # end players turn
-                                    player.board.confirm_using_tile()
                                     player.end_my_turn(enemies)
                                     player_turn = False
                                     player_turn_step = 0
@@ -513,7 +512,6 @@ def fight(screen, clock, player, place = None):
                         enemies[i].targeted = False
                         enemies[i].draw(screen,mousepos)  # redraw
                     # end players turn
-                    player.board.confirm_using_tile()
                     player.end_my_turn(enemies)
                     player_turn = False
                     player_turn_step = 0

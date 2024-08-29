@@ -178,8 +178,8 @@ while meta_run:
                     # for i in range(3):
                     #     player.pick_up_relic(WhiteCube())
                     #
-                    # for i in range(24):
-                    #     player.pick_up_relic(BlackCube())
+                    # for i in range(10):
+                    #     player.pick_up_relic(YellowCube())
                     # if not first_run:
                     #     # 일종의 축복 스타터 보너스..? 유물 개수 24개 제한이니 없는게 나을지도..?
                     #     player.pick_up_relic(GoldenClover())

@@ -114,11 +114,10 @@ A simple dice game (actually a planar figure game)
 2024.08.28 Added skill masks / help screen: show some basic rules  / enhanced toggle buttons / bug fix: CINAVRO 스킬 사용 후 사용처리가 안되는 것 해결
 
 
-2024.08.29 Added how to fight in help_screen / Added black cube / black market: you can sell relics & buy powerful relics (TBU)
+2024.08.29 Added how to fight in help_screen / Added black cube, yellow cube / black market: you can sell relics & buy powerful relics (TBU)
 
 
 
-- Fix dagger/straw mat mechanism: Also include tiles that are consumed 
 
 
 # Future 
@@ -140,6 +139,8 @@ A simple dice game (actually a planar figure game)
 
 - options screen: see player information etc.
 WARNING: There might still be a bug in character selection. (초기화되지 않은 것들이 있거나 잠재적 에러가 있을 수 있음. 특히 deep copy를 하지 않고 쓰는 변수를 사용할 경우 저번 게임에 줬던 영향이 지금 줄수도 있으니 새 게임에서 참조하는 변수들은 왠만하면 딥카피해서 가지고 있게 하기 - 상점 변수 같은거 매번 상점 클래스 새로 만드는게 안전하긴 한데, 그럴때 사용하는 리스트나 딕셔너리같은거 내부적으로 딥카피해서 가지고 있기 또는 내부에서 항상 새로 생성하기)
+
+- Mirinae buff: Fix dagger/straw mat mechanism -> Also include tiles that are consumed (e.g. Excaliber skill)
 
 
 # Character Concepts
