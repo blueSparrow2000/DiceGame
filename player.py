@@ -533,8 +533,6 @@ class Player(Entity):
     def end_my_turn(self, enemies = None): # do something at the end of the turn
         super().end_my_turn(enemies)
 
-        self.board.confirm_using_tile()
-
         copy_of_current_tile = copy.deepcopy(self.current_tile)
 
         for relic in self.relics:

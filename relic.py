@@ -99,6 +99,11 @@ class Relic():
     def curse_chance_decreaser(self):
         return 0
 
+    def skill_requiring_3_skill_tile_reduce_one(self):
+        if self.debug:
+            print("Relic trying to reduce skill requiring 3 skill tile reduce one")
+        return False
+
     ####################################### In progress... ##############################################
     #####################################################################################################
 
@@ -740,7 +745,8 @@ class RedCube(Relic):
     def description(self):
         return "Reduce the cost of skills with 3 required skill tiles by 1"
 
-
+    def skill_requiring_3_skill_tile_reduce_one(self):
+        return True
 
 relic_class_names = ['RedCube','YellowCube','BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 

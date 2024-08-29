@@ -1161,7 +1161,91 @@ class Guard(Enemy):
         self.end_my_turn()
 
 
+class Ikarus(Enemy):
+    def __init__(self, my_name = 'ikarus', hp=100, hpmax = 100, attack_damage = 60, pos = (332,mob_Y_level), attack_pattern = [ 'buff','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 30)
+        self.evade_damage_threshold = 30
+    def get_description(self):  # override
+        return "Evade if damage received is greater than %d"%self.evade_damage_threshold
 
+    def take_damage(self, attacker, damage_temp, no_fightback = False): # wake up when taken damage!
+        if damage_temp > self.evade_damage_threshold:
+            sound_effects['dash'].play()
+            return
+        super().take_damage(attacker, damage_temp, no_fightback)
+
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['playerdeath'].play()
+                player.take_damage(self,self.get_current_damage())
+                player.buffs['weakness'] = 2
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            pass
+        elif current_pattern=='buff':
+            player.buffs['vulnerability'] += 1
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
+
+
+
+class Wall(Enemy):
+    def __init__(self, my_name = 'wall', hp=500, hpmax = 500, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 20)
+
+        self.taking_damage_threshold = 100
+    def get_description(self):  # override
+        return "Maximum amount of damage taken is %d"%self.taking_damage_threshold
+
+    def take_damage(self, attacker, damage_temp, no_fightback = False): # wake up when taken damage!
+        if damage_temp > self.taking_damage_threshold:
+            sound_effects['block'].play()
+            damage_temp = self.taking_damage_threshold # truncate to threshold
+
+        super().take_damage(attacker, damage_temp, no_fightback)
+
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='attack':
+            if self.can_attack:
+                sound_effects['hard_hit'].play()
+                player.take_damage(self,self.get_current_damage())
+                # player.buffs['broken will'] = 1
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='shield':
+            for i in range(3):
+                time.sleep(0.15)
+                sound_effects['block'].play()
+            self.defence += 999
+            self.update_defence()
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass # no op
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
 
 
 

@@ -150,6 +150,16 @@ class Skill_Book():
         self.minitile_spacing = 50
         self.minitile_not_shown = ['Used', 'Empty','Unusable'] # should not show these tiles
 
+        ################ multiplier variables for child classes ###################
+        self.antifragile_multiplier = 1
+
+
+    def get_skill_reducer(self, player):
+        for relic in player.relics:
+            if relic.skill_requiring_3_skill_tile_reduce_one():
+                return True
+        return False
+
     def init_each_fight(self):
         pass
 
@@ -348,11 +358,14 @@ class Skill_Book():
         :param player:
         :return:
         '''
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         S = player.count_tile('Skill')
         R = player.count_tile('Regen')
-        if (S < 3 or R < 1):
-            return False, 1, False, {'Skill': (3, 0), 'Regen': (1, 0)}  # skill_valid, target_nums, is_attack
-        return True, 1, False, {'Skill': (3, 0), 'Regen': (1, 0)}  # skill_valid, target_nums,is_attack
+        if (S < skill_cost or R < 1):
+            return False, 1, False, {'Skill': (skill_cost, 0), 'Regen': (1, 0)}  # skill_valid, target_nums, is_attack
+        return True, 1, False, {'Skill': (skill_cost, 0), 'Regen': (1, 0)}  # skill_valid, target_nums,is_attack
 
     def acute(self, player, target_list):
         sound_effects['bell'].play()
@@ -371,12 +384,15 @@ class Skill_Book():
 
     ###########################################################################################################################
     def gas_get_requirement(self, player):
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         S = player.count_tile('Skill')
         A = player.count_tile('Attack')
         R = player.count_tile('Regen')
-        if (S < 1 or A < 1 or R < 1):
-            return False, 3, False, {'Skill': (3, 0), 'Regen': (1, 0),'Attack': (1, 0)}  # skill_valid, target_nums, is_attack
-        return True, 3, False, {'Skill': (3, 0), 'Regen': (1, 0),'Attack': (1, 0)}  # skill_valid, target_nums,is_attack
+        if (S < skill_cost or A < 1 or R < 1):
+            return False, 3, False, {'Skill': (skill_cost, 0), 'Regen': (1, 0),'Attack': (1, 0)}  # skill_valid, target_nums, is_attack
+        return True, 3, False, {'Skill': (skill_cost, 0), 'Regen': (1, 0),'Attack': (1, 0)}  # skill_valid, target_nums,is_attack
 
     def gas(self, player, target_list):
         ### relic effect ###
@@ -418,7 +434,7 @@ class Mirinae_skills(Skill_Book):
         # S = player.count_tile('Skill')
         # D = player.count_tile('Defence')
         # R = player.count_tile('Regen')
-        self.antifragile_multiplier = 1
+
 
     def init_each_fight(self):# initialize skill book parameters
         self.antifragile_multiplier = 1
@@ -538,11 +554,14 @@ class Mirinae_skills(Skill_Book):
         ''' 5
 
         '''
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         A = player.count_tile('Attack')
         S = player.count_tile('Skill')
-        if (S<3 or A<1):
-            return False, 1, True, {'Skill':(3,0),'Attack':(1,0)}
-        return True, 1, True, {'Skill':(3,0),'Attack':(1,0)} # skill_valid, target_nums,is_attack
+        if (S<skill_cost or A<1):
+            return False, 1, True, {'Skill':(skill_cost,0),'Attack':(1,0)}
+        return True, 1, True, {'Skill':(skill_cost,0),'Attack':(1,0)} # skill_valid, target_nums,is_attack
 
     def Antifragile(self,player, target_list):
         for i in range(4):
@@ -570,10 +589,14 @@ class Mirinae_skills(Skill_Book):
         ''' 6
 
         '''
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
+
         S = player.count_tile('Skill')
-        if (S<3):
-            return False, 1, True, {'Skill':(3,0)}
-        return True, 1, True, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+        if (S<skill_cost):
+            return False, 1, True, {'Skill':(skill_cost,0)}
+        return True, 1, True, {'Skill':(skill_cost,0)} # skill_valid, target_nums,is_attack
 
     def Excaliber(self,player, target_list):
         sound_effects['playerdeath'].play()
@@ -673,10 +696,13 @@ class Cinavro_skills(Skill_Book):
 
     #################################### 5 #########################################
     def Jackpot_get_requirement(self,player):
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         S = player.count_tile('Skill')
-        if (S<3):
-            return False, 0, False, {'Skill':(3,0)}
-        return True, 0, False, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+        if (S<skill_cost):
+            return False, 0, False, {'Skill':(skill_cost,0)}
+        return True, 0, False, {'Skill':(skill_cost,0)} # skill_valid, target_nums,is_attack
     def Jackpot(self,player, target_list):
         sound_effects['jackpot'].play()
         time.sleep(0.1)
@@ -688,10 +714,13 @@ class Cinavro_skills(Skill_Book):
 
     ##################################### 6 #########################################
     def All_in_get_requirement(self,player):
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         S = player.count_tile('Skill')
-        if (S<3):
-            return False, 0, False, {'Skill':(3,0)}
-        return True, 0, False, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+        if (S<skill_cost):
+            return False, 0, False, {'Skill':(skill_cost,0)}
+        return True, 0, False, {'Skill':(skill_cost,0)} # skill_valid, target_nums,is_attack
     def All_in(self,player, target_list):
         sound_effects['bell'].play()
         time.sleep(0.1)
@@ -810,10 +839,13 @@ class Baron_skills(Skill_Book):
     ###############################################################################
     ##############################################################################
     def Mortal_strike_get_requirement(self,player):
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         S = player.count_tile('Skill')
-        if (S<3):
-            return False, 0, False, {'Skill':(3,0)}
-        return True, 0, False, {'Skill':(3,0)} # skill_valid, target_nums,is_attack
+        if (S<skill_cost):
+            return False, 0, False, {'Skill':(skill_cost,0)}
+        return True, 0, False, {'Skill':(skill_cost,0)} # skill_valid, target_nums,is_attack
     def Mortal_strike(self,player, target_list):
         sound_effects['shruff'].play()
         time.sleep(0.1)
@@ -829,11 +861,14 @@ class Baron_skills(Skill_Book):
     ###############################################################################
     ##############################################################################
     def Build_get_requirement(self,player):
+        skill_cost = 3
+        if self.get_skill_reducer(player):
+            skill_cost = 2
         S = player.count_tile('Skill')
         D = player.count_tile('Defence')
-        if (S<3 or D<1):
-            return False, 0, False, {'Skill':(3,0), 'Defence':(1,0)}
-        return True, 0, False, {'Skill':(3,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
+        if (S<skill_cost or D<1):
+            return False, 0, False, {'Skill':(skill_cost,0), 'Defence':(1,0)}
+        return True, 0, False, {'Skill':(skill_cost,0), 'Defence':(1,0)} # skill_valid, target_nums,is_attack
     def Build(self,player, target_list):
         for i in range(3):
             sound_effects['block'].play()
