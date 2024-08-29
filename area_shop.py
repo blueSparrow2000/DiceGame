@@ -35,8 +35,8 @@ def safe_delete_dict_one_depth_2(dictionary,target_index, target_tile):
 
 
 def go_to_shop(screen,clock, player):
-    global relic_by_rarity_dict
-    relic_price_by_rarity = {'common':10, 'rare':20, 'epic':40, 'special':100, 'legendary':200, 'myth':500}
+    global relic_by_rarity_dict,relic_price_by_rarity
+
     common_relics = relic_by_rarity_dict['common'] # currently only cell common relics
     random.shuffle(common_relics)
     final_relic_name = common_relics[0][0]

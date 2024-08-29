@@ -102,12 +102,32 @@ class Player(Entity):
                 cnt = 0
             location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
             if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
-                relic.effect_when_discard()
+                relic.effect_when_discard(self)
                 remove_relic_idx = (self.max_relic_in_a_row)*next_row + cnt
             cnt += 1
 
         if remove_relic_idx != -1: # if discarding
+            relic = self.relics[remove_relic_idx]
             del self.relics[remove_relic_idx]
+            return True,relic # discard complete
+
+        return False,None
+
+    def show_estimated_relic_price(self, screen, mousepos, text_location):
+        global relic_price_by_rarity
+        cnt = 0
+        next_row = 0
+        for relic in self.relics:
+            if cnt >= self.max_relic_in_a_row:
+                next_row += 1
+                cnt = 0
+            location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
+            if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
+                sell_price = relic_price_by_rarity[relic.rarity]//2
+                write_text(screen, text_location[0], text_location[1],"Sell price: "+str(sell_price)+" g", 20, 'gold')
+            cnt += 1
+
+
 
     ######################################### Relic ################################################
 

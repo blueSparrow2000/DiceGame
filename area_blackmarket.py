@@ -3,8 +3,12 @@ Rename the function go_to_area
 
 '''
 from util import *
+from area_ruin import *
 
 def go_to_blackmarket(screen,clock, player):
+    global relic_by_rarity_dict, relic_price_by_rarity
+    high_tier_relics = relic_by_rarity_dict['legendary'] + relic_by_rarity_dict['special']
+
     music_Q('Anxiety', True)
     game_run = True
     mousepos = (0,0)
@@ -28,13 +32,19 @@ def go_to_blackmarket(screen,clock, player):
                 mousepos = pygame.mouse.get_pos()
 
             if event.type == pygame.MOUSEBUTTONUP:
-                sound_effects['confirm'].play()
                 mousepos = pygame.mouse.get_pos()
                 mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
+                    sound_effects['confirm'].play()
                     # exit
                     game_run = False
                     break
+
+                discarded, discarded_relic = player.discard_relic(mousepos)
+                if discarded:
+                    sell_price = relic_price_by_rarity[discarded_relic.rarity] // 2
+                    player.get_gold(sell_price)
+                    sound_effects['jackpot'].play()
 
 
             if event.type == pygame.KEYDOWN:
@@ -56,8 +66,20 @@ def go_to_blackmarket(screen,clock, player):
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
 
-        # draw effects
+        # draw sell
         write_text(screen, width//2, market_text_level, 'Blackmarket', 30, 'white')
+
+        write_text(screen, width//2, market_text_level + 100, 'Click a relic to sell', 20, 'white')
+
+        player.show_estimated_relic_price(screen, mousepos, (width//2, market_text_level + 150))
+
+        # buy random high tier relic with double price
+
+
+
+
+
+
 
         # Draw player main info
         player.draw_player_info_top(screen, mousepos)

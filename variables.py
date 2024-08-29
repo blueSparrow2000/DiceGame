@@ -58,6 +58,10 @@ joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight','boss_fight','blackmarket']
 event_tile_names = ['campfire','fight','ruin','shop','altar','blackmarket']
 
+
+relic_price_by_rarity = {'common':10, 'rare':20, 'epic':40, 'special':100, 'legendary':200, 'myth':500}
+
+
 # move background
 background_y = -470
 background_layer_y = 100
@@ -70,6 +74,7 @@ particle_width = 6
 particle_width_mouse = 3
 mouse_particle_radius = 5
 droplet_radius = 33
+
 # mouse color
 effect_color = 'darkgoldenrod'#(150, 200, 240)
 adventure_effect_color = 'darkgoldenrod'
