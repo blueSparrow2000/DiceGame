@@ -344,7 +344,7 @@ class Embryo(Enemy):
 
 class Mine(Enemy):
     def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
         self.thorny = True
     def get_description(self): # override
         return "Thorny: inflict half of the damage to attacker"
@@ -391,7 +391,7 @@ class Mine(Enemy):
 ##### PRIMARY BOSS ####
 class Norm(Enemy):
     def __init__(self, my_name = 'norm', hp=32, hpmax = 32, attack_damage = 16, pos = (332,mob_Y_level), attack_pattern = ['attack', 'shield'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
 
 
     def behave(self, player, enemy = None):
@@ -427,7 +427,7 @@ class Norm(Enemy):
 
 class Scout(Enemy):
     def __init__(self, my_name = 'scout', hp=32, hpmax = 32, attack_damage = 8, pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
         '''
         This mob gets stronger after attacking
         '''
@@ -465,7 +465,7 @@ class Scout(Enemy):
 
 class Sentinel(Enemy):
     def __init__(self, my_name = 'sentinel', hp=64, hpmax = 64, attack_damage = 16, pos = (332,mob_Y_level), attack_pattern = ['buff', 'shield', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
 
 
     def behave(self, player, enemy = None):
@@ -508,7 +508,7 @@ class Sentinel(Enemy):
 
 class Observer(Enemy):
     def __init__(self, my_name = 'observer', hp=64, hpmax = 64, attack_damage = 12, pos = (332,mob_Y_level), attack_pattern = ['buff',  'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
 
 
     def behave(self, player, enemy = None):
