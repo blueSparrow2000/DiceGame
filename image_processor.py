@@ -106,6 +106,7 @@ confirm_img_white = load_image("icons/confirm_white")
 
 
 back_img_gold = load_image("icons/back_gold")
+skip_img_gold = load_image("icons/skip_gold")
 
 sold_out = load_image("icons/sold_out")
 right_button = load_image("icons/right")

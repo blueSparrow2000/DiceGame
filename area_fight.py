@@ -476,7 +476,7 @@ def fight(screen, clock, player, place = None):
                 ### DRAWING ###
                 screen.blit(TAB_img, TAB_img.get_rect(center=bottom_left_button))
                 screen.blit(rotate_img, rotate_img.get_rect(center=bottom_right_button))
-                screen.blit(skip_img, skip_img.get_rect(center=bottom_center_button))
+                draw_toggle_button(screen, mousepos, skip_img, skip_img_white, bottom_center_button, button_side_len_half)
 
                 player.board.net.draw_planar_figure(screen, mousepos)
 
