@@ -117,6 +117,8 @@ A simple dice game (actually a planar figure game)
 2024.08.29 Added how to fight in help_screen / Added Myth relics: black cube, yellow cube, red cube / (New map tile) black market: you can sell relics & buy powerful relics (TBU) / Added new mobs: Wall, Ikarus 
 
 
+2024.08.30 ~ Beta test: Fix bugs!
+
 # Future 
 - Advanced path finder
 브릿지인 타일 가는 도중에 다른 보이드 아닌 타일이 있는 경우 그걸 재외하고 차일드 만드는걸 먼저 돌려보기

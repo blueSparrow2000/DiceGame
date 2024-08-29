@@ -1,3 +1,6 @@
+version = 'beta 1.3.8'
+
+
 # system variables
 game_fps = 30 #60
 fast_fps = 60

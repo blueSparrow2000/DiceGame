@@ -596,7 +596,7 @@ class Carrier(Enemy):
 
 
 class Silent(Enemy):
-    def __init__(self, my_name='silent', hp=500, hpmax=500, attack_damage=[32, 64], pos=(332, mob_Y_level),
+    def __init__(self, my_name='silent', hp=800, hpmax=800, attack_damage=[32, 64], pos=(332, mob_Y_level),
                  attack_pattern=['shield', 'buff', 'attack', 'infiltrate'], rank=1):  #
         super().__init__(my_name, hp, hpmax, attack_damage, pos, attack_pattern, rank, gold_reward=200)
 
@@ -666,7 +666,7 @@ class Silent(Enemy):
 
 
 class Scalpion(Enemy):
-    def __init__(self, my_name = 'scalpion', hp=80, hpmax = 80, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['toxin', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'scalpion', hp=180, hpmax = 180, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['toxin', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
         self.thorny = True
     '''
@@ -715,7 +715,7 @@ class Scalpion(Enemy):
 
 
 class Snalk(Enemy):
-    def __init__(self, my_name = 'snalk', hp=60, hpmax = 60, attack_damage = [4,8], pos = (332,mob_Y_level), attack_pattern = ['poison', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'snalk', hp=120, hpmax = 120, attack_damage = [4,8], pos = (332,mob_Y_level), attack_pattern = ['poison', 'attack'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 7)
     '''
     This mob does random damage attack
@@ -758,7 +758,7 @@ class Snalk(Enemy):
         return 10
 
 class Snider(Enemy):
-    def __init__(self, my_name = 'snider', hp=60, hpmax = 60, attack_damage = [4,16], pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack', 'regen'] , rank = 1 ): #
+    def __init__(self, my_name = 'snider', hp=120, hpmax = 120, attack_damage = [4,16], pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack', 'regen'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 7)
     '''
     This mob does random damage attack

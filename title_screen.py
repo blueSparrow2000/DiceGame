@@ -93,7 +93,7 @@ def title_screen(screen,clock):
 
         # draw effects
         write_text(screen, width//2, screen_y, 'Diagramiz', 30, 'gold')
-        write_text(screen, width // 2, screen_y + 40, 'beta 1.3.7', 15, 'gold')
+        write_text(screen, width // 2, screen_y + 40, version, 15, 'gold')
         # write_text(screen, width//2, screen_y+40, 'since 2024.07.21', 15, 'gold')
 
 
