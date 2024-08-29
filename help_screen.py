@@ -181,7 +181,8 @@ def help_screen(screen,clock):
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Blackmarket", 30, 'gold')
             screen.blit(map_tile_image_dict['blackmarket'],
                         map_tile_image_dict['blackmarket'].get_rect(center=tile_explanation_location))
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "Blackmarket most commonly appears on    deep regions below -200 m", 17, requirement_shown = False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "Blackmarket most commonly appears on    deep regions below -200 m, substituting shop", 17, requirement_shown = False)
+
             write_text_description(screen, width // 2, tile_explanation_location[1] + 170, "You can sell relics for low price or buy high tier relics", 17, requirement_shown = False)
 
 

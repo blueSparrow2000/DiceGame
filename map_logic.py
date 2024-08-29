@@ -85,7 +85,7 @@ class Map():
             blackmarket_chance = random.randint(1, 100)
 
             for i in range(len(util_tiles)):
-                if util_tiles[i] =='shop' and not player.reached_max_depth() and ((-200 < player.get_depth() <= -100 and blackmarket_chance <= 10) or (player.get_depth() <= -200 and blackmarket_chance <= 50)): #
+                if util_tiles[i] =='shop' and not player.reached_max_depth() and ((-200 < player.get_depth() <= -100 and blackmarket_chance <= 10) or (player.get_depth() <= -200 and blackmarket_chance <= 30)): #
                     self.map[columns[i]][rows[i]] = ['blackmarket',False]
                 else:
                     self.map[columns[i]][rows[i]] = [util_tiles[i],False]

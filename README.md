@@ -114,10 +114,11 @@ A simple dice game (actually a planar figure game)
 2024.08.28 Added skill masks / help screen: show some basic rules  / enhanced toggle buttons / bug fix: CINAVRO 스킬 사용 후 사용처리가 안되는 것 해결
 
 
-2024.08.29 Added how to fight in help_screen / black market: you can sell relics & buy powerful relics
+2024.08.29 Added how to fight in help_screen / Added black cube / black market: you can sell relics & buy powerful relics (TBU)
 
 
-- Add myth relics
+
+- Fix dagger/straw mat mechanism: Also include tiles that are consumed 
 
 
 # Future 

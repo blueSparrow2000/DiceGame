@@ -212,6 +212,8 @@ class Board():
 
         self.number_of_permanent_tiles = 0 # used in ending credit
 
+        self.used_tile_as_empty_tile = False
+
     def set_out_of_board_protection(self, bool_input):
         self.out_of_board_protection = bool_input
 
@@ -863,7 +865,7 @@ class Board():
             return False
 
         # check whether some unusable tile is inside the planar figure
-        if ('Unusable' in tiles) or ('Used' in tiles):        # if unusable tile is included, return False
+        if ('Unusable' in tiles) or ('Used' in tiles and not self.used_tile_as_empty_tile):        # if unusable tile is included, return False
             print("Invalid position: containing unusable or used tile")
             return False
 

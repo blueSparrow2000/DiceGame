@@ -123,7 +123,7 @@ class Player(Entity):
                 cnt = 0
             location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
             if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
-                sell_price = relic_price_by_rarity[relic.rarity]//2
+                sell_price = relic_price_by_rarity[relic.rarity]//5
                 write_text(screen, text_location[0], text_location[1],"Sell price: "+str(sell_price)+" g", 20, 'gold')
             cnt += 1
 

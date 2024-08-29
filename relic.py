@@ -214,6 +214,22 @@ class WhiteCube(Relic):
             player.set_health(player.max_health)
             self.delete = True
 
+class BlackCube(Relic):
+    '''
+    [Exhaust] Can revive once
+    '''
+    def __init__(self):
+        super().__init__(name="black cube", rarity = 'myth')
+
+    def description(self):
+        return "You can place planar figure on top of used tiles"
+
+    def effect_when_first_obtained(self, player):
+        player.board.used_tile_as_empty_tile = True
+
+    def effect_when_discard(self, player):
+        player.board.used_tile_as_empty_tile = False
+
 
 
 class FrenzySkull(Relic):
@@ -673,7 +689,7 @@ class GoldenClover(Relic):
 
 
 
-relic_class_names = ['GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+relic_class_names = ['BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

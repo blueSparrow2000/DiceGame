@@ -42,7 +42,7 @@ def go_to_blackmarket(screen,clock, player):
 
                 discarded, discarded_relic = player.discard_relic(mousepos)
                 if discarded:
-                    sell_price = relic_price_by_rarity[discarded_relic.rarity] // 2
+                    sell_price = relic_price_by_rarity[discarded_relic.rarity] // 5
                     player.get_gold(sell_price)
                     sound_effects['jackpot'].play()
 

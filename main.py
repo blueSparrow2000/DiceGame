@@ -168,7 +168,7 @@ while meta_run:
                     # for i in range(3):
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
-                    # player.pick_up_relic(WhiteCube())
+                    # player.pick_up_relic(BlackCube())
                     # player.pick_up_relic(Tombstone())
                     # player.pick_up_relic(RecycledSword())
                     # for i in range(20):
