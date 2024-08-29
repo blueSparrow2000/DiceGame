@@ -5,6 +5,8 @@ from area_altar import *
 from area_shop import *
 from area_fight import *
 from game_win_screen import *
+from area_blackmarket import *
+
 
 def exit():
     pygame.quit()
@@ -181,6 +183,8 @@ def adventure_loop(screen, clock, player,map):
 
                 elif which_event == 'shop':
                     go_to_shop(screen, clock, player)
+                elif which_event == 'blackmarket':
+                    go_to_blackmarket(screen, clock, player)
                 elif which_event == 'altar':
                     go_to_altar(screen, clock, player)
                 elif which_event == 'fight':

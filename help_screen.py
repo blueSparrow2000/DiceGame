@@ -47,7 +47,7 @@ Rename the function go_to_area
 
 '''
 from util import *
-max_help_page_idx = 8
+max_help_page_idx = 10
 
 def update_help_idx(i, deviance):
     return (i+deviance)%max_help_page_idx
@@ -123,52 +123,75 @@ def help_screen(screen,clock):
 
         # Draw help
         if help_page_idx==0:
-            write_text(screen, width // 2, tile_explanation_location[1] - 60, "Fight", 30, 'gold')
+            write_text(screen, width // 2, tile_explanation_location[1] - 60, "Battle", 30, 'gold')
             screen.blit(map_tile_image_dict['fight'], map_tile_image_dict['fight'].get_rect(center=tile_explanation_location))
 
             write_text_description(screen, width//2, tile_explanation_location[1]+100, "At a battle, up to 3 enemies can spawn", 17, requirement_shown = False )
             write_text_description(screen, width // 2, tile_explanation_location[1] + 150, "Player always starts first, then enemy  does its behavior", 17, requirement_shown = False)
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 200, "Your planar figure must not leave the   board, and must not contain used /      unusable tiles", 17, requirement_shown = False)
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 270, "Three basic moves (attack, defense,     regen) increase in proportion to the     power of the number of each tiles drawn", 17, requirement_shown = False)
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 340, "Defence points decay after one turn,    Until it comes back to the player's turn", 17, requirement_shown = False)
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 400, "There are required tiles for each skill you use", 17, requirement_shown = False)
-
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 220, "Defence points decay after one turn,    Until it comes back to the player's turn", 17, requirement_shown = False)
 
         elif help_page_idx==1:
+            write_text(screen, width // 2, tile_explanation_location[1] - 60, "How to fight", 30, 'gold')
+            screen.blit(map_tile_image_dict['fight'], map_tile_image_dict['fight'].get_rect(center=tile_explanation_location))
+
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 100,
+                                   "Every 6 turns, the board is reset and   tiles are randomly placed", 17, requirement_shown=False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 150,
+                                   "Click on the primary or secondary planar figure to choose the tiles you want to use from the board", 17, requirement_shown=False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 220,
+                                   "* You can also rotate the figure", 17, requirement_shown=False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 250, "* Your planar figure must not leave the   board, and must not contain used /      unusable tiles", 17, requirement_shown = False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 320,
+                                   "Three basic moves (attack, defense,     regen) increase in proportion to the     power of the number of each tiles drawn",
+                                   17, requirement_shown=False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 400,
+                                   "There are requirements for each skill   depending on the tiles you draw, so     consider these to choose the action you want", 17, requirement_shown=False)
+
+
+        elif help_page_idx==2:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Ruin", 30, 'gold')
             screen.blit(map_tile_image_dict['ruin'],
                         map_tile_image_dict['ruin'].get_rect(center=tile_explanation_location))
             write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "Ruin give you 0~3 choices of relics", 17, requirement_shown = False)
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 150, "Note: you could come across a battle    before entering ruin", 17,
+
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 150, "You cannot have more than 24 relics, so think carefully to take it or not", 17,
                                    requirement_shown=False)
-            write_text_description(screen, width // 2, tile_explanation_location[1] + 200, "You cannot have more than 24 relics, so think carefully to take it or not", 17,
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 200, "* You could come across a battle before entering ruin", 17,
                                    requirement_shown=False)
 
-        elif help_page_idx==2:
+        elif help_page_idx==3:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Altar", 30, 'gold')
             screen.blit(map_tile_image_dict['altar'],
                         map_tile_image_dict['altar'].get_rect(center=tile_explanation_location))
             write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "Altar gives you a curse (with prob 80%) and you can choose one blessing among   three as compensation for the curse", 17, requirement_shown = False)
 
-        elif help_page_idx==3:
+        elif help_page_idx==4:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Campfire", 30, 'gold')
             screen.blit(map_tile_image_dict['campfire'],
                         map_tile_image_dict['campfire'].get_rect(center=tile_explanation_location))
             write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "You can reset by the campfire to heal    50 hp", 17, requirement_shown = False)
 
-        elif help_page_idx==4:
+        elif help_page_idx==5:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Shop", 30, 'gold')
             screen.blit(map_tile_image_dict['shop'],
                         map_tile_image_dict['shop'].get_rect(center=tile_explanation_location))
             write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "You can buy 1 relic, 1 skill, and 3 of  each tiles in the shop", 17, requirement_shown = False)
 
-        elif help_page_idx==5:
+        elif help_page_idx==6:
+            write_text(screen, width // 2, tile_explanation_location[1] - 60, "Blackmarket", 30, 'gold')
+            screen.blit(map_tile_image_dict['blackmarket'],
+                        map_tile_image_dict['blackmarket'].get_rect(center=tile_explanation_location))
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 100, "Blackmarket most commonly appears on    deep regions below -200 m", 17, requirement_shown = False)
+            write_text_description(screen, width // 2, tile_explanation_location[1] + 170, "You can sell relics for low price or buy high tier relics", 17, requirement_shown = False)
+
+
+        elif help_page_idx==7:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Map progression", 30, 'gold')
             screen.blit(map_progression,map_progression.get_rect(center=(tile_explanation_location[0], tile_explanation_location[1]+150)))
             write_text_description(screen, width // 2, tile_explanation_location[1] + 350,
                                    "You can progress the map by building a  bridge using only one 'click' of planar figure", 17,
                                    requirement_shown=False)
-        elif help_page_idx==6:
+        elif help_page_idx==8:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Bosses", 30, 'gold')
             boss =[load_image("enemies/carrier"),load_image("enemies/silent") ,load_image("enemies/halo")]
             for i in range(len(boss)):
@@ -179,7 +202,7 @@ def help_screen(screen,clock):
             write_text_description(screen, width // 2, tile_explanation_location[1] + 150,
                                    "There are currently three bosses on     depth -100, -200, -300 and one ruin boss at -150", 17,
                                    requirement_shown=False)
-        elif help_page_idx==7:
+        elif help_page_idx==9:
             write_text(screen, width // 2, tile_explanation_location[1] - 60, "Buffs & Debuffs", 30, 'gold')
 
             cnt = 0
@@ -204,6 +227,8 @@ def help_screen(screen,clock):
             write_text_description(screen, width // 2, tile_explanation_location[1] + 200,
                                    "All buffs like poison, toxin, strength, weakness, decay, vulnerability etc.     damage does not stack, only the duration is increased", 17,
                                    requirement_shown=False)
+
+
 
         if mouse_particle_list:  # if not empty
             # print(len(mouse_particle_list))

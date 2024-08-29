@@ -81,6 +81,35 @@ class Player(Entity):
         self.gamemode = 'player'
     ######################################### Relic ################################################
 
+    def have_space_for_relic(self):
+        return len(self.relics) < 24
+
+    def pick_up_relic(self, relic_obj):
+        if not self.have_space_for_relic():
+            print("cannot pick up relics more than 24")
+            return
+        self.relics.append(relic_obj)
+        relic_obj.effect_when_first_obtained(self)
+
+    def discard_relic(self, mousepos):
+        remove_relic_idx = -1
+
+        cnt = 0
+        next_row = 0
+        for relic in self.relics:
+            if cnt >= self.max_relic_in_a_row:
+                next_row += 1
+                cnt = 0
+            location = (20 + (self.relic_delta  + 10) * cnt, self.relic_y_start + next_row * (self.relic_delta + 5))
+            if check_inside_button(mousepos, location, self.relic_delta//2): # if mouse is pointing to the relic
+                relic.effect_when_discard()
+                remove_relic_idx = (self.max_relic_in_a_row)*next_row + cnt
+            cnt += 1
+
+        if remove_relic_idx != -1: # if discarding
+            del self.relics[remove_relic_idx]
+
+    ######################################### Relic ################################################
 
     def fissure_attack(self, enemies):
         if self.fissure_flag:
@@ -98,20 +127,6 @@ class Player(Entity):
 
                 self.set_zero_defence()
 
-
-
-    def have_space_for_relic(self):
-        return len(self.relics) < 24
-
-    def pick_up_relic(self, relic_obj):
-        if not self.have_space_for_relic():
-            print("cannot pick up relics more than 24")
-            return
-        self.relics.append(relic_obj)
-        relic_obj.effect_when_first_obtained(self)
-
-
-    ######################################### Relic ################################################
     def do_after_updating_current_tile(self):
         for i in range(len(self.current_skills)):
             skill_valid, _, _, _ = getattr(self.skill_book, self.current_skills[
@@ -635,7 +650,6 @@ class Player(Entity):
         if (self.board.current_turn-1) == 0: # 보드 리셋시
             for relic in self.relics:
                 relic.activate_on_board_reset(self, enemies)
-
 
 
 

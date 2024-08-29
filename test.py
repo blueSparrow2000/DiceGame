@@ -45,9 +45,19 @@ import copy
 
 
 
-for x in [0, -5, -74, -99, -100, -101, -199, -200, -201, -298, -299]:
-    y = abs(x)//100 + 1
+# for x in [0, -5, -74, -99, -100, -101, -199, -200, -201, -298, -299]:
+#     y = abs(x)//100 + 1
+#
+#     print('%4d'%x, y, "  |%d"%(- (abs(x)%100) ))
+#
 
-    print('%4d'%x, y, "  |%d"%(- (abs(x)%100) ))
+listy = [1,2,3,4,5,6,4]
+remove_idx = 0
+cnt = 0
+for ll in listy:
+    if ll==5:
+        remove_idx=cnt
+    cnt+=1
 
-
+del listy[remove_idx]
+print(listy)

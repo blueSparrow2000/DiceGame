@@ -55,8 +55,8 @@ tile_names = list(tile_name_description_dic.keys())# ['Attack', 'Defence', 'Rege
 joker_transformable_tiles = ['Attack', 'Defence', 'Regen', 'Skill',  'Karma']
 
 
-map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight','boss_fight']
-event_tile_names = ['campfire','fight','ruin','shop','altar']
+map_tile_names = ['void','base','campfire','fight','ruin','shop','altar','bridge','highlight','boss_fight','blackmarket']
+event_tile_names = ['campfire','fight','ruin','shop','altar','blackmarket']
 
 # move background
 background_y = -470
@@ -83,7 +83,7 @@ adventure_bg_color = (100,130,100)
 terracotta = (150, 140, 120)
 darker_gold = (133, 83, 0)
 pastel_purple = (195, 177, 225)
-
+dark_brown = (54,26,12)
 
 ### basic buttons
 button_side_len_half = 25 # buttons are all of side 50 pixels

@@ -24,7 +24,6 @@ class Relic():
         self.debug = False
         self.scaled_image = pygame.transform.scale(self.image, (50, 50))
 
-
     def fight_every_turn_beginning_effect(self, player):
         if self.debug:
             print("my turn started!")
@@ -43,6 +42,11 @@ class Relic():
     def effect_when_first_obtained(self, player):
         if self.debug:
             print("Relic first obtained!")
+        pass
+
+    def effect_when_discard(self, player):
+        if self.debug:
+            print("Relic discarded!")
         pass
 
     def activate_on_death(self, enemy):
@@ -147,7 +151,8 @@ class SerpentHeart(Relic):
     def effect_when_first_obtained(self, player):
         player.max_health += 50
         player.enforced_regen(50)
-
+    def effect_when_discard(self, player):
+        player.set_max_health(player.max_health - 50)
 
 class FearCell(Relic):
     '''
@@ -555,6 +560,9 @@ class IronPlate(Relic):
     def effect_when_first_obtained(self, player):
         player.base_defence += self.base_defence_gain
         player.update_defence()
+    def effect_when_discard(self, player):
+        player.base_defence -= self.base_defence_gain
+
 
 class Armadillo(Relic):
     '''
@@ -587,6 +595,9 @@ class Antidote(Relic):
     def effect_when_first_obtained(self, player):
         player.immune_to_toxin = True
         player.immune_to_poison = True
+    def effect_when_discard(self, player):
+        player.immune_to_toxin = False
+        player.immune_to_poison = False
 
 class Oil(Relic):
     '''
@@ -600,6 +611,9 @@ class Oil(Relic):
 
     def effect_when_first_obtained(self, player):
         player.immune_to_weakness = True
+    def effect_when_discard(self, player):
+        player.immune_to_weakness = False
+
 
 class Encyclopedia(Relic):
     '''

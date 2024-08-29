@@ -17,9 +17,6 @@ class Map():
         self.map_save = copy.deepcopy(self.map) # for reset
 
         self.image_dict = map_tile_image_dict
-        # self.image_dict = dict() # load map tile images!
-        # for tile_name in map_tile_names:
-        #     self.image_dict[tile_name] = (load_image("map_tiles/%s" % tile_name))
 
         self.side_length = 50 # map tile's length
         self.image_button_tolerance = self.side_length//2
@@ -71,7 +68,10 @@ class Map():
             self.map[3][3] = ['fight', False]
         else:
             # spawn island randomly - fight/campfire/shop/boss/ruin/altar
-            util_tiles = ['ruin','altar','shop','campfire']
+            util_tiles = copy.deepcopy(event_tile_names)
+            util_tiles.remove('fight') #['ruin','altar','shop','campfire'] #
+            util_tiles.remove('blackmarket')
+
             self.map[3][3] = ['fight',False] # you can always reach fight tile
 
             col_candidate = [1,2,3,4]
@@ -82,8 +82,13 @@ class Map():
             columns = col_candidate
             rows = row_candidate[:len(util_tiles)]
 
+            blackmarket_chance = random.randint(1, 100)
+
             for i in range(len(util_tiles)):
-                self.map[columns[i]][rows[i]] = [util_tiles[i],False]
+                if util_tiles[i] =='shop' and not player.reached_max_depth() and ((-200 < player.get_depth() <= -100 and blackmarket_chance <= 10) or (player.get_depth() <= -200 and blackmarket_chance <= 50) or True): #
+                    self.map[columns[i]][rows[i]] = ['blackmarket',False]
+                else:
+                    self.map[columns[i]][rows[i]] = [util_tiles[i],False]
 
 
         # insert at-least-contain-one's in neighbors islands
