@@ -117,16 +117,13 @@ A simple dice game (actually a planar figure game)
 2024.08.29 Added how to fight in help_screen / Added Myth relics: black cube, yellow cube, red cube / (New map tile) black market: you can sell relics & buy powerful relics (TBU) / Added new mobs: Wall, Ikarus 
 
 
-2024.08.30 Game saver & loader 
+2024.08.30 Game saver & loader / Blue cube: max incoming damage fixed / Baron, Cinavro design / 
 
 
 ~ Beta test: Fix bugs!
 
-- Blue cube: max incoming damage fixed 
-- Campfire: you can remove one tile from the board (if you want)
+
 - Apostle: deal damage propotional to max_health / current health
-- Baron, Cinavro design
-- 
 
 # Future 
 - Advanced path finder
@@ -135,6 +132,7 @@ A simple dice game (actually a planar figure game)
 
 
 ### beyond beta version (further implementation will use Flutter instead of python)
+- Campfire: you can remove one tile from the board (if you want)
 
 - simple hit animation
 
