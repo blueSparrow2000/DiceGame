@@ -59,14 +59,31 @@ music_Q('Lobby', True)
 meta_run = True
 
 while meta_run:
+    random.seed(None) # initialize seed
+    map = Map()
+
     if not first_run:
         music_Q('Lobby', True)     # The Music in main
-    title_screen(screen, clock)
+
+    quit_flag, new_game, load_game_player = title_screen(screen, clock)
+    if quit_flag:
+        pygame.quit()
+        break
+
+    if not new_game:
+        # load game을 이용하여 새로운 게임을 시작함
+        ############## game start module #################
+        # game_win_screen(screen,clock,player)
+        try_again = adventure_loop(screen, clock, load_game_player, map)
+        first_run = False
+        if not try_again:
+            meta_run = False
+        continue
+        ############## game start module #################
 
     run_character_selection = True
     mousepos = (0, 0)
 
-    map = Map()
     print("Starting a new game!")
 
     ### change planar figure ###
@@ -147,7 +164,8 @@ while meta_run:
                         fix_a_tile(screen, clock, player, 'Regen')
 
                     #### set character abilities here (like fixing a tile etc) ####
-                    # player.pick_up_relic(Equipment()) #
+                    # player.pick_up_relic(Relic()) #
+                    # player.pick_up_relic(SerpentHeart())  #
                     # player.golds = 1000
                     # player.gamemode = 'creator'
                     # for i in range(30):
@@ -178,6 +196,7 @@ while meta_run:
                     # for i in range(3):
                     #     player.pick_up_relic(WhiteCube())
                     #
+                    # player.pick_up_relic(BlueCube())
                     # for i in range(10):
                     #     player.pick_up_relic(RedCube())
                     # if not first_run:

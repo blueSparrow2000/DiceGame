@@ -1,0 +1,20 @@
+Mirinae
+5127
+75
+60
+['martial_art', 'head_start', 'sword_storm', 'Antifragile', 'poison_dart']
+-10
+100
+[]
+10
+0
+False
+[0, 4]
+6
+{'Attack': 9, 'Regen': 0, 'Defence': 4, 'Skill': 4, 'Joker': 0, 'Karma': 0, 'Empty': 47}
+4
+{28: 'Attack'}
+True
+False
+False
+['Relic', 'SerpentHeart']

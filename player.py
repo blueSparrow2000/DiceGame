@@ -11,6 +11,7 @@ class Player(Entity):
         hpmax = character_max_hp[character_name]
         super().__init__(character_name, hpmax, hpmax, (100,mob_Y_level))
         self.my_type = 'player'
+        self.my_seed = random.randint(1, 10000)
         ####################### player only stuffs ############################
         self.current_tile = dict()
         self.board = board
@@ -84,12 +85,12 @@ class Player(Entity):
     def have_space_for_relic(self):
         return len(self.relics) < 24
 
-    def pick_up_relic(self, relic_obj):
+    def pick_up_relic(self, relic_obj,side_effect_off = False):
         if not self.have_space_for_relic():
             print("cannot pick up relics more than 24")
             return
         self.relics.append(relic_obj)
-        relic_obj.effect_when_first_obtained(self)
+        relic_obj.effect_when_first_obtained(self,side_effect_off)
 
     def discard_relic(self, mousepos):
         remove_relic_idx = -1

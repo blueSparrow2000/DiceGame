@@ -12,8 +12,9 @@ relic_rarity_color = {'common':'silver', 'rare':(150, 200, 240), 'epic':'yellowg
 
 
 class Relic():
-    def __init__(self, name="Relic", type = 'regular', rarity = 'myth'):
+    def __init__(self, class_name="Relic", name="Relic", type = 'regular', rarity = 'myth'):
         global relic_rarity_color
+        self.class_name = class_name
         self.name = name
         self.image = load_image("relics/%s"%name)
         self.type = type
@@ -49,9 +50,13 @@ class Relic():
             print("Fight has started!")
         pass
 
-    def effect_when_first_obtained(self, player):
+    def effect_when_first_obtained(self, player, side_effect_off = False):
         if self.debug:
-            print("Relic first obtained!")
+            print("Relic first obtained!",end='')
+            if side_effect_off:
+                print(": Effect off is turned on!")
+            else:
+                print()
         pass
 
     def effect_when_discard(self, player):
@@ -104,10 +109,9 @@ class Relic():
             print("Relic trying to reduce skill requiring 3 skill tile reduce one")
         return False
 
-    ####################################### In progress... ##############################################
-    #####################################################################################################
+    ####################################### In progress feature ... ##############################################
 
-
+    ##############################################################################################################
 
     def description(self):
         return "A relic for debugging"
@@ -136,7 +140,7 @@ class PoisonBottle(Relic):
     duration 3 -> 6
     '''
     def __init__(self):
-        super().__init__(name="poison bottle",rarity = 'epic')
+        super().__init__(class_name="PoisonBottle", name="poison bottle",rarity = 'epic')
 
     def description(self):
         return "Poison dart: damage multiplier 3 -> 6 / duration 3 -> 6"
@@ -146,7 +150,7 @@ class PoisonMask(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="poison mask",rarity = 'epic')
+        super().__init__(class_name="PoisonMask", name="poison mask",rarity = 'epic')
 
     def description(self):
         return "Gas: Double the poison duration"
@@ -158,12 +162,14 @@ class SerpentHeart(Relic):
     Increase max hp by 50
     '''
     def __init__(self):
-        super().__init__(name="serpent heart",rarity = 'special')
+        super().__init__(class_name="SerpentHeart", name="serpent heart",rarity = 'special')
 
     def description(self):
         return "Increase max hp by 50"
 
-    def effect_when_first_obtained(self, player):
+    def effect_when_first_obtained(self, player, side_effect_off = False):
+        if side_effect_off:
+            return
         player.max_health += 50
         player.enforced_regen(50)
     def effect_when_discard(self, player):
@@ -174,7 +180,7 @@ class FearCell(Relic):
     Recovers 4 hp at the start of each fight
     '''
     def __init__(self):
-        super().__init__(name="fear cell",rarity = 'common')
+        super().__init__(class_name="FearCell", name="fear cell",rarity = 'common')
         self.recover_amount = 4
 
     def description(self):
@@ -188,7 +194,7 @@ class StemCell(Relic):
     Recovers 2 hp at the beginning of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="stem cell",rarity = 'epic')
+        super().__init__(class_name="StemCell", name="stem cell",rarity = 'epic')
         self.recover_amount = 2
 
     def description(self):
@@ -202,7 +208,7 @@ class Ration(Relic):
     Recovers 1 hp at the end of each turn in a battle
     '''
     def __init__(self):
-        super().__init__(name="ancient ration",rarity = 'rare')
+        super().__init__(class_name="Ration", name="ancient ration",rarity = 'rare')
         self.recover_amount = 1
 
     def description(self):
@@ -217,7 +223,7 @@ class WhiteCube(Relic):
     [Exhaust] Can revive once
     '''
     def __init__(self):
-        super().__init__(name="white cube", type = 'exhaust',rarity = 'myth')
+        super().__init__(class_name="WhiteCube", name="white cube", type = 'exhaust',rarity = 'myth')
 
     def description(self):
         return "[Exhaust] Can revive once"
@@ -233,12 +239,12 @@ class BlackCube(Relic):
     '''
     '''
     def __init__(self):
-        super().__init__(name="black cube", rarity = 'myth')
+        super().__init__(class_name="BlackCube", name="black cube", rarity = 'myth')
 
     def description(self):
         return "You can place planar figure on top of used tiles"
 
-    def effect_when_first_obtained(self, player):
+    def effect_when_first_obtained(self, player, side_effect_off = False):
         player.board.used_tile_as_empty_tile = True
 
     def effect_when_discard(self, player): # 이런식의 toggle effect같은 경우, 같은 이름의 유물이 더이상 존재하지 않을떄 토글을 꺼줘야 한다
@@ -256,7 +262,7 @@ class FrenzySkull(Relic):
     should be called whenever enemy is getting deleted
     '''
     def __init__(self):
-        super().__init__(name="frenzy skull", rarity = 'legendary')
+        super().__init__(class_name="FrenzySkull", name="frenzy skull", rarity = 'legendary')
 
     def description(self):
         return "heal by the amount overkilled"
@@ -272,7 +278,7 @@ class LargeThorn(Relic):
     Deals half of the damage received
     '''
     def __init__(self):
-        super().__init__(name="large thorn", rarity = 'legendary')
+        super().__init__(class_name="LargeThorn", name="large thorn", rarity = 'legendary')
 
     def description(self):
         return "Deals half of the damage received"
@@ -287,7 +293,7 @@ class Thorn(Relic):
     Deals 5 damage when attacked
     '''
     def __init__(self):
-        super().__init__(name="thorn", rarity = 'special')
+        super().__init__(class_name="Thorn", name="thorn", rarity = 'special')
         self.thorn_damage = 5
 
     def description(self):
@@ -303,7 +309,7 @@ class Moss(Relic):
     Better next time!
     '''
     def __init__(self):
-        super().__init__(name="moss", rarity = 'common')
+        super().__init__(class_name="Moss", name="moss", rarity = 'common')
 
     def description(self):
         return "Better luck next time!"
@@ -316,7 +322,7 @@ class GoldenTalisman(Relic):
     Each has 20% chance of doubling earned gold
     '''
     def __init__(self):
-        super().__init__(name="golden talisman", rarity = 'common')
+        super().__init__(class_name="GoldenTalisman", name="golden talisman", rarity = 'common')
         self.chance = 20
 
     def description(self):
@@ -335,7 +341,7 @@ class RuinCompass(Relic):
     Forward compatibility of the moss
     '''
     def __init__(self):
-        super().__init__(name="ruin compass", rarity = 'rare')
+        super().__init__(class_name="RuinCompass", name="ruin compass", rarity = 'rare')
 
     def description(self):
         return "Increase the chance of finding a relic in ruins"
@@ -357,7 +363,7 @@ class Dagger(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="dagger",rarity = 'special')
+        super().__init__(class_name="Dagger", name="dagger",rarity = 'special')
         self.damage_per_dagger = 3
 
     def description(self):
@@ -377,7 +383,7 @@ class BagOfDagger(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="bag of dagger",rarity = 'legendary')
+        super().__init__(class_name="BagOfDagger", name="bag of dagger",rarity = 'legendary')
         self.damage_per_dagger = 2
 
     def description(self):
@@ -397,7 +403,7 @@ class TiltedScale(Relic):
     NOTE: You cannot get frenzy skull effect or enemy's thorny effect due to this relic
     '''
     def __init__(self):
-        super().__init__(name="tilted scale",rarity = 'epic')
+        super().__init__(class_name="TiltedScale", name="tilted scale",rarity = 'epic')
         self.tilt_amount = 2
 
     def description(self):
@@ -415,7 +421,7 @@ class ArcaneBook(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="arcane book",rarity = 'epic')
+        super().__init__(class_name="ArcaneBook", name="arcane book",rarity = 'epic')
 
     def description(self):
         return "Gain strength on the first turn of each battle"
@@ -429,7 +435,7 @@ class Tombstone(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="tombstone",rarity = 'rare')
+        super().__init__(class_name="Tombstone", name="tombstone",rarity = 'rare')
 
     def description(self):
         return "On board reset, one empty tile is converted into an attack tile"
@@ -442,7 +448,7 @@ class RecycledSword(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="recycled sword",rarity = 'common')
+        super().__init__(class_name="RecycledSword", name="recycled sword",rarity = 'common')
 
     def description(self):
         return "Each turn, one used tile is converted into an attack tile"
@@ -455,7 +461,7 @@ class SwordCatalyst(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="sword catalyst",rarity = 'common')
+        super().__init__(class_name="SwordCatalyst", name="sword catalyst",rarity = 'common')
 
     def description(self):
         return "For each enemy killed, get temporal attack tile"
@@ -469,7 +475,7 @@ class WarHorn(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="war horn",rarity = 'epic')
+        super().__init__(class_name="WarHorn", name="war horn",rarity = 'epic')
 
     def description(self):
         return "If no attack tiles on the board, all empty tiles become attack"
@@ -491,7 +497,7 @@ class StrawMat(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="straw mat",rarity = 'epic')
+        super().__init__(class_name="StrawMat", name="straw mat",rarity = 'epic')
         self.shield_per_straw = 5
 
     def description(self):
@@ -508,7 +514,7 @@ class Obsidian(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="obsidian",rarity = 'rare')
+        super().__init__(class_name="Obsidian", name="obsidian",rarity = 'rare')
 
     def description(self):
         return "On board reset, one empty tile is converted into a defence tile"
@@ -521,7 +527,7 @@ class RecycledShield(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="recycled shield",rarity = 'common')
+        super().__init__(class_name="RecycledShield", name="recycled shield",rarity = 'common')
 
     def description(self):
         return "Each turn, one used tile is converted into a defence tile"
@@ -534,7 +540,7 @@ class ShieldCatalyst(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="shield catalyst",rarity = 'common')
+        super().__init__(class_name="ShieldCatalyst", name="shield catalyst",rarity = 'common')
 
     def description(self):
         return "For each enemy killed, get temporal defence tile"
@@ -547,7 +553,7 @@ class BattleShield(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="battle shield",rarity = 'rare')
+        super().__init__(class_name="BattleShield", name="battle shield",rarity = 'rare')
         self.shield_gain = 5
 
     def description(self):
@@ -563,7 +569,7 @@ class Paranoia(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="paranoia",rarity = 'epic')
+        super().__init__(class_name="Paranoia", name="paranoia",rarity = 'epic')
         self.shield_gain = 2
 
     def description(self):
@@ -586,12 +592,12 @@ class IronPlate(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="iron plate",rarity = 'legendary')
+        super().__init__(class_name="IronPlate", name="iron plate",rarity = 'legendary')
         self.base_defence_gain = 4
     def description(self):
         return "Gain %d permanent defence"%self.base_defence_gain
 
-    def effect_when_first_obtained(self, player):
+    def effect_when_first_obtained(self, player, side_effect_off = False):
         player.base_defence += self.base_defence_gain
         player.update_defence()
     def effect_when_discard(self, player):
@@ -603,7 +609,7 @@ class Armadillo(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="armadillo",rarity = 'rare')
+        super().__init__(class_name="Armadillo", name="armadillo",rarity = 'rare')
         self.defence_multiplier = 5
 
     def description(self):
@@ -619,12 +625,12 @@ class Antidote(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="antidote",rarity = 'legendary')
+        super().__init__(class_name="Antidote", name="antidote",rarity = 'legendary')
 
     def description(self):
         return "Become immune to poison and toxin"
 
-    def effect_when_first_obtained(self, player):
+    def effect_when_first_obtained(self, player, side_effect_off = False):
         player.immune_to_toxin = True
         player.immune_to_poison = True
     def effect_when_discard(self, player):
@@ -643,12 +649,12 @@ class Oil(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="oil",rarity = 'special')
+        super().__init__(class_name="Oil", name="oil",rarity = 'special')
 
     def description(self):
         return "Become immune to weakness"
 
-    def effect_when_first_obtained(self, player):
+    def effect_when_first_obtained(self, player, side_effect_off = False):
         player.immune_to_weakness = True
     def effect_when_discard(self, player):
         relic_num = self.count_relic_with_same_name(player, self.name)
@@ -666,7 +672,7 @@ class Encyclopedia(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="encyclopedia",rarity = 'legendary')
+        super().__init__(class_name="Encyclopedia", name="encyclopedia",rarity = 'legendary')
         self.decrease_rate = 5
 
     def description(self):
@@ -681,7 +687,7 @@ class Candle(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="candle",rarity = 'special')
+        super().__init__(class_name="Candle", name="candle",rarity = 'special')
         self.percent_point = 40
 
     def description(self):
@@ -696,7 +702,7 @@ class Equipment(Relic):
     '''
 
     def __init__(self):
-        super().__init__(name="equipment", rarity='legendary')
+        super().__init__(class_name="Equipment", name="equipment", rarity='legendary')
 
     def description(self):
         return "There are always 3 artifact options in the ruins"
@@ -709,7 +715,7 @@ class GoldenClover(Relic):
 
     '''
     def __init__(self):
-        super().__init__(name="golden clover",rarity = 'legendary')
+        super().__init__(class_name="GoldenClover", name="golden clover",rarity = 'legendary')
 
     def description(self):
         return "Each turn, one used tile is converted into a joker tile"
@@ -723,7 +729,7 @@ class YellowCube(Relic):
     '''
 
     def __init__(self):
-        super().__init__(name="yellow cube", rarity='myth')
+        super().__init__(class_name="YellowCube", name="yellow cube", rarity='myth')
 
     def description(self):
         return "All prices in the shop are half off per yellow cube"
@@ -732,6 +738,28 @@ class YellowCube(Relic):
     def get_discount_factor(self):
         return 2
 
+class BlueCube(Relic):
+    '''
+
+    '''
+
+    def __init__(self):
+        super().__init__(class_name="BlueCube", name="blue cube", rarity='myth')
+        self.damage_threshold = 100
+    def description(self):
+        return "Do not take more damage than %d per hit"%self.damage_threshold
+
+    def effect_when_first_obtained(self, player, side_effect_off = False):
+        player.taking_damage_threshold = self.damage_threshold
+
+    def effect_when_discard(self, player): # 이런식의 toggle effect같은 경우, 같은 이름의 유물이 더이상 존재하지 않을떄 토글을 꺼줘야 한다
+        relic_num = self.count_relic_with_same_name(player, self.name)
+        if relic_num == 1: # 1일때는 나밖에 없을떄
+            player.taking_damage_threshold = -1
+        elif relic_num == 0:
+            print("ERROR! I exist but not counted")
+        else:
+            pass
 
 ####################################### In progress... ##############################################
 
@@ -741,7 +769,7 @@ class RedCube(Relic):
     '''
 
     def __init__(self):
-        super().__init__(name="red cube", rarity='myth')
+        super().__init__(class_name="RedCube", name="red cube", rarity='myth')
 
     def description(self):
         return "Reduce the cost of skills with 3 required skill tiles by 1"
@@ -749,7 +777,7 @@ class RedCube(Relic):
     def skill_requiring_3_skill_tile_reduce_one(self):
         return True
 
-relic_class_names = ['RedCube','YellowCube','BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
+relic_class_names = ['BlueCube','RedCube','YellowCube','BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
 
 

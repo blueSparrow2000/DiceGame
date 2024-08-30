@@ -100,6 +100,12 @@ bottom_left_button = (40, height - 40)
 bottom_right_button = (width - 40, height - 40)
 bottom_center_button = (width//2,height-40)
 
+top_left_button = (40, 60)
+top_right_button = (width - 40, 60)
+top_center_button = (width//2,60)
+
+
+
 right_middle_button = (width - 40,middle_button_Y_level)
 left_middle_button = (40,middle_button_Y_level)
 

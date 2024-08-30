@@ -114,6 +114,11 @@ left_button = load_image("icons/left")
 right_button_gold = load_image("icons/right_gold")
 left_button_gold = load_image("icons/left_gold")
 
+
+game_save_img = load_image("icons/save")
+game_load_img = load_image("icons/load")
+
+
 mini_tile_icons = dict()
 for mini_tile in tile_names:
     mini_tile_icons[mini_tile] = (load_image("tiles/mini_tile/%s" % mini_tile))

@@ -1,0 +1,20 @@
+	player.my_name,  # 이것만 알면 스킬북은 로딩에서 생성하면 된다
+        player.my_seed,  # 시드 저장
+        player.max_health,
+        player.health,
+        player.current_skills,  # 현재 스킬 리스트 이거 저장 후 덮어씌워야 함
+        player.current_depth,
+        player.golds,
+        player.items,
+        player.killed_enemies,
+        player.boss_stage,
+        player.killed_watcher,
+        player.board.planar_figure_idx,
+        player.board.board_side_length,
+        player.board.permanent_board_dict,
+        player.board.board_reset_turn,
+        player.board.permanently_fixed_tiles,
+        player.board.out_of_board_protection,
+        player.board.irregular_shape,
+        player.board.board_shuffle_every_turn,
+        [relic.class_name for relic in player.relics]

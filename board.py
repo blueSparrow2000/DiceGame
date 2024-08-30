@@ -168,9 +168,9 @@ Out of board protection becomes false! => more free space to use
 collect_tiles(self,mousepos, out_of_board_protection = False)
 '''
 class Board():
-    def __init__(self,tiles_dict,planar_figure_idx):
+    def __init__(self,tiles_dict,planar_figure_idx, side_length = 8):
         global tile_names,sound_effects,board_Y_level
-        self.board_side_length = 8
+        self.board_side_length = side_length
         self.board = [] # 이번 보드에만 영향을 주는건 이것만 바꿈  # 각 원소의 형태 = [location , tile name , fixed_or_not boolean ]
         self.temp_board = []
         self.permanent_board_dict = copy.deepcopy(tiles_dict) # 영구적인 영향을 주는 거면 이거도 바꿈
@@ -207,12 +207,14 @@ class Board():
         self.board_shuffle_every_turn = False
 
         ############# planar figure ##############
-        self.net = Net(planar_figure_idx,self.side_length ,self.board_Y_selectable)
+        self.planar_figure_idx = planar_figure_idx
+        self.net = Net(self.planar_figure_idx,self.side_length ,self.board_Y_selectable)
         ############# planar figure ##############
 
         self.number_of_permanent_tiles = 0 # used in ending credit
 
         self.used_tile_as_empty_tile = False
+
 
     def set_out_of_board_protection(self, bool_input):
         self.out_of_board_protection = bool_input
@@ -323,7 +325,7 @@ class Board():
         for fixed_tile_idx in self.permanently_fixed_tiles.keys():
             if location_index == fixed_tile_idx:
                 print("tile already exists in that location!")
-                return  False
+                return False
 
         self.reset_fixing_tile()
         # add one!
@@ -344,6 +346,7 @@ class Board():
             self.permanently_replace_a_blank_tile_to(tile_name_to_fix)
             print("Fixed a tile permanently!")
             self.reset_fixing_tile()
+
 
     def reset_fixing_tile(self):
         self.temp_permanently_fixed_tiles = copy.deepcopy(self.permanently_fixed_tiles)

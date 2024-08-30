@@ -1207,15 +1207,9 @@ class Wall(Enemy):
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 20)
 
         self.taking_damage_threshold = 100
+
     def get_description(self):  # override
-        return "Maximum amount of damage taken is %d"%self.taking_damage_threshold
-
-    def take_damage(self, attacker, damage_temp, no_fightback = False): # wake up when taken damage!
-        if damage_temp > self.taking_damage_threshold:
-            sound_effects['block'].play()
-            damage_temp = self.taking_damage_threshold # truncate to threshold
-
-        super().take_damage(attacker, damage_temp, no_fightback)
+        return "Does not take more damage than %d per hit"%self.taking_damage_threshold
 
     def behave(self, player, enemy = None):
         self.refresh_my_turn()

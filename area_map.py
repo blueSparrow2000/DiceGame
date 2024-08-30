@@ -78,6 +78,10 @@ def adventure_loop(screen, clock, player,map):
                     (xp, yp) = pygame.mouse.get_pos()
                     mouse_particle_list.append((pygame.time.get_ticks(), (xp, yp)))
 
+                    if check_inside_button(mousepos, top_center_button, button_side_len_half):
+                        save_game(1, player)
+
+
                     if check_inside_button(mousepos, bottom_left_button, button_side_len_half):
                         player.board.net.change_planar_figure(False)
                     elif check_inside_button(mousepos, bottom_right_button, button_side_len_half):
@@ -137,6 +141,12 @@ def adventure_loop(screen, clock, player,map):
                 activate_tile = map.animate_draw(screen)
             else:
                 map.draw(screen)
+                if check_inside_button(mousepos, top_center_button, button_side_len_half):
+                    write_text(screen,top_center_button[0],top_center_button[1],"Save", 18,'dimgray')
+                else:
+                    screen.blit(game_save_img, game_save_img.get_rect(center=top_center_button))
+
+
 
             if activate_tile:
                 player.update_depth(move_depth)

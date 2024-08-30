@@ -51,13 +51,100 @@ import copy
 #     print('%4d'%x, y, "  |%d"%(- (abs(x)%100) ))
 #
 
-listy = [1,2,3,4,5,6,4]
-remove_idx = 0
-cnt = 0
-for ll in listy:
-    if ll==5:
-        remove_idx=cnt
-    cnt+=1
+# with open("foo.txt", "w") as f:
+#     information = ["%d sentence "%i for i in range(10)]
+#     for info in information:
+#         f.write(info+"\n")
 
-del listy[remove_idx]
-print(listy)
+
+
+# dict_in_str = "{'Attack': 9, 'Regen': 0, 'Defence': 4, 'Skill': 4, 'Joker': 0, 'Karma': 0, 'Empty': 47}"
+#
+# def get_permanent_tile_dict(dict_in_str):
+#     permanent_tile_dict = dict()
+#     dict_in_str = dict_in_str[1:-1]
+#     tile_info_list = dict_in_str.split(",")
+#     for tile_info in tile_info_list:
+#         refined_info = tile_info.split(":")
+#         # print(refined_info)
+#         tile_name = refined_info[0].strip()[1:-1]
+#         tile_amount = int(refined_info[1].strip())
+#         permanent_tile_dict[tile_name] = tile_amount
+#
+#     return permanent_tile_dict
+#
+# print(get_permanent_tile_dict(dict_in_str))
+#
+#
+# list_in_str = "['martial_art', 'head_start', 'sword_storm', 'self_defence', 'Antifragile', 'Excaliber']"
+# def string_to_list(list_in_str):
+#     result_list = []
+#     dict_in_str = list_in_str[1:-1]
+#     tile_info_list = dict_in_str.split(",")
+#     for tile_info in tile_info_list:
+#         refined_info = tile_info.strip()[1:-1]
+#         result_list.append(refined_info)
+#     return result_list
+#
+#
+#
+# print(string_to_list(list_in_str))
+#
+#
+# fixed_tile_info_str = "{ }"
+#
+# def get_fixed_tile_dict(dict_in_str):
+#     permanent_tile_dict = dict()
+#     dict_in_str = dict_in_str[1:-1]
+#     tile_info_list = dict_in_str.split(",")
+#     for tile_info in tile_info_list:
+#         refined_info = tile_info.split(":")
+#         # print(refined_info)
+#         tile_amount = int(refined_info[0])
+#         tile_name = refined_info[1].strip()[1:-1]
+#
+#         permanent_tile_dict[tile_amount] = tile_name
+#
+#     return permanent_tile_dict
+#
+# print(get_fixed_tile_dict(fixed_tile_info_str))
+
+
+# sss = " "
+# xx = sss.strip()
+# print(xx)
+# print(len(xx))
+
+# def str_to_bool(candidate):
+#     if candidate=='True':
+#         return True
+#     elif candidate=='False':
+#         return False
+#     else:
+#         print("ERROR! Input Not boolean!")
+#         return False
+#
+# print(str_to_bool('False'))
+#
+#
+# list_in_str = "[0, 3]"
+# def string_to_int_list(list_in_str):
+#     result_list = []
+#     dict_in_str = list_in_str[1:-1]
+#     tile_info_list = dict_in_str.split(",")
+#     for tile_info in tile_info_list:
+#         refined_info = int(tile_info.strip())
+#         result_list.append(refined_info)
+#     return result_list
+#
+# print(string_to_int_list(list_in_str))
+
+# def try_cast_int(candidate):
+#     try:
+#         return int(candidate)
+#     except ValueError:
+#         # print("not int")
+#         return candidate
+#
+# depthsss = "LIMIT" #-1#
+# print(try_cast_int(depthsss))

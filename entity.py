@@ -76,6 +76,8 @@ class Entity():
         ######## relics
         self.relics = []
 
+        self.taking_damage_threshold = -1
+
 
     def set_zero_defence(self):
         self.defence = 0
@@ -199,8 +201,12 @@ class Entity():
             self.buffs['attack immunity'] -= 1 # discount one
             return 0
 
+        counter_attack_damage = damage_temp
         damage = self.vulnerability_multiplier * damage_temp
-        counter_attack_damage = damage
+        if self.taking_damage_threshold>0 and damage > self.taking_damage_threshold:
+            sound_effects['block'].play()
+            damage = self.taking_damage_threshold # truncate to threshold
+
         # consider absorption first
         damage = max(0, damage - self.absorption)
         # print(self.my_name,'got damage of',  damage_temp)

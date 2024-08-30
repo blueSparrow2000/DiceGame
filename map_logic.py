@@ -41,6 +41,11 @@ class Map():
         self.debug_mode = False
 
     def random_initialize(self, player):
+        if not player.reached_max_depth():
+            random.seed(player.my_seed + abs(player.get_depth())) # 게임 들어갔다 나왔다 하면서 맵을 원하는 대로 유도하는걸 방지함 (몹 종류는 상관없음)
+        else:
+            random.seed(None)
+
         self.moving_X = 0
         self.moving_Y = 0
         self.block_paths = [] # 거리 단위임에 유의
