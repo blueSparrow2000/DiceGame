@@ -1,6 +1,19 @@
 # Diagramiz
 A simple dice game (actually a planar figure game)
 
+# How to run
+* Suggest IDE(like pyCharm) to play this game.
+
+
+1. Download and unzip file in your interpreter. If you use pyCharm, then put the file in PycharmProjects folder
+2. (If using Pycharm) Go to interpreter settings and configure python interpreter ** to python version 3.8 or higher
+3. Install pygame to the interpreter (version higher than pygame 2.6.0 is fine) using pip or using pycharm interpreter settings
+4. Similarly to 3, install numpy version 2.0.1 or higher
+5. Open the project folder (dice_game_test)
+6. Run main.py 
+
+
+** If 'Invalid Python interpreter selected ...' message comes out, click on 'Configure Python interpreter' and add one! Any interpreter of Python version greater or equal to 3.8 is ok.
 
 ## Sample run
 <img src="./run_images/mirinae.png" width="255" height="503" align="left">
@@ -120,7 +133,7 @@ A simple dice game (actually a planar figure game)
 2024.08.30 Game saver & loader / Blue cube: max incoming damage fixed / Baron, Cinavro design / Apostle: deal damage proportional to player current health
 
 
-~ Beta test: Fix bugs!
+2024.08.31 ~ Beta test: Fix bugs!
 
 
 
@@ -134,7 +147,6 @@ A simple dice game (actually a planar figure game)
 - Campfire: you can remove one tile from the board (if you want)
 
 - Halo phase 2: NALO
-
 
 - simple hit animation
 
@@ -253,8 +265,10 @@ Trick style
 Aquatic: カナリアスキップ
 
 # About distribution
-You are free to download and play the game, but you may not modify and re-distribute the game file. 
+You are free to download and play the game, but you should not modify and re-distribute the game file. 
 
 
 This game is planned for commercial use, so copying the game logic is prohibited.
 
+
+All the assets except musics belong to the creator.
