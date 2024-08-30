@@ -1,4 +1,4 @@
-version = 'beta 1.3.8'
+version = 'beta 1.3.9'
 
 
 # system variables
