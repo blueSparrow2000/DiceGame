@@ -250,3 +250,9 @@ Trick style
 
 Aquatic: カナリアスキップ
 
+# About distribution
+You are free to download and play the game, but you may not modify and re-distribute the game file. 
+
+
+This game is planned for commercial use, so copying the game logic is prohibited.
+
