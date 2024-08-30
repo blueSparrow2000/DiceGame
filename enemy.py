@@ -99,7 +99,13 @@ class Enemy(Entity):
             if isinstance(self.attack_damage, list):
                 description = "%d~%d" %(self.attack_damage[0],self.attack_damage[1])
             else:
-                description = "%d"%self.get_current_damage()
+                if current_pattern == 'attack' and self.my_name=="apostle":
+                    # health_proportion = player.health // 4
+                    # damage = max(health_proportion, 20)
+                    # player.take_damage(self, damage * self.get_attack_multiplier())
+                    description = "x/4"
+                else:
+                    description = "%d"%self.get_current_damage()
         elif current_pattern == 'buff':
             pass
         elif current_pattern == 'regen':
@@ -593,7 +599,48 @@ class Carrier(Enemy):
     def get_heal_amount(self):
         return 20
 
+class Apostle(Enemy):
+    def __init__(self, my_name = 'apostle', hp=100, hpmax = 1000, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack', 'lifesteal'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 25)
 
+    def get_description(self): # override
+        return "Deal damage proportional to player's health"
+
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='lifesteal':
+            if self.can_attack:
+                sound_effects['small_hit'].play()
+                player.take_damage(self,self.get_current_damage())
+                self.enforced_regen(self.attack_damage)
+
+        elif current_pattern == 'attack':
+            if self.can_attack:
+                sound_effects['playerdeath'].play()
+                health_proportion = player.health // 4
+                damage = health_proportion #max(health_proportion, 20)
+                player.take_damage(self, damage * self.get_attack_multiplier())
+
+        elif current_pattern=='no op':
+            player.buffs['vulnerability'] += 1
+            pass # no op
+        elif current_pattern=='shield':
+            pass
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            pass
+        elif current_pattern=='unknown':
+            pass # no op
+        elif current_pattern == 'summon':
+            pass
+        elif current_pattern == 'infiltrate': # place a tile inside the player's tile
+            player.board.insert_a_tile_on_board("Slime")
+
+        self.proceed_next_pattern()
+        self.end_my_turn()
 
 class Silent(Enemy):
     def __init__(self, my_name='silent', hp=800, hpmax=800, attack_damage=[32, 64], pos=(332, mob_Y_level),

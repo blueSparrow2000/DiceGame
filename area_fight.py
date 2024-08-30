@@ -171,8 +171,8 @@ def fight(screen, clock, player, place = None):
     enemy_request = []
     candidate_enemy_list = []
 
-    enemies_by_depth = {1:['mob', 'fragment', 'lenz', 'mine', 'norm', 'scout', 'observer', 'sentinel'], 2:[ 'embryo', 'scalpion', 'snider','snalk'], 3:[ 'parasite','urchin','operator', 'guard','wall','ikarus'], 'ruin':['stem', 'beast', 'raider', 'shatter','golem']}
-    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6], [30, 6.8], [50, 6.2],[50, 6.2]], 3:[[25, 8.6], [30, 6.8],[50, 6.2],[50, 6.2],[73,6.3],[90,5.4]], 'ruin':[[40, 14] , [60, 9.6],[110, 13],[120, 10],[135,9]]}
+    enemies_by_depth = {1:['mob', 'fragment', 'lenz', 'mine', 'norm', 'scout', 'observer', 'sentinel'], 2:[ 'embryo', 'scalpion', 'snider','snalk','apostle'], 3:[ 'parasite','urchin','operator', 'guard','wall','ikarus'], 'ruin':['stem', 'beast', 'raider', 'shatter','golem']}
+    params_by_depth = {1:[[25, 8.6] , [30, 6.8],[50, 6.2],[50, 6.2],[80,5.4],[73,6.3],[80,5.4],[80,5.4] ], 2:[[25, 8.6], [30, 6.8], [50, 6.2],[50, 6.2],[95,5.4]], 3:[[25, 8.6], [30, 6.8],[50, 6.2],[50, 6.2],[73,6.3],[90,5.4]], 'ruin':[[40, 14] , [60, 9.6],[110, 13],[120, 10],[135,9]]}
 
     cur_depth = player.get_depth()
 
@@ -213,6 +213,8 @@ def fight(screen, clock, player, place = None):
     #####################################################################################
     # enemy_request = ['raider'for i in range(3)] #
     # enemy_request = ['wall','ikarus']
+    # enemy_request =['apostle']
+
 
     enemies = []
     mob_number_cap = 3
