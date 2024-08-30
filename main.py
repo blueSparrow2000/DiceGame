@@ -35,7 +35,7 @@ from skill_book import *
 from area_map import *
 from relic import *
 from title_screen import *
-
+from game_saver import *
 
 
 pygame.init()  # 파이게임 초기화
@@ -55,13 +55,13 @@ dummy_net = Net([0],50,100)
 
 first_run = True
 music_Q('Lobby', True)
-title_screen(screen,clock)
 
 meta_run = True
 
 while meta_run:
     if not first_run:
         music_Q('Lobby', True)     # The Music in main
+    title_screen(screen, clock)
 
     run_character_selection = True
     mousepos = (0, 0)
@@ -169,7 +169,7 @@ while meta_run:
                     #     fix_a_tile(screen, clock, player,'Attack')
                     #     fix_a_tile(screen, clock, player,'Defence')
 
-                    # player.pick_up_relic(Tombstone())
+                    # player.pick_up_relic(Candle())
                     # player.pick_up_relic(RecycledSword())
                     # for i in range(20):
                     #     player.pick_up_relic(TiltedScale())

@@ -6,6 +6,7 @@ from area_shop import *
 from area_fight import *
 from game_win_screen import *
 from area_blackmarket import *
+from game_saver import *
 
 
 def exit():

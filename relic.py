@@ -682,9 +682,10 @@ class Candle(Relic):
     '''
     def __init__(self):
         super().__init__(name="candle",rarity = 'special')
+        self.percent_point = 40
 
     def description(self):
-        return "decrease chance of getting cursed on the altar by 50%p"
+        return "decrease chance of getting cursed on the altar by %d%%p"%self.percent_point
 
     def curse_chance_decreaser(self):
         return 50
