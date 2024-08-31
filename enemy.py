@@ -33,6 +33,9 @@ class Enemy(Entity):
         self.turn_count_threshold = 5
         self.turn_count = 0
 
+        self.enemy_list = None
+
+
     def get_description(self): # override
         return None
     def write_description(self, screen, mousepos):
@@ -63,8 +66,8 @@ class Enemy(Entity):
         super().take_damage(attacker, damage_temp, no_fightback)
         self.passive_to_aggressive = True
 
-    def draw(self,screen,mousepos): ################# ENEMY EXCLUSIVE
-        super().draw(screen,mousepos)
+    def draw(self,screen,mousepos, fast_draw = False): ################# ENEMY EXCLUSIVE
+        super().draw(screen,mousepos,fast_draw)
         self.show_next_move(screen,mousepos)
         self.write_description(screen,mousepos)
 
@@ -146,6 +149,13 @@ class Halo(Enemy):
     def get_description(self): # override
         return "??? "
 
+    def on_death(self, attacker):
+        time.sleep(0.1)
+        sound_effects['playerdeath'].play()
+        spawn_enemy(self.enemy_list, 'nalo', 3,[], self.mypos[0])
+        time.sleep(0.1)
+
+
     def behave(self, player, enemy = None):
         self.refresh_my_turn()
 
@@ -173,8 +183,78 @@ class Halo(Enemy):
             self.regen()
         elif current_pattern=='unknown':
             player.buffs['broken will'] += 1
+
+            # player.buffs['strength'] = 1
+            # player.buffs['toxin'] = 1
+            # player.buffs['confusion'] = 1
+            # player.buffs['confusion'] += 1
+            # player.buffs['vulnerability'] += 1
         elif current_pattern == 'summon':
             pass
+
+        self.proceed_next_pattern()
+
+        self.end_my_turn()
+        time.sleep(0.2)
+
+    def get_heal_amount(self):
+        return 15
+
+
+class Nalo(Enemy):
+    def __init__(self, my_name = 'nalo', hp=1000, hpmax = 1000, attack_damage = [128,256], pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'unknown','lifesteal','charge','charge','charge', 'death'], rank = 1 ):
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 500)
+
+    def get_description(self): # override
+        return "Mors erit resistentibus"
+
+    def on_death(self, attacker):
+        attacker.kill_all = True
+
+    def get_spawn_mob_name(self):
+        self.spawn_request = False
+        return "apostle"
+
+    def behave(self, player, enemy = None):
+        self.refresh_my_turn()
+
+        current_pattern = self.pattern[self.current_pattern_idx]
+        if current_pattern=='death':
+            if self.can_attack:
+                damage_per_hit = player.health//3 + 1
+                for i in range(3):
+                    time.sleep(0.15)
+                    sound_effects['playerdeath'].play()
+                    player.take_damage(self, damage_per_hit*self.get_attack_multiplier())
+
+                    player.fast_update_health(screen)
+
+                    time.sleep(0.15)
+
+        elif current_pattern == 'lifesteal':
+            if self.can_attack:
+                time.sleep(0.2)
+                sound_effects['shruff'].play()
+                time.sleep(0.1)
+                damage = random.randint(self.attack_damage[0], self.attack_damage[1])
+                player.take_damage(self, damage * self.get_attack_multiplier())
+                self.enforced_regen(damage)
+
+        elif current_pattern=='no op':
+            pass # no op
+        elif current_pattern=='charge':
+            sound_effects['blast'].play()
+            self.buffs['vulnerability'] = 2
+        elif current_pattern=='shield':
+            pass # no op
+        elif current_pattern=='buff':
+            pass
+        elif current_pattern=='regen':
+            self.regen()
+        elif current_pattern=='unknown':
+            player.buffs['confusion'] += 1
+        elif current_pattern == 'summon':
+            self.spawn_request = True
 
         self.proceed_next_pattern()
 
@@ -556,6 +636,10 @@ class Carrier(Enemy):
     def get_description(self): # override
         return "Boss: 4 base defence, summons norm"
 
+    def on_death(self, attacker):
+        attacker.kill_all = True
+
+
     def get_spawn_mob_name(self):
         self.spawn_request = False
         return "norm"
@@ -655,6 +739,11 @@ class Silent(Enemy):
     '''
     def get_description(self): # override
         return "Boss: Immune to poison / next moves are randomized"
+
+    def on_death(self, attacker):
+        attacker.kill_all = True
+
+
     def behave(self, player, enemy=None):
         self.refresh_my_turn()
 

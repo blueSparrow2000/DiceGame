@@ -162,3 +162,38 @@ class Node():
                 return True
         # print("Map path finder: one branch failed in Depth first search")
 
+
+def get_enemy_class_by_class_name(enemy_name):
+    enemy_class_name = string_capitalizer(enemy_name)
+    enemy_class = getattr(__import__("enemy"), enemy_class_name)
+    return enemy_class
+
+
+def spawn_enemy(enemy_list, enemy_name,mob_number_cap, mob_locations, enforced_location = None):
+    if len(enemy_list) >= mob_number_cap: # enemy list is full!
+        # print("cannot spawn enemy more than %d"%mob_number_cap)
+        return
+
+    final_loc = 0
+    if enforced_location is not None:
+        final_loc = enforced_location
+    else:
+        occupied_x_pos = []
+        for enemy in enemy_list: # there should be at least one place
+            occupied_x_pos.append(enemy.mypos[0])
+        occupied_x_pos.sort()
+        locations_set = set(mob_locations)
+        occupied_set = set(occupied_x_pos)
+        candidate_set = locations_set.difference(occupied_set)
+
+        for candidate in candidate_set: # just use any
+            final_loc = candidate
+
+    enemy_class = get_enemy_class_by_class_name(enemy_name)
+    enemy = enemy_class(pos=(final_loc, mob_Y_level), rank=1)
+    enemy.refresh_my_turn()
+    enemy_list.insert(0,enemy)
+
+    # update enemy list here
+    for entity in enemy_list:
+        entity.enemy_list = enemy_list

@@ -25,6 +25,7 @@ class Entity():
         self.my_name = my_name
         self.my_type='entity'
         self.image = load_image(my_name)
+        self.my_img_side_len = self.image.get_height()
 
         self.health = hp
         self.max_health = hpmax
@@ -78,6 +79,7 @@ class Entity():
 
         self.taking_damage_threshold = -1
 
+        self.kill_all = False
 
     def set_zero_defence(self):
         self.defence = 0
@@ -143,17 +145,29 @@ class Entity():
 
         self.update_buffs()  # update buff counts
 
-    def show_hp_attributes(self,screen,mousepos):
-        global buff_icon_container, icon_container
+
+    def show_hp_only(self, screen, fast_draw = False):
         draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100, 'silver')
         draw_bar(screen, self.health_bar_pos[0], self.health_bar_pos[1], 64, 15, 100 * self.health / self.max_health, 'coral')
 
         write_text(screen, self.health_bar_pos[0], self.health_bar_pos[1], "%d/%d" % (self.health, self.max_health), 15, 'maroon')
+
         if (self.total_defence > 0):
 
             screen.blit(icon_container['shield'], icon_container['shield'].get_rect(center=(self.icon_x, self.icon_y)))
             write_text(screen, self.icon_x, self.icon_y, "%d" % (self.total_defence), 15,
                        'deepskyblue')
+
+        if fast_draw:
+            region = (self.health_bar_pos[0] - 32, self.health_bar_pos[1] - 8, 64, 16)  # 64 15
+            pygame.display.update(region)
+            pygame.display.update((self.icon_x - self.icon_delta // 2, self.icon_y - self.icon_delta // 2,
+                                   self.icon_delta, self.icon_delta ))
+
+    def show_hp_attributes(self,screen,mousepos, fast_draw = False):
+        global buff_icon_container, icon_container
+
+        self.show_hp_only(screen, fast_draw)
 
         # show buff/debuffs
         cnt = 0
@@ -178,16 +192,23 @@ class Entity():
                     write_text(screen, width // 2, turn_text_level + self.icon_delta, description, 17, "white", 'black')
                 cnt += 1
 
+        if fast_draw:
+
+            pygame.display.update((self.buff_icon_x - self.icon_delta//2, self.buff_icon_y - self.icon_delta//2, self.icon_delta*3, self.icon_delta*4))
+
         if (self.absorption > 0):
             screen.blit(icon_container['absorption'], icon_container['absorption'].get_rect(center=(self.absorption_icon_x, self.absorption_icon_y)))
             write_text(screen, self.absorption_icon_x, self.absorption_icon_y, "%d" % (self.absorption), 15,
                        'khaki')
 
-    def draw(self,screen, mousepos):
+    def draw(self,screen, mousepos, fast_draw = False):
         screen.blit(self.image, self.image.get_rect(center=self.mypos))
-        self.show_hp_attributes(screen, mousepos)
         if self.targeted:
             screen.blit(target_icon, target_icon.get_rect(center=self.mypos))
+        if fast_draw:
+            pygame.display.update((self.mypos[0] -self.my_img_side_len//2, self.mypos[1] - self.my_img_side_len//2, self.my_img_side_len, self.my_img_side_len))
+
+        self.show_hp_attributes(screen, mousepos,fast_draw)
 
     def death_check(self):
         if self.health > 0:
@@ -253,6 +274,11 @@ class Entity():
                     attacker.health -= counter_attack_damage # immediately damages enemies
                 elif self.thorny:
                     attacker.health -= damage_temp // 2  # take half of damage back
+        else:
+            self.on_death(attacker)
+
+    def on_death(self, attacker):
+        pass
 
     def is_dead(self):
         return self.health <= 0

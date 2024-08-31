@@ -319,23 +319,32 @@ class Player(Entity):
     def proceed_next_boss_stage(self):
         self.boss_stage += 1
 
+    def fast_update_health(self,screen):
+        self.show_hp_only(screen, True)
+        self.draw_giant_hp_only(screen)
 
+    def draw_giant_hp_only(self,screen, fast_draw = False):
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
+
+        draw_health = self.max_health
+        if self.max_health <= 0:
+            draw_health = 1
+
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width,
+                 100 * self.health / draw_health, 'coral')
+        draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width, width, 5, 100, 'gray')
+
+        write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
+
+        write_text(screen, 80, self.giant_HP_width // 2 + 5, self.my_name, 30, darker_gold)
+
+        if fast_draw:
+            pygame.display.update((0, 0, width, self.giant_HP_width))
 
     def draw_player_info_top(self,screen, mousepos):
         if not super().death_check():  # not dead
 
-            draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100, 'silver')
-
-            draw_health = self.max_health
-            if self.max_health<=0:
-                draw_health = 1
-
-            draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_pos[1], width, self.giant_HP_width, 100 * self.health / draw_health, 'coral')
-            draw_bar(screen, self.giant_HP_pos[0], self.giant_HP_width , width, 5, 100, 'gray')
-
-            write_text(screen, width - 40, self.giant_HP_pos[1], "%d/%d" % (self.health, self.max_health), 20, 'maroon')
-
-            write_text(screen, 80,self.giant_HP_width//2+5, self.my_name,30, darker_gold)
+            self.draw_giant_hp_only(screen)
 
         # depth
         if self.reached_max_depth():

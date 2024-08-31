@@ -117,34 +117,11 @@ def safe_delete(entity_list, player):
         del entity_list[i]
     ### DELETE DEAD ENEMY ###
 
+    # update enemy list here
+    for entity in entity_list:
+        entity.enemy_list = entity_list
 
 
-def get_enemy_class_by_class_name(enemy_name):
-    enemy_class_name = string_capitalizer(enemy_name)
-    enemy_class = getattr(__import__("enemy"), enemy_class_name)
-    return enemy_class
-
-
-def spawn_enemy(enemy_list, enemy_name,mob_number_cap, mob_locations):
-    if len(enemy_list) >= mob_number_cap: # enemy list is full!
-        # print("cannot spawn enemy more than %d"%mob_number_cap)
-        return
-    occupied_x_pos = []
-    for enemy in enemy_list: # there should be at least one place
-        occupied_x_pos.append(enemy.mypos[0])
-    occupied_x_pos.sort()
-    locations_set = set(mob_locations)
-    occupied_set = set(occupied_x_pos)
-    candidate_set = locations_set.difference(occupied_set)
-
-    final_loc = 0
-    for candidate in candidate_set: # just use any
-        final_loc = candidate
-
-    enemy_class = get_enemy_class_by_class_name(enemy_name)
-    enemy = enemy_class(pos=(final_loc, mob_Y_level), rank=1)
-    enemy.refresh_my_turn()
-    enemy_list.insert(0,enemy)
 
 
 def fight(screen, clock, player, place = None):
@@ -213,7 +190,7 @@ def fight(screen, clock, player, place = None):
     #####################################################################################
     # enemy_request = ['raider'for i in range(3)] #
     # enemy_request = ['wall','ikarus']
-    # enemy_request =['apostle']
+    # enemy_request =['nalo']
 
 
     enemies = []
@@ -276,6 +253,9 @@ def fight(screen, clock, player, place = None):
             safe_delete(enemies, player)
             ### DELETE DEAD ENEMY ###
 
+            if player.kill_all:
+                enemies = []
+
             current_turn += 1
 
             for entity in enemies:
@@ -284,11 +264,16 @@ def fight(screen, clock, player, place = None):
                 # draw again
                 screen.fill(background_color)
                 write_text(screen, width // 2, turn_text_level, "Enemy's turn", 30, 'darkgoldenrod')
-                player.draw(screen, mousepos)
-                player.draw_player_info_top(screen, mousepos)  # Draw player main info
+                pygame.display.update((0, turn_text_level - 15, width, 30))
+
+                player.draw(screen, mousepos, fast_draw = True)
+                # pygame.display.update((0, turn_text_level - 15, width, 30))
+                player.draw_giant_hp_only(screen, fast_draw = True)
+
                 for entity_draw in enemies:
-                    entity_draw.draw(screen,mousepos)
-                pygame.display.flip()
+                    entity_draw.draw(screen,mousepos, fast_draw = True)
+                # pygame.display.flip()
+
                 clock.tick_busy_loop(game_fps)
                 time.sleep(0.3)
 
