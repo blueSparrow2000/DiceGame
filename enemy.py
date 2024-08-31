@@ -22,6 +22,8 @@ class Enemy(Entity):
         # attack patterns
         self.current_pattern_idx = 0
         self.pattern = attack_pattern
+        self.shift_pattern = ['no op']
+        self.change_pattern_flag = False
         self.num_of_patterns = len(self.pattern)
 
         self.rank = rank
@@ -35,6 +37,9 @@ class Enemy(Entity):
 
         self.enemy_list = None
 
+    def change_attack_pattern(self):
+        self.pattern = self.shift_pattern
+        self.current_pattern_idx = 0
 
     def get_description(self): # override
         return None
@@ -153,7 +158,9 @@ class Halo(Enemy):
         time.sleep(0.1)
         sound_effects['playerdeath'].play()
         spawn_enemy(self.enemy_list, 'nalo', 3,[], self.mypos[0])
+        print(self.enemy_list)
         time.sleep(0.1)
+
 
 
     def behave(self, player, enemy = None):
@@ -202,8 +209,9 @@ class Halo(Enemy):
 
 
 class Nalo(Enemy):
-    def __init__(self, my_name = 'nalo', hp=1000, hpmax = 1000, attack_damage = [128,256], pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'unknown','lifesteal','charge','charge','charge', 'death'], rank = 1 ):
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 500)
+    def __init__(self, my_name = 'nalo', hp=1000, hpmax = 1000, attack_damage = [128,256], pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'unknown','lifesteal'], rank = 1 ):
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 0)
+        self.shift_pattern = ['charge','charge','charge', 'death']
 
     def get_description(self): # override
         return "Mors erit resistentibus"
@@ -216,6 +224,10 @@ class Nalo(Enemy):
         return "apostle"
 
     def behave(self, player, enemy = None):
+        if self.health < 300 and self.change_pattern_flag == False:
+            self.change_attack_pattern()
+            self.change_pattern_flag = True
+
         self.refresh_my_turn()
 
         current_pattern = self.pattern[self.current_pattern_idx]

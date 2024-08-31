@@ -556,6 +556,7 @@ class Player(Entity):
         time.sleep(0.3)
 
     def new_fight(self,enemies):
+        self.kill_all = False
         super().refresh_my_turn()
         super().reset_buff_count()
 
