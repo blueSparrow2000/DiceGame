@@ -221,7 +221,8 @@ class Nalo(Enemy):
         return "Mors erit resistentibus"
 
     def on_death(self, attacker):
-        attacker.kill_all = True
+        if attacker:
+            attacker.kill_all = True
 
     def get_spawn_mob_name(self):
         self.spawn_request = False
@@ -237,13 +238,17 @@ class Nalo(Enemy):
         current_pattern = self.pattern[self.current_pattern_idx]
         if current_pattern=='death':
             if self.can_attack:
-                damage_per_hit = player.health//3 + 1
-                for i in range(3):
+                sweep = 5
+                hit_count = 4
+                damage_per_hit = player.health // (sweep*hit_count) + 1
+                for i in range(sweep):
                     time.sleep(0.15)
                     sound_effects['playerdeath'].play()
-                    player.take_damage(self, damage_per_hit*self.get_attack_multiplier())
+                    for j in range(hit_count):
+                        player.take_damage(self, damage_per_hit*self.get_attack_multiplier())
 
                     player.fast_update_health(screen)
+                    player.draw_giant_hp_only(screen, fast_draw=True)
 
                     time.sleep(0.15)
 
@@ -655,7 +660,8 @@ class Carrier(Enemy):
         return "Boss: 4 base defence, summons norm"
 
     def on_death(self, attacker):
-        attacker.kill_all = True
+        if attacker:
+            attacker.kill_all = True
 
 
     def get_spawn_mob_name(self):
@@ -759,7 +765,9 @@ class Silent(Enemy):
         return "Boss: Immune to poison / next moves are randomized"
 
     def on_death(self, attacker):
-        attacker.kill_all = True
+        if attacker:
+            attacker.kill_all = True
+
 
 
     def behave(self, player, enemy=None):

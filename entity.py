@@ -237,7 +237,15 @@ class Entity():
         damage = max(0, damage - self.absorption)
         # print(self.my_name,'got damage of',  damage_temp)
 
-        if (self.toxined and (not self.immune_to_toxin)): # ignores defence
+        # check for rapier relic
+        armor_penetration_relic = False
+        if attacker and attacker.my_type != 'entity':
+            for relic in attacker.relics:
+                if relic.penetrate_armor(damage):
+                    armor_penetration_relic = True
+                    break
+
+        if (self.toxined and (not self.immune_to_toxin)) or armor_penetration_relic: # ignores defence
             self.health -= damage
         else:
             partial_damage = damage - self.total_defence
@@ -270,7 +278,7 @@ class Entity():
                 self.temporal_defence = 0
                 self.total_defence = 0
                 self.health -= partial_damage
-                if attacker and no_fightback == False:
+                if attacker is not None and (not no_fightback):
                     attacker.lifesteal_amt = partial_damage
                 # print('got hit!')
 
@@ -282,6 +290,7 @@ class Entity():
                 elif self.thorny:
                     attacker.health -= damage_temp // 2  # take half of damage back
         else:
+
             self.on_death(attacker)
 
     def do_lifesteal(self):

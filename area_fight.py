@@ -190,7 +190,7 @@ def fight(screen, clock, player, place = None):
     #####################################################################################
     # enemy_request = ['raider'for i in range(3)] #
     # enemy_request = ['wall','ikarus']
-    # enemy_request =['halo']
+    # enemy_request =['nalo']
 
 
     enemies = []

@@ -162,7 +162,12 @@ while meta_run:
                     # player.pick_up_relic(SerpentHeart())  #
                     # player.golds = 1000
                     # player.gamemode = 'creator'
+                    # player.pick_up_relic(Rapier())
+                    # for i in range(23):
+                    #     player.pick_up_relic(SerpentHeart())
+                    # player.pick_up_relic(BlueCube())
                     # for i in range(30):
+
                     #     go_to_ruin(screen, clock, player, False)
                     # for i in range(10):
                     #     go_to_shop(screen, clock, player)

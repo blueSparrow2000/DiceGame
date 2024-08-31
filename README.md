@@ -133,7 +133,10 @@ A simple dice game (actually a planar figure game)
 2024.08.30 Game saver & loader / Blue cube: max incoming damage fixed / Baron, Cinavro design / Apostle: deal damage proportional to player current health
 
 
-2024.08.31 ~ Beta test: Fix bugs!
+2024.08.31 Add final boss: Nalo / Added relic: rapier
+
+
+~ Beta test: Fix bugs!
 
 
 

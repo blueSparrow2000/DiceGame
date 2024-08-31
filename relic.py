@@ -25,6 +25,9 @@ class Relic():
         self.debug = False
         self.scaled_image = pygame.transform.scale(self.image, (50, 50))
 
+    def penetrate_armor(self, damage):
+        return False
+
     def get_discount_factor(self):
         return 1
 
@@ -761,8 +764,6 @@ class BlueCube(Relic):
         else:
             pass
 
-####################################### In progress... ##############################################
-
 class RedCube(Relic):
     '''
 
@@ -776,6 +777,30 @@ class RedCube(Relic):
 
     def skill_requiring_3_skill_tile_reduce_one(self):
         return True
+
+
+
+####################################### In progress... ##############################################
+
+
+
+class Rapier(Relic):
+    '''
+
+    '''
+
+    def __init__(self):
+        super().__init__(class_name="Rapier", name="rapier", rarity='rare')
+        self.damage_threshold = 10
+
+    def description(self):
+        return "Penetrates enemy's armor if damage is less than %d"%self.damage_threshold
+
+    def penetrate_armor(self, damage):
+        if damage < self.damage_threshold:
+            return True
+        return False
+
 
 relic_class_names = ['BlueCube','RedCube','YellowCube','BlackCube','GoldenClover','PoisonMask','Equipment','Candle', 'Encyclopedia', 'Antidote', 'Oil','StrawMat','Obsidian','RecycledShield','ShieldCatalyst','BattleShield','Paranoia','IronPlate','Armadillo','WarHorn','SwordCatalyst','RecycledSword','Tombstone','ArcaneBook','TiltedScale','BagOfDagger', 'Dagger', 'PoisonBottle','Thorn' , 'LargeThorn', 'FrenzySkull', 'WhiteCube', 'Ration' , 'StemCell','FearCell' ,'SerpentHeart' , 'Moss', 'GoldenTalisman']
 
