@@ -71,6 +71,7 @@ class Entity():
         self.toxined = False
         self.vulnerability_multiplier = 1
         self.confused = False
+
         ####################
         self.reset_buffs()
 
@@ -80,6 +81,9 @@ class Entity():
         self.taking_damage_threshold = -1
 
         self.kill_all = False
+
+        self.lifesteal_amt = 0
+
 
     def set_zero_defence(self):
         self.defence = 0
@@ -119,6 +123,7 @@ class Entity():
         self.toxined = False
         self.vulnerability_multiplier = 1
         self.confused = False
+
 
     def reset_buff_count(self):
         for buff in buff_names:
@@ -265,6 +270,8 @@ class Entity():
                 self.temporal_defence = 0
                 self.total_defence = 0
                 self.health -= partial_damage
+                if attacker and no_fightback == False:
+                    attacker.lifesteal_amt = partial_damage
                 # print('got hit!')
 
         if not self.death_check():

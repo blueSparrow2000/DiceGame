@@ -250,7 +250,8 @@ class Nalo(Enemy):
                 time.sleep(0.1)
                 damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage * self.get_attack_multiplier())
-                self.enforced_regen(damage)
+
+                self.enforced_regen(self.lifesteal_amt)
 
         elif current_pattern=='no op':
             pass # no op
@@ -710,7 +711,7 @@ class Apostle(Enemy):
             if self.can_attack:
                 sound_effects['small_hit'].play()
                 player.take_damage(self,self.get_current_damage())
-                self.enforced_regen(self.attack_damage)
+                self.enforced_regen(self.lifesteal_amt)
 
         elif current_pattern == 'attack':
             if self.can_attack:
@@ -967,7 +968,7 @@ class Stem(Enemy):
             if self.can_attack:
                 sound_effects['hard_hit'].play()
                 player.take_damage(self,self.get_current_damage())
-                self.enforced_regen(4)
+                self.enforced_regen(self.lifesteal_amt)
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
