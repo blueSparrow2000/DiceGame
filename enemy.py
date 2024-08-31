@@ -73,7 +73,7 @@ class Enemy(Entity):
 
     def draw(self,screen,mousepos, fast_draw = False): ################# ENEMY EXCLUSIVE
         super().draw(screen,mousepos,fast_draw)
-        self.show_next_move(screen,mousepos)
+        self.show_next_move(screen,mousepos,fast_draw)
         self.write_description(screen,mousepos)
 
         if check_inside_button(mousepos, self.mypos, self.icon_delta // 2):
@@ -86,7 +86,7 @@ class Enemy(Entity):
         # proceed to the next pattern
         self.current_pattern_idx = (self.current_pattern_idx+1)%self.num_of_patterns
 
-    def show_next_move(self,screen,mousepos):
+    def show_next_move(self,screen,mousepos, fast_draw = False):
         current_pattern = self.pattern[self.current_pattern_idx]
 
         # check whether can attack or not
@@ -135,6 +135,10 @@ class Enemy(Entity):
                 description = "It will try to %s" % current_pattern
 
             write_text(screen, width // 2, turn_text_level + self.icon_delta, description, 17, "white", 'black')
+
+        if fast_draw:
+            pygame.display.update((self.next_move_loc[0] - self.icon_delta // 2, self.next_move_loc[1] - self.icon_delta // 2,
+                                   self.icon_delta, self.icon_delta))
 
     def get_current_damage(self):
         return self.attack_damage*self.get_attack_multiplier()
@@ -251,7 +255,8 @@ class Nalo(Enemy):
                 damage = random.randint(self.attack_damage[0], self.attack_damage[1])
                 player.take_damage(self, damage * self.get_attack_multiplier())
 
-                self.enforced_regen(self.lifesteal_amt)
+
+                self.do_lifesteal()
 
         elif current_pattern=='no op':
             pass # no op
@@ -315,7 +320,7 @@ class Mob(Enemy):
         self.end_my_turn()
 
 class Fragment(Enemy):
-    def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['attack','no op' ] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
         self.thorny = True
     def get_description(self): # override
@@ -442,7 +447,7 @@ class Embryo(Enemy):
 
 
 class Mine(Enemy):
-    def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['attack','infiltrate'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
         self.thorny = True
     def get_description(self): # override
@@ -711,7 +716,7 @@ class Apostle(Enemy):
             if self.can_attack:
                 sound_effects['small_hit'].play()
                 player.take_damage(self,self.get_current_damage())
-                self.enforced_regen(self.lifesteal_amt)
+                self.do_lifesteal()
 
         elif current_pattern == 'attack':
             if self.can_attack:
@@ -802,7 +807,7 @@ class Silent(Enemy):
     def get_heal_amount(self):
         return 16
 
-    def show_next_move(self,screen,mousepos):
+    def show_next_move(self,screen,mousepos, fast_draw = False):
         if self.health < 200: # phase two
             next_move_img = self.pattern_image['unknown']
             screen.blit(next_move_img, next_move_img.get_rect(center=self.next_move_loc))
@@ -810,7 +815,7 @@ class Silent(Enemy):
             if check_inside_button(mousepos, self.next_move_loc, self.icon_delta // 2):  # if mouse is pointing to the relic
                 write_text(screen, width // 2, turn_text_level + self.icon_delta, "what will it do?", 17, "white", 'black')
         else:
-            super().show_next_move(screen,mousepos)
+            super().show_next_move(screen,mousepos,fast_draw)
 
 
 
@@ -968,7 +973,7 @@ class Stem(Enemy):
             if self.can_attack:
                 sound_effects['hard_hit'].play()
                 player.take_damage(self,self.get_current_damage())
-                self.enforced_regen(self.lifesteal_amt)
+                self.do_lifesteal()
                 # print(self.health)
                 # player.buffs['broken will'] = 1
                 # player.buffs['strength'] = 1
@@ -1278,7 +1283,7 @@ class Operator(Enemy):
 
 
 class Guard(Enemy):
-    def __init__(self, my_name = 'guard', hp=300, hpmax = 300, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'shield','attack'] , rank = 1 ): #
+    def __init__(self, my_name = 'guard', hp=300, hpmax = 300, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'attack', 'shield', 'shield'] , rank = 1 ): #
         super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 15)
 
 

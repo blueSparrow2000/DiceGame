@@ -284,6 +284,10 @@ class Entity():
         else:
             self.on_death(attacker)
 
+    def do_lifesteal(self):
+        self.enforced_regen(self.lifesteal_amt)
+        self.lifesteal_amt = 0 # reset to 0 after lifesteal
+
     def on_death(self, attacker):
         pass
 

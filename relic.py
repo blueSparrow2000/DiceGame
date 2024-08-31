@@ -498,7 +498,7 @@ class StrawMat(Relic):
     '''
     def __init__(self):
         super().__init__(class_name="StrawMat", name="straw mat",rarity = 'epic')
-        self.shield_per_straw = 5
+        self.shield_per_straw = 4
 
     def description(self):
         return "Gains %d shield for each defence tile drawn"%self.shield_per_straw
@@ -554,7 +554,7 @@ class BattleShield(Relic):
     '''
     def __init__(self):
         super().__init__(class_name="BattleShield", name="battle shield",rarity = 'rare')
-        self.shield_gain = 5
+        self.shield_gain = 10
 
     def description(self):
         return "For each enemy killed, get %d temporal defence"%self.shield_gain
@@ -610,7 +610,7 @@ class Armadillo(Relic):
     '''
     def __init__(self):
         super().__init__(class_name="Armadillo", name="armadillo",rarity = 'rare')
-        self.defence_multiplier = 5
+        self.defence_multiplier = 10
 
     def description(self):
         return "Gain %d*(# of enemies) defence on the first turn"%self.defence_multiplier
@@ -747,7 +747,7 @@ class BlueCube(Relic):
         super().__init__(class_name="BlueCube", name="blue cube", rarity='myth')
         self.damage_threshold = 100
     def description(self):
-        return "Do not take more damage than %d per hit"%self.damage_threshold
+        return "Do not take damage more than %d per hit"%self.damage_threshold
 
     def effect_when_first_obtained(self, player, side_effect_off = False):
         player.taking_damage_threshold = self.damage_threshold
