@@ -162,7 +162,7 @@ class Halo(Enemy):
         time.sleep(0.1)
         sound_effects['playerdeath'].play()
         spawn_enemy(self.enemy_list, 'nalo', 3,[], self.mypos[0])
-        print(self.enemy_list)
+        # print(self.enemy_list)
         time.sleep(0.1)
 
 

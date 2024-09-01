@@ -72,7 +72,7 @@ def game_win_screen(screen,clock,player):
         if ending_roll_Y_level <= ending_roll_capacity:
             # draw button
             if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-                write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
+                write_text(screen, bottom_center_button[0], bottom_center_button[1], "back to main menu", 15)
             else:
                 screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 

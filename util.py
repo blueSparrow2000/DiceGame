@@ -14,7 +14,6 @@ def calc_drop_radius(factor,start_radius,mouse=True):  # factor is given by floa
     return r
 
 
-
 def draw_bar(screen,x,y,bar_length,bar_height, current_percent, color): # x,y is a position of x,y axis of bar
     pygame.draw.rect(screen,color,[x-bar_length//2, y-bar_height//2,int(bar_length*(current_percent/100)),bar_height])
 

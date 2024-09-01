@@ -80,6 +80,7 @@ class Entity():
 
         self.taking_damage_threshold = -1
 
+        self.activated_on_death = False
         self.kill_all = False
 
         self.lifesteal_amt = 0
@@ -290,8 +291,9 @@ class Entity():
                 elif self.thorny:
                     attacker.health -= damage_temp // 2  # take half of damage back
         else:
-
-            self.on_death(attacker)
+            if not self.activated_on_death: # this should be activated only once
+                self.activated_on_death = True
+                self.on_death(attacker)
 
     def do_lifesteal(self):
         self.enforced_regen(self.lifesteal_amt)
