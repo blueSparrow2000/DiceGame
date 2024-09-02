@@ -166,6 +166,9 @@ while meta_run:
                     # for i in range(23):
                     #     player.pick_up_relic(SerpentHeart())
                     # player.pick_up_relic(BlueCube())
+                    # for i in range(23):
+                    #     player.pick_up_relic(Dagger())
+                    # player.pick_up_relic(BlackCube())
                     # for i in range(30):
 
                     #     go_to_ruin(screen, clock, player, False)

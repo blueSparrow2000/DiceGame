@@ -44,10 +44,10 @@ def go_to_shop(screen,clock, player):
     if shop_discount>1:
         price_tag_color = "maroon"
 
-    common_relics = relic_by_rarity_dict['common'] # currently only cell common relics
-    random.shuffle(common_relics)
-    final_relic_name = common_relics[0][0]
-    final_relic_sample = common_relics[0][1]
+    shop_relics = relic_by_rarity_dict['common'] + relic_by_rarity_dict['rare'] + relic_by_rarity_dict['epic'] # currently only cell common, rare, epic relics
+    random.shuffle(shop_relics)
+    final_relic_name = shop_relics[0][0]
+    final_relic_sample = shop_relics[0][1]
     relic_obtained = False
     shop_relic_button_loc = [width//2, shop_text_description_level + 550]
     relic_price = relic_price_by_rarity[final_relic_sample.rarity]//shop_discount

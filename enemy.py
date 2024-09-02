@@ -326,7 +326,7 @@ class Mob(Enemy):
 
 class Fragment(Enemy):
     def __init__(self, my_name = 'fragment', hp=16, hpmax = 16, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['attack','no op' ] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
         self.thorny = True
     def get_description(self): # override
         return "Thorny: inflict half of the damage to attacker"
@@ -364,7 +364,7 @@ class Fragment(Enemy):
 
 class Lenz(Enemy):
     def __init__(self, my_name = 'lenz', hp=30, hpmax = 30, attack_damage = 5, pos = (332,mob_Y_level), attack_pattern = ['no op','summon', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
     def get_description(self): # override
         return "Can duplicate itself"
 
@@ -410,7 +410,7 @@ class Lenz(Enemy):
 
 class Embryo(Enemy):
     def __init__(self, my_name = 'embryo', hp=64, hpmax = 64, attack_damage = 16, pos = (332,mob_Y_level), attack_pattern = ['no op','infiltrate'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 5)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 10)
 
 
     def behave(self, player, enemy = None):
@@ -453,7 +453,7 @@ class Embryo(Enemy):
 
 class Mine(Enemy):
     def __init__(self, my_name = 'mine', hp=30, hpmax = 30, attack_damage = 6, pos = (332,mob_Y_level), attack_pattern = ['attack','infiltrate'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
         self.thorny = True
     def get_description(self): # override
         return "Thorny: inflict half of the damage to attacker"
@@ -709,7 +709,7 @@ class Carrier(Enemy):
 
 class Apostle(Enemy):
     def __init__(self, my_name = 'apostle', hp=100, hpmax = 1000, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['no op', 'attack', 'lifesteal'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 25)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 40)
 
     def get_description(self): # override
         return "Deal damage proportional to player's health"
@@ -829,7 +829,7 @@ class Silent(Enemy):
 
 class Scalpion(Enemy):
     def __init__(self, my_name = 'scalpion', hp=180, hpmax = 180, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['toxin', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 15)
         self.thorny = True
     '''
     This mob does random damage attack
@@ -878,7 +878,7 @@ class Scalpion(Enemy):
 
 class Snalk(Enemy):
     def __init__(self, my_name = 'snalk', hp=120, hpmax = 120, attack_damage = [4,8], pos = (332,mob_Y_level), attack_pattern = ['poison', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 7)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
     '''
     This mob does random damage attack
     '''
@@ -921,7 +921,7 @@ class Snalk(Enemy):
 
 class Snider(Enemy):
     def __init__(self, my_name = 'snider', hp=120, hpmax = 120, attack_damage = [4,16], pos = (332,mob_Y_level), attack_pattern = ['buff', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 7)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
     '''
     This mob does random damage attack
     '''
@@ -1008,7 +1008,7 @@ class Stem(Enemy):
 
 class Golem(Enemy):
     def __init__(self, my_name = 'golem', hp=120, hpmax = 120, attack_damage = 20, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 20)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 8)
 
         self.base_defence = 4 #
     def get_description(self):  # override
@@ -1054,7 +1054,7 @@ class Golem(Enemy):
 
 class Raider(Enemy):
     def __init__(self, my_name = 'raider', hp=80, hpmax = 80, attack_damage = [8,16], pos = (332,mob_Y_level), attack_pattern = ['poison','buff', 'attack', 'regen'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 15)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 6)
     '''
     This mob does random damage attack
     '''
@@ -1146,7 +1146,7 @@ class Beast(Enemy):
 
 class Shatter(Enemy):
     def __init__(self, my_name = 'shatter', hp=60, hpmax = 60, attack_damage = 15, pos = (332,mob_Y_level), attack_pattern = ['shield', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 12)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank,gold_reward = 4)
         self.passive = True
 
         self.base_defence = 2 #
@@ -1292,7 +1292,7 @@ class Operator(Enemy):
 
 class Guard(Enemy):
     def __init__(self, my_name = 'guard', hp=300, hpmax = 300, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'attack', 'shield', 'shield'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 15)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 25 )
 
 
     def behave(self, player, enemy = None):
@@ -1324,8 +1324,8 @@ class Guard(Enemy):
 
 
 class Ikarus(Enemy):
-    def __init__(self, my_name = 'ikarus', hp=100, hpmax = 100, attack_damage = 60, pos = (332,mob_Y_level), attack_pattern = [ 'buff','attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 30)
+    def __init__(self, my_name = 'ikarus', hp=100, hpmax = 100, attack_damage = 50, pos = (332,mob_Y_level), attack_pattern = [ 'buff','attack'] , rank = 1 ): #
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 80)
         self.evade_damage_threshold = 30
     def get_description(self):  # override
         return "Evade if damage received is greater than %d"%self.evade_damage_threshold
@@ -1344,7 +1344,7 @@ class Ikarus(Enemy):
             if self.can_attack:
                 sound_effects['playerdeath'].play()
                 player.take_damage(self,self.get_current_damage())
-                player.buffs['weakness'] = 2
+                player.buffs['weakness'] = 1
 
         elif current_pattern=='no op':
             pass # no op
@@ -1366,7 +1366,7 @@ class Ikarus(Enemy):
 
 class Wall(Enemy):
     def __init__(self, my_name = 'wall', hp=500, hpmax = 500, attack_damage = 25, pos = (332,mob_Y_level), attack_pattern = [ 'shield', 'attack'] , rank = 1 ): #
-        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 20)
+        super().__init__(my_name,hp,hpmax,attack_damage,pos,attack_pattern, rank, gold_reward = 30)
 
         self.taking_damage_threshold = 100
 

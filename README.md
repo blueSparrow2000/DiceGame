@@ -136,8 +136,11 @@ A simple dice game (actually a planar figure game)
 2024.08.31 Add final boss: Nalo / Added relic: rapier
 
 
-~ Beta test: Fix bugs!
+2024.09.02 Enemies drop more gold on fight, less gold on ruins / shop now sells common, rare, and epic relics!
 
+
+~ Beta test: Fix bugs!
+- 내 턴 스킵시 dagger 데미지가 한번 더 들어가는 현상 수정
 
 
 # Future 
