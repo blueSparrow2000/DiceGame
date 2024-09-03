@@ -5,7 +5,7 @@ A simple dice game (actually a planar figure game)
 * Suggest IDE(like pyCharm) to play this game.
 
 
-1. Download and unzip file in your interpreter. If you use pyCharm, then put the file in PycharmProjects folder
+1. Download the latest 'tag' file and unzip it in your interpreter. If you use pyCharm, then put the file in PycharmProjects folder
 2. (If using Pycharm) Go to interpreter settings and configure python interpreter ** to python version 3.8 or higher
 3. Install pygame to the interpreter (version higher than pygame 2.6.0 is fine) using pip or using pycharm interpreter settings
 4. Similarly to 3, install numpy version 2.0.1 or higher
