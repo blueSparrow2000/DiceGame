@@ -101,6 +101,7 @@ def go_to_shop(screen,clock, player):
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     sound_effects['confirm'].play()
                     # exit
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
 
@@ -142,6 +143,7 @@ def go_to_shop(screen,clock, player):
                     game_run = False
                     break
                 elif event.key == pygame.K_RETURN:
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
 
@@ -224,5 +226,6 @@ def go_to_shop(screen,clock, player):
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, shop_effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick_busy_loop(slow_fps)

@@ -14,6 +14,7 @@ def falling_coeff(target_y, cur_y, coeff):
 
 
 
+
 def title_screen(screen,clock):
     ########## particle ############
     particle_list = []
@@ -51,6 +52,7 @@ def title_screen(screen,clock):
                 mousepos = pygame.mouse.get_pos()
                 mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
                 if check_inside_button(mousepos, bottom_center_button, PLAY_BUTTON_SIDE_LENGTH): # confirmed
+                    transition_screen_obj.exit_screen(screen, clock)
                     # exit
                     game_run = False
                     return False,True,None
@@ -62,6 +64,7 @@ def title_screen(screen,clock):
                     if check_inside_button(mousepos, load_image_location[i], button_side_len_half):
                         player_data = load_game(i + 1)
                         if player_data is not None:
+                            transition_screen_obj.exit_screen(screen, clock)
                             # exit
                             game_run = False
                             return False, False, player_data
@@ -73,6 +76,7 @@ def title_screen(screen,clock):
                     game_run = False
                     return True, True,None
                 elif event.key == pygame.K_RETURN:
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     return False, True,None
 

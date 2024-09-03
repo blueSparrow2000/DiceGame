@@ -69,6 +69,7 @@ def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
                 # do fight logic on player's turn
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     # exit
+                    transition_screen_obj.exit_screen(screen, clock)
                     run_win_screen = False
                     break
             if event.type == pygame.KEYDOWN:
@@ -76,6 +77,7 @@ def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
                     run_win_screen = False
                     break
                 elif event.key == pygame.K_RETURN:
+                    transition_screen_obj.exit_screen(screen, clock)
                     run_win_screen = False
                     break
         screen.fill(adventure_bg_color)
@@ -95,6 +97,7 @@ def player_win_screen(screen,clock,player,enemy_drops, earned_gold):
         else:
             screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick(game_fps)
 
@@ -219,6 +222,7 @@ def fight(screen, clock, player, place = None):
             exit_fight()
             game_run = False
             print('player lost!')
+            # transition_screen_obj.exit_screen(screen, clock)
             return True, True,enemy_drops, earned_gold
         elif len(enemies) == 0:
             # give player these!
@@ -234,6 +238,7 @@ def fight(screen, clock, player, place = None):
                 player.get_drop(enemy_drops)
 
                 exit_fight()
+                transition_screen_obj.exit_screen(screen, clock)
                 game_run = False
                 return False, True,enemy_drops, earned_gold
         ### DELETE DEAD ENEMY ###
@@ -539,5 +544,6 @@ def fight(screen, clock, player, place = None):
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick_busy_loop(fast_fps)

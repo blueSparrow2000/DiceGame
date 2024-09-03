@@ -34,6 +34,7 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
                     # confirm changes
                     player.board.confirm_fixing_tile(tile_to_fix)
                     # exit
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
 
@@ -48,6 +49,7 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
                     game_run = False
                     break
                 elif event.key == pygame.K_RETURN:
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
 
@@ -88,5 +90,6 @@ def fix_a_tile(screen,clock, player, tile_to_fix):
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick_busy_loop(slow_fps)

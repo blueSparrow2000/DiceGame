@@ -53,6 +53,7 @@ music_Q('Lobby', True)
 meta_run = True
 
 while meta_run:
+    transition_screen_obj.init_goto()
     random.seed(None) # initialize seed
     map = Map()
 
@@ -68,6 +69,7 @@ while meta_run:
         # load game을 이용하여 새로운 게임을 시작함
         ############## game start module #################
         # game_win_screen(screen,clock,player)
+        transition_screen_obj.exit_screen(screen, clock)
         try_again = adventure_loop(screen, clock, load_game_player, map)
         first_run = False
         if not try_again:
@@ -206,6 +208,7 @@ while meta_run:
                     #     player.pick_up_relic(GoldenClover())
                     ############## game start module #################
                     # game_win_screen(screen,clock,player)
+                    transition_screen_obj.exit_screen(screen, clock)
                     try_again = adventure_loop(screen, clock, player, map)
                     first_run = False
                     if not try_again:
@@ -233,7 +236,6 @@ while meta_run:
 
         screen.fill('dimgray')
         write_text(screen, width // 2, 40, 'Choose two nets', 20, 'gold')
-
 
         # draw button
         if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
@@ -286,6 +288,7 @@ while meta_run:
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen,option_effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick(slow_fps)
 

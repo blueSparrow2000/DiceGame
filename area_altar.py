@@ -44,8 +44,6 @@ for name in altar_curse_bless_names:
 altar_text_color = 'gold'
 
 
-def exit_altar():
-    pass
 
 def reset_altar():
     global altar_bless,altar_curse
@@ -144,6 +142,7 @@ def go_to_altar(screen,clock, player):
                             pass
 
                         # exit
+                        transition_screen_obj.exit_screen(screen, clock)
                         game_run = False
                         break
 
@@ -152,9 +151,9 @@ def go_to_altar(screen,clock, player):
                 if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
                     game_run = False
                     break
-                elif event.key == pygame.K_RETURN:
-                    game_run = False
-                    break
+                # elif event.key == pygame.K_RETURN:
+                #     game_run = False
+                #     break
 
 
         if not game_run:
@@ -201,5 +200,6 @@ def go_to_altar(screen,clock, player):
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, altar_effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick_busy_loop(slow_fps)

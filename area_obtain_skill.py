@@ -44,6 +44,7 @@ def obtain_skill(screen,clock, player,skill_to_learn):
                     bought_skill = player.confirm_skill_replacement()
 
                     # exit
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     return bought_skill
 
@@ -59,6 +60,7 @@ def obtain_skill(screen,clock, player,skill_to_learn):
                     game_run = False
                     break
                 elif event.key == pygame.K_RETURN:
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
 
@@ -101,5 +103,6 @@ def obtain_skill(screen,clock, player,skill_to_learn):
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick_busy_loop(slow_fps)

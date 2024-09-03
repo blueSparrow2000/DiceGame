@@ -2,154 +2,75 @@
 Rename the function go_to_area
 
 '''
-from util import *
+from image_processor import *
+import pygame
 
-def transition_in(screen,clock, player):
-    game_run = True
-    mousepos = (0,0)
+class TransitionScreen():
+    def __init__(self, screen):
+        self.transition_on = True
 
-    while game_run:
-        screen.fill(terracotta)
+        self.shadow_down = pygame.transform.smoothscale(load_image("background/shadow_down"), (width, height))
+        self.shadow_up = pygame.transform.smoothscale(load_image("background/shadow_up"), (width, height))
+        self.screen = screen
+        self.y =height//2 # 0#height//2
 
-        events = pygame.event.get()
-        # Event handling
-        keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들 # SHOULD BE CALLED AFTER pygame.event.get()!
+        self.tolerance = 10
+        self.transition_step = self.tolerance
 
-        if keys[pygame.K_f]:
-            pass
-        for event in events:
-            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                game_run = False
-                return True, False
+        self.exit_complete = False
+        self.goto_complete = False
 
-            if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
-                mousepos = pygame.mouse.get_pos()
+    def init_goto(self):
+        self.y = height//2
+        self.goto_complete = False
 
-            if event.type == pygame.MOUSEBUTTONUP:
-                sound_effects['confirm'].play()
-                mousepos = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
-                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
-                    # exit
-                    game_run = False
-                    break
+    def init_exit(self):
+        self.y = 0
+        self.exit_complete = False
 
+    def calc_screen_speed(self, target):
+        amount = abs(target - self.y) // self.transition_step
+        return amount
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                    game_run = False
-                    break
-                elif event.key == pygame.K_RETURN:
-                    game_run = False
-                    break
+    def closing_screen(self):
+        self.y -= self.calc_screen_speed(-30)
+        self.screen.blit(self.shadow_down, (0, self.y))
+        self.screen.blit(self.shadow_up, (0, -self.y))
 
+        if self.y <= self.tolerance and not self.goto_complete:
+            self.init_exit() # next move is exit
+            self.goto_complete = True
 
-        if not game_run:
-            break
+            # print("done!")
 
-        # draw button
-        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
-        else:
-            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
+    def opening(self):
+        if not self.transition_on:
+            return
+        self.y += self.calc_screen_speed(height//2)
+        self.screen.blit(self.shadow_down, (0, self.y))
+        self.screen.blit(self.shadow_up, (0, -self.y))
 
+        if self.y >= height//2 - self.tolerance and not self.exit_complete:
+            self.init_goto() # next move is goto
+            self.exit_complete = True
 
-        # draw effects
-        write_text(screen, width//2, 240, 'Area name', 30, 'gold')
-
-        # Draw player main info
-        player.draw_player_info_top(screen, mousepos)
-
-
-        if mouse_particle_list:  # if not empty
-            # print(len(mouse_particle_list))
-            current_run_time = pygame.time.get_ticks()
-            for mouse_particle in mouse_particle_list:
-                # draw_particle(screen, mouse_particle)
-                mouse_click_time = mouse_particle[0]
-                position = mouse_particle[1]
-                delta = (current_run_time - (mouse_click_time)) / 1000
-                if delta >= water_draw_time_mouse:
-                    mouse_particle_list.remove(mouse_particle)
-                factor = delta / water_draw_time_mouse
-                radi = calc_drop_radius(factor, mouse_particle_radius)
-                pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
-
+    def exit_screen(self,screen, clock):
+        if not self.transition_on:
+            return
+        while not self.goto_complete:
+            self.closing_screen()
+            pygame.display.flip()
+            clock.tick(slow_fps)
+        screen.fill("black")
         pygame.display.flip()
-        clock.tick_busy_loop(slow_fps)
+
+        # some busy loop
+        tick = 0
+        while tick <= 5:
+            tick+=1
+            clock.tick(slow_fps)
+
+transition_screen_obj = TransitionScreen(screen)
 
 
 
-def transition_out(screen,clock, player):
-    game_run = True
-    mousepos = (0,0)
-
-    while game_run:
-        screen.fill(terracotta)
-
-        events = pygame.event.get()
-        # Event handling
-        keys = pygame.key.get_pressed()  # 꾹 누르고 있으면 계속 실행되는 것들 # SHOULD BE CALLED AFTER pygame.event.get()!
-
-        if keys[pygame.K_f]:
-            pass
-        for event in events:
-            if event.type == pygame.QUIT:  # 윈도우를 닫으면 종료
-                game_run = False
-                return True, False
-
-            if event.type == pygame.MOUSEMOTION:  # player가 마우스를 따라가도록
-                mousepos = pygame.mouse.get_pos()
-
-            if event.type == pygame.MOUSEBUTTONUP:
-                sound_effects['confirm'].play()
-                mousepos = pygame.mouse.get_pos()
-                mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
-                if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
-                    # exit
-                    game_run = False
-                    break
-
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:  # esc 키를 누르면 종료
-                    game_run = False
-                    break
-                elif event.key == pygame.K_RETURN:
-                    game_run = False
-                    break
-
-
-        if not game_run:
-            break
-
-        # draw button
-        if check_inside_button(mousepos, bottom_center_button, button_side_len_half):
-            write_text(screen, bottom_center_button[0], bottom_center_button[1], "confirm", 15)
-        else:
-            screen.blit(confirm_img, confirm_img.get_rect(center=bottom_center_button))
-
-
-        # draw effects
-        write_text(screen, width//2, 240, 'Area name', 30, 'gold')
-
-        # Draw player main info
-        player.draw_player_info_top(screen, mousepos)
-
-
-        if mouse_particle_list:  # if not empty
-            # print(len(mouse_particle_list))
-            current_run_time = pygame.time.get_ticks()
-            for mouse_particle in mouse_particle_list:
-                # draw_particle(screen, mouse_particle)
-                mouse_click_time = mouse_particle[0]
-                position = mouse_particle[1]
-                delta = (current_run_time - (mouse_click_time)) / 1000
-                if delta >= water_draw_time_mouse:
-                    mouse_particle_list.remove(mouse_particle)
-                factor = delta / water_draw_time_mouse
-                radi = calc_drop_radius(factor, mouse_particle_radius)
-                pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
-
-        pygame.display.flip()
-        clock.tick_busy_loop(slow_fps)

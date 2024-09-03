@@ -120,6 +120,7 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
                 mouse_particle_list.append((pygame.time.get_ticks(), mousepos))
                 if check_inside_button(mousepos, bottom_center_button, button_side_len_half): # confirmed
                     # exit
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
                 elif not relic_obtained: # clicked relic => get relic! (only for one time!)
@@ -135,6 +136,7 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
                     game_run = False
                     break
                 elif event.key == pygame.K_RETURN:
+                    transition_screen_obj.exit_screen(screen, clock)
                     game_run = False
                     break
 
@@ -191,5 +193,6 @@ def go_to_ruin(screen,clock, player, fought): # if player fought with an enemy, 
                 radi = calc_drop_radius(factor, mouse_particle_radius)
                 pygame.draw.circle(screen, effect_color, position, radi, particle_width_mouse)
 
+        transition_screen_obj.opening()
         pygame.display.flip()
         clock.tick_busy_loop(slow_fps)

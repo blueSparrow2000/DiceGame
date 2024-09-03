@@ -33,25 +33,25 @@ A simple dice game (actually a planar figure game)
 
 
 
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
 # Youtube test play
 https://www.youtube.com/watch?v=I6kSO1ByNRE
 
 
-
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
 
 
 

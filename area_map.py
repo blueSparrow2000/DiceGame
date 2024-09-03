@@ -152,6 +152,7 @@ def adventure_loop(screen, clock, player,map):
                 player.update_depth(move_depth)
                 adventure_bg_color = update_depth_color(player)
                 run_adventure = False
+                transition_screen_obj.exit_screen(screen, clock)
 
                 if which_event == 'campfire':
                     go_to_campfire(screen, clock, player)
@@ -260,6 +261,7 @@ def adventure_loop(screen, clock, player,map):
                     radi = calc_drop_radius(factor, mouse_particle_radius)
                     pygame.draw.circle(screen, adventure_effect_color, position, radi, particle_width_mouse)
 
+            transition_screen_obj.opening()
             pygame.display.flip()
             clock.tick(fast_fps)
 

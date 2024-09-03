@@ -784,7 +784,7 @@ class Silent(Enemy):
         elif current_pattern == 'no op':
             pass  # no op
         elif current_pattern == 'shield':
-            self.defence += 32
+            self.defence += 64
             self.update_defence()
         elif current_pattern == 'buff':
             player.buffs['weakness'] += 3
@@ -797,7 +797,8 @@ class Silent(Enemy):
         elif current_pattern == 'summon':
             pass
         elif current_pattern == 'infiltrate':  # place a tile inside the player's tile
-            print("unusable infiltration!")
+            # print("unusable infiltration!")
+            sound_effects['water'].play()
             for i in range(3):
                 player.board.insert_a_tile_on_board("Unusable")
 
