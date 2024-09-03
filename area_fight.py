@@ -336,6 +336,7 @@ def fight(screen, clock, player, place = None):
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
                                 current_display_text = "Hover mouse on a tile for description"  # reset text
+                                continue  # skip below
                             else:
                                 valid_location = player.board.collect_tiles((xp, yp))
                                 player.initialize_step_1()
@@ -391,6 +392,7 @@ def fight(screen, clock, player, place = None):
                                     player_turn_step = 0
                                     number_of_targets_to_specify = 0
                                     enemy_targets = set()
+                                    continue  # skip below
                             else:
                                 player.reset_skill_idx()
 
@@ -504,6 +506,7 @@ def fight(screen, clock, player, place = None):
                     player_turn_step = 0
                     number_of_targets_to_specify = 0
                     enemy_targets = set()
+                    continue  # skip below
 
                 ### DRAWING ###
                 screen.blit(back_img, back_img.get_rect(center=bottom_right_button))

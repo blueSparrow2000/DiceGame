@@ -367,7 +367,7 @@ class Dagger(Relic):
     '''
     def __init__(self):
         super().__init__(class_name="Dagger", name="dagger",rarity = 'special')
-        self.damage_per_dagger = 3
+        self.damage_per_dagger = 2
 
     def description(self):
         return "Deals %d damage to closest enemy for each attack tile drawn"%self.damage_per_dagger
@@ -376,7 +376,7 @@ class Dagger(Relic):
         A = player.count_tile('Attack')
         dagger_damage = self.damage_per_dagger * A
         enemies[0].take_damage(player, dagger_damage)
-
+        # print("Dagger used!")
         # for entity in enemies:
         #     entity.take_damage(player, dagger_damage)
 
@@ -387,7 +387,7 @@ class BagOfDagger(Relic):
     '''
     def __init__(self):
         super().__init__(class_name="BagOfDagger", name="bag of dagger",rarity = 'legendary')
-        self.damage_per_dagger = 2
+        self.damage_per_dagger = 1
 
     def description(self):
         return "Deals %d damage to all enemies for each attack tile drawn"%self.damage_per_dagger

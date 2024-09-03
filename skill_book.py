@@ -481,7 +481,7 @@ class Mirinae_skills(Skill_Book):
         D = player.count_tile('Defence')
         for enemy in target_list:
             enemy.buffs['vulnerability'] += 3
-            enemy.total_defence -= 5*D
+            enemy.total_defence = max(0, enemy.total_defence - 5*D)
 
     def get_detail_head_start(self,player):
         S = player.count_tile('Skill')
@@ -572,7 +572,7 @@ class Mirinae_skills(Skill_Book):
         S = player.count_tile('Skill')
         # damage = player.P(A+S) * player.get_attack_multiplier() * self.antifragile_multiplier
         damage = 5 * (A + S) * player.get_attack_multiplier() * self.antifragile_multiplier
-        damage = min(damage, 9999) # bound
+        damage = min(damage, 999) # bound
         for enemy in target_list:
             enemy.take_damage(player,damage)
 
@@ -583,8 +583,8 @@ class Mirinae_skills(Skill_Book):
         S = player.count_tile('Skill')
         # damage = player.P(A+S) * player.get_attack_multiplier() * self.antifragile_multiplier
         damage = 5*(A + S) * player.get_attack_multiplier() * self.antifragile_multiplier
-        damage = min(damage, 9999)
-        return "Antifragile|Damage is doubled with each attack in   a fight. Current damage: 5*(A+S)x%d = %d  Max damage: 9999"%( self.antifragile_multiplier, damage)
+        damage = min(damage, 999)
+        return "Antifragile|Damage is doubled with each attack in   a fight. Current damage: 5*(A+S)x%d = %d  Max damage: 999"%( self.antifragile_multiplier, damage)
 
 
     def Excaliber_get_requirement(self,player):
