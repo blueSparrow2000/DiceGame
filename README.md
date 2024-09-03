@@ -146,8 +146,8 @@ https://www.youtube.com/watch?v=I6kSO1ByNRE
 2024.09.02 Enemies drop more gold on fight, less gold on ruins / shop now sells common, rare, and epic relics!
 
 
-~ Beta test: Fix bugs!
-- 내 턴 스킵시 dagger 데미지가 한번 더 들어가는 현상 수정
+2024.09.03 Added transition screen / Silent shield doubled / Bug fix 
+
 
 
 # Future 
