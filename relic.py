@@ -236,7 +236,10 @@ class WhiteCube(Relic):
             sound_effects['playerdeath'].play()
             # player.enforced_regen(player.max_health)
             player.set_health(player.max_health)
+            player.reset_buffs()
+            player.reset_buff_count()
             self.delete = True
+
 
 class BlackCube(Relic):
     '''
