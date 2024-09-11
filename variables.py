@@ -1,5 +1,5 @@
 import pygame
-version = 'V 1.0'
+version = 'V 1.1'
 
 
 # system variables
