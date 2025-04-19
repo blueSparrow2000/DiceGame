@@ -552,8 +552,11 @@ class Player(Entity):
         self.board.turn_end_check(self, copy_of_current_tile)
 
         self.reset_skill_idx()
-        self.current_tile = dict()
+        self.reset_current_tile()
         time.sleep(0.3)
+
+    def reset_current_tile(self):
+        self.current_tile = dict()
 
     def new_fight(self,enemies):
         self.kill_all = False

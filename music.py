@@ -7,6 +7,7 @@ https://stackoverflow.com/questions/65869913/how-to-get-out-of-the-while-loop-in
 '''
 import pygame
 import os, sys
+
 pygame.mixer.init()
 
 mixer_channel_num = 8  # default 로 8임
@@ -44,9 +45,6 @@ def music_Q(music_file,repeat = False): #현재 재생되고 있는 음악을 �
     song_start_time = 0 # adjust start times of the songs if needed...
     pygame.mixer.music.set_volume(1) # 0.5
 
-    # if music_file == 'BadApple':
-    #     pygame.mixer.music.set_volume(1)
-    #     song_start_time = 0
     if repeat:
         pygame.mixer.music.play(-1)
     else:

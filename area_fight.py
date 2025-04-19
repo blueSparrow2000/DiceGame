@@ -354,7 +354,7 @@ def fight(screen, clock, player, place = None):
                         elif player_turn_step == 1:  # choose skill or attack
                             if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
                                 # go to initial stage and do it again
-
+                                player.reset_current_tile()
                                 player_turn_step = 0
                                 current_display_text = "Hover mouse on a tile for description"  # reset text
                                 continue  # skip below
@@ -371,6 +371,7 @@ def fight(screen, clock, player, place = None):
                                 player.board.confirm_using_tile()
                                 player.end_my_turn(enemies)
                                 player_turn = False
+                                player.reset_current_tile()
                                 player_turn_step = 0
                                 number_of_targets_to_specify = 0
                                 enemy_targets = set()
@@ -394,6 +395,7 @@ def fight(screen, clock, player, place = None):
                                     player.board.confirm_using_tile()
                                     player.end_my_turn(enemies)
                                     player_turn = False
+                                    player.reset_current_tile()
                                     player_turn_step = 0
                                     number_of_targets_to_specify = 0
                                     enemy_targets = set()
@@ -405,6 +407,7 @@ def fight(screen, clock, player, place = None):
                         elif player_turn_step == 2:
                             if check_inside_button(mousepos, bottom_right_button, button_side_len_half):  # back
                                 # go to initial stage and do it again
+                                player.reset_current_tile()
                                 player_turn_step = 0
                                 player.reset_skill_idx()
                                 current_display_text = "Hover mouse on a tile for description"  # reset text
@@ -431,11 +434,13 @@ def fight(screen, clock, player, place = None):
                         # if event.key == pygame.K_RETURN:    # skip player's turn
                         #     player.end_my_turn(enemies)
                         #     player_turn = False
+                        #     player.reset_current_tile()
                         #     player_turn_step = 0
                         #     number_of_targets_to_specify = 0
                         # enemy_targets = set()
                         if event.key == pygame.K_BACKSPACE:
                             # go to initial stage and do it again
+                            player.reset_current_tile()
                             player_turn_step = 0
                             current_display_text = "Hover mouse on a tile for description"  # reset text
                             for i in range(len(enemies)):
@@ -508,6 +513,7 @@ def fight(screen, clock, player, place = None):
                     player.board.confirm_using_tile()
                     player.end_my_turn(enemies)
                     player_turn = False
+                    player.reset_current_tile()
                     player_turn_step = 0
                     number_of_targets_to_specify = 0
                     enemy_targets = set()

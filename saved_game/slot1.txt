@@ -1,0 +1,20 @@
+Mirinae
+6370
+100
+68
+['martial_art', 'head_start', 'sword_storm', 'self_defence', 'Antifragile', 'Excaliber']
+-67
+38
+[]
+23
+0
+False
+[0, 6]
+8
+{'Attack': 10, 'Regen': 0, 'Defence': 4, 'Skill': 5, 'Joker': 0, 'Karma': 0, 'Empty': 45}
+1
+{27: 'Attack', 28: 'Skill'}
+False
+False
+False
+['Candle', 'WarHorn', 'Candle', 'TiltedScale', 'Oil', 'BlackCube', 'PoisonMask', 'Candle', 'StemCell']
