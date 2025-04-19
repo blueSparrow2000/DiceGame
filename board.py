@@ -260,10 +260,13 @@ class Board():
         return fixed_board
     def update_fixed_board(self): # called only when clicking / or reseting (back button)
         temp_board = ['Empty' for j in range(self.board_side_length**2)]
-        for fixed_tile_idx,tile_name in self.temp_permanently_fixed_tiles.items():
-            temp_board[fixed_tile_idx] = tile_name
-        # update fixed board
-        self.fixed_board = self.fixed_boardify(temp_board)
+        try:
+            for fixed_tile_idx,tile_name in self.temp_permanently_fixed_tiles.items():
+                temp_board[fixed_tile_idx] = tile_name
+            # update fixed board
+            self.fixed_board = self.fixed_boardify(temp_board)
+        except:
+            print("[ERROR] board too small: \ncurrent board size: {} \ncurrent number of tiles: {}\n". format(len(temp_board), len(list(self.temp_permanently_fixed_tiles.items()))))
 
     def draw_fixed_board(self,screen):
         for i in range(self.board_side_length):
